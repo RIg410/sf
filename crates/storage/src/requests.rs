@@ -1,8 +1,10 @@
 use bson::{doc, oid::ObjectId, Regex};
 use chrono::{DateTime, Local, Utc};
 use eyre::Error;
-use model::{request::Request, session::Session};
+use model::request::Request;
 use mongodb::{Collection, IndexModel, SessionCursor};
+
+use crate::session::Session;
 
 const COLLECTION: &str = "requests";
 

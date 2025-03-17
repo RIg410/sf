@@ -2,8 +2,9 @@ use super::Users;
 use chrono::Utc;
 use eyre::{eyre, Result};
 use log::info;
-use model::{decimal::Decimal, session::Session, subscription::UserSubscription};
+use model::{decimal::Decimal, subscription::UserSubscription};
 use mongodb::bson::oid::ObjectId;
+use storage::session::Session;
 use tx_macro::tx;
 
 impl Users {
@@ -137,9 +138,7 @@ impl Users {
                 if delta > 0 {
                     sub.locked_balance += delta as u32;
                 } else {
-                    sub.locked_balance = sub
-                        .locked_balance
-                        .saturating_sub(delta.unsigned_abs());
+                    sub.locked_balance = sub.locked_balance.saturating_sub(delta.unsigned_abs());
                 }
             });
         self.store.update(session, &mut payer).await?;
@@ -243,7 +242,10 @@ impl Users {
         if let Some(sub) = payer
             .subscriptions_mut()
             .iter_mut()
-            .find(|sub| sub.id == id) { sub.item_price = Some(price); }
+            .find(|sub| sub.id == id)
+        {
+            sub.item_price = Some(price);
+        }
         self.store.update(session, &mut payer).await?;
         Ok(())
     }

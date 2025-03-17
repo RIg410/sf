@@ -6,8 +6,9 @@ use bot_core::{
     widget::{Jmp, View},
 };
 use bot_viewer::user::render_rate;
+use error::LedgerError;
 use eyre::Result;
-use model::{errors::LedgerError, rights::Rule, user::rate::Rate};
+use model::{rights::Rule, user::rate::Rate};
 use mongodb::bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
 use teloxide::types::InlineKeyboardMarkup;

@@ -1,6 +1,7 @@
 use eyre::{eyre, Error};
-use model::{decimal::Decimal, session::Session, subscription::Subscription};
+use model::{decimal::Decimal, subscription::Subscription};
 use mongodb::bson::oid::ObjectId;
+use storage::session::Session;
 use storage::subscription::SubscriptionsStore;
 use thiserror::Error;
 use tx_macro::tx;

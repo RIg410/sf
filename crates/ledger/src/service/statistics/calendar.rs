@@ -1,10 +1,10 @@
+use super::month_id;
 use crate::service::calendar::Calendar;
 use chrono::NaiveDate;
 use eyre::Error;
-use model::{session::Session, statistics::month::MonthStatistics};
+use model::statistics::month::MonthStatistics;
 use std::collections::HashMap;
-
-use super::month_id;
+use storage::session::Session;
 
 pub async fn load_calendar(
     calendar: &Calendar,

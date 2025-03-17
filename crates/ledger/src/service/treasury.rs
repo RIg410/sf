@@ -2,7 +2,6 @@ use chrono::{DateTime, Local, Utc};
 use eyre::Error;
 use model::{
     decimal::Decimal,
-    session::Session,
     statistics::source::Source,
     subscription::Subscription,
     treasury::{
@@ -16,6 +15,7 @@ use model::{
 use mongodb::bson::oid::ObjectId;
 use storage::treasury::TreasuryStore;
 use tx_macro::tx;
+use storage::session::Session;
 
 use std::{ops::Deref, sync::Arc};
 

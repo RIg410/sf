@@ -6,7 +6,6 @@ use model::{
     day::Day,
     ids::DayId,
     program::TrainingType,
-    session::Session,
     training::{Filter, Notified, Statistics, Training, TrainingId},
 };
 use mongodb::{
@@ -14,6 +13,8 @@ use mongodb::{
     options::{FindOneOptions, FindOptions, IndexOptions, UpdateOptions},
     Collection, Database, IndexModel, SessionCursor,
 };
+
+use crate::session::Session;
 
 const COLLECTION: &str = "days";
 
@@ -72,9 +73,7 @@ impl CalendarStore {
             },
             (None, None) => doc! {},
         };
-        let find_options = FindOptions::builder()
-            .sort(doc! { "date_time": 1 })
-            .build();
+        let find_options = FindOptions::builder().sort(doc! { "date_time": 1 }).build();
         Ok(self
             .store
             .find(filter)

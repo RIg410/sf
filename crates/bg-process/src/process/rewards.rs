@@ -4,7 +4,7 @@ use crate::{Ledger, Task};
 use async_trait::async_trait;
 use chrono::Local;
 use eyre::Error;
-use model::session::Session;
+use storage::session::Session;
 use tx_macro::tx;
 
 #[derive(Clone)]

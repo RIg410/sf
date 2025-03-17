@@ -1,16 +1,13 @@
+use super::aggregation::month_range;
+use crate::service::{treasury::Treasury, users::Users};
 use chrono::NaiveDate;
 use eyre::Error;
 use model::{
-    session::Session,
     statistics::month::{EmployeeStat, MonthStatistics},
     treasury::Event,
     user::rate::EmployeeRole,
 };
-
-use crate::service::{treasury::Treasury, users::Users};
-
-use super::aggregation::month_range;
-
+use storage::session::Session;
 
 pub async fn load_treasury(
     session: &mut Session,

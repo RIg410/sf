@@ -14,13 +14,12 @@ use bson::{doc, Bson};
 use eyre::Result;
 use futures_util::{StreamExt as _, TryStreamExt as _};
 use history::HistoryStore;
-use model::session::Session;
 use mongodb::Collection;
 use notification::NotificationStore;
 use requests::RequestStore;
 use rewards::RewardsStore;
 use serde::{Deserialize, Serialize};
-use session::Db;
+use session::{Db, Session};
 use std::{collections::HashMap, sync::Arc};
 use user::UserStore;
 

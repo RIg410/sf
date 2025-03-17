@@ -1,11 +1,9 @@
 use eyre::Error;
-use model::{
-    program::{Program, TrainingType},
-    session::Session,
-};
+use model::program::{Program, TrainingType};
 use mongodb::bson::oid::ObjectId;
 use std::{ops::Deref, sync::Arc};
 use storage::program::ProgramStore;
+use storage::session::Session;
 use tx_macro::tx;
 
 #[derive(Clone)]

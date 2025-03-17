@@ -6,13 +6,12 @@ version = "0.1.0"
 
 [workspace]
 exclude = [
-  "crates/mini-app/front",
 ]
+
 members = [
   "crates/bg-process",
   "crates/bot/*",
   "crates/ledger",
-  "crates/mini-app/*",
   "crates/model",
   "crates/storage",
   "crates/tx_macro",
@@ -20,13 +19,16 @@ members = [
   "crates/env",
   "crates/payment/yookassa",
   "crates/time",
-  "crates/graph", 
-  "crates/ai",
+  "crates/graph",
+  "crates/ai", 
+  "crates/error",
+  "mini-app/main",
 ]
 
 resolver = "2"
 
 [workspace.dependencies]
+ai = {path = "crates/ai"}
 bg-process = {path = "crates/bg-process"}
 bot-calendar = {path = "crates/bot/calendar"}
 bot-core = {path = "crates/bot/core"}
@@ -42,9 +44,9 @@ bot-viewer = {path = "crates/bot/viewer"}
 bot-views = {path = "crates/bot/views"}
 graph = {path = "crates/graph"}
 time = {path = "crates/time"}
-ai = {path = "crates/ai"}
+error = {path = "crates/error"}
 
-mini-app-main = {path = "crates/mini-app/main"}
+mini-app-main = {path = "mini-app/main"}
 
 env = {path = "crates/env"}
 ledger = {path = "crates/ledger"}
@@ -54,6 +56,7 @@ tx_macro = {path = "crates/tx_macro"}
 yookassa = {path = "crates/payment/yookassa"}
 
 #libs 
+arc-swap = "1.7.1"
 async-trait = "0.1.81"
 axum = "0.7.7"
 axum-extra = {version = "0.9.4", features = ["cookie-private"]}
@@ -62,6 +65,7 @@ bs58 = "0.5.1"
 bson = {version = "2", features = ["chrono-0_4"]}
 chrono = {version = "0.4.38", features = ["serde"]}
 color-eyre = "0.6"
+csv = "1.3.1"
 derive_more = "0.99"
 dotenv = "0.15.0"
 eyre = "0.6"
@@ -77,6 +81,7 @@ parking_lot = "0.12.3"
 plotly = {version = "0.12", features = ["kaleido", "kaleido_download"]}
 pretty_env_logger = "0.5"
 proc-macro2 = "1.0"
+prost = "0.13.5"
 quote = "1.0"
 rand = "0.8.4"
 reqwest = {version = "0.12.9", features = ["json"]}
@@ -90,8 +95,8 @@ teloxide = {version = "0.13", features = ["macros"]}
 thiserror = "1"
 tokio = {version = "1", features = ["full"]}
 tokio-cron-scheduler = {version = "0.13.0", features = ["english"]}
+tonic = "0.12.3"
+tonic-build = "0.12.3"
 url = "2"
 uuid = "1.11.0"
 zip = "2.2.0"
-arc-swap = "1.7.1"
-csv = "1.3.1"

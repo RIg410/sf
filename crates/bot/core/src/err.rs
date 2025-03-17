@@ -1,7 +1,8 @@
 use crate::{context::Context, widget::Jmp};
 use chrono::Local;
+use error::LedgerError;
 use eyre::{Error, Result};
-use model::{errors::LedgerError, training::TrainingId, user::rate::Rate};
+use model::{training::TrainingId, user::rate::Rate};
 use mongodb::bson::oid::ObjectId;
 use teloxide::utils::markdown::escape;
 

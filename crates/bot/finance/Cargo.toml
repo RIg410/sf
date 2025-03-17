@@ -8,6 +8,7 @@ async-trait.workspace = true
 bincode.workspace = true
 bot-core.workspace = true
 bot-viewer.workspace = true
+error.workspace = true
 chrono.workspace = true
 eyre.workspace = true
 hex.workspace = true

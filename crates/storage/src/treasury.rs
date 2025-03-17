@@ -1,8 +1,10 @@
 use bson::doc;
 use chrono::{DateTime, Local, Utc};
 use eyre::Error;
-use model::{session::Session, treasury::TreasuryEvent};
+use model::treasury::TreasuryEvent;
 use mongodb::{options::IndexOptions, Collection, IndexModel, SessionCursor};
+
+use crate::session::Session;
 
 const COLLECTION: &str = "treasury";
 

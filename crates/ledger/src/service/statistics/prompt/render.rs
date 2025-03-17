@@ -3,7 +3,6 @@ use chrono::NaiveDate;
 use eyre::Result;
 use model::{
     rooms::Room,
-    session::Session,
     statistics::{
         month::{MarketingStat, MonthStatistics, SubscriptionStat, TreasuryIO},
         source::Source,
@@ -11,6 +10,7 @@ use model::{
     },
 };
 use std::collections::{HashMap, HashSet};
+use storage::session::Session;
 
 use crate::service::users::Users;
 

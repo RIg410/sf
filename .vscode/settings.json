@@ -3,5 +3,6 @@
         "bson",
         "teloxide",
         "Yookassa"
-    ]
+    ],
+    "makefile.configureOnOpen": false
 }

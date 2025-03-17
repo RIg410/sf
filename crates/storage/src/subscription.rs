@@ -1,8 +1,8 @@
-use crate::session::Db;
+use crate::session::{Db, Session};
 use bson::{doc, oid::ObjectId};
 use eyre::Error;
 use log::info;
-use model::{decimal::Decimal, session::Session, subscription::Subscription};
+use model::{decimal::Decimal, subscription::Subscription};
 use mongodb::Collection;
 
 const TABLE_NAME: &str = "subscriptions";

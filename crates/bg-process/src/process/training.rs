@@ -9,11 +9,11 @@ use log::{error, info};
 use model::{
     program::TrainingType,
     rights::Rule,
-    session::Session,
     subscription::UserSubscription,
     training::{Statistics, Training, TrainingStatus},
     user::{employee::UserRewardContribution, family::FindFor, User},
 };
+use storage::session::Session;
 use teloxide::{
     types::{ChatId, InlineKeyboardMarkup},
     utils::markdown::escape,

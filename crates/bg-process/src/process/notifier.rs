@@ -5,8 +5,9 @@ use bot_viewer::day::fmt_time;
 use chrono::{DateTime, Local};
 use eyre::Error;
 use ledger::Ledger;
-use model::{ids::DayId, session::Session, training::Notified};
+use model::{ids::DayId, training::Notified};
 use mongodb::bson::oid::ObjectId;
+use storage::session::Session;
 use std::sync::Arc;
 use teloxide::{types::ChatId, utils::markdown::escape};
 

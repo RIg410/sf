@@ -1,7 +1,7 @@
-use eyre::Error;
-use model::{history::Action, session::Session, user::User};
-
 use super::Statistics;
+use eyre::Error;
+use model::{history::Action, user::User};
+use storage::session::Session;
 
 impl Statistics {
     pub async fn find_clients_without_subscription(

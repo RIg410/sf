@@ -1,18 +1,18 @@
 use std::{ops::Deref, sync::Arc};
 
 use chrono::{DateTime, Local, Utc};
+use error::LedgerError;
 use eyre::{Error, Result};
 use model::{
     decimal::Decimal,
-    errors::LedgerError,
     ids::DayId,
-    session::Session,
     slot::Slot,
     training::{Training, TrainingId, TrainingStatus},
 };
 use mongodb::bson::oid::ObjectId;
 use storage::calendar::CalendarStore;
 use tx_macro::tx;
+use storage::session::Session;
 
 use super::{programs::Programs, users::Users};
 

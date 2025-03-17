@@ -7,7 +7,6 @@ use futures_util::stream::TryStreamExt;
 use log::info;
 use model::decimal::Decimal;
 use model::rights::{self, Rule};
-use model::session::Session;
 use model::statistics::source::Source;
 use model::subscription::{Status, Subscription, UserSubscription};
 use model::user::extension::UserExtension;
@@ -18,6 +17,8 @@ use mongodb::{
     Collection, Database,
 };
 use mongodb::{IndexModel, SessionCursor};
+
+use crate::session::Session;
 
 const COLLECTION: &str = "users";
 

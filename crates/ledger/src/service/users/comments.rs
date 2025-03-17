@@ -1,9 +1,9 @@
+use super::Users;
 use bson::oid::ObjectId;
 use eyre::Error;
-use model::{session::Session, user::comments::Comment};
+use model::user::comments::Comment;
+use storage::session::Session;
 use tx_macro::tx;
-
-use super::Users;
 
 impl Users {
     #[tx]

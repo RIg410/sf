@@ -27,3 +27,4 @@ bson.workspace = true
 ai.workspace = true
 arc-swap.workspace = true
 csv.workspace = true
+error.workspace = true

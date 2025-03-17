@@ -1,10 +1,9 @@
+use eyre::{Context, Error};
 use std::{
     collections::HashMap,
     io::{Cursor, Read, Write as _},
 };
-
-use eyre::{Context, Error};
-use model::session::Session;
+use storage::session::Session;
 use storage::{CollectionBackup, Storage};
 use tx_macro::tx;
 use zip::write::SimpleFileOptions;

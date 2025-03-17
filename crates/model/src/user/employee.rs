@@ -1,6 +1,5 @@
 use crate::{
     decimal::Decimal,
-    errors::LedgerError,
     reward::{Reward, RewardSource},
     training::Training,
 };
@@ -48,21 +47,17 @@ impl Employee {
         &mut self,
         training: &Training,
         users: Vec<UserRewardContribution>,
-    ) -> Result<Option<Reward>, LedgerError> {
+    ) -> Result<Option<Reward>, Error> {
         if training.clients.is_empty() {
             return Ok(None);
         }
 
         if training.clients.len() != users.len() {
-            return Err(LedgerError::WrongTrainingClients {
-                training_id: training.id(),
-            });
+            bail!("Wrong training clients");
         }
         for user in &users {
             if !training.clients.contains(&user.user) {
-                return Err(LedgerError::WrongTrainingClients {
-                    training_id: training.id(),
-                });
+                bail!("Wrong training clients");
             }
         }
 

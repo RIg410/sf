@@ -2,10 +2,10 @@ use bson::oid::ObjectId;
 use chrono::{Duration, Local};
 use model::{
     decimal::Decimal,
-    session::Session,
     statistics::user::{Statistics, SubscriptionStat},
     training::CLOSE_SING_UP,
 };
+use storage::session::Session;
 
 use super::Users;
 

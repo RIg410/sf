@@ -2,7 +2,7 @@ use bson::oid::ObjectId;
 use chrono::Local;
 use thiserror::Error;
 
-use crate::{
+use model::{
     ids::DayId,
     training::{Training, TrainingId, TrainingStatus},
     user::rate::Rate,

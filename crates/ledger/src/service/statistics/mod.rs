@@ -1,10 +1,9 @@
 pub mod aggregation;
 pub mod calendar;
+pub mod clients;
 pub mod history;
 pub mod prompt;
 pub mod treasury;
-pub mod clients;
-
 
 use super::{
     calendar::Calendar, history::History, requests::Requests, treasury::Treasury, users::Users,
@@ -13,8 +12,8 @@ use aggregation::RequiredAggregations;
 use ai::{Ai, AiContext, AiModel};
 use chrono::{DateTime, Datelike as _, Local, NaiveDate};
 use eyre::Error;
-use model::session::Session;
 use prompt::select_aggregation;
+use storage::session::Session;
 
 pub struct Statistics {
     calendar: Calendar,

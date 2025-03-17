@@ -1,10 +1,11 @@
+use crate::session::Session;
+
 use super::UserStore;
 use bson::oid::ObjectId;
 use bson::{to_bson, to_document};
 use eyre::{Error, Result};
 use futures_util::TryStreamExt as _;
 use log::info;
-use model::session::Session;
 use model::user::employee::Employee;
 use model::user::rate::Rate;
 use model::user::User;
@@ -37,9 +38,9 @@ impl UserStore {
         let update = if let Some(rates) = update_rates {
             doc! {
                 "$inc": { "version": 1 },
-                "$set": { 
+                "$set": {
                     "employee.rates": to_bson(&rates)?,
-                     "employee.reward":  reward.inner() 
+                     "employee.reward":  reward.inner()
                 }
             }
         } else {

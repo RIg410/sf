@@ -19,9 +19,9 @@ test:
 
 build-front:
 	rm -rf bot-static/*
-	cd crates/mini-app/front; cp -rf * ../../../bot-static
-	cd bot-static; rm -r *.json 
-	cd crates/mini-app/front; tsc
+	cd mini-app/sf-view; yarn lint
+	cd mini-app/sf-view; yarn build
+	cp -rf mini-app/sf-view/dist/* bot-static
 
 deploy-front: build-front
 	sh ./scripts/sync.sh

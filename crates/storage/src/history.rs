@@ -1,8 +1,10 @@
 use bson::{doc, oid::ObjectId};
 use chrono::{DateTime, Local, Utc};
 use eyre::Error;
-use model::{history::HistoryRow, session::Session};
+use model::history::HistoryRow;
 use mongodb::{Collection, IndexModel, SessionCursor};
+
+use crate::session::Session;
 
 const COLLECTION: &str = "history";
 

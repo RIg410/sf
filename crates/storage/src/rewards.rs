@@ -1,7 +1,9 @@
 use bson::{doc, oid::ObjectId};
 use eyre::Error;
-use model::{reward::Reward, session::Session};
+use model::reward::Reward;
 use mongodb::Collection;
+
+use crate::session::Session;
 
 const REWARD_COLLECTION: &str = "reward";
 

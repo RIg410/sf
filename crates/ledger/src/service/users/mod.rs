@@ -5,7 +5,6 @@ use eyre::{bail, eyre, Result};
 use log::info;
 use model::{
     rights::{Rights, Rule},
-    session::Session,
     statistics::source::Source,
     user::{
         extension::{Birthday, UserExtension},
@@ -14,16 +13,17 @@ use model::{
 };
 use mongodb::{bson::oid::ObjectId, SessionCursor};
 use std::{ops::Deref, sync::Arc};
+use storage::session::Session;
 use storage::user::UserStore;
 use thiserror::Error;
 use tx_macro::tx;
 
+pub mod ai;
 pub mod comments;
 pub mod employee;
 pub mod family;
-pub mod subscription;
-pub mod ai;
 pub mod statistics;
+pub mod subscription;
 
 #[derive(Clone)]
 pub struct Users {

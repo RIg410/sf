@@ -1,8 +1,9 @@
 use crate::service::users::Users;
 use chrono::NaiveDate;
 use eyre::Result;
-use model::{session::Session, statistics::month::MonthStatistics};
+use model::statistics::month::MonthStatistics;
 use std::collections::HashMap;
+use storage::session::Session;
 
 mod render;
 

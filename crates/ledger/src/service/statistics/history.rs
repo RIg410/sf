@@ -3,10 +3,10 @@ use chrono::NaiveDate;
 use eyre::Result;
 use model::{
     history::Action,
-    session::Session,
     statistics::month::{MonthStatistics, SourceStat, SubscriptionStat},
 };
 use std::collections::HashMap;
+use storage::session::Session;
 
 use super::aggregation::month_range;
 

@@ -1,12 +1,14 @@
 use bson::to_document;
 use eyre::Error;
 use futures_util::TryStreamExt as _;
-use model::{program::Program, session::Session};
+use model::program::Program;
 use mongodb::{
     bson::{doc, oid::ObjectId},
     options::UpdateOptions,
     Collection,
 };
+
+use crate::session::Session;
 
 const COLLECTION: &str = "training";
 

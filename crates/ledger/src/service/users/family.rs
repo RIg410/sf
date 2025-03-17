@@ -1,11 +1,11 @@
+use error::LedgerError;
 use eyre::Result;
 use model::{
-    errors::LedgerError,
     rights::Rights,
-    session::Session,
     user::{User, UserName},
 };
 use mongodb::bson::oid::ObjectId;
+use storage::session::Session;
 use tx_macro::tx;
 
 use super::Users;

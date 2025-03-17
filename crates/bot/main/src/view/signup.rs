@@ -7,8 +7,9 @@ use bot_core::{
 use eyre::{Context as _, Ok};
 use ledger::Ledger;
 use log::info;
-use model::{session::Session, user::UserName};
+use model::user::UserName;
 use mongodb::bson::oid::ObjectId;
+use storage::session::Session;
 use teloxide::types::{
     ButtonRequest, Contact, KeyboardButton, KeyboardMarkup, KeyboardRemove, Message, ReplyMarkup,
 };

@@ -6,13 +6,13 @@ use model::{
     decimal::Decimal,
     history::{Action, HistoryRow},
     rooms::Room,
-    session::Session,
     subscription::{Subscription, UserSubscription},
     training::Training,
     user::UserName,
 };
 use mongodb::bson::oid::ObjectId;
 use storage::history::HistoryStore;
+use storage::session::Session;
 
 #[derive(Clone)]
 pub struct History {

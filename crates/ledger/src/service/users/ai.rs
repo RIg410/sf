@@ -6,10 +6,10 @@ use eyre::Error;
 use model::decimal::Decimal;
 use model::{
     history::HistoryRow,
-    session::Session,
     subscription::UserSubscription,
     user::{extension::UserExtension, User},
 };
+use storage::session::Session;
 
 use super::Users;
 
