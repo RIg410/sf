@@ -30,6 +30,7 @@ restart-nginx:
 	sudo docker image prune -a -f
 	sudo docker compose build nginx
 	sudo docker compose up -d --build nginx
+	sudo docker compose restart nginx
 
 restart-back: 
 	cargo build --release	
