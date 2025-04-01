@@ -1,7 +1,10 @@
 <template>
   <nav>
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+    <router-link to="/">Главная</router-link> |
+    <router-link to="/profile">Профиль</router-link> |
+    <router-link to="/schedule">Расписание</router-link> |
+    <router-link to="/instructors">Инструкторы</router-link> |
+    <router-link to="/more">Еще</router-link> |
   </nav>
   <router-view/>
 </template>
