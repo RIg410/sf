@@ -10,6 +10,5 @@ message TgKeyRequest {
 }
 
 message Token {
-    // Reply contains the greeting message
     string token = 1;
 }
