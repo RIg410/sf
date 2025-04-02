@@ -122,7 +122,11 @@ export default defineComponent({
       () => route.path,
       (newPath) => {
         if (!isAuthenticated.value && newPath !== '/auth') {
-          router.push('/auth');
+          if (auth.getAuthType() === 'telegram') {
+            router.push('/tg-auth');
+          } else {
+            router.push('/auth');
+          }
         }
       }
     );

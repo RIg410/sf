@@ -7,6 +7,7 @@
 
         <div class="auth-form">
             <div v-if="authError" class="error-message">{{ authError }}</div>
+            <div v-if="authError" class="error-message">Свяжитесь с администратором 🔧</div>
         </div>
     </div>
 </template>
@@ -29,7 +30,7 @@ export default defineComponent({
         onMounted(async () => {
             const result = await auth.authThroughTelegram();
             if (result) {
-                authError.value = result + "\n Свяжитесь с администратором";
+                authError.value = result;
             } else {
                 router.push({ name: 'HomeView' });
             }
@@ -71,8 +72,8 @@ h1 {
 
 .error-message {
     color: #ff5252;
-    font-size: 0.75rem;
-    margin-top: 4px;
+    font-size: 1rem;
+    margin-top: 10px;
 }
 
 :root {

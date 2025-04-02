@@ -41,7 +41,7 @@ export class Auth {
             return null;
         }
         if (this.auth_type !== "telegram") {
-            throw new Error("Not in telegram context");
+            return "Неизвестный тип авторизации. Пожалуйста, перезайдите в приложение.";
         }
         if (this.auth_service === null) {
             this.auth_service = new AuthServiceClientImpl(this.rpc_client);
