@@ -1,4 +1,4 @@
-import { ref, reactive } from 'vue';
+import { reactive } from 'vue';
 
 interface ToastOptions {
     message: string;

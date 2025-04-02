@@ -13,9 +13,8 @@
                         :class="{ 'input-error': phoneNumberError }" @blur="validatePhone" />
                     <div v-if="phoneNumberError" class="error-message">{{ phoneNumberError }}</div>
                 </div>
-                <button @click="sendAuthCode" class="primary-button" :class="{ 'button-disabled': cooldownActive }"
-                    :disabled="cooldownActive">
-                    {{ cooldownActive ? `Resend in ${countdown}s` : 'Send Code' }}
+                <button @click="sendAuthCode" class="text-button">
+                    Отправить код
                 </button>
             </template>
 
@@ -26,8 +25,14 @@
                         :class="{ 'input-error': codeError }" @blur="validateCode" />
                     <div v-if="codeError" class="error-message">{{ codeError }}</div>
                 </div>
-                <button @click="verifyCode" class="primary-button">
+                <div v-if="cooldownActive" class="countdown">
+                    Код будет доступен для повторной отправки через {{ countdown }} секунд
+                </div>
+                <button v-if="!cooldownActive" @click="sendAuthCode" class="text-button">
                     Отправить код
+                </button>
+                <button @click="verifyCode" class="text-button">
+                    Подтвердить
                 </button>
                 <button @click="goBack" class="text-button">
                     Попробовать другой номер
@@ -51,7 +56,6 @@ export default defineComponent({
         //const authStore = useAuthStore();
         const { showToast } = useToast();
 
-        // Form state
         const phoneNumber = ref('');
         const verificationCode = ref('');
         const isCodeSent = ref(false);
@@ -61,7 +65,6 @@ export default defineComponent({
         const codeError = ref('');
         let countdownTimer: number | null = null;
 
-        // Validation functions
         const validatePhone = () => {
             if (!phoneNumber.value) {
                 phoneNumberError.value = 'Обязательное поле';
@@ -87,7 +90,6 @@ export default defineComponent({
             return true;
         };
 
-        // Start cooldown timer for resending code
         const startCooldown = (seconds = 60) => {
             cooldownActive.value = true;
             countdown.value = seconds;
@@ -104,14 +106,11 @@ export default defineComponent({
             }, 1000);
         };
 
-        // Send authentication code
         const sendAuthCode = async () => {
             try {
                 if (!validatePhone()) {
                     return;
                 }
-
-                // Format phone number (remove spaces, ensure + prefix)
                 const formattedPhone = phoneNumber.value.replace(/\s/g, '');
 
                 // Here you would call your API to send verification code
@@ -126,7 +125,6 @@ export default defineComponent({
             }
         };
 
-        // Verify the authentication code
         const verifyCode = async () => {
             try {
                 if (!validateCode()) {
@@ -144,14 +142,12 @@ export default defineComponent({
             }
         };
 
-        // Go back to phone number input
         const goBack = () => {
             isCodeSent.value = false;
             verificationCode.value = '';
             codeError.value = '';
         };
 
-        // Clean up timer when component is destroyed
         onBeforeUnmount(() => {
             if (countdownTimer) {
                 clearInterval(countdownTimer);
