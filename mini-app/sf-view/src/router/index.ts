@@ -4,7 +4,8 @@ import InstructorsView from '@/views/InstructorsView.vue'
 import MoreView from '@/views/MoreView.vue'
 import ProfileView from '@/views/ProfileView.vue'
 import ScheduleView from '@/views/ScheduleView.vue'
-import PhoneAuthView from '@/views/PhoneAuthView.vue'
+import PhoneAuthView from '@/views/auth/PhoneAuthView.vue'
+import TgAuthView from '@/views/auth/TgAuthView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -33,9 +34,14 @@ const routes: Array<RouteRecordRaw> = [
     component: ScheduleView
   },
   {
-    path: '/auth',  
+    path: '/auth',
     name: 'auth',
     component: PhoneAuthView
+  },
+  {
+    path: '/tg-auth',
+    name: 'tg-auth',
+    component: TgAuthView
   }
   // {
   //   path: '/about',

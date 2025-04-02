@@ -1,14 +1,44 @@
 syntax = "proto3";
 package auth;
 
-service Auth {
-    rpc tg_auth (TgKeyRequest) returns (Token);
+import "status.proto";
+
+service AuthService {
+    rpc tg_auth (TgKeyRequest) returns (TgAuthResult);
+
+    rpc send_verification_code (VerificationCodeRequest) returns (SendVerificationCodeResponse);
+
+    rpc verify_code (VerifyCodeRequest) returns (TokenResponse);
+}
+
+message SendVerificationCodeResponse {
+    optional Status error = 2; 
+}
+
+message TgAuthResult {
+    optional string token = 1; 
+    optional TgAuthError error = 2;
+}
+
+message TokenResponse {
+   optional string token = 1; 
+   optional Status error = 2; 
 }
 
 message TgKeyRequest {
     string key = 1;
 }
 
-message Token {
-    string token = 1;
+message VerificationCodeRequest {
+    string phone_number = 1;
+}
+
+message VerifyCodeRequest {
+    string phone_number = 1;
+    string code = 2;
+}
+
+enum TgAuthError {
+    INVALID_TOKEN = 0;
+    TOO_OLD_TOKEN = 1;
 }

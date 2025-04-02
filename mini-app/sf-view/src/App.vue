@@ -80,7 +80,7 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { Auth } from '@/sources/auth';
+import { getAuthService } from '@/sources/auth';
 
 
 export default defineComponent({
@@ -88,7 +88,7 @@ export default defineComponent({
   setup() {
     const router = useRouter();
     const route = useRoute();
-    const auth = new Auth();
+    const auth = getAuthService();
 
 
     const isAuthenticated = ref(false);
@@ -104,13 +104,17 @@ export default defineComponent({
       }
     );
 
-    onMounted(() => {
+    onMounted(async () => {
       auth.checkAuthStatus();
 
       isAuthenticated.value = auth.isAuthenticated();
 
       if (!isAuthenticated.value && route.path !== '/auth') {
-        router.push('/auth');
+        if (auth.getAuthType() === 'telegram') {
+          router.push('/tg-auth');
+        } else {
+          router.push('/auth');
+        }
       }
     });
 

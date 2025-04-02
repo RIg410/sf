@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
+    "gen_proto": "sh gen_proto.sh",
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build",
+    "build": "yarn gen_proto && vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
