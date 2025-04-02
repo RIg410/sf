@@ -1,17 +1,15 @@
 syntax = "proto3";
-package helloworld;
+package auth;
 
-service Greeter {
-    // Our SayHello rpc accepts HelloRequests and returns HelloReplies
-    rpc SayHello (HelloRequest) returns (HelloReply);
+service Auth {
+    rpc tg_auth (TgKeyRequest) returns (Token);
 }
 
-message HelloRequest {
-    // Request message contains the name to be greeted
-    string name = 1;
+message TgKeyRequest {
+    string key = 1;
 }
 
-message HelloReply {
+message Token {
     // Reply contains the greeting message
-    string message = 1;
+    string token = 1;
 }

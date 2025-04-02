@@ -4,6 +4,7 @@ import InstructorsView from '@/views/InstructorsView.vue'
 import MoreView from '@/views/MoreView.vue'
 import ProfileView from '@/views/ProfileView.vue'
 import ScheduleView from '@/views/ScheduleView.vue'
+import PhoneAuthView from '@/views/PhoneAuthView.vue'
 
 const routes: Array<RouteRecordRaw> = [
   {
@@ -30,6 +31,11 @@ const routes: Array<RouteRecordRaw> = [
     path: '/schedule',
     name: 'schedule',
     component: ScheduleView
+  },
+  {
+    path: '/auth',  
+    name: 'auth',
+    component: PhoneAuthView
   }
   // {
   //   path: '/about',

@@ -1,7 +1,7 @@
 <template>
   <header id="header"></header>
   <router-view />
-  <footer class="navbar">
+  <footer class="navbar" v-if="isAuthenticated">
     <div class="nav-btn">
       <router-link class="nav-link" to="/">
         <svg width="28" height="28" xmlns="http://www.w3.org/2000/svg" fill="none">
@@ -56,7 +56,7 @@
       </router-link>
     </div>
     <div class="nav-btn">
-      <router-link class="nav-link"  to="/more">
+      <router-link class="nav-link" to="/more">
         <svg width="28" height="28" xmlns="http://www.w3.org/2000/svg" fill="none">
           <defs>
             <clipPath id="clip0_136_163">
@@ -76,6 +76,59 @@
     </div>
   </footer>
 </template>
+
+<script lang="ts">
+import { defineComponent, ref, onMounted, watch } from 'vue';
+import { useRouter, useRoute } from 'vue-router';
+import { Auth } from '@/sources/auth';
+
+
+export default defineComponent({
+  name: 'App',
+  setup() {
+    const router = useRouter();
+    const route = useRoute();
+    const auth = new Auth();
+
+
+    const isAuthenticated = ref(false);
+
+    watch(
+      () => auth.isAuthenticated(),
+      (newValue) => {
+        isAuthenticated.value = newValue;
+
+        if (!newValue && route.path !== '/auth') {
+          router.push('/auth');
+        }
+      }
+    );
+
+    onMounted(() => {
+      auth.checkAuthStatus();
+
+      isAuthenticated.value = auth.isAuthenticated();
+
+      if (!isAuthenticated.value && route.path !== '/auth') {
+        router.push('/auth');
+      }
+    });
+
+    watch(
+      () => route.path,
+      (newPath) => {
+        if (!isAuthenticated.value && newPath !== '/auth') {
+          router.push('/auth');
+        }
+      }
+    );
+
+    return {
+      isAuthenticated
+    };
+  }
+});
+</script>
 
 <style lang="scss">
 body,
@@ -167,6 +220,7 @@ a {
     color: #e24c4c;
   }
 }
+
 .nav-link {
   display: flex;
   flex-direction: column;
