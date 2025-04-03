@@ -215,7 +215,7 @@ impl TriningBg {
         let balance = payer.available_balance_for_training(training);
 
         // Notify user and manager if balance is zero and user has more than one lesson in subscription.
-        if balance == 0 && sub.items > 1 {
+        if balance == 0 && sub.locked_balance == 0 && sub.items > 1 {
             Ok(Some(Notification {
                 to_user: (
                     "Ваш абонемент закончился🥺".to_string(),

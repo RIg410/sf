@@ -1,0 +1,18 @@
+syntax = "proto3";
+package users;
+
+import "user.proto";
+
+service UsersService {
+    rpc get(UserId) returns (user.User);
+    rpc find(UserFilter) returns (stream user.User);
+
+}
+
+message UserId {
+    int64 id = 1;
+}
+
+message UserFilter {
+  
+}

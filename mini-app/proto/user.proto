@@ -1,0 +1,206 @@
+syntax = "proto3";
+package user;
+
+
+message User {
+    string id = 1;
+    int64 tg_id = 2;
+    UserName name = 3;
+    Rights rights = 4;
+    optional string phone = 5;
+    bool is_active = 6;
+    optional Freeze freeze = 7;
+    repeated UserSubscription subscriptions = 8;
+    uint32 freeze_days = 9;
+    uint64 created_at = 11;
+    optional Employee employee = 12;
+    optional Source come_from = 13;
+    optional Family family = 14;
+}
+
+message UserName {
+    optional string tg_user_name = 1;
+    string first_name = 2;
+    optional string last_name = 3;
+}
+
+message Freeze {
+    string freeze_start = 1;
+    string freeze_end = 2;
+}
+
+message UserSubscription {
+    string id = 1;
+    string subscription_id = 2;
+    string name = 3;
+    uint32 items = 4;
+    uint32 days = 5;
+    Status status = 6;
+    string price = 7;
+    SubscriptionType tp = 8;
+    uint32 balance = 9;
+    uint32 locked_balance = 10;
+    bool unlimited = 11;
+    optional string discount = 12;
+    optional string item_price = 13;
+}
+
+message Employee {
+    EmployeeRole role = 1;
+    string description = 2;
+    string reward = 3;
+    repeated Rate rates = 4;
+}
+
+enum Source {
+    UNKNOWN = 0;
+    WEBSITE = 1;
+    INSTAGRAM = 2;
+    VK = 3;
+    YANDEX_MAP = 4;
+    YANDEX_DIRECT = 5;
+    DIRECT_ADDS = 6;
+    VK_ADDS = 7;
+    DOUBLE_GIS = 8;
+    AVITO = 9;
+    RECOMMENDATION = 10;
+    OTHER = 11;
+    WEB_SEARCH = 12;
+    OLD_BASE = 13;
+}
+
+message Family {
+    optional string payer_id = 1;
+    bool is_individual = 2;
+    optional User payer = 3;
+    repeated string children_ids = 4;
+    repeated User children = 5;
+    repeated string members = 6;
+}
+
+message Rights {
+    bool full = 1;
+    repeated Rule rights = 2;
+}
+
+enum Rule {
+    VIEW_PROFILE = 0;
+    VIEW_USERS = 1;
+    EDIT_USER_RIGHTS = 2;
+    BLOCK_USER = 3;
+    EDIT_USER_INFO = 4;
+    EDIT_USER_SUBSCRIPTION = 5;
+    FREEZE_USERS = 6;
+    CHANGE_BALANCE = 7;
+    EDIT_MARKETING_INFO = 8;
+    EDIT_FAMILY = 9;
+    VIEW_FAMILY = 10;
+    EDIT_AI_PROMPT = 11;
+    VIEW_USER_COMMENTS = 12;
+    EDIT_USER_COMMENTS = 13;
+    DELETE_USER_COMMENTS = 14;
+    EDIT_TRAINING = 15;
+    CREATE_TRAINING = 16;
+    EDIT_TRAINING_CLIENTS_LIST = 17;
+    SET_KEEP_OPEN = 18;
+    SET_FREE = 19;
+    EDIT_SCHEDULE = 20;
+    CANCEL_TRAINING = 21;
+    REMOVE_TRAINING = 22;
+    EDIT_TRAINING_COUCH = 23;
+    SCHEDULE_GROUP_TRAINING = 24;
+    SCHEDULE_PERSONAL_TRAINING = 25;
+    SCHEDULE_SUB_RENT = 26;
+    SELECT_PERSONAL_INSTRUCTOR = 27;
+    VIEW_ALL_TRAININGS = 28;
+    CHANGE_TRAINING_SLOT = 29;
+    CREATE_SUBSCRIPTION = 30;
+    EDIT_SUBSCRIPTION = 31;
+    SELL_SUBSCRIPTION = 32;
+    FREE_SELL = 33;
+    SUB_RENT = 34;
+    VIEW_FINANCE = 35;
+    MAKE_PAYMENT = 36;
+    MAKE_DEPOSIT = 37;
+    FINANCE_HISTORICAL_DATE = 38;
+    DELETE_HISTORY = 39;
+    VIEW_EMPLOYEES = 40;
+    EDIT_EMPLOYEE = 41;
+    EDIT_EMPLOYEE_RATES = 42;
+    VIEW_LOGS = 43;
+    CREATE_COUCH = 44;
+    EDIT_COUCH = 45;
+    VIEW_COUCH_RATES = 46;
+    VIEW_STATISTICS = 47;
+    SYSTEM = 48;
+    VIEW_REWARDS = 49;
+    RECALCULATE_REWARDS = 50;
+    VIEW_MARKETING_INFO = 51;
+    CREATE_REQUEST = 52;
+    REQUESTS_HISTORY = 53;
+    RECEIVE_NOTIFICATIONS_ABOUT_SUBSCRIPTIONS = 54;
+    RECEIVE_NOTIFICATIONS_ABOUT_BIRTHDAYS = 55;
+    RECEIVE_AI_NOTIFICATIONS = 56;
+    MINI_APP = 57;
+    BUY_SUBSCRIPTION = 58;
+    VIEW_HIDDEN_PROGRAMS = 59;
+    HISTORY_VIEWER = 60;
+    AI_STATISTIC = 61;
+    AI_USER_INFO = 62;
+    SELECT_MODEL = 63;
+}
+
+enum EmployeeRole {
+    COUCH = 0;
+    MANAGER = 1;
+    ADMIN = 2;
+}
+
+message Rate {
+    oneof rate_type {
+        FixRate fix = 1;
+        GroupTrainingRate group_training = 2;
+        PersonalTrainingRate personal_training = 3;
+    }
+}
+
+message FixRate {
+    int64 amount = 1;
+    int64 next_payment_date = 2;
+    Interval reward_interval = 3;
+}
+
+message GroupTrainingRate {
+    int64 percent = 1;
+    int64 min_reward = 2;
+}
+
+message PersonalTrainingRate {
+    int64 percent = 1;
+}
+
+message Interval {
+    uint32 month_num = 1;
+}
+enum Status {
+    NOT_ACTIVE = 0;
+    ACTIVE = 1;
+}
+
+message ActiveStatus {
+    int64 start_date = 1;
+    int64 end_date = 2;
+}
+
+enum SubscriptionType {
+    GROUP = 0;
+    PERSONAL = 1;
+}
+
+message GroupSubscription {
+    repeated string program_filter = 1;
+}
+
+message PersonalSubscription {
+    string couch_filter = 1;
+}
