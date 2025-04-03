@@ -1,4 +1,4 @@
-use auth::{ctx, AuthServer};
+use auth::AuthServer;
 use bot_main::BotApp;
 use eyre::Result;
 use ledger::Ledger;
@@ -7,6 +7,7 @@ use std::sync::Arc;
 use tonic::transport::Server;
 
 pub(crate) mod auth;
+pub(crate) mod ctx;
 pub(crate) mod pb;
 
 pub fn spawn(ledger: Arc<Ledger>, bot: BotApp) -> Result<()> {

@@ -1,4 +1,4 @@
-use super::jwt::Jwt;
+use crate::auth::jwt::{Claims, Jwt};
 use bot_core::{
     bot::{Origin, TgBot, ValidToken},
     context::Context,
@@ -9,6 +9,7 @@ use env::Env;
 use ledger::Ledger;
 use std::sync::Arc;
 use teloxide::types::{ChatId, MessageId};
+use tokio::time::sleep;
 use tonic::Status;
 
 #[derive(Clone)]
@@ -22,6 +23,23 @@ impl ContextBuilder {
     pub fn new(ledger: Arc<Ledger>, bot: BotApp) -> Self {
         let jwt = Arc::new(Jwt::new(bot.env.jwt_secret()));
         ContextBuilder { ledger, bot, jwt }
+    }
+
+    pub async fn with_request<T>(&self, request: &tonic::Request<T>) -> Result<Context, Status> {
+        let meta = request.metadata();
+        let token = meta.get("Authorization").and_then(|v| v.to_str().ok());
+        if let Some(token) = token {
+            if let Ok((claim, _)) = self.jwt.claims::<Claims>(token) {
+                self.build(claim.id).await
+            } else {
+                sleep(std::time::Duration::from_secs(1)).await;
+                log::warn!("Failed to decode token: {}", token);
+                return Err(Status::unauthenticated("Invalid token"));
+            }
+        } else {
+            sleep(std::time::Duration::from_secs(1)).await;
+            return Err(Status::unauthenticated("No Authorization header"));
+        }
     }
 
     pub fn env(&self) -> &Env {
@@ -84,5 +102,14 @@ impl ContextBuilder {
             session,
             true,
         ))
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct UserId(pub ObjectId);
+
+impl From<UserId> for ObjectId {
+    fn from(user_id: UserId) -> Self {
+        user_id.0
     }
 }

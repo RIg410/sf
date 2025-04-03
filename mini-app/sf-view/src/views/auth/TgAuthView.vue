@@ -30,7 +30,7 @@ export default defineComponent({
             if (result) {
                 authError.value = result;
             } else {
-                router.back();
+                await router.back();
             }
         });
 

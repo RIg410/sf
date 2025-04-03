@@ -1,3 +1,4 @@
+use crate::ctx::ContextBuilder;
 use crate::pb::auth::auth_service_server::AuthService;
 use crate::pb::auth::{
     SendVerificationCodeError, SendVerificationCodeResponse, TgAuthError, TgAuthResult,
@@ -12,21 +13,19 @@ use tokio::time::sleep;
 use tonic::async_trait;
 
 pub mod codes;
-pub mod ctx;
-pub mod interceptor;
 pub mod jwt;
 pub mod tg_token;
 
 #[derive(Clone)]
 pub struct AuthServer {
-    context_builder: ctx::ContextBuilder,
+    context_builder: ContextBuilder,
     tg_auth: TgAuth,
     jwt: Arc<Jwt>,
     codes: Codes,
 }
 
 impl AuthServer {
-    pub fn new(context_builder: ctx::ContextBuilder) -> Self {
+    pub fn new(context_builder: ContextBuilder) -> Self {
         let tg_auth = TgAuth::new(context_builder.env().tg_token());
         let jwt = Arc::new(Jwt::new(context_builder.env().jwt_secret()));
         AuthServer {

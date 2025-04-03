@@ -171,7 +171,8 @@ export default defineComponent({
                     await popupService.showOk("Неверный код. Пожалуйста, проверьте код и попробуйте еще раз.");
                     return;
                 }
-                router.back();
+                console.log('Code verified successfully');
+                await router.back();
             } catch (error) {
                 await popupService.showOk("Неверный код. Пожалуйста, проверьте код и попробуйте еще раз.");
                 console.error('Error verifying code:', error);

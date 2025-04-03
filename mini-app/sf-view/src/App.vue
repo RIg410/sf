@@ -111,25 +111,25 @@ export default defineComponent({
 
     onMounted(async () => {
       auth.checkAuthStatus();
-
+      console.log('Auth status checked');
       isAuthenticated.value = auth.isAuthenticated();
       if (!isAuthenticated.value && route.path !== '/auth') {
         if (auth.getAuthType() === 'telegram') {
-          router.push('/tg-auth');
+          await router.push('/tg-auth');
         } else {
-          router.push('/auth');
+          await router.push('/auth');
         }
       }
     });
 
     watch(
       () => route.path,
-      (newPath) => {
+      async (newPath) => {
         if (!isAuthenticated.value && newPath !== '/auth') {
           if (auth.getAuthType() === 'telegram') {
-            router.push('/tg-auth');
+            await router.push('/tg-auth');
           } else {
-            router.push('/auth');
+            await router.push('/auth');
           }
         }
       }
