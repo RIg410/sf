@@ -203,7 +203,7 @@ impl View for EditSubscription {
                     EditType::CanBuyByUser => self.edit_can_buy_by_user(ctx, true).await?,
                 };
                 ctx.send_msg("Изменения сохранены ✅").await?;
-                ctx.reset_origin().await?;
+                ctx.reset_origin();
                 Ok(Jmp::Back)
             }
             Callback::No => {
@@ -211,7 +211,7 @@ impl View for EditSubscription {
                     self.edit_can_buy_by_user(ctx, false).await?;
                 }
 
-                ctx.reset_origin().await?;
+                ctx.reset_origin();
                 Ok(Jmp::Back)
             }
         }

@@ -58,7 +58,7 @@ impl View for ConfirmSell {
                     Err(err.into())
                 } else {
                     ctx.send_msg("🤑 Продано").await?;
-                    ctx.reset_origin().await?;
+                    ctx.reset_origin();
                     Ok(Jmp::Goto(SubscriptionView.into()))
                 }
             }

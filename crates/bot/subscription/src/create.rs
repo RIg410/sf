@@ -332,7 +332,7 @@ impl View for CreateSubscription {
                 match result {
                     Ok(_) => {
                         ctx.send_msg("✅Абонемент создан").await?;
-                        ctx.reset_origin().await?;
+                        ctx.reset_origin();
                         Ok(Jmp::Back)
                     }
                     Err(CreateSubscriptionError::NameAlreadyExists) => {

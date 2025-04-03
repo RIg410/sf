@@ -10,7 +10,7 @@ use std::{
 use teloxide::{
     net::Download,
     payloads::{EditMessageTextSetters as _, SendMessageSetters as _},
-    prelude::Requester as _,
+    prelude::Requester,
     types::{
         ChatId, FileMeta, InlineKeyboardMarkup, InputFile, MessageId, ParseMode, ReplyMarkup, True,
     },
@@ -54,26 +54,11 @@ impl TgBot {
             }
         }
 
-        if let Err(err) = self.reset_origin().await {
-            log::error!("Failed to reset origin: {}.Msg:[{}]", err, msg);
-        }
+        self.origin.invalidate();
     }
 
-    pub async fn remove_origin(&mut self) -> Result<(), Error> {
-        if self.origin.message_id.0 != 0 {
-            self.bot
-                .delete_message(self.chat_id(), self.origin.message_id)
-                .await?;
-        }
-        self.reset_origin().await?;
-        Ok(())
-    }
-
-    pub async fn reset_origin(&mut self) -> Result<(), Error> {
-        let id = self.send_msg("\\.").await?;
-        self.origin.message_id = id;
-        self.origin.set_valid();
-        Ok(())
+    pub fn reset_origin(&mut self) {
+        self.origin.invalidate();
     }
 
     pub async fn load_document(&self, file: &FileMeta) -> Result<Vec<u8>, Error> {
@@ -94,22 +79,38 @@ impl TgBot {
         text: &str,
         markup: InlineKeyboardMarkup,
     ) -> Result<(), eyre::Error> {
-        if !self.origin.is_valid() {
-            self.reset_origin().await?;
-        }
-
-        let update_result = self
-            .bot
-            .edit_message_text(self.chat_id(), self.origin.message_id, text)
-            .parse_mode(teloxide::types::ParseMode::MarkdownV2)
-            .reply_markup(sys_button(markup, self.system_go_back))
-            .await;
-        match update_result {
-            Ok(_) => Ok(()),
-            Err(RequestError::Api(ApiError::MessageNotModified)) => Ok(()),
-            Err(e) => {
-                log::error!("Failed to edit message: {}: {}", e, text);
-                Err(e.into())
+        if self.origin.is_valid() {
+            let result = self
+                .bot
+                .edit_message_text(self.chat_id(), self.origin.message_id, text)
+                .parse_mode(teloxide::types::ParseMode::MarkdownV2)
+                .reply_markup(sys_button(markup, self.system_go_back))
+                .await;
+            match result {
+                Ok(_) => Ok(()),
+                Err(RequestError::Api(ApiError::MessageNotModified)) => Ok(()),
+                Err(e) => {
+                    log::error!("Failed to edit message: {}: {}", e, text);
+                    Err(e.into())
+                }
+            }
+        } else {
+            let result = self
+                .bot
+                .send_message(self.chat_id(), text)
+                .parse_mode(teloxide::types::ParseMode::MarkdownV2)
+                .reply_markup(sys_button(markup, self.system_go_back))
+                .await;
+            match result {
+                Ok(msg) => {
+                    self.origin.message_id = msg.id;
+                    self.origin.set_valid();
+                    Ok(())
+                }
+                Err(e) => {
+                    log::error!("Failed to edit message: {}: {}", e, text);
+                    Err(e.into())
+                }
             }
         }
     }

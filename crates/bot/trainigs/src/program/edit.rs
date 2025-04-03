@@ -150,11 +150,11 @@ impl View for EditProgram {
                     EditType::Description => self.edit_description(ctx, value).await?,
                 };
                 ctx.send_msg("Изменения сохранены ✅").await?;
-                ctx.reset_origin().await?;
+                ctx.reset_origin();
                 Ok(Jmp::Back)
             }
             Callback::No => {
-                ctx.reset_origin().await?;
+                ctx.reset_origin();
                 Ok(Jmp::Back)
             }
         }
