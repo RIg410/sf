@@ -6,25 +6,31 @@ export class FetchRpc implements Rpc {
     private readonly baseUrl: string;
     private readonly token: string | null;
 
-    constructor(baseUrl: string, token: string | null) {
+
+    constructor(token: string | null) {
         this.token = token;
-        this.baseUrl = baseUrl;
+        this.baseUrl = "http://localhost:3000";
     }
 
     async request(service: string, method: string, data: Uint8Array): Promise<Uint8Array> {
-        
+
+        console.log({
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/proto',
+                ...this.token ? { 'Authorization': `Bearer ${this.token}` } : {}
+            },
+            body: data,
+        });
         const response = await fetch(`${this.baseUrl}/${service}/${method}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/proto',
-                ...this.token ? {'Authorization': `Bearer ${this.token}`} : {}
+                ...this.token ? { 'Authorization': `Bearer ${this.token}` } : {}
             },
             body: data,
         });
-        if (this.token) {
-            response.headers.append('Authorization', `Bearer ${this.token}`);
-        }
-    
+
         if (!response.ok) {
             throw new Error(`HTTP Error: ${response.status}, ${response.statusText}`);
         }

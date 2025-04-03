@@ -1,5 +1,7 @@
 <template>
     <div class="phone-home">
+        <PopupView />
+
         <div class="logo-container">
             <img src="@/assets/logo.webp" alt="SoulFamily Logo" class="logo">
             <h1>Добро пожаловать в SoulFamily</h1>
@@ -43,18 +45,21 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, onBeforeUnmount, computed } from 'vue';
+import { defineComponent, ref, onBeforeUnmount, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { useToast } from '@/composables/useToast';
-//import { useAuthStore } from '@/stores/auth';
+import { getAuthService } from '@/services/auth';
+import { SendVerificationCodeError } from '@/generated/auth';
+import PopupView from '@/components/common/PopupView.vue';
+import { popupService } from '@/services/PopupService';
 
 export default defineComponent({
     name: 'PhoneAuthView',
-    components: {},
+    components: {
+        PopupView
+    },
     setup() {
         const router = useRouter();
-        //const authStore = useAuthStore();
-        const { showToast } = useToast();
+        const auth = getAuthService();
 
         const phoneNumber = ref('');
         const verificationCode = ref('');
@@ -64,6 +69,12 @@ export default defineComponent({
         const phoneNumberError = ref('');
         const codeError = ref('');
         let countdownTimer: number | null = null;
+
+        onMounted(async () => {
+            if (auth.isAuthenticated()) {
+                router.back();
+            }
+        });
 
         const validatePhone = () => {
             if (!phoneNumber.value) {
@@ -113,14 +124,37 @@ export default defineComponent({
                 }
                 const formattedPhone = phoneNumber.value.replace(/\s/g, '');
 
-                // Here you would call your API to send verification code
-                // await authStore.sendVerificationCode(formattedPhone);
+                const resp = await auth.sendVerificationCode(formattedPhone);
+
+                if (resp) {
+                    switch (resp.error) {
+                        case SendVerificationCodeError.INVALID_PHONE_NUMBER:
+                            await popupService.showOk("Пользователь не найден. Пожалуста свяжитесь с администратором.");
+                            return;
+                        case SendVerificationCodeError.V_USER_NOT_FOUND:
+                            await popupService.showOk("Пользователь не найден. Пожалуста свяжитесь с администратором.");
+                            return;
+                        case SendVerificationCodeError.ALREADY_SENT:
+                            isCodeSent.value = true;
+                            startCooldown();
+                            countdown.value = resp.leftTime ? resp.leftTime : 60;
+                            await popupService.showOk(`Код уже был отправлен. Повторная отправка возможна через ${countdown.value} секунд.`);
+                            return;
+                        case SendVerificationCodeError.NOT_AVAILABLE:
+                            await popupService.showOk("Данный тип авторизации не доступен. Пожалуста свяжитесь с администратором.");
+                            return;
+                        case SendVerificationCodeError.UNRECOGNIZED:
+                            await popupService.showOk("Неизвестная ошибка");
+                            return;
+                        default:
+                            break;
+                    }
+                }
 
                 isCodeSent.value = true;
                 startCooldown();
-                showToast('Verification code sent successfully', 'success');
             } catch (error) {
-                showToast('Failed to send verification code', 'error');
+                await popupService.showOk('Не удалось отправить код. Пожалуйста, проверьте номер телефона и попробуйте еще раз.');
                 console.error('Error sending verification code:', error);
             }
         };
@@ -130,14 +164,16 @@ export default defineComponent({
                 if (!validateCode()) {
                     return;
                 }
+                const formattedPhone = phoneNumber.value.replace(/\s/g, '');
 
-                // Call API to verify the code
-                //  await authStore.verifyCode(phoneNumber.value, verificationCode.value);
-
-                showToast('Authentication successful', 'success');
-                router.push({ name: 'Home' });
+                let err = await auth.verifyCode(formattedPhone, verificationCode.value);
+                if (err) {
+                    await popupService.showOk("Неверный код. Пожалуйста, проверьте код и попробуйте еще раз.");
+                    return;
+                }
+                router.back();
             } catch (error) {
-                showToast('Invalid verification code', 'error');
+                await popupService.showOk("Неверный код. Пожалуйста, проверьте код и попробуйте еще раз.");
                 console.error('Error verifying code:', error);
             }
         };

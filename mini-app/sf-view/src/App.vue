@@ -75,15 +75,20 @@
       </router-link>
     </div>
   </footer>
+  <Popup />
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, onMounted, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
-import { getAuthService } from '@/sources/auth';
+import { getAuthService } from '@/services/auth';
+import Popup from '@/components/common/PopupView.vue';
 
 
 export default defineComponent({
+  components: {
+    Popup
+  },
   name: 'App',
   setup() {
     const router = useRouter();
@@ -108,7 +113,6 @@ export default defineComponent({
       auth.checkAuthStatus();
 
       isAuthenticated.value = auth.isAuthenticated();
-
       if (!isAuthenticated.value && route.path !== '/auth') {
         if (auth.getAuthType() === 'telegram') {
           router.push('/tg-auth');

@@ -13,17 +13,15 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, reactive, onBeforeUnmount, computed, onMounted } from 'vue';
+import { defineComponent, ref, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
-import { useToast } from '@/composables/useToast';
-import { getAuthService } from '@/sources/auth';
+import { getAuthService } from '@/services/auth';
 
 export default defineComponent({
     name: 'TgAuthView',
     components: {},
     setup() {
         const router = useRouter();
-        const { showToast } = useToast();
         const authError = ref('');
         const auth = getAuthService();
 
@@ -32,7 +30,7 @@ export default defineComponent({
             if (result) {
                 authError.value = result;
             } else {
-                router.push({ name: 'HomeView' });
+                router.back();
             }
         });
 

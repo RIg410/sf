@@ -7,14 +7,13 @@ publish.workspace = true
 version.workspace = true
 
 [dependencies]
-model.workspace = true
-
-axum-extra.workspace = true
-axum.workspace = true
 bot-core.workspace = true
 bot-main.workspace = true
+model.workspace = true
+
 bson.workspace = true
 chrono.workspace = true
+dashmap.workspace = true
 env.workspace = true
 eyre.workspace = true
 hex.workspace = true
@@ -24,12 +23,16 @@ ledger.workspace = true
 log.workspace = true
 mongodb.workspace = true
 prost.workspace = true
+rand.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 sha2.workspace = true
 teloxide.workspace = true
 tokio.workspace = true
+tonic-web.workspace = true
 tonic.workspace = true
+tower-http = {workspace = true, features = ["cors"]}
+tower.workspace = true
 
 [build-dependencies]
 tonic-build.workspace = true

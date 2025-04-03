@@ -67,11 +67,17 @@ impl Env {
             log::info!("dotenv not found");
         }
 
+        let build_time = env!("BUILD_TIME");
+
         Ok(Env(Arc::new(EnvInner {
             tg_token: var("TG_TOKEN").context("TG_TOKEN is not set")?,
             mongo_url: var("MONGO_URL").context("MONGO_URL is not set")?,
             rust_log: var("RUST_LOG").context("RUST_LOG is not set")?,
-            app_url: var("APP_URL").context("APP_URL is not set")?,
+            app_url: format!(
+                "{}?b={}",
+                var("APP_URL").context("APP_URL is not set")?,
+                build_time
+            ),
             yookassa_token: var("YOOKASSA_TOKEN").context("YOOKASSA_TOKEN is not set")?,
             yookassa_shop_id: var("YOOKASSA_SHOP_ID").context("YOOKASSA_TOKEN is not set")?,
             bot_url: var("BOT_URL").context("BOT_URL is not set")?,

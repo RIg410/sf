@@ -9,6 +9,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
+    "@improbable-eng/grpc-web": "^0.15.0",
     "core-js": "^3.8.3",
     "ts-proto": "^2.7.0",
     "vue": "^3.2.13",

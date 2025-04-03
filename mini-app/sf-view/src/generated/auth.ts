@@ -6,13 +6,60 @@
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
-import { Status } from "./status";
+import { grpc } from "@improbable-eng/grpc-web";
+import { BrowserHeaders } from "browser-headers";
 
 export const protobufPackage = "auth";
+
+export enum VerifyCodeError {
+  INVALID_PHONE = 0,
+  INVALID_CODE = 1,
+  EXPIRED = 2,
+  TOO_MANY_ATTEMPTS = 3,
+  UNRECOGNIZED = -1,
+}
+
+export function verifyCodeErrorFromJSON(object: any): VerifyCodeError {
+  switch (object) {
+    case 0:
+    case "INVALID_PHONE":
+      return VerifyCodeError.INVALID_PHONE;
+    case 1:
+    case "INVALID_CODE":
+      return VerifyCodeError.INVALID_CODE;
+    case 2:
+    case "EXPIRED":
+      return VerifyCodeError.EXPIRED;
+    case 3:
+    case "TOO_MANY_ATTEMPTS":
+      return VerifyCodeError.TOO_MANY_ATTEMPTS;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return VerifyCodeError.UNRECOGNIZED;
+  }
+}
+
+export function verifyCodeErrorToJSON(object: VerifyCodeError): string {
+  switch (object) {
+    case VerifyCodeError.INVALID_PHONE:
+      return "INVALID_PHONE";
+    case VerifyCodeError.INVALID_CODE:
+      return "INVALID_CODE";
+    case VerifyCodeError.EXPIRED:
+      return "EXPIRED";
+    case VerifyCodeError.TOO_MANY_ATTEMPTS:
+      return "TOO_MANY_ATTEMPTS";
+    case VerifyCodeError.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
 
 export enum TgAuthError {
   INVALID_TOKEN = 0,
   TOO_OLD_TOKEN = 1,
+  USER_NOT_FOUND = 2,
   UNRECOGNIZED = -1,
 }
 
@@ -24,6 +71,9 @@ export function tgAuthErrorFromJSON(object: any): TgAuthError {
     case 1:
     case "TOO_OLD_TOKEN":
       return TgAuthError.TOO_OLD_TOKEN;
+    case 2:
+    case "USER_NOT_FOUND":
+      return TgAuthError.USER_NOT_FOUND;
     case -1:
     case "UNRECOGNIZED":
     default:
@@ -37,14 +87,62 @@ export function tgAuthErrorToJSON(object: TgAuthError): string {
       return "INVALID_TOKEN";
     case TgAuthError.TOO_OLD_TOKEN:
       return "TOO_OLD_TOKEN";
+    case TgAuthError.USER_NOT_FOUND:
+      return "USER_NOT_FOUND";
     case TgAuthError.UNRECOGNIZED:
     default:
       return "UNRECOGNIZED";
   }
 }
 
+export enum SendVerificationCodeError {
+  INVALID_PHONE_NUMBER = 0,
+  V_USER_NOT_FOUND = 1,
+  ALREADY_SENT = 2,
+  NOT_AVAILABLE = 3,
+  UNRECOGNIZED = -1,
+}
+
+export function sendVerificationCodeErrorFromJSON(object: any): SendVerificationCodeError {
+  switch (object) {
+    case 0:
+    case "INVALID_PHONE_NUMBER":
+      return SendVerificationCodeError.INVALID_PHONE_NUMBER;
+    case 1:
+    case "V_USER_NOT_FOUND":
+      return SendVerificationCodeError.V_USER_NOT_FOUND;
+    case 2:
+    case "ALREADY_SENT":
+      return SendVerificationCodeError.ALREADY_SENT;
+    case 3:
+    case "NOT_AVAILABLE":
+      return SendVerificationCodeError.NOT_AVAILABLE;
+    case -1:
+    case "UNRECOGNIZED":
+    default:
+      return SendVerificationCodeError.UNRECOGNIZED;
+  }
+}
+
+export function sendVerificationCodeErrorToJSON(object: SendVerificationCodeError): string {
+  switch (object) {
+    case SendVerificationCodeError.INVALID_PHONE_NUMBER:
+      return "INVALID_PHONE_NUMBER";
+    case SendVerificationCodeError.V_USER_NOT_FOUND:
+      return "V_USER_NOT_FOUND";
+    case SendVerificationCodeError.ALREADY_SENT:
+      return "ALREADY_SENT";
+    case SendVerificationCodeError.NOT_AVAILABLE:
+      return "NOT_AVAILABLE";
+    case SendVerificationCodeError.UNRECOGNIZED:
+    default:
+      return "UNRECOGNIZED";
+  }
+}
+
 export interface SendVerificationCodeResponse {
-  error?: Status | undefined;
+  leftTime?: number | undefined;
+  error?: SendVerificationCodeError | undefined;
 }
 
 export interface TgAuthResult {
@@ -52,9 +150,9 @@ export interface TgAuthResult {
   error?: TgAuthError | undefined;
 }
 
-export interface TokenResponse {
+export interface VerifyCodeResponse {
   token?: string | undefined;
-  error?: Status | undefined;
+  error?: VerifyCodeError | undefined;
 }
 
 export interface TgKeyRequest {
@@ -71,13 +169,16 @@ export interface VerifyCodeRequest {
 }
 
 function createBaseSendVerificationCodeResponse(): SendVerificationCodeResponse {
-  return { error: undefined };
+  return { leftTime: undefined, error: undefined };
 }
 
 export const SendVerificationCodeResponse: MessageFns<SendVerificationCodeResponse> = {
   encode(message: SendVerificationCodeResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.leftTime !== undefined) {
+      writer.uint32(8).int32(message.leftTime);
+    }
     if (message.error !== undefined) {
-      Status.encode(message.error, writer.uint32(18).fork()).join();
+      writer.uint32(16).int32(message.error);
     }
     return writer;
   },
@@ -89,12 +190,20 @@ export const SendVerificationCodeResponse: MessageFns<SendVerificationCodeRespon
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        case 2: {
-          if (tag !== 18) {
+        case 1: {
+          if (tag !== 8) {
             break;
           }
 
-          message.error = Status.decode(reader, reader.uint32());
+          message.leftTime = reader.int32();
+          continue;
+        }
+        case 2: {
+          if (tag !== 16) {
+            break;
+          }
+
+          message.error = reader.int32() as any;
           continue;
         }
       }
@@ -107,13 +216,19 @@ export const SendVerificationCodeResponse: MessageFns<SendVerificationCodeRespon
   },
 
   fromJSON(object: any): SendVerificationCodeResponse {
-    return { error: isSet(object.error) ? Status.fromJSON(object.error) : undefined };
+    return {
+      leftTime: isSet(object.leftTime) ? globalThis.Number(object.leftTime) : undefined,
+      error: isSet(object.error) ? sendVerificationCodeErrorFromJSON(object.error) : undefined,
+    };
   },
 
   toJSON(message: SendVerificationCodeResponse): unknown {
     const obj: any = {};
+    if (message.leftTime !== undefined) {
+      obj.leftTime = Math.round(message.leftTime);
+    }
     if (message.error !== undefined) {
-      obj.error = Status.toJSON(message.error);
+      obj.error = sendVerificationCodeErrorToJSON(message.error);
     }
     return obj;
   },
@@ -123,9 +238,8 @@ export const SendVerificationCodeResponse: MessageFns<SendVerificationCodeRespon
   },
   fromPartial<I extends Exact<DeepPartial<SendVerificationCodeResponse>, I>>(object: I): SendVerificationCodeResponse {
     const message = createBaseSendVerificationCodeResponse();
-    message.error = (object.error !== undefined && object.error !== null)
-      ? Status.fromPartial(object.error)
-      : undefined;
+    message.leftTime = object.leftTime ?? undefined;
+    message.error = object.error ?? undefined;
     return message;
   },
 };
@@ -206,25 +320,25 @@ export const TgAuthResult: MessageFns<TgAuthResult> = {
   },
 };
 
-function createBaseTokenResponse(): TokenResponse {
+function createBaseVerifyCodeResponse(): VerifyCodeResponse {
   return { token: undefined, error: undefined };
 }
 
-export const TokenResponse: MessageFns<TokenResponse> = {
-  encode(message: TokenResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const VerifyCodeResponse: MessageFns<VerifyCodeResponse> = {
+  encode(message: VerifyCodeResponse, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.token !== undefined) {
       writer.uint32(10).string(message.token);
     }
     if (message.error !== undefined) {
-      Status.encode(message.error, writer.uint32(18).fork()).join();
+      writer.uint32(16).int32(message.error);
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): TokenResponse {
+  decode(input: BinaryReader | Uint8Array, length?: number): VerifyCodeResponse {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseTokenResponse();
+    const message = createBaseVerifyCodeResponse();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -237,11 +351,11 @@ export const TokenResponse: MessageFns<TokenResponse> = {
           continue;
         }
         case 2: {
-          if (tag !== 18) {
+          if (tag !== 16) {
             break;
           }
 
-          message.error = Status.decode(reader, reader.uint32());
+          message.error = reader.int32() as any;
           continue;
         }
       }
@@ -253,33 +367,31 @@ export const TokenResponse: MessageFns<TokenResponse> = {
     return message;
   },
 
-  fromJSON(object: any): TokenResponse {
+  fromJSON(object: any): VerifyCodeResponse {
     return {
       token: isSet(object.token) ? globalThis.String(object.token) : undefined,
-      error: isSet(object.error) ? Status.fromJSON(object.error) : undefined,
+      error: isSet(object.error) ? verifyCodeErrorFromJSON(object.error) : undefined,
     };
   },
 
-  toJSON(message: TokenResponse): unknown {
+  toJSON(message: VerifyCodeResponse): unknown {
     const obj: any = {};
     if (message.token !== undefined) {
       obj.token = message.token;
     }
     if (message.error !== undefined) {
-      obj.error = Status.toJSON(message.error);
+      obj.error = verifyCodeErrorToJSON(message.error);
     }
     return obj;
   },
 
-  create<I extends Exact<DeepPartial<TokenResponse>, I>>(base?: I): TokenResponse {
-    return TokenResponse.fromPartial(base ?? ({} as any));
+  create<I extends Exact<DeepPartial<VerifyCodeResponse>, I>>(base?: I): VerifyCodeResponse {
+    return VerifyCodeResponse.fromPartial(base ?? ({} as any));
   },
-  fromPartial<I extends Exact<DeepPartial<TokenResponse>, I>>(object: I): TokenResponse {
-    const message = createBaseTokenResponse();
+  fromPartial<I extends Exact<DeepPartial<VerifyCodeResponse>, I>>(object: I): VerifyCodeResponse {
+    const message = createBaseVerifyCodeResponse();
     message.token = object.token ?? undefined;
-    message.error = (object.error !== undefined && object.error !== null)
-      ? Status.fromPartial(object.error)
-      : undefined;
+    message.error = object.error ?? undefined;
     return message;
   },
 };
@@ -477,43 +589,181 @@ export const VerifyCodeRequest: MessageFns<VerifyCodeRequest> = {
 };
 
 export interface AuthService {
-  tg_auth(request: TgKeyRequest): Promise<TgAuthResult>;
-  send_verification_code(request: VerificationCodeRequest): Promise<SendVerificationCodeResponse>;
-  verify_code(request: VerifyCodeRequest): Promise<TokenResponse>;
+  tg_auth(request: DeepPartial<TgKeyRequest>, metadata?: grpc.Metadata): Promise<TgAuthResult>;
+  send_verification_code(
+    request: DeepPartial<VerificationCodeRequest>,
+    metadata?: grpc.Metadata,
+  ): Promise<SendVerificationCodeResponse>;
+  verify_code(request: DeepPartial<VerifyCodeRequest>, metadata?: grpc.Metadata): Promise<VerifyCodeResponse>;
 }
 
-export const AuthServiceServiceName = "auth.AuthService";
 export class AuthServiceClientImpl implements AuthService {
   private readonly rpc: Rpc;
-  private readonly service: string;
-  constructor(rpc: Rpc, opts?: { service?: string }) {
-    this.service = opts?.service || AuthServiceServiceName;
+
+  constructor(rpc: Rpc) {
     this.rpc = rpc;
     this.tg_auth = this.tg_auth.bind(this);
     this.send_verification_code = this.send_verification_code.bind(this);
     this.verify_code = this.verify_code.bind(this);
   }
-  tg_auth(request: TgKeyRequest): Promise<TgAuthResult> {
-    const data = TgKeyRequest.encode(request).finish();
-    const promise = this.rpc.request(this.service, "tg_auth", data);
-    return promise.then((data) => TgAuthResult.decode(new BinaryReader(data)));
+
+  tg_auth(request: DeepPartial<TgKeyRequest>, metadata?: grpc.Metadata): Promise<TgAuthResult> {
+    return this.rpc.unary(AuthServicetg_authDesc, TgKeyRequest.fromPartial(request), metadata);
   }
 
-  send_verification_code(request: VerificationCodeRequest): Promise<SendVerificationCodeResponse> {
-    const data = VerificationCodeRequest.encode(request).finish();
-    const promise = this.rpc.request(this.service, "send_verification_code", data);
-    return promise.then((data) => SendVerificationCodeResponse.decode(new BinaryReader(data)));
+  send_verification_code(
+    request: DeepPartial<VerificationCodeRequest>,
+    metadata?: grpc.Metadata,
+  ): Promise<SendVerificationCodeResponse> {
+    return this.rpc.unary(
+      AuthServicesend_verification_codeDesc,
+      VerificationCodeRequest.fromPartial(request),
+      metadata,
+    );
   }
 
-  verify_code(request: VerifyCodeRequest): Promise<TokenResponse> {
-    const data = VerifyCodeRequest.encode(request).finish();
-    const promise = this.rpc.request(this.service, "verify_code", data);
-    return promise.then((data) => TokenResponse.decode(new BinaryReader(data)));
+  verify_code(request: DeepPartial<VerifyCodeRequest>, metadata?: grpc.Metadata): Promise<VerifyCodeResponse> {
+    return this.rpc.unary(AuthServiceverify_codeDesc, VerifyCodeRequest.fromPartial(request), metadata);
   }
 }
 
+export const AuthServiceDesc = { serviceName: "auth.AuthService" };
+
+export const AuthServicetg_authDesc: UnaryMethodDefinitionish = {
+  methodName: "tg_auth",
+  service: AuthServiceDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: {
+    serializeBinary() {
+      return TgKeyRequest.encode(this).finish();
+    },
+  } as any,
+  responseType: {
+    deserializeBinary(data: Uint8Array) {
+      const value = TgAuthResult.decode(data);
+      return {
+        ...value,
+        toObject() {
+          return value;
+        },
+      };
+    },
+  } as any,
+};
+
+export const AuthServicesend_verification_codeDesc: UnaryMethodDefinitionish = {
+  methodName: "send_verification_code",
+  service: AuthServiceDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: {
+    serializeBinary() {
+      return VerificationCodeRequest.encode(this).finish();
+    },
+  } as any,
+  responseType: {
+    deserializeBinary(data: Uint8Array) {
+      const value = SendVerificationCodeResponse.decode(data);
+      return {
+        ...value,
+        toObject() {
+          return value;
+        },
+      };
+    },
+  } as any,
+};
+
+export const AuthServiceverify_codeDesc: UnaryMethodDefinitionish = {
+  methodName: "verify_code",
+  service: AuthServiceDesc,
+  requestStream: false,
+  responseStream: false,
+  requestType: {
+    serializeBinary() {
+      return VerifyCodeRequest.encode(this).finish();
+    },
+  } as any,
+  responseType: {
+    deserializeBinary(data: Uint8Array) {
+      const value = VerifyCodeResponse.decode(data);
+      return {
+        ...value,
+        toObject() {
+          return value;
+        },
+      };
+    },
+  } as any,
+};
+
+interface UnaryMethodDefinitionishR extends grpc.UnaryMethodDefinition<any, any> {
+  requestStream: any;
+  responseStream: any;
+}
+
+type UnaryMethodDefinitionish = UnaryMethodDefinitionishR;
+
 interface Rpc {
-  request(service: string, method: string, data: Uint8Array): Promise<Uint8Array>;
+  unary<T extends UnaryMethodDefinitionish>(
+    methodDesc: T,
+    request: any,
+    metadata: grpc.Metadata | undefined,
+  ): Promise<any>;
+}
+
+export class GrpcWebImpl {
+  private host: string;
+  private options: {
+    transport?: grpc.TransportFactory;
+
+    debug?: boolean;
+    metadata?: grpc.Metadata;
+    upStreamRetryCodes?: number[];
+  };
+
+  constructor(
+    host: string,
+    options: {
+      transport?: grpc.TransportFactory;
+
+      debug?: boolean;
+      metadata?: grpc.Metadata;
+      upStreamRetryCodes?: number[];
+    },
+  ) {
+    this.host = host;
+    this.options = options;
+  }
+
+  unary<T extends UnaryMethodDefinitionish>(
+    methodDesc: T,
+    _request: any,
+    metadata: grpc.Metadata | undefined,
+  ): Promise<any> {
+    const request = { ..._request, ...methodDesc.requestType };
+    const maybeCombinedMetadata = metadata && this.options.metadata
+      ? new BrowserHeaders({ ...this.options?.metadata.headersMap, ...metadata?.headersMap })
+      : metadata ?? this.options.metadata;
+    return new Promise((resolve, reject) => {
+      grpc.unary(methodDesc, {
+        request,
+        host: this.host,
+        metadata: maybeCombinedMetadata ?? {},
+        ...(this.options.transport !== undefined ? { transport: this.options.transport } : {}),
+        debug: this.options.debug ?? false,
+        onEnd: function (response) {
+          if (response.status === grpc.Code.OK) {
+            resolve(response.message!.toObject());
+          } else {
+            const err = new GrpcWebError(response.statusMessage, response.status, response.trailers);
+            reject(err);
+          }
+        },
+      });
+    });
+  }
 }
 
 type Builtin = Date | Function | Uint8Array | string | number | boolean | undefined;
@@ -530,6 +780,12 @@ export type Exact<P, I extends P> = P extends Builtin ? P
 
 function isSet(value: any): boolean {
   return value !== null && value !== undefined;
+}
+
+export class GrpcWebError extends globalThis.Error {
+  constructor(message: string, public code: grpc.Code, public metadata: grpc.Metadata) {
+    super(message);
+  }
 }
 
 export interface MessageFns<T> {

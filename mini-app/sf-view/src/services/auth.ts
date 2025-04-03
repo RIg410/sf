@@ -1,19 +1,24 @@
+import { grpc } from "@improbable-eng/grpc-web";
 import { FetchRpc } from "./rpc";
 import { is_telegram_context, initData } from "./tg";
-import { AuthService, AuthServiceClientImpl, TgAuthError } from "@/generated/auth";
+import { AuthService, AuthServiceClientImpl, GrpcWebImpl, SendVerificationCodeResponse, TgAuthError, VerifyCodeError } from "@/generated/auth";
 
 export class Auth {
     private token: string | null;
     private auth_type: AuthType;
     private auth_service: AuthService | null;
-    private rpc_client: FetchRpc;
+    private rpc_client: GrpcWebImpl;
 
 
     constructor() {
         this.token = get_auth_token();
         this.auth_type = auth_type();
         this.auth_service = null;
-        this.rpc_client = new FetchRpc("api", this.token);
+        const metadata = new grpc.Metadata();
+        metadata.set("Authorization", this.token ? `Bearer ${this.token}` : "");
+        this.rpc_client = new GrpcWebImpl("http://localhost:3000", {
+            metadata,
+        });
     }
 
     getToken(): string | null {
@@ -32,8 +37,22 @@ export class Auth {
         this.token = get_auth_token();
     }
 
-    getRpcClient(): FetchRpc {
+    getRpcClient(): GrpcWebImpl {
         return this.rpc_client;
+    }
+
+    setToken(token: string | null) {
+        this.token = token;
+        const metadata = new grpc.Metadata();
+        metadata.set("Authorization", this.token ? `Bearer ${this.token}` : "");
+        this.rpc_client = new GrpcWebImpl("http://localhost:3000", {
+            metadata,
+        });
+        if (token) {
+            localStorage.setItem('token', token);
+        } else {
+            localStorage.removeItem('token');
+        }
     }
 
     async authThroughTelegram(): Promise<string | null> {
@@ -64,9 +83,7 @@ export class Auth {
                 }
             } else {
                 if (result.token) {
-                    localStorage.setItem('token', result.token);
-                    this.token = result.token;
-                    this.rpc_client = new FetchRpc("api", this.token);
+                    this.setToken(result.token);
                     return null;
                 } else {
                     console.error("Telegram authentication error: No token received.");
@@ -78,6 +95,48 @@ export class Auth {
             console.error("Error during Telegram authentication:", e);
             return "Не удалось авторизоваться. Попробуйте позже.";
         }
+    }
+
+
+    async sendVerificationCode(phone: string): Promise<SendVerificationCodeResponse | null> {
+        if (this.auth_type !== "phone") {
+            throw new Error("Неизвестный тип авторизации. Пожалуйста, перезайдите в приложение.");
+        }
+        if (this.auth_service === null) {
+            this.auth_service = new AuthServiceClientImpl(this.rpc_client);
+        }
+
+        return await this.auth_service.send_verification_code({
+            phoneNumber: phone,
+        });
+    }
+
+    async verifyCode(phone: string, code: string): Promise<string | null> {
+        if (this.auth_type !== "phone") {
+            throw new Error("Неизвестный тип авторизации. Пожалуйста, перезайдите в приложение.");
+        }
+        if (this.auth_service === null) {
+            this.auth_service = new AuthServiceClientImpl(this.rpc_client);
+        }
+
+        const result = await this.auth_service.verify_code({
+            phoneNumber: phone,
+            code: code,
+        });
+
+        if (result.error) {
+            console.error("Verification error:", result.error);
+            return "Неверный код подтверждения.";
+        } else {
+            if (result.token) {
+                this.setToken(result.token);
+                return null;
+            } else {
+                console.error("Telegram authentication error: No token received.");
+                return "Не удалось авторизоваться. Попробуйте позже.";
+            }
+        }
+
     }
 }
 

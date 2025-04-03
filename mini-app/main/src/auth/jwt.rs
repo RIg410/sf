@@ -1,4 +1,5 @@
-use axum::http::HeaderValue;
+use bson::oid::ObjectId;
+use chrono::{Duration, Utc};
 use eyre::{eyre, Error};
 use jsonwebtoken::{DecodingKey, EncodingKey, Header, Validation};
 use serde::{de::DeserializeOwned, Deserialize, Serialize};
@@ -24,12 +25,8 @@ impl Jwt {
         }
     }
 
-    pub fn claims<C: DeserializeOwned>(
-        &self,
-        header: &HeaderValue,
-    ) -> Result<(C, JwtToken), Error> {
-        let auth_key = header.to_str()?;
-        let jwt = auth_key
+    pub fn claims<C: DeserializeOwned>(&self, header: &str) -> Result<(C, JwtToken), Error> {
+        let jwt = header
             .strip_prefix("Bearer ")
             .ok_or_else(|| eyre!("No Bearer"))?;
         let token = jsonwebtoken::decode::<C>(jwt, &self.jwt_decode, &self.validation)?;
@@ -49,7 +46,20 @@ impl Jwt {
 
 #[derive(Clone, Serialize, Deserialize)]
 pub struct JwtToken {
-    key: String,
+    pub key: String,
 }
 
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Claims {
+    pub id: ObjectId,
+    pub exp: u64,
+}
 
+impl Claims {
+    pub fn new(id: ObjectId) -> Self {
+        Claims {
+            id,
+            exp: (Utc::now() + Duration::days(360)).timestamp() as u64,
+        }
+    }
+}

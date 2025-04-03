@@ -1,5 +1,7 @@
 syntax = "proto3";
 
+package status;
+
 message Status {
     int32 code = 1;
     string message = 2;

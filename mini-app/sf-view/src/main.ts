@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import router from './router'
 
-import { is_telegram_context, tg_init } from '@/sources/tg'
+import { is_telegram_context, tg_init } from '@/services/tg'
 
 tg_init()
 

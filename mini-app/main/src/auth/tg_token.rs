@@ -1,10 +1,9 @@
-use std::collections::BTreeMap;
-
 use chrono::Utc;
 use eyre::Error;
 use hmac::{Hmac, Mac};
 use log::info;
 use sha2::Sha256;
+use std::collections::BTreeMap;
 type HmacSha256 = Hmac<Sha256>;
 
 const TG_TTL: i64 = 60; // 60 seconds
@@ -23,7 +22,8 @@ impl TgAuth {
         TgAuth { secret: key }
     }
 
-    pub fn validate(&self, mut query: BTreeMap<String, String>) -> Result<i64, Error> {
+    pub fn validate(&self, init_data: &str) -> Result<i64, Error> {
+        let mut query = parse_query(init_data);
         info!("Validating telegram auth:{:?}", query);
         let original_hash = query.remove("hash").ok_or_else(|| eyre::eyre!("No hash"))?;
         let auth_date = query
@@ -61,4 +61,18 @@ impl TgAuth {
 
         Ok(tg_id)
     }
+}
+
+fn parse_query(init_data: &str) -> BTreeMap<String, String> {
+    init_data
+        .split('&')
+        .filter_map(|s| {
+            let mut split = s.split('=');
+            if let (Some(key), Some(value)) = (split.next(), split.next()) {
+                Some((key.to_string(), value.to_string()))
+            } else {
+                None
+            }
+        })
+        .collect()
 }

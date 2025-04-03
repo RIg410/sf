@@ -1,18 +1,17 @@
 syntax = "proto3";
 package auth;
 
-import "status.proto";
-
 service AuthService {
     rpc tg_auth (TgKeyRequest) returns (TgAuthResult);
 
     rpc send_verification_code (VerificationCodeRequest) returns (SendVerificationCodeResponse);
 
-    rpc verify_code (VerifyCodeRequest) returns (TokenResponse);
+    rpc verify_code (VerifyCodeRequest) returns (VerifyCodeResponse);
 }
 
 message SendVerificationCodeResponse {
-    optional Status error = 2; 
+    optional int32 left_time = 1; 
+    optional SendVerificationCodeError error = 2;
 }
 
 message TgAuthResult {
@@ -20,9 +19,16 @@ message TgAuthResult {
     optional TgAuthError error = 2;
 }
 
-message TokenResponse {
+message VerifyCodeResponse {
    optional string token = 1; 
-   optional Status error = 2; 
+   optional VerifyCodeError error = 2; 
+}
+
+enum VerifyCodeError {
+    INVALID_PHONE = 0;
+    INVALID_CODE = 1;
+    EXPIRED = 2;
+    TOO_MANY_ATTEMPTS = 3;
 }
 
 message TgKeyRequest {
@@ -41,4 +47,12 @@ message VerifyCodeRequest {
 enum TgAuthError {
     INVALID_TOKEN = 0;
     TOO_OLD_TOKEN = 1;
+    USER_NOT_FOUND = 2;
+}
+
+enum SendVerificationCodeError {
+    INVALID_PHONE_NUMBER = 0;
+    V_USER_NOT_FOUND = 1;
+    ALREADY_SENT = 2;
+    NOT_AVAILABLE = 3;
 }
