@@ -9,7 +9,8 @@ export class FetchRpc implements Rpc {
 
     constructor(token: string | null) {
         this.token = token;
-        this.baseUrl = "http://localhost:3000";
+        //this.baseUrl = "http://localhost:3000";
+        this.baseUrl = "api";
     }
 
     async request(service: string, method: string, data: Uint8Array): Promise<Uint8Array> {
