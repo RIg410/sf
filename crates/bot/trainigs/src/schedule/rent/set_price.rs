@@ -44,8 +44,7 @@ impl View for SetPrice {
         let price = match msg.parse::<Decimal>() {
             Ok(price) => price,
             Err(_) => {
-                ctx.send_notification("Неверный формат стоимости\\.")
-                    .await;
+                ctx.send_notification("Неверный формат стоимости\\.").await;
                 return Ok(Jmp::Stay);
             }
         };

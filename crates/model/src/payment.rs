@@ -2,6 +2,4 @@ pub enum PaymentMethod {
     YooKassa,
 }
 
-pub struct Invoice {
-    
-}
+pub struct Invoice {}

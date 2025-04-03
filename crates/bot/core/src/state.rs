@@ -52,9 +52,6 @@ impl Tokens {
 
     pub fn get_token(&self, chat_id: ChatId) -> ValidToken {
         let mut tokens = self.tokens.lock();
-        tokens
-            .entry(chat_id)
-            .or_default()
-            .clone()
+        tokens.entry(chat_id).or_default().clone()
     }
 }

@@ -5,8 +5,6 @@ use chrono::Weekday;
 use model::ids::WeekId;
 use mongodb::bson::oid::ObjectId;
 
-
-
 #[derive(Clone)]
 pub struct TrainingListView(Arc<dyn Fn(ObjectId) -> Widget + Send + Sync + 'static>);
 

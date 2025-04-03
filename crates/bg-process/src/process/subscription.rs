@@ -81,7 +81,11 @@ impl Task for SubscriptionBg {
 
                         if extension.birthday.is_none() {
                             self.bot
-                                .notify(ChatId(listener.tg_id), "У пользователя нет даты рождения", true)
+                                .notify(
+                                    ChatId(listener.tg_id),
+                                    "У пользователя нет даты рождения",
+                                    true,
+                                )
                                 .await;
                         }
                     }

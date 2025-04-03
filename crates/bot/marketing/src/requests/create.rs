@@ -572,8 +572,10 @@ impl View for ConfirmSellSubscription {
             markup = markup.append_row(vec![
                 ConfirmSellSubscriptionCallback::AddDiscount(Decimal::int(10))
                     .button("👨‍👩‍👧‍👦 Cкидка 10%"),
-                ConfirmSellSubscriptionCallback::AddDiscount(Decimal::from_str("13.043478").unwrap())
-                    .button("Cкидка 13.043478%"),
+                ConfirmSellSubscriptionCallback::AddDiscount(
+                    Decimal::from_str("13.043478").unwrap(),
+                )
+                .button("Cкидка 13.043478%"),
                 ConfirmSellSubscriptionCallback::AddDiscount(Decimal::int(20))
                     .button("👨‍👩‍👧‍👦 Cкидка 20%"),
             ]);

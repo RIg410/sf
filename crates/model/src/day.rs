@@ -4,8 +4,8 @@ use crate::{
     slot::Slot,
     training::{Statistics, Training},
 };
-use chrono::{DateTime, Datelike, Local, Utc};
 use bson::oid::ObjectId;
+use chrono::{DateTime, Datelike, Local, Utc};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]

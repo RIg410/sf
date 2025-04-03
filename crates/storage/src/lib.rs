@@ -1,5 +1,6 @@
 pub mod calendar;
 pub mod history;
+pub mod notification;
 pub mod payment;
 pub mod program;
 pub mod requests;
@@ -8,7 +9,6 @@ pub mod session;
 pub mod subscription;
 pub mod treasury;
 pub mod user;
-pub mod notification;
 
 use bson::{doc, Bson};
 use eyre::Result;

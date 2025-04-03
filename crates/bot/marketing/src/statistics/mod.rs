@@ -70,9 +70,7 @@ impl View for StatisticsView {
         match calldata!(data) {
             Calldata::Budget => Ok(Jmp::Stay),
             Calldata::Instructor => Ok(Jmp::Stay),
-            Calldata::Clients => {
-                Ok(ClientsStatistics.into())
-            }
+            Calldata::Clients => Ok(ClientsStatistics.into()),
             Calldata::Marketing => Ok(Jmp::Stay),
             Calldata::AI => {
                 ctx.ensure(Rule::AIStatistic)?;

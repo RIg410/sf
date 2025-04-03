@@ -30,6 +30,8 @@ impl UserStore {
         reward: model::decimal::Decimal,
         update_rates: Option<Vec<Rate>>,
     ) -> std::result::Result<(), Error> {
+        self.user_cache.remove(&id);
+
         info!(
             "Updating couch reward: {:?} {:?} {:?}",
             id, reward, update_rates
@@ -67,6 +69,7 @@ impl UserStore {
         id: ObjectId,
         couch: &Employee,
     ) -> Result<()> {
+        self.user_cache.remove(&id);
         info!("Setting employee for user {}: {:?}", id, couch);
         self.users
             .update_one(
@@ -79,6 +82,7 @@ impl UserStore {
     }
 
     pub async fn delete_employee(&self, session: &mut Session, id: ObjectId) -> Result<(), Error> {
+        self.user_cache.remove(&id);
         info!("Deleting employee: {:?}", id);
         let result = self
             .users

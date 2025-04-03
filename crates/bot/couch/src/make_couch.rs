@@ -63,8 +63,7 @@ impl StageYesNo<State> for Confirm {
                 EmployeeRole::Couch,
             )
             .await?;
-        ctx.send_notification("Инструктор успешно создан 🎉")
-            .await;
+        ctx.send_notification("Инструктор успешно создан 🎉").await;
         Ok(Dispatch::WidgetBack)
     }
 

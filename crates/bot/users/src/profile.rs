@@ -244,8 +244,7 @@ impl View for UserProfile {
                     .await;
                 match ai_response {
                     Ok(resp) => {
-                        let msg =
-                            format!("\n\nВопрос: {}\nОтвет: {}", escape(text), escape(&resp));
+                        let msg = format!("\n\nВопрос: {}\nОтвет: {}", escape(text), escape(&resp));
                         self.skip_show = true;
                         ctx.send_notification(&msg).await;
                     }

@@ -36,12 +36,7 @@ impl View for AddNotification {
 
     async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {
         match calldata!(data) {
-            CalldataYesNo::Yes => Ok(Jmp::Next(
-                SetRemindLater {
-                    id: self.id,
-                }
-                .into(),
-            )),
+            CalldataYesNo::Yes => Ok(Jmp::Next(SetRemindLater { id: self.id }.into())),
             CalldataYesNo::No => {
                 ctx.ledger
                     .requests

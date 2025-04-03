@@ -38,6 +38,7 @@ impl Deref for Db {
 pub struct Session {
     client_session: ClientSession,
     actor: ObjectId,
+    in_transaction: bool,
 }
 
 impl Session {
@@ -45,7 +46,30 @@ impl Session {
         Session {
             client_session,
             actor,
+            in_transaction: false,
         }
+    }
+
+    pub fn in_transaction(&self) -> bool {
+        self.in_transaction
+    }
+
+    pub async fn start_transaction(&mut self) -> Result<(), mongodb::error::Error> {
+        let result = self.client_session.start_transaction().await;
+        if result.is_ok() {
+            self.in_transaction = true;
+        }
+        result
+    }
+
+    pub async fn commit_transaction(&mut self) -> Result<(), mongodb::error::Error> {
+        self.in_transaction = false;
+        self.client_session.commit_transaction().await
+    }
+
+    pub async fn abort_transaction(&mut self) -> Result<(), mongodb::error::Error> {
+        self.in_transaction = false;
+        self.client_session.abort_transaction().await
     }
 
     pub fn actor(&self) -> ObjectId {

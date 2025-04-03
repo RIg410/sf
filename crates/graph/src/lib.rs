@@ -2,13 +2,18 @@ pub mod model;
 
 use ndarray::Array;
 use plotly::{
-    color::{NamedColor, Rgb, Rgba}, common::{
+    color::{NamedColor, Rgb, Rgba},
+    common::{
         ColorScale, ColorScalePalette, DashType, Domain, Fill, Font, HoverInfo, Line, LineShape,
         Marker, Mode, Orientation, Pattern, PatternShape,
-    }, layout::{
+    },
+    layout::{
         Annotation, Axis, BarMode, CategoryOrder, Layout, LayoutGrid, Legend, TicksDirection,
         TraceOrder,
-    }, sankey::{Line as SankeyLine, Link, Node}, traces::table::{Cells, Header}, Bar, Pie, Plot, Sankey, Scatter, ScatterPolar, Table
+    },
+    sankey::{Line as SankeyLine, Link, Node},
+    traces::table::{Cells, Header},
+    Bar, Pie, Plot, Sankey, Scatter, ScatterPolar, Table,
 };
 use rand_distr::{Distribution, Normal, Uniform};
 

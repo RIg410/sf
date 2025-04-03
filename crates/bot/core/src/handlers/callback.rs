@@ -2,7 +2,11 @@ use std::sync::Arc;
 
 use super::build_context;
 use crate::{
-    context::Context, err::handle_result, state::{State, StateHolder}, widget::Widget, BACK_NAME, ERROR
+    context::Context,
+    err::handle_result,
+    state::{State, StateHolder},
+    widget::Widget,
+    BACK_NAME, ERROR,
 };
 use env::Env;
 use ledger::Ledger;
@@ -109,7 +113,7 @@ async fn inner_callback_handler(
     } else {
         widget
     };
-    
+
     let result = widget.handle_callback(ctx, data.as_str()).await;
     let mut new_widget = match handle_result(ctx, result).await? {
         crate::widget::Jmp::Next(mut new_widget) => {

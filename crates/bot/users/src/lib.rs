@@ -18,6 +18,7 @@ use teloxide::{
 };
 
 pub mod come_from;
+pub mod comments;
 pub mod family;
 pub mod freeze;
 pub mod history;
@@ -30,7 +31,6 @@ pub mod set_birthday;
 pub mod set_fio;
 pub mod set_phone;
 pub mod subscriptions;
-pub mod comments;
 
 pub const LIMIT: u64 = 7;
 
@@ -51,7 +51,11 @@ impl View for UsersView {
     }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
-        let count = ctx.ledger.users.count(&mut ctx.session, self.query.only_with_subscriptions).await?;
+        let count = ctx
+            .ledger
+            .users
+            .count(&mut ctx.session, self.query.only_with_subscriptions)
+            .await?;
         let users = ctx
             .ledger
             .users

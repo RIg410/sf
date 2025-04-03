@@ -1,7 +1,10 @@
 mod employee;
 
+use std::time::Instant;
+
 use bson::to_document;
 use chrono::{DateTime, Local, Utc};
+use dashmap::DashMap;
 use eyre::{bail, eyre, Error, Result};
 use futures_util::stream::TryStreamExt;
 use log::info;
@@ -25,6 +28,8 @@ const COLLECTION: &str = "users";
 pub struct UserStore {
     pub(crate) users: Collection<User>,
     pub(crate) extensions: Collection<UserExtension>,
+    pub(crate) user_cache: DashMap<ObjectId, User>,
+    pub(crate) tg_id_cache: DashMap<i64, ObjectId>,
 }
 
 impl UserStore {
@@ -39,6 +44,8 @@ impl UserStore {
         Ok(UserStore {
             users,
             extensions: db.collection("users_extension"),
+            user_cache: DashMap::new(),
+            tg_id_cache: DashMap::new(),
         })
     }
 
@@ -80,18 +87,45 @@ impl UserStore {
     }
 
     pub async fn get(&self, session: &mut Session, id: ObjectId) -> Result<Option<User>> {
-        Ok(self
+        if !session.in_transaction() {
+            if let Some(user) = self.user_cache.get(&id) {
+                let user = user.clone();
+
+                return Ok(Some(user));
+            }
+        }
+
+        let mut user = self.get_row(session, id).await?;
+        self.cache_user(session, &mut user).await?;
+
+        Ok(user)
+    }
+
+    async fn get_row(&self, session: &mut Session, id: ObjectId) -> Result<Option<User>> {
+        let mut user = self
             .users
             .find_one(doc! { "_id": id })
             .session(&mut *session)
-            .await?)
+            .await?;
+        Ok(user)
+    }
+
+    async fn cache_user(&self, session: &mut Session, user: &mut Option<User>) -> Result<()> {
+        if let Some(user) = user {
+            self.resolve_family(session, user).await?;
+            self.user_cache.insert(user.id, user.clone());
+            if user.tg_id != -1 {
+                self.tg_id_cache.insert(user.tg_id, user.id);
+            }
+        }
+        Ok(())
     }
 
     pub async fn resolve_family(&self, session: &mut Session, user: &mut User) -> Result<()> {
         let family = &mut user.family;
         if family.payer.is_none() {
             if let Some(payer) = family.payer_id {
-                if let Some(payer) = self.get(session, payer).await? {
+                if let Some(payer) = self.get_row(session, payer).await? {
                     family.payer = Some(Box::new(payer));
                 }
             }
@@ -100,7 +134,7 @@ impl UserStore {
         if family.children_ids.len() != family.children.len() {
             family.children.clear();
             for child in &family.children_ids {
-                if let Some(child) = self.get(session, *child).await? {
+                if let Some(child) = self.get_row(session, *child).await? {
                     family.children.push(child);
                 }
             }
@@ -110,11 +144,23 @@ impl UserStore {
     }
 
     pub async fn get_by_tg_id(&self, session: &mut Session, tg_id: i64) -> Result<Option<User>> {
-        Ok(self
+        if !session.in_transaction() {
+            if let Some(id) = self.tg_id_cache.get(&tg_id) {
+                if let Some(user) = self.user_cache.get(&id) {
+                    let user = user.clone();
+                    return Ok(Some(user));
+                }
+            }
+        }
+
+        let mut user = self
             .users
             .find_one(doc! { "tg_id": tg_id })
             .session(&mut *session)
-            .await?)
+            .await?;
+        self.cache_user(session, &mut user).await?;
+
+        return Ok(user);
     }
 
     pub async fn find_by_phone(&self, session: &mut Session, phone: &str) -> Result<Option<User>> {
@@ -127,6 +173,8 @@ impl UserStore {
 
     pub async fn insert(&self, session: &mut Session, user: User) -> Result<()> {
         info!("Inserting user: {:?}", user);
+        self.user_cache.remove(&user.id);
+
         let result = self
             .users
             .update_one(
@@ -139,12 +187,14 @@ impl UserStore {
         if result.upserted_id.is_none() {
             return Err(Error::msg("User already exists"));
         }
-
         Ok(())
     }
 
     pub async fn set_tg_id(&self, session: &mut Session, id: ObjectId, tg_id: i64) -> Result<()> {
         info!("Setting tg_id for user {}: {}", tg_id, id);
+        self.user_cache.remove(&id);
+        self.tg_id_cache.remove(&tg_id);
+
         let result = self
             .users
             .update_one(
@@ -166,6 +216,8 @@ impl UserStore {
         name: UserName,
     ) -> Result<()> {
         info!("Setting name for user {}: {}", id, name);
+        self.user_cache.remove(&id);
+
         let result = self
             .users
             .update_one(
@@ -248,6 +300,7 @@ impl UserStore {
         sub: Subscription,
         discount: Option<Decimal>,
     ) -> Result<()> {
+        self.user_cache.remove(&id);
         info!("Add subscription for user {}: {:?}", id, sub);
         let freeze_days = sub.freeze_days as i32;
         let amount = sub.items as i32;
@@ -288,6 +341,7 @@ impl UserStore {
     }
 
     pub async fn unfreeze(&self, session: &mut Session, id: ObjectId) -> Result<()> {
+        self.user_cache.remove(&id);
         info!("Unfreeze account:{}", id);
         let result = self
             .users
@@ -311,9 +365,10 @@ impl UserStore {
         days: u32,
         force: bool,
     ) -> Result<()> {
+        self.user_cache.remove(&id);
         info!("Freeze account:{}", id);
         let mut user = self
-            .get(session, id)
+            .get_row(session, id)
             .await?
             .ok_or_else(|| eyre!("User not found:{}", id))?;
         self.resolve_family(session, &mut user).await?;
@@ -363,6 +418,7 @@ impl UserStore {
         id: ObjectId,
         first_name: &str,
     ) -> Result<bool> {
+        self.user_cache.remove(&id);
         info!("Setting first_name for user {}: {}", id, first_name);
         let result = self
             .users
@@ -381,6 +437,7 @@ impl UserStore {
         id: ObjectId,
         last_name: &str,
     ) -> Result<bool> {
+        self.user_cache.remove(&id);
         info!("Setting last_name for user {}: {}", id, last_name);
         let result = self
             .users
@@ -399,6 +456,7 @@ impl UserStore {
         id: ObjectId,
         tg_user_name: &str,
     ) -> Result<bool> {
+        self.user_cache.remove(&id);
         info!("Setting tg_user_name for user {}: {}", id, tg_user_name);
         let result = self
             .users
@@ -423,6 +481,7 @@ impl UserStore {
         id: ObjectId,
         is_active: bool,
     ) -> Result<bool> {
+        self.user_cache.remove(&id);
         info!("Blocking user {}: {}", id, is_active);
         let result = self
             .users
@@ -441,6 +500,7 @@ impl UserStore {
         id: ObjectId,
         rule: &rights::Rule,
     ) -> Result<bool> {
+        self.user_cache.remove(&id);
         info!("Adding rule {:?} to user {}", rule, id);
         let result = self.users
             .update_one(
@@ -457,6 +517,7 @@ impl UserStore {
         id: ObjectId,
         rule: &rights::Rule,
     ) -> Result<bool> {
+        self.user_cache.remove(&id);
         info!("Removing rule {:?} from user {}", rule, id);
         let result = self.users
             .update_one(
@@ -479,6 +540,7 @@ impl UserStore {
     }
 
     pub async fn set_phone(&self, session: &mut Session, id: ObjectId, phone: &str) -> Result<()> {
+        self.user_cache.remove(&id);
         info!("Setting phone for user {}: {}", id, phone);
         let result = self
             .users
@@ -512,6 +574,7 @@ impl UserStore {
         id: ObjectId,
         come_from: Source,
     ) -> Result<(), Error> {
+        self.user_cache.remove(&id);
         info!("Updating come_from: {:?}", come_from);
         self.users
             .update_one(
@@ -526,7 +589,7 @@ impl UserStore {
 
     pub async fn update(&self, session: &mut Session, user: &mut User) -> Result<()> {
         user.gc();
-
+        self.user_cache.remove(&user.id);
         self.users
             .update_one(
                 doc! { "_id": user.id },
@@ -552,7 +615,7 @@ impl UserStore {
         let mut users = vec![];
         while let Some(ext) = cursor.next(&mut *session).await {
             let id = ext?.id;
-            let user = self.get(session, id).await?;
+            let user = self.get_row(session, id).await?;
             if let Some(user) = user {
                 users.push(user);
             } else {

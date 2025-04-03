@@ -81,7 +81,11 @@ impl View for Comments {
         Ok(())
     }
 
-    async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> Result<Jmp, eyre::Error> {
+    async fn handle_message(
+        &mut self,
+        ctx: &mut Context,
+        message: &Message,
+    ) -> Result<Jmp, eyre::Error> {
         ctx.delete_msg(message.id).await?;
         ctx.ensure(Rule::EditUserComments)?;
 

@@ -49,7 +49,10 @@ impl View for SetAiPrompt {
         let prompt = message.text().unwrap_or_default().to_string();
         let prompt = if prompt == "-" { None } else { Some(prompt) };
 
-        ctx.ledger.users.set_ai_prompt(&mut ctx.session, self.id, prompt).await?;
+        ctx.ledger
+            .users
+            .set_ai_prompt(&mut ctx.session, self.id, prompt)
+            .await?;
 
         Ok(Jmp::Stay)
     }

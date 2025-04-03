@@ -1,3 +1,4 @@
+use super::{new::MakeEmployee, profile::EmployeeProfile};
 use async_trait::async_trait;
 use bot_core::{
     callback_data::Calldata as _,
@@ -10,7 +11,6 @@ use model::{rights::Rule, user::User};
 use mongodb::bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
 use teloxide::types::{InlineKeyboardButton, InlineKeyboardMarkup};
-use super::{new::MakeEmployee, profile::EmployeeProfile};
 
 pub struct EmployeeList {}
 
@@ -54,9 +54,9 @@ impl View for EmployeeList {
 
     async fn handle_callback(&mut self, _: &mut Context, data: &str) -> Result<Jmp> {
         match calldata!(data) {
-            Callback::Select(id) => {
-                Ok(Jmp::Next(EmployeeProfile::new(ObjectId::from_bytes(id)).into()))
-            }
+            Callback::Select(id) => Ok(Jmp::Next(
+                EmployeeProfile::new(ObjectId::from_bytes(id)).into(),
+            )),
             Callback::Make => Ok(Jmp::Next(MakeEmployee::new().into())),
         }
     }

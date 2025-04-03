@@ -7,7 +7,8 @@ use bot_core::{
 };
 use bot_trainigs::list::TrainingList;
 use bot_users::{
-    history::HistoryList, rewards::RewardsList, rights::UserRightsView, set_ai_prompt::SetAiPrompt, set_birthday::SetBirthday, set_fio::SetFio, set_phone::SetPhone
+    history::HistoryList, rewards::RewardsList, rights::UserRightsView, set_ai_prompt::SetAiPrompt,
+    set_birthday::SetBirthday, set_fio::SetFio, set_phone::SetPhone,
 };
 use bot_viewer::user::render_profile_msg;
 use eyre::Error;

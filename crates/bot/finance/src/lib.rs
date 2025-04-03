@@ -1,9 +1,9 @@
+pub mod employees;
 pub mod history;
 pub mod in_out;
 pub mod marketing;
 pub mod operation;
 pub mod stat;
-pub mod employees;
 
 use async_trait::async_trait;
 use bot_core::{
@@ -46,7 +46,6 @@ impl View for FinanceView {
 
         if ctx.has_right(Rule::ViewEmployees) {
             keymap = keymap.append_row(Callback::EmployeeList.btn_row("Сотрудники ❤️"));
-
         }
 
         keymap = keymap.append_row(Callback::StatAll.btn_row("Общая статистика 📊"));
@@ -77,10 +76,7 @@ impl View for FinanceView {
             }
             Callback::StatByMonth => {
                 ctx.ensure(Rule::ViewFinance)?;
-                Ok(Stat::new(Range::Month(
-                    Local::now().with_day(1).unwrap_or_default(),
-                ))
-                .into())
+                Ok(Stat::new(Range::Month(Local::now().with_day(1).unwrap_or_default())).into())
             }
             Callback::PayMarketing => {
                 ctx.ensure(Rule::MakePayment)?;

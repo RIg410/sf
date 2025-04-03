@@ -5,16 +5,16 @@ use std::fmt::{Display, Formatter};
 
 use super::rights::Rights;
 use crate::{statistics::source::Source, subscription::UserSubscription};
+use bson::oid::ObjectId;
 use chrono::{DateTime, TimeZone as _, Utc};
 use family::{Family, Payer};
-use bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
 
+pub mod comments;
 pub mod employee;
 pub mod extension;
 pub mod family;
 pub mod rate;
-pub mod comments;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct User {

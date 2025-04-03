@@ -125,7 +125,7 @@ async fn fmt_row(log: &Reward, ctx: &mut Context) -> Result<String> {
                 )));
             }
 
-           format!(
+            format!(
                 "*{}*\n начислено *{}* \\- тренировка '{}' \\- {}\nКлиенты:\n {}",
                 fmt_dt(&log.created_at.with_timezone(&Local)),
                 escape(&log.reward.to_string()),

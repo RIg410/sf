@@ -1,5 +1,9 @@
 use async_trait::async_trait;
-use bot_core::{callback_data::Calldata as _, context::Context, widget::{Jmp, View}};
+use bot_core::{
+    callback_data::Calldata as _,
+    context::Context,
+    widget::{Jmp, View},
+};
 use model::training::TrainingId;
 use serde::{Deserialize, Serialize};
 use teloxide::types::InlineKeyboardMarkup;
@@ -42,7 +46,6 @@ impl View for ChangeProgram {
     }
 
     async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {
-        
         Ok(Jmp::Stay)
     }
 }
@@ -51,4 +54,3 @@ impl View for ChangeProgram {
 enum Callback {
     SelectTraining([u8; 12]),
 }
-

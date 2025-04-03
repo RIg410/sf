@@ -33,7 +33,7 @@ pub enum LedgerError {
         user_id: ObjectId,
         member_id: ObjectId,
     },
-    
+
     #[error("User already employee")]
     UserAlreadyEmployee { user_id: ObjectId },
     #[error("User not employee")]

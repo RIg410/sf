@@ -135,7 +135,8 @@ async fn render(
     if discount.is_none() {
         keymap = keymap.append_row(vec![
             Callback::AddDiscount(Decimal::int(10)).button("Cкидка 10%"),
-            Callback::AddDiscount(Decimal::from_str("13.043478").unwrap()).button("Cкидка 13.043478%"),
+            Callback::AddDiscount(Decimal::from_str("13.043478").unwrap())
+                .button("Cкидка 13.043478%"),
             Callback::AddDiscount(Decimal::int(20)).button("Cкидка 20%"),
         ]);
     } else {

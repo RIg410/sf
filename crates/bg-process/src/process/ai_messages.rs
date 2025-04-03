@@ -4,8 +4,8 @@ use bot_core::bot::TgBot;
 use eyre::Error;
 use ledger::Ledger;
 use model::rights::Rule;
-use teloxide::{types::ChatId, utils::markdown::escape};
 use std::sync::Arc;
+use teloxide::{types::ChatId, utils::markdown::escape};
 
 #[derive(Clone)]
 pub struct MotivationNotifier {

@@ -31,7 +31,6 @@ impl Requests {
     }
 }
 
-
 #[async_trait]
 impl View for Requests {
     fn name(&self) -> &'static str {

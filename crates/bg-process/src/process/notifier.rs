@@ -7,8 +7,8 @@ use eyre::Error;
 use ledger::Ledger;
 use model::{ids::DayId, training::Notified};
 use mongodb::bson::oid::ObjectId;
-use storage::session::Session;
 use std::sync::Arc;
+use storage::session::Session;
 use teloxide::{types::ChatId, utils::markdown::escape};
 
 #[derive(Clone)]
@@ -54,18 +54,14 @@ impl TrainingNotifier {
 
             if by_day {
                 if receiver.settings.notification.notify_by_day {
-                    self.bot
-                        .notify(ChatId(receiver.tg_id), msg, true)
-                        .await;
+                    self.bot.notify(ChatId(receiver.tg_id), msg, true).await;
                     return Ok(true);
                 }
             } else {
                 let now = Local::now();
                 if let Some(hours) = receiver.settings.notification.notify_by_n_hours {
                     if now + chrono::Duration::hours(hours as i64) > start_at {
-                        self.bot
-                            .notify(ChatId(receiver.tg_id), msg, true)
-                            .await;
+                        self.bot.notify(ChatId(receiver.tg_id), msg, true).await;
                         return Ok(true);
                     }
                 }
@@ -147,9 +143,11 @@ impl TrainingNotifier {
 
             let mut has_changes = false;
             for client in &training.clients {
-                if !already_notified.contains(client) && self
+                if !already_notified.contains(client)
+                    && self
                         .notify_user(session, start_at, *client, &msg, false)
-                        .await? {
+                        .await?
+                {
                     already_notified.push(*client);
                     has_changes = true;
                 }
