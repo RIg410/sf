@@ -2,7 +2,6 @@ use super::history::History;
 use ::ai::Ai;
 use chrono::{DateTime, Local};
 use eyre::{bail, eyre, Result};
-use log::info;
 use model::{
     rights::{Rights, Rule},
     statistics::source::Source,
@@ -12,6 +11,7 @@ use model::{
     },
 };
 use mongodb::{bson::oid::ObjectId, SessionCursor};
+use tracing::info;
 use std::{ops::Deref, sync::Arc};
 use storage::session::Session;
 use storage::user::UserStore;

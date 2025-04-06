@@ -1,7 +1,7 @@
 use chrono::Utc;
 use eyre::Error;
 use hmac::{Hmac, Mac};
-use log::info;
+use tracing::info;
 use sha2::Sha256;
 use std::collections::BTreeMap;
 type HmacSha256 = Hmac<Sha256>;

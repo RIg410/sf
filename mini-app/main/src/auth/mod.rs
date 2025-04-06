@@ -6,7 +6,8 @@ use crate::pb::auth::{
 };
 use codes::{AuthResult, Codes, PhoneNumber};
 use jwt::{Claims, Jwt};
-use log::debug;
+use tracing::debug;
+use tracing::warn;
 use std::sync::Arc;
 use tg_token::TgAuth;
 use tokio::time::sleep;
@@ -50,7 +51,7 @@ impl AuthService for AuthServer {
             Err(err) => {
                 sleep(std::time::Duration::from_secs(1)).await;
 
-                log::warn!("Failed to validate key: {}", err);
+                warn!("Failed to validate key: {}", err);
                 return Ok(tonic::Response::new(TgAuthResult {
                     token: None,
                     error: Some(TgAuthError::InvalidToken as i32),

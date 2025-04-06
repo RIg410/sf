@@ -8,7 +8,7 @@ use bot_core::{
 };
 use chrono::{DateTime, Datelike as _, Local, TimeZone, Timelike, Utc};
 use eyre::{Error, Result};
-use log::warn;
+use tracing::warn;
 use model::slot::Slot;
 use teloxide::types::{InlineKeyboardMarkup, Message};
 

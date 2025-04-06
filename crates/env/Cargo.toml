@@ -1,12 +1,12 @@
 [package]
-name = "env"
 edition.workspace = true
 license.workspace = true
+name = "env"
 publish.workspace = true
 version.workspace = true
 
 [dependencies]
 dotenv.workspace = true
-log.workspace = true
 eyre.workspace = true
 rand.workspace = true
+tracing.workspace = true

@@ -5,7 +5,7 @@ use async_trait::async_trait;
 use bot_core::{bot::TgBot, CommonLocation};
 use bot_viewer::{fmt_phone, user::link_to_user};
 use eyre::{bail, eyre, Error, Result};
-use log::{error, info};
+use tracing::{error, info};
 use model::{
     program::TrainingType,
     rights::Rule,

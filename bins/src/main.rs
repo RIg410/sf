@@ -2,13 +2,21 @@ use std::sync::Arc;
 
 use env::Env;
 use eyre::Context;
-use log::info;
+use tracing::info;
+use tracing_subscriber::EnvFilter;
 
 #[tokio::main]
 async fn main() -> eyre::Result<()> {
     let env = Env::load()?;
 
-    pretty_env_logger::init();
+    tracing_subscriber::fmt()
+        .with_env_filter(EnvFilter::builder().parse_lossy("debug"))
+        .with_file(true)
+        .with_line_number(true)
+        .with_target(true)
+        .pretty()
+        .init();
+
     color_eyre::install()?;
     info!("connecting to mongo");
     let storage = storage::Storage::new(env.mongo_url())

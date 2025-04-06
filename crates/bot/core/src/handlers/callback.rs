@@ -10,7 +10,7 @@ use crate::{
 };
 use env::Env;
 use ledger::Ledger;
-use log::error;
+use tracing::error;
 use teloxide::{
     prelude::{Requester as _, ResponseResult},
     types::CallbackQuery,

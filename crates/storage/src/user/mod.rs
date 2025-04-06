@@ -1,13 +1,10 @@
 mod employee;
 
-use std::time::Instant;
-
 use bson::to_document;
 use chrono::{DateTime, Local, Utc};
 use dashmap::DashMap;
 use eyre::{bail, eyre, Error, Result};
 use futures_util::stream::TryStreamExt;
-use log::info;
 use model::decimal::Decimal;
 use model::rights::{self, Rule};
 use model::statistics::source::Source;
@@ -20,6 +17,7 @@ use mongodb::{
     Collection, Database,
 };
 use mongodb::{IndexModel, SessionCursor};
+use tracing::info;
 
 use crate::session::Session;
 
@@ -102,7 +100,7 @@ impl UserStore {
     }
 
     async fn get_row(&self, session: &mut Session, id: ObjectId) -> Result<Option<User>> {
-        let mut user = self
+        let user = self
             .users
             .find_one(doc! { "_id": id })
             .session(&mut *session)

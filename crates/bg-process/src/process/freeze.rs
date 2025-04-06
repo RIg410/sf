@@ -4,7 +4,7 @@ use crate::{Ledger, Task};
 use async_trait::async_trait;
 use chrono::Local;
 use eyre::{Error, Result};
-use log::{info, warn};
+use tracing::{info, warn};
 
 #[derive(Clone)]
 pub struct FreezeBg {

@@ -1,11 +1,12 @@
 [package]
-name = "bot-marketing"
 edition.workspace = true
 license.workspace = true
+name = "bot-marketing"
 publish.workspace = true
 version.workspace = true
 
 [dependencies]
+ai.workspace = true
 async-trait.workspace = true
 bincode.workspace = true
 bot-core.workspace = true
@@ -13,10 +14,10 @@ bot-viewer.workspace = true
 bot-views.workspace = true
 chrono.workspace = true
 eyre.workspace = true
+graph.workspace = true
 hex.workspace = true
 itertools.workspace = true
 ledger.workspace = true
-log.workspace = true
 model.workspace = true
 mongodb.workspace = true
 serde.workspace = true
@@ -24,5 +25,4 @@ storage.workspace = true
 strum.workspace = true
 teloxide.workspace = true
 time.workspace = true
-graph.workspace = true
-ai.workspace = true
+tracing.workspace = true

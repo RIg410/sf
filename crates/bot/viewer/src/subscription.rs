@@ -1,6 +1,6 @@
 use bot_core::context::Context;
 use eyre::Error;
-use log::warn;
+use tracing::warn;
 use model::subscription::SubscriptionType;
 use teloxide::utils::markdown::escape;
 

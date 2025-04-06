@@ -2,7 +2,7 @@ use crate::{Ledger, Task};
 use async_trait::async_trait;
 use bot_core::bot::TgBot;
 use eyre::Error;
-use log::info;
+use tracing::info;
 use std::sync::Arc;
 use teloxide::{prelude::Requester as _, types::ChatId};
 

@@ -17,6 +17,6 @@ env.workspace = true
 color-eyre.workspace = true
 dotenv.workspace = true
 eyre.workspace = true
-log.workspace = true
-pretty_env_logger.workspace = true
+tracing.workspace = true
+tracing-subscriber = {workspace = true, features = ["fmt", "env-filter"]}
 tokio.workspace = true

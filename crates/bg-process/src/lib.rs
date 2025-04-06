@@ -4,7 +4,7 @@ use bot_core::bot::{Origin, TgBot, ValidToken};
 use bot_main::BotApp;
 use eyre::{Context, Error};
 use ledger::Ledger;
-use log::info;
+use tracing::info;
 use process::{
     ai_messages::MotivationNotifier, birthdays::BirthdaysNotifier, freeze::FreezeBg,
     notifier::TrainingNotifier, requests::RequestNotifier, rewards::RewardsBg,
@@ -12,6 +12,7 @@ use process::{
 };
 use teloxide::types::{ChatId, MessageId};
 use tokio_cron_scheduler::{Job, JobScheduler};
+use tracing::error;
 mod process;
 
 pub async fn start(ledger: Arc<Ledger>, bot: BotApp) -> Result<(), Error> {
@@ -72,7 +73,7 @@ impl<T: Task + Send + Sync + Clone + 'static> CronJob for T {
     async fn call(&mut self) {
         info!("Starting background {} process", Self::NAME);
         if let Err(err) = self.process().await {
-            log::error!("Error in background {} process: {:#}", Self::NAME, err);
+            error!("Error in background {} process: {:#}", Self::NAME, err);
         }
     }
 

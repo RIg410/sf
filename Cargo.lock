@@ -61,9 +61,9 @@ name = "ai"
 version = "0.1.0"
 dependencies = [
  "eyre",
- "log",
  "reqwest 0.12.12",
  "serde",
+ "tracing",
 ]
 
 [[package]]
@@ -239,13 +239,13 @@ dependencies = [
  "eyre",
  "futures-util",
  "ledger",
- "log",
  "model",
  "mongodb",
  "storage",
  "teloxide",
  "tokio",
  "tokio-cron-scheduler",
+ "tracing",
  "tx_macro",
 ]
 
@@ -306,13 +306,13 @@ dependencies = [
  "hex",
  "itertools 0.2.9",
  "ledger",
- "log",
  "model",
  "mongodb",
  "serde",
  "storage",
  "strum",
  "teloxide",
+ "tracing",
 ]
 
 [[package]]
@@ -330,7 +330,6 @@ dependencies = [
  "hex",
  "itertools 0.2.9",
  "ledger",
- "log",
  "model",
  "mongodb",
  "parking_lot",
@@ -339,6 +338,7 @@ dependencies = [
  "storage",
  "strum",
  "teloxide",
+ "tracing",
 ]
 
 [[package]]
@@ -356,13 +356,13 @@ dependencies = [
  "hex",
  "itertools 0.2.9",
  "ledger",
- "log",
  "model",
  "mongodb",
  "serde",
  "storage",
  "strum",
  "teloxide",
+ "tracing",
 ]
 
 [[package]]
@@ -381,7 +381,6 @@ dependencies = [
  "hex",
  "itertools 0.2.9",
  "ledger",
- "log",
  "model",
  "mongodb",
  "serde",
@@ -389,6 +388,7 @@ dependencies = [
  "strum",
  "teloxide",
  "time 0.1.0",
+ "tracing",
 ]
 
 [[package]]
@@ -412,13 +412,13 @@ dependencies = [
  "hex",
  "itertools 0.2.9",
  "ledger",
- "log",
  "model",
  "mongodb",
  "serde",
  "storage",
  "strum",
  "teloxide",
+ "tracing",
 ]
 
 [[package]]
@@ -437,7 +437,6 @@ dependencies = [
  "hex",
  "itertools 0.2.9",
  "ledger",
- "log",
  "model",
  "mongodb",
  "serde",
@@ -445,6 +444,7 @@ dependencies = [
  "strum",
  "teloxide",
  "time 0.1.0",
+ "tracing",
 ]
 
 [[package]]
@@ -460,13 +460,13 @@ dependencies = [
  "hex",
  "itertools 0.2.9",
  "ledger",
- "log",
  "model",
  "mongodb",
  "serde",
  "storage",
  "strum",
  "teloxide",
+ "tracing",
 ]
 
 [[package]]
@@ -482,13 +482,13 @@ dependencies = [
  "hex",
  "itertools 0.2.9",
  "ledger",
- "log",
  "model",
  "mongodb",
  "serde",
  "storage",
  "strum",
  "teloxide",
+ "tracing",
 ]
 
 [[package]]
@@ -507,13 +507,13 @@ dependencies = [
  "hex",
  "itertools 0.2.9",
  "ledger",
- "log",
  "model",
  "mongodb",
  "serde",
  "storage",
  "strum",
  "teloxide",
+ "tracing",
 ]
 
 [[package]]
@@ -528,13 +528,13 @@ dependencies = [
  "hex",
  "itertools 0.2.9",
  "ledger",
- "log",
  "model",
  "mongodb",
  "serde",
  "storage",
  "strum",
  "teloxide",
+ "tracing",
 ]
 
 [[package]]
@@ -549,13 +549,13 @@ dependencies = [
  "hex",
  "itertools 0.2.9",
  "ledger",
- "log",
  "model",
  "mongodb",
  "serde",
  "storage",
  "strum",
  "teloxide",
+ "tracing",
 ]
 
 [[package]]
@@ -1058,21 +1058,8 @@ version = "0.1.0"
 dependencies = [
  "dotenv",
  "eyre",
- "log",
  "rand",
-]
-
-[[package]]
-name = "env_logger"
-version = "0.10.2"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4cd405aab171cb85d6735e5c8d9db038c17d3ca007a4d2c25f337935c3d90580"
-dependencies = [
- "humantime",
- "is-terminal",
- "log",
- "regex",
- "termcolor",
+ "tracing",
 ]
 
 [[package]]
@@ -1388,12 +1375,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d231dfb89cfffdbc30e7fc41579ed6066ad03abda9e567ccafae602b97ec5024"
 
 [[package]]
-name = "hermit-abi"
-version = "0.4.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "fbf6a919d6cf397374f7dfeeea91d974c7c0a7221d0d0f4f20d859d329e53fcc"
-
-[[package]]
 name = "hex"
 version = "0.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1540,12 +1521,6 @@ checksum = "6cb51c9a029ddc91b07a787f1d86b53ccfa49b0e86688c946ebe8d3555685dd7"
 dependencies = [
  "libm",
 ]
-
-[[package]]
-name = "humantime"
-version = "2.1.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9a3a5bfb195931eeb336b2a7b4d761daec841b97f947d34394601737a7bba5e4"
 
 [[package]]
 name = "hyper"
@@ -1794,17 +1769,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "187674a687eed5fe42285b40c6291f9a01517d415fad1c3cbc6a9f778af7fcd4"
 
 [[package]]
-name = "is-terminal"
-version = "0.4.13"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "261f68e344040fbd0edea105bef17c66edf46f984ddb1115b775ce31be948f4b"
-dependencies = [
- "hermit-abi 0.4.0",
- "libc",
- "windows-sys 0.52.0",
-]
-
-[[package]]
 name = "itertools"
 version = "0.2.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1878,7 +1842,6 @@ dependencies = [
  "error",
  "eyre",
  "futures-util",
- "log",
  "model",
  "mongodb",
  "serde",
@@ -1886,6 +1849,7 @@ dependencies = [
  "storage",
  "thiserror",
  "tokio",
+ "tracing",
  "tx_macro",
  "yookassa",
  "zip",
@@ -1902,11 +1866,11 @@ dependencies = [
  "env",
  "eyre",
  "ledger",
- "log",
  "mini-app-main",
- "pretty_env_logger",
  "storage",
  "tokio",
+ "tracing",
+ "tracing-subscriber",
 ]
 
 [[package]]
@@ -1991,6 +1955,15 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ffbee8634e0d45d258acb448e7eaab3fce7a0a467395d4d9f228e3c1f01fb2e4"
 
 [[package]]
+name = "matchers"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "8263075bb86c5a1b1427b5ae862e8889656f126e9f77c484496e8b47cf5c5558"
+dependencies = [
+ "regex-automata 0.1.10",
+]
+
+[[package]]
 name = "matchit"
 version = "0.8.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2053,7 +2026,6 @@ dependencies = [
  "hmac",
  "jsonwebtoken",
  "ledger",
- "log",
  "model",
  "mongodb",
  "prost",
@@ -2068,6 +2040,7 @@ dependencies = [
  "tonic-web",
  "tower",
  "tower-http",
+ "tracing",
 ]
 
 [[package]]
@@ -2100,7 +2073,7 @@ version = "1.0.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "80e04d1dcff3aae0704555fe5fee3bcfaf3d1fdf8a7e521d5b9d2b42acb52cec"
 dependencies = [
- "hermit-abi 0.3.9",
+ "hermit-abi",
  "libc",
  "wasi",
  "windows-sys 0.52.0",
@@ -2115,12 +2088,12 @@ dependencies = [
  "chrono",
  "eyre",
  "hex",
- "log",
  "rand",
  "serde",
  "strum",
  "thiserror",
  "time 0.1.0",
+ "tracing",
 ]
 
 [[package]]
@@ -2228,6 +2201,16 @@ checksum = "d273983c5a657a70a3e8f2a01329822f3b8c8172b73826411a55751e404a0a4a"
 dependencies = [
  "memchr",
  "minimal-lexical",
+]
+
+[[package]]
+name = "nu-ansi-term"
+version = "0.46.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "77a8165726e8236064dbb45459242600304b42a5ea24ee2948e18e023bf7ba84"
+dependencies = [
+ "overload",
+ "winapi",
 ]
 
 [[package]]
@@ -2349,6 +2332,12 @@ name = "option-ext"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "04744f49eae99ab78e0d5c0b603ab218f515ea8cfe5a456d7629ad883a3b6e7d"
+
+[[package]]
+name = "overload"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b15813163c1d831bf4a13c3610c05c0d03b39feb07f7e09fa234dac9b15aaf39"
 
 [[package]]
 name = "owo-colors"
@@ -2535,16 +2524,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "77957b295656769bb8ad2b6a6b09d897d94f05c41b069aede1fcdaa675eaea04"
 dependencies = [
  "zerocopy",
-]
-
-[[package]]
-name = "pretty_env_logger"
-version = "0.5.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "865724d4dbe39d9f3dd3b52b88d859d66bcb2d6a0acfd5ea68a65fb66d4bdc1c"
-dependencies = [
- "env_logger",
- "log",
 ]
 
 [[package]]
@@ -2746,8 +2725,17 @@ checksum = "4219d74c6b67a3654a9fbebc4b419e22126d13d2f3c4a07ee0cb61ff79a79619"
 dependencies = [
  "aho-corasick",
  "memchr",
- "regex-automata",
- "regex-syntax",
+ "regex-automata 0.4.7",
+ "regex-syntax 0.8.4",
+]
+
+[[package]]
+name = "regex-automata"
+version = "0.1.10"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6c230d73fb8d8c1b9c0b3135c5142a8acee3a0558fb8db5cf1cb65f8d7862132"
+dependencies = [
+ "regex-syntax 0.6.29",
 ]
 
 [[package]]
@@ -2758,8 +2746,14 @@ checksum = "38caf58cc5ef2fed281f89292ef23f6365465ed9a41b7a7754eb4e26496c92df"
 dependencies = [
  "aho-corasick",
  "memchr",
- "regex-syntax",
+ "regex-syntax 0.8.4",
 ]
+
+[[package]]
+name = "regex-syntax"
+version = "0.6.29"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f162c6dd7b008981e4d40210aca20b4bd0f9b60ca9271061b07f78537722f2e1"
 
 [[package]]
 name = "regex-syntax"
@@ -3335,13 +3329,13 @@ dependencies = [
  "dashmap",
  "eyre",
  "futures-util",
- "log",
  "model",
  "mongodb",
  "serde",
  "serde_json",
  "serde_with 3.9.0",
  "strum",
+ "tracing",
 ]
 
 [[package]]
@@ -3571,15 +3565,6 @@ dependencies = [
  "once_cell",
  "rustix",
  "windows-sys 0.59.0",
-]
-
-[[package]]
-name = "termcolor"
-version = "1.4.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "06794f8f6c5c898b3275aebefa6b8a1cb24cd2c6c79397ab15774837a0bc5755"
-dependencies = [
- "winapi-util",
 ]
 
 [[package]]
@@ -3874,9 +3859,9 @@ checksum = "8df9b6e13f2d32c91b9bd719c00d1958837bc7dec474d94952798cc8e69eeec3"
 
 [[package]]
 name = "tracing"
-version = "0.1.40"
+version = "0.1.41"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c3523ab5a71916ccf420eebdf5521fcef02141234bbc0b8a49f2fdc4544364ef"
+checksum = "784e0ac535deb450455cbfa28a6f0df145ea1bb7ae51b821cf5e7927fdcfbdd0"
 dependencies = [
  "pin-project-lite",
  "tracing-attributes",
@@ -3885,9 +3870,9 @@ dependencies = [
 
 [[package]]
 name = "tracing-attributes"
-version = "0.1.27"
+version = "0.1.28"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "34704c8d6ebcbc939824180af020566b01a7c01f80641264eba0999f6c2b6be7"
+checksum = "395ae124c09f9e6918a2310af6038fba074bcf474ac352496d5910dd59a2226d"
 dependencies = [
  "proc-macro2",
  "quote",
@@ -3896,9 +3881,9 @@ dependencies = [
 
 [[package]]
 name = "tracing-core"
-version = "0.1.32"
+version = "0.1.33"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "c06d3da6113f116aaee68e4d601191614c9053067f9ab7f6edbcb161237daa54"
+checksum = "e672c95779cf947c5311f83787af4fa8fffd12fb27e4993211a84bdfd9610f9c"
 dependencies = [
  "once_cell",
  "valuable",
@@ -3915,14 +3900,32 @@ dependencies = [
 ]
 
 [[package]]
+name = "tracing-log"
+version = "0.2.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "ee855f1f400bd0e5c02d150ae5de3840039a3f54b025156404e34c23c03f47c3"
+dependencies = [
+ "log",
+ "once_cell",
+ "tracing-core",
+]
+
+[[package]]
 name = "tracing-subscriber"
 version = "0.3.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ad0f048c97dbd9faa9b7df56362b8ebcaa52adb06b498c050d2f4e32f90a7a8b"
 dependencies = [
+ "matchers",
+ "nu-ansi-term",
+ "once_cell",
+ "regex",
  "sharded-slab",
+ "smallvec",
  "thread_local",
+ "tracing",
  "tracing-core",
+ "tracing-log",
 ]
 
 [[package]]
@@ -4177,15 +4180,6 @@ name = "winapi-i686-pc-windows-gnu"
 version = "0.4.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ac3b87c63620426dd9b991e5ce0329eff545bccbbb34f3be09ff6fb6ab51b7b6"
-
-[[package]]
-name = "winapi-util"
-version = "0.1.9"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cf221c93e13a30d793f7645a0e7762c55d169dbb0a49671918a2319d289b10bb"
-dependencies = [
- "windows-sys 0.59.0",
-]
 
 [[package]]
 name = "winapi-x86_64-pc-windows-gnu"

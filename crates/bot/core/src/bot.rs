@@ -2,6 +2,7 @@ use crate::{state::Tokens, sys_button};
 use env::Env;
 use eyre::{Context as _, Error};
 use futures_util::stream::StreamExt;
+use tracing::{info, error};
 use std::{
     fmt::Debug,
     ops::Deref,
@@ -46,11 +47,11 @@ impl TgBot {
     }
 
     pub async fn send_notification(&mut self, msg: &str) {
-        log::info!("Sending notification: {}", msg);
+        info!("Sending notification: {}", msg);
         if let Err(err) = self.send_msg(msg).await {
-            log::error!("Failed to send notification: {}. Msg:[{}]", err, msg);
+            error!("Failed to send notification: {}. Msg:[{}]", err, msg);
             if let Err(err) = self.send_msg(&escape(msg)).await {
-                log::error!("Failed to send notification: {}. Msg:[{}]", err, msg);
+                error!("Failed to send notification: {}. Msg:[{}]", err, msg);
             }
         }
 
@@ -90,7 +91,7 @@ impl TgBot {
                 Ok(_) => Ok(()),
                 Err(RequestError::Api(ApiError::MessageNotModified)) => Ok(()),
                 Err(e) => {
-                    log::error!("Failed to edit message: {}: {}", e, text);
+                    error!("Failed to edit message: {}: {}", e, text);
                     Err(e.into())
                 }
             }
@@ -108,7 +109,7 @@ impl TgBot {
                     Ok(())
                 }
                 Err(e) => {
-                    log::error!("Failed to edit message: {}: {}", e, text);
+                    error!("Failed to edit message: {}: {}", e, text);
                     Err(e.into())
                 }
             }
@@ -223,7 +224,7 @@ impl TgBot {
         let id = match result {
             Ok(msg) => msg.id,
             Err(err) => {
-                log::error!("Failed to send notification: {}. Msg:[{}]", err, text);
+                error!("Failed to send notification: {}. Msg:[{}]", err, text);
                 return MessageId(0);
             }
         };
@@ -252,7 +253,7 @@ impl TgBot {
         let id = match result {
             Ok(msg) => msg.id,
             Err(err) => {
-                log::error!("Failed to send notification: {}. Msg:[{}]", err, text);
+                error!("Failed to send notification: {}. Msg:[{}]", err, text);
                 return MessageId(0);
             }
         };

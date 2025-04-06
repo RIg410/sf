@@ -10,4 +10,4 @@ version.workspace = true
 reqwest.workspace = true
 serde.workspace = true
 eyre.workspace = true
-log.workspace = true
+tracing.workspace = true

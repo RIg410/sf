@@ -1,5 +1,5 @@
 use chrono::{DateTime, Datelike as _, Local, TimeZone as _, Timelike as _, Utc};
-use log::error;
+use tracing::error;
 use model::ids::{DayId, WeekId};
 use model::training::TrainingId;
 use mongodb::bson::oid::ObjectId;

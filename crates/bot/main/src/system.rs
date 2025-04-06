@@ -9,6 +9,7 @@ use eyre::Error;
 use model::rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::types::{InlineKeyboardMarkup, Message};
+use tracing::info;
 
 mod subscription;
 
@@ -76,9 +77,9 @@ impl View for ApplyDump {
 
     async fn handle_message(&mut self, ctx: &mut Context, msg: &Message) -> Result<Jmp, Error> {
         ctx.ensure(Rule::System)?;
-        log::info!("Apply dump");
+        info!("Apply dump");
         if let Some(document) = msg.document() {
-            log::info!("Apply dump {:?}", document);
+            info!("Apply dump {:?}", document);
             let dump = ctx.bot.load_document(&document.file).await?;
             ctx.ledger
                 .backup

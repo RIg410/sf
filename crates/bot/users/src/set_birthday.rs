@@ -5,7 +5,7 @@ use bot_core::{
 };
 use chrono::{Local, TimeZone as _};
 use eyre::{Error, Result};
-use log::warn;
+use tracing::warn;
 use model::rights::Rule;
 use mongodb::bson::oid::ObjectId;
 use teloxide::types::{InlineKeyboardMarkup, Message};

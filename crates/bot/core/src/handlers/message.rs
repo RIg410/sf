@@ -10,13 +10,13 @@ use crate::{
 };
 use env::Env;
 use ledger::Ledger;
-use log::error;
 use teloxide::{
     prelude::{Requester as _, ResponseResult},
     types::Message,
     utils::markdown::escape,
     Bot,
 };
+use tracing::error;
 
 pub async fn message_handler(
     bot: Bot,

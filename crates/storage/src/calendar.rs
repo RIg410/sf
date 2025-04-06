@@ -1,7 +1,6 @@
 use bson::to_document;
 use chrono::{DateTime, Duration, Local, Utc, Weekday};
 use eyre::Result;
-use log::info;
 use model::{
     day::Day,
     ids::DayId,
@@ -13,6 +12,7 @@ use mongodb::{
     options::{FindOneOptions, FindOptions, IndexOptions, UpdateOptions},
     Collection, Database, IndexModel, SessionCursor,
 };
+use tracing::info;
 
 use crate::session::Session;
 

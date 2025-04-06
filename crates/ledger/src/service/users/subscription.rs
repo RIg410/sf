@@ -1,10 +1,10 @@
 use super::Users;
 use chrono::Utc;
 use eyre::{eyre, Result};
-use log::info;
 use model::{decimal::Decimal, subscription::UserSubscription};
 use mongodb::bson::oid::ObjectId;
 use storage::session::Session;
+use tracing::{info, warn};
 use tx_macro::tx;
 
 impl Users {
@@ -203,7 +203,7 @@ impl Users {
         let mut payer = if let Ok(payer) = user.payer_mut() {
             payer
         } else {
-            log::warn!("User {:?} has no payer", user);
+            warn!("User {:?} has no payer", user);
             return Err(eyre!("User has no payer"));
         };
 

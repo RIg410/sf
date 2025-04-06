@@ -10,7 +10,7 @@ use bot_core::{
 use env::Env;
 use eyre::Result;
 use ledger::Ledger;
-use log::info;
+use tracing::info;
 use teloxide::{
     dispatching::UpdateFilterExt as _,
     dptree,

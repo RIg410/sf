@@ -7,6 +7,7 @@ use bot_main::BotApp;
 use bson::oid::ObjectId;
 use env::Env;
 use ledger::Ledger;
+use tracing::warn;
 use std::sync::Arc;
 use teloxide::types::{ChatId, MessageId};
 use tokio::time::sleep;
@@ -33,7 +34,7 @@ impl ContextBuilder {
                 self.build(claim.id).await
             } else {
                 sleep(std::time::Duration::from_secs(1)).await;
-                log::warn!("Failed to decode token: {}", token);
+                warn!("Failed to decode token: {}", token);
                 return Err(Status::unauthenticated("Invalid token"));
             }
         } else {

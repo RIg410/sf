@@ -5,11 +5,11 @@ use bson::oid::ObjectId;
 use bson::{to_bson, to_document};
 use eyre::{Error, Result};
 use futures_util::TryStreamExt as _;
-use log::info;
 use model::user::employee::Employee;
 use model::user::rate::Rate;
 use model::user::User;
 use mongodb::bson::doc;
+use tracing::info;
 
 impl UserStore {
     pub async fn employees_with_ready_fix_reward(

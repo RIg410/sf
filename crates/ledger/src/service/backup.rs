@@ -1,4 +1,5 @@
 use eyre::{Context, Error};
+use tracing::info;
 use std::{
     collections::HashMap,
     io::{Cursor, Read, Write as _},
@@ -19,7 +20,7 @@ impl Backup {
 
     #[tx]
     pub async fn apply_backup(&self, session: &mut Session, dump: Vec<u8>) -> Result<(), Error> {
-        log::info!("Applying backup");
+        info!("Applying backup");
         let mut zip = zip::ZipArchive::new(Cursor::new(dump))?;
 
         let mut collections = HashMap::new();
@@ -35,7 +36,7 @@ impl Backup {
 
         self.store.restore(collections, session).await?;
 
-        log::info!("Backup applied");
+        info!("Backup applied");
         Ok(())
     }
 
@@ -52,7 +53,7 @@ impl Backup {
 
     #[tx]
     pub async fn make_backup(&self, session: &mut Session) -> Result<Vec<u8>, Error> {
-        log::info!("Making backup");
+        info!("Making backup");
         let mut zip = zip::ZipWriter::new(Cursor::new(Vec::new()));
 
         let options = SimpleFileOptions::default()
@@ -69,7 +70,7 @@ impl Backup {
 
         let mut writer = zip.finish()?;
         writer.flush()?;
-        log::info!("Backup done:{} kb", writer.get_ref().len() / 1024);
+        info!("Backup done:{} kb", writer.get_ref().len() / 1024);
         Ok(writer.into_inner())
     }
 }

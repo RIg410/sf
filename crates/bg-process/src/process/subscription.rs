@@ -11,6 +11,7 @@ use teloxide::{
     types::{ChatId, InlineKeyboardMarkup},
     utils::markdown::escape,
 };
+use tracing::warn;
 
 #[derive(Clone)]
 pub struct SubscriptionBg {
@@ -49,7 +50,7 @@ impl Task for SubscriptionBg {
             let payer = if let Ok(payer) = user.payer() {
                 payer
             } else {
-                log::warn!("User {:?} has no payer", user);
+                warn!("User {:?} has no payer", user);
                 continue;
             };
 

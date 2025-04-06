@@ -5,7 +5,7 @@ use bot_viewer::fmt_phone;
 use chrono::{Datelike as _, Local};
 use eyre::Error;
 use ledger::Ledger;
-use log::info;
+use tracing::info;
 use model::{rights::Rule, user::User};
 use std::sync::Arc;
 use teloxide::{

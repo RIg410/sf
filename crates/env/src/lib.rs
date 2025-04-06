@@ -3,6 +3,7 @@ use std::{env::var, sync::Arc};
 use dotenv::dotenv;
 use eyre::{Context, Error};
 use rand::prelude::Distribution as _;
+use tracing::info;
 
 #[derive(Clone)]
 pub struct Env(Arc<EnvInner>);
@@ -64,7 +65,7 @@ impl Env {
 
     pub fn load() -> Result<Env, Error> {
         if dotenv().ok().is_none() {
-            log::info!("dotenv not found");
+            info!("dotenv not found");
         }
 
         let build_time = env!("BUILD_TIME");

@@ -8,7 +8,7 @@ use bot_core::{
 };
 use chrono::{Local, Timelike, Utc};
 use eyre::Result;
-use log::warn;
+use tracing::warn;
 use model::{rights::Rule, slot::Slot, training::TrainingId};
 use serde::{Deserialize, Serialize};
 use teloxide::types::{InlineKeyboardMarkup, Message};
