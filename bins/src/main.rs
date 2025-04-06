@@ -10,7 +10,7 @@ async fn main() -> eyre::Result<()> {
     let env = Env::load()?;
 
     tracing_subscriber::fmt()
-        .with_env_filter(EnvFilter::builder().parse_lossy("debug"))
+        .with_env_filter(EnvFilter::builder().parse_lossy("debug,teloxide=error,hyper=error,reqwest=warn,tonic_web=warn,h2=warn"))
         .with_file(true)
         .with_line_number(true)
         .with_target(true)

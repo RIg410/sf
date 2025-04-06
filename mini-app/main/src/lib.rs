@@ -4,7 +4,9 @@ use eyre::Result;
 use ledger::Ledger;
 use pb::auth::auth_service_server::AuthServiceServer;
 use std::sync::Arc;
-use tonic::transport::Server;
+use tonic::{transport::Server, Request, Status};
+use tonic_web::GrpcWebLayer;
+use tracing::debug;
 
 pub(crate) mod auth;
 pub(crate) mod ctx;
@@ -15,12 +17,10 @@ pub fn spawn(ledger: Arc<Ledger>, bot: BotApp) -> Result<()> {
 
     tokio::spawn(async move {
         let addr = "0.0.0.0:3000".parse().unwrap();
-        log::debug!("listening on {}", addr);
-
+        debug!("listening on {}", addr);
         Server::builder()
             .accept_http1(true)
-            .layer(tower_http::cors::CorsLayer::permissive())
-            .layer(tonic_web::GrpcWebLayer::new())
+            .layer(GrpcWebLayer::new())
             .add_service(AuthServiceServer::new(AuthServer::new(ctx_builder)))
             .serve(addr)
             .await

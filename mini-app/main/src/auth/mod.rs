@@ -44,7 +44,6 @@ impl AuthService for AuthServer {
         &self,
         request: tonic::Request<TgKeyRequest>,
     ) -> Result<tonic::Response<TgAuthResult>, tonic::Status> {
-        dbg!(&request);
         let key = request.into_inner();
         let tg_id = match self.tg_auth.validate(&key.key) {
             Ok(id) => id,

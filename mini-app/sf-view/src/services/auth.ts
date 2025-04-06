@@ -1,5 +1,4 @@
 import { grpc } from "@improbable-eng/grpc-web";
-import { FetchRpc } from "./rpc";
 import { is_telegram_context, initData } from "./tg";
 import { AuthService, AuthServiceClientImpl, GrpcWebImpl, SendVerificationCodeResponse, TgAuthError, VerifyCodeError } from "@/generated/auth";
 
@@ -16,7 +15,7 @@ export class Auth {
         this.auth_service = null;
         const metadata = new grpc.Metadata();
         metadata.set("Authorization", this.token ? `Bearer ${this.token}` : "");
-        this.rpc_client = new GrpcWebImpl("http://localhost:3000", {
+        this.rpc_client = new GrpcWebImpl("api", {
             metadata,
         });
     }
@@ -45,7 +44,7 @@ export class Auth {
         this.token = token;
         const metadata = new grpc.Metadata();
         metadata.set("Authorization", this.token ? `Bearer ${this.token}` : "");
-        this.rpc_client = new GrpcWebImpl("http://localhost:3000", {
+        this.rpc_client = new GrpcWebImpl("api", {
             metadata,
         });
         if (token) {
