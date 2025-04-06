@@ -4,7 +4,7 @@ use eyre::Result;
 use ledger::Ledger;
 use pb::auth::auth_service_server::AuthServiceServer;
 use std::sync::Arc;
-use tonic::{transport::Server, Request, Status};
+use tonic::transport::Server;
 use tonic_web::GrpcWebLayer;
 use tracing::debug;
 

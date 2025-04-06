@@ -125,6 +125,7 @@ export default defineComponent({
     watch(
       () => route.path,
       async (newPath) => {
+        isAuthenticated.value = auth.isAuthenticated();
         if (!isAuthenticated.value && newPath !== '/auth') {
           if (auth.getAuthType() === 'telegram') {
             await router.push('/tg-auth');

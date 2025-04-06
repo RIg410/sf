@@ -1,9 +1,9 @@
 use chrono::Utc;
 use eyre::Error;
 use hmac::{Hmac, Mac};
-use tracing::info;
 use sha2::Sha256;
 use std::collections::BTreeMap;
+use tracing::info;
 type HmacSha256 = Hmac<Sha256>;
 
 const TG_TTL: i64 = 60; // 60 seconds
@@ -64,15 +64,5 @@ impl TgAuth {
 }
 
 fn parse_query(init_data: &str) -> BTreeMap<String, String> {
-    init_data
-        .split('&')
-        .filter_map(|s| {
-            let mut split = s.split('=');
-            if let (Some(key), Some(value)) = (split.next(), split.next()) {
-                Some((key.to_string(), value.to_string()))
-            } else {
-                None
-            }
-        })
-        .collect()
+    serde_qs::from_str(init_data).unwrap_or_default()
 }

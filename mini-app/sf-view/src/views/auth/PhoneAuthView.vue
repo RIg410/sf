@@ -52,6 +52,8 @@ import { SendVerificationCodeError } from '@/generated/auth';
 import PopupView from '@/components/common/PopupView.vue';
 import { popupService } from '@/services/PopupService';
 
+const CODE_LEN = 4;
+
 export default defineComponent({
     name: 'PhoneAuthView',
     components: {
@@ -92,7 +94,7 @@ export default defineComponent({
             return true;
         };
 
-        const validateCode = () => {
+        const validateCode = async () => {
             if (!verificationCode.value) {
                 codeError.value = 'Обязательное поле';
                 return false;
@@ -172,7 +174,7 @@ export default defineComponent({
                     return;
                 }
                 console.log('Code verified successfully');
-                await router.back();
+                await router.replace("/");
             } catch (error) {
                 await popupService.showOk("Неверный код. Пожалуйста, проверьте код и попробуйте еще раз.");
                 console.error('Error verifying code:', error);

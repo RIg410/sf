@@ -86,13 +86,13 @@ export class Auth {
                     return null;
                 } else {
                     console.error("Telegram authentication error: No token received.");
-                    return "Не удалось авторизоваться. Попробуйте позже.";
+                    return "Не удалось авторизоваться.";
                 }
             }
 
         } catch (e) {
             console.error("Error during Telegram authentication:", e);
-            return "Не удалось авторизоваться. Попробуйте позже.";
+            return "Не удалось авторизоваться.";
         }
     }
 
