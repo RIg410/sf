@@ -82,7 +82,7 @@ fn user_sub_to_prompt(sub: &UserSubscription) -> String {
 
     prompt.push_str(&format!("Абонемент: {}\n", sub.name));
     match &sub.status {
-        model::subscription::Status::Active {
+        model::subscription::SubscriptionStatus::Active {
             start_date,
             end_date,
         } => {
@@ -92,7 +92,7 @@ fn user_sub_to_prompt(sub: &UserSubscription) -> String {
                 end_date.with_timezone(&Local)
             ));
         }
-        model::subscription::Status::NotActive => {
+        model::subscription::SubscriptionStatus::NotActive => {
             prompt.push_str("Абонемент не активен");
         }
     }

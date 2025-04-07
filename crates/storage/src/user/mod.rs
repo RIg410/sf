@@ -8,7 +8,7 @@ use futures_util::stream::TryStreamExt;
 use model::decimal::Decimal;
 use model::rights::{self, Rule};
 use model::statistics::source::Source;
-use model::subscription::{Status, Subscription, UserSubscription};
+use model::subscription::{SubscriptionStatus, Subscription, UserSubscription};
 use model::user::extension::UserExtension;
 use model::user::{Freeze, User, UserName};
 use mongodb::options::UpdateOptions;
@@ -384,14 +384,14 @@ impl UserStore {
 
         for sub in user.payer_mut()?.subscriptions_mut() {
             match sub.status {
-                Status::NotActive => {
+                SubscriptionStatus::NotActive => {
                     //no-op
                 }
-                Status::Active {
+                SubscriptionStatus::Active {
                     start_date,
                     end_date,
                 } => {
-                    sub.status = Status::Active {
+                    sub.status = SubscriptionStatus::Active {
                         start_date,
                         end_date: end_date + chrono::Duration::days(days as i64),
                     }

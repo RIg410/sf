@@ -2,16 +2,12 @@ syntax = "proto3";
 package users;
 
 import "user.proto";
+import "id.proto";
 
 service UsersService {
-    rpc get(UserId) returns (user.User);
-    rpc find(UserFilter) returns (stream user.User);
-
+    rpc get(id.ObjectId) returns (user.UserView);
 }
 
-message UserId {
-    int64 id = 1;
-}
 
 message UserFilter {
   

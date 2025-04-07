@@ -22,7 +22,7 @@ impl Users {
             };
 
             for sub in payer.subscriptions_mut() {
-                if let model::subscription::Status::Active {
+                if let model::subscription::SubscriptionStatus::Active {
                     start_date: _,
                     end_date,
                 } = &mut sub.status
@@ -169,7 +169,7 @@ impl Users {
             .iter_mut()
             .find(|sub| sub.id == id);
         if let Some(sub) = sub {
-            if let model::subscription::Status::Active {
+            if let model::subscription::SubscriptionStatus::Active {
                 start_date: _,
                 end_date,
             } = &mut sub.status

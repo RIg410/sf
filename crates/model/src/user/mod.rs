@@ -29,7 +29,7 @@ pub struct User {
     #[serde(default)]
     pub freeze: Option<Freeze>,
     #[serde(default)]
-    subscriptions: Vec<UserSubscription>,
+    pub subscriptions: Vec<UserSubscription>,
     #[serde(default)]
     pub freeze_days: u32,
     #[serde(default)]

@@ -9,7 +9,7 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
 use crate::{
-    subscription::{self, Status, SubscriptionType, UserSubscription},
+    subscription::{self, SubscriptionStatus, SubscriptionType, UserSubscription},
     training::Training,
 };
 
@@ -77,18 +77,18 @@ impl Payer<&mut User> {
             .subscriptions
             .sort_by(|a, b| match (&a.status, &b.status) {
                 (
-                    Status::Active {
+                    SubscriptionStatus::Active {
                         start_date: _,
                         end_date: a_end_date,
                     },
-                    Status::Active {
+                    SubscriptionStatus::Active {
                         start_date: _,
                         end_date: b_end_date,
                     },
                 ) => a_end_date.cmp(b_end_date),
-                (Status::Active { .. }, Status::NotActive) => Ordering::Less,
-                (Status::NotActive, Status::Active { .. }) => Ordering::Greater,
-                (Status::NotActive, Status::NotActive) => Ordering::Equal,
+                (SubscriptionStatus::Active { .. }, SubscriptionStatus::NotActive) => Ordering::Less,
+                (SubscriptionStatus::NotActive, SubscriptionStatus::Active { .. }) => Ordering::Greater,
+                (SubscriptionStatus::NotActive, SubscriptionStatus::NotActive) => Ordering::Equal,
             });
         self.0
             .subscriptions
@@ -107,7 +107,7 @@ impl Payer<&mut User> {
             })
             .find(|s| match reason {
                 FindFor::Lock => {
-                    if let Status::Active {
+                    if let SubscriptionStatus::Active {
                         start_date: _,
                         end_date,
                     } = s.status
@@ -257,7 +257,7 @@ mod tests {
         program::TrainingType,
         rights::Rights,
         statistics::source::Source,
-        subscription::{Status, SubscriptionType, UserSubscription},
+        subscription::{SubscriptionStatus, SubscriptionType, UserSubscription},
         training::Training,
         user::UserName,
     };
@@ -296,12 +296,12 @@ mod tests {
     ) -> UserSubscription {
         let status = if let Some(start_date) = start_date {
             let start_date: DateTime<Utc> = start_date.parse().unwrap();
-            Status::Active {
+            SubscriptionStatus::Active {
                 start_date,
                 end_date: start_date + chrono::Duration::days(i64::from(days)),
             }
         } else {
-            Status::NotActive
+            SubscriptionStatus::NotActive
         };
 
         UserSubscription {

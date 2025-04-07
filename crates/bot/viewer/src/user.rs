@@ -7,7 +7,7 @@ use model::user::employee::Employee;
 use model::user::rate::Rate;
 use model::{
     rights::Rule,
-    subscription::{Status, UserSubscription},
+    subscription::{SubscriptionStatus, UserSubscription},
     user::{extension::UserExtension, User},
 };
 use mongodb::bson::oid::ObjectId;
@@ -21,7 +21,7 @@ pub fn render_sub(sub: &UserSubscription, is_owner: bool) -> String {
     let emoji = if is_owner { "💳" } else { "🎟" };
 
     match sub.status {
-        Status::NotActive => {
+        SubscriptionStatus::NotActive => {
             if sub.unlimited {
                 format!(
                     "{}_{}_\nБезлимитный абонемент\nНе активен\\. \n",
@@ -38,7 +38,7 @@ pub fn render_sub(sub: &UserSubscription, is_owner: bool) -> String {
                 )
             }
         }
-        Status::Active {
+        SubscriptionStatus::Active {
             start_date,
             end_date,
         } => {

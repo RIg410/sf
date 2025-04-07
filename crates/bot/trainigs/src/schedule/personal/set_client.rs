@@ -83,7 +83,7 @@ fn make_client_button(client: &User) -> InlineKeyboardButton {
     let name = format!(
         "{} {}",
         client.name.first_name,
-        fmt_phone_escape_less(client.phone.as_deref())
+        client.phone.as_deref().map(fmt_phone_escape_less).unwrap_or_else(|| "_".to_owned())
     );
     Callback::SelectClient(client.id.bytes()).button(name)
 }

@@ -10,6 +10,7 @@ version.workspace = true
 bot-core.workspace = true
 bot-main.workspace = true
 model.workspace = true
+bot-viewer.workspace = true
 
 bson.workspace = true
 chrono.workspace = true

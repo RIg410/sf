@@ -24,6 +24,10 @@ impl Rights {
         }
     }
 
+    pub fn iter(&self) -> impl Iterator<Item = &Rule> {
+        self.rights.iter()
+    }
+
     pub fn is_full(&self) -> bool {
         self.full
     }
@@ -186,5 +190,21 @@ impl TryFrom<u8> for Rule {
 
     fn try_from(value: u8) -> std::result::Result<Self, Self::Error> {
         Rule::from_repr(value).ok_or_else(|| eyre::eyre!("Invalid rule: {}", value))
+    }
+}
+
+pub trait HasRule {
+    fn has_rule(&self, rule: Rule) -> bool;
+}
+
+impl HasRule for Rights {
+    fn has_rule(&self, rule: Rule) -> bool {
+        Rights::has_rule(&self, rule)
+    }
+}
+
+impl HasRule for () {
+    fn has_rule(&self, _: Rule) -> bool {
+        true
     }
 }

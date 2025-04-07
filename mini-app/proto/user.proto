@@ -1,58 +1,59 @@
 syntax = "proto3";
 package user;
 
+import "id.proto";
+import "subscription.proto";
 
-message User {
-    string id = 1;
+message UserView {
+    id.ObjectId id = 1;
     int64 tg_id = 2;
-    UserName name = 3;
-    Rights rights = 4;
+    UserNameView name = 3;
+    RightsView rights = 4;
     optional string phone = 5;
     bool is_active = 6;
-    optional Freeze freeze = 7;
-    repeated UserSubscription subscriptions = 8;
+    optional FreezeView freeze = 7;
+    repeated UserSubscriptionView subscriptions = 8;
     uint32 freeze_days = 9;
-    uint64 created_at = 11;
-    optional Employee employee = 12;
-    optional Source come_from = 13;
-    optional Family family = 14;
+    optional EmployeeView employee = 12;
+    optional SourceView come_from = 13;
+    optional FamilyView family = 14;
 }
 
-message UserName {
+message UserNameView {
     optional string tg_user_name = 1;
     string first_name = 2;
     optional string last_name = 3;
 }
 
-message Freeze {
-    string freeze_start = 1;
-    string freeze_end = 2;
+message FreezeView {
+    int64 freeze_start = 1;
+    int64 freeze_end = 2;
 }
 
-message UserSubscription {
-    string id = 1;
-    string subscription_id = 2;
+message UserSubscriptionView {
+    id.ObjectId id = 1;
+    id.ObjectId subscription_id = 2;
     string name = 3;
     uint32 items = 4;
     uint32 days = 5;
-    Status status = 6;
-    string price = 7;
-    SubscriptionType tp = 8;
+    StatusView status = 6;
+    int64 price = 7;
+    subscription.SubscriptionTypeView tp = 8;
     uint32 balance = 9;
     uint32 locked_balance = 10;
     bool unlimited = 11;
-    optional string discount = 12;
-    optional string item_price = 13;
+    optional int64 discount = 12;
+    optional int64 item_price = 13;
 }
 
-message Employee {
-    EmployeeRole role = 1;
+message EmployeeView {
+    EmployeeRoleView role = 1;
     string description = 2;
-    string reward = 3;
-    repeated Rate rates = 4;
+    int64 reward = 3;
+    repeated RateView rates = 4;
 }
 
-enum Source {
+enum SourceView {
     UNKNOWN = 0;
     WEBSITE = 1;
     INSTAGRAM = 2;
@@ -69,21 +70,18 @@ enum Source {
     OLD_BASE = 13;
 }
 
-message Family {
-    optional string payer_id = 1;
+message FamilyView {
     bool is_individual = 2;
-    optional User payer = 3;
-    repeated string children_ids = 4;
-    repeated User children = 5;
-    repeated string members = 6;
+    optional UserView payer = 3;
+    repeated UserView children = 5;
 }
 
-message Rights {
+message RightsView {
     bool full = 1;
-    repeated Rule rights = 2;
+    repeated RuleView rights = 2;
 }
 
-enum Rule {
+enum RuleView {
     VIEW_PROFILE = 0;
     VIEW_USERS = 1;
     EDIT_USER_RIGHTS = 2;
@@ -150,57 +148,50 @@ enum Rule {
     SELECT_MODEL = 63;
 }
 
-enum EmployeeRole {
+enum EmployeeRoleView {
     COUCH = 0;
     MANAGER = 1;
     ADMIN = 2;
 }
 
-message Rate {
+message RateView {
     oneof rate_type {
-        FixRate fix = 1;
-        GroupTrainingRate group_training = 2;
-        PersonalTrainingRate personal_training = 3;
+        FixRateView fix = 1;
+        GroupTrainingRateView group_training = 2;
+        PersonalTrainingRateView personal_training = 3;
     }
 }
 
-message FixRate {
+message FixRateView {
     int64 amount = 1;
     int64 next_payment_date = 2;
-    Interval reward_interval = 3;
+    IntervalView reward_interval = 3;
 }
 
-message GroupTrainingRate {
+message GroupTrainingRateView {
     int64 percent = 1;
     int64 min_reward = 2;
 }
 
-message PersonalTrainingRate {
+message PersonalTrainingRateView {
     int64 percent = 1;
 }
 
-message Interval {
+message IntervalView {
     uint32 month_num = 1;
 }
-enum Status {
-    NOT_ACTIVE = 0;
-    ACTIVE = 1;
+
+message StatusView {
+    oneof status_view {
+        NotActive not_active = 1;
+        ActiveStatusView active = 2;
+    }
 }
 
-message ActiveStatus {
+message NotActive {
+}
+
+message ActiveStatusView {
     int64 start_date = 1;
     int64 end_date = 2;
-}
-
-enum SubscriptionType {
-    GROUP = 0;
-    PERSONAL = 1;
-}
-
-message GroupSubscription {
-    repeated string program_filter = 1;
-}
-
-message PersonalSubscription {
-    string couch_filter = 1;
 }

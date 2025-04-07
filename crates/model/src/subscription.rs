@@ -70,9 +70,10 @@ pub struct UserSubscription {
     #[serde(default = "default_days")]
     pub days: u32,
     #[serde(default)]
-    pub status: Status,
+    pub status: SubscriptionStatus,
+    /// full subscription price
     #[serde(default)]
-    pub(crate) price: Decimal,
+    pub price: Decimal,
     #[serde(default)]
     pub tp: SubscriptionType,
     #[serde(default)]
@@ -90,16 +91,16 @@ pub struct UserSubscription {
 impl UserSubscription {
     pub fn is_expired(&self, current_date: DateTime<Utc>) -> bool {
         match self.status {
-            Status::Active {
+            SubscriptionStatus::Active {
                 start_date: _,
                 end_date,
             } => current_date > end_date,
-            Status::NotActive => false,
+            SubscriptionStatus::NotActive => false,
         }
     }
 
     pub fn is_active(&self) -> bool {
-        matches!(self.status, Status::Active { .. })
+        matches!(self.status, SubscriptionStatus::Active { .. })
     }
 
     pub fn activate(&mut self, training: &Training) {
@@ -195,7 +196,7 @@ impl From<Subscription> for UserSubscription {
             name: value.name,
             items: value.items,
             days: value.expiration_days,
-            status: Status::NotActive,
+            status: SubscriptionStatus::NotActive,
             price: value.price,
             tp: value.subscription_type,
             balance: value.items,
@@ -214,7 +215,7 @@ fn default_days() -> u32 {
 
 /// Don't reorder variants!
 #[derive(Debug, Serialize, Deserialize, Clone, Default, Eq, PartialEq, PartialOrd, Ord, Hash)]
-pub enum Status {
+pub enum SubscriptionStatus {
     Active {
         #[serde(with = "bson::serde_helpers::chrono_datetime_as_bson_datetime")]
         start_date: DateTime<Utc>,
@@ -226,9 +227,9 @@ pub enum Status {
     NotActive,
 }
 
-impl Status {
+impl SubscriptionStatus {
     pub fn is_active(&self) -> bool {
-        matches!(self, Status::Active { .. })
+        matches!(self, SubscriptionStatus::Active { .. })
     }
 
     pub fn activate(&mut self, training: &Training, expiration_days: u32) {
@@ -241,7 +242,7 @@ impl Status {
             .and_hms_opt(23, 59, 59)
             .and_then(|dt| Local.from_local_datetime(&dt).single())
             .unwrap_or(end_date);
-        *self = Status::Active {
+        *self = SubscriptionStatus::Active {
             start_date: training.get_slot().start_at().with_timezone(&Utc),
             end_date: end_date.with_timezone(&Utc),
         };

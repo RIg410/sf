@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+import "id.proto";
+
+package subscription;
+
+message SubscriptionTypeView {
+    oneof subscription_type {
+        Group group = 1;
+        Personal personal = 2;
+    }
+}
+
+message Group {
+    repeated id.ObjectId program_filter = 1;
+}
+
+message Personal {
+    id.ObjectId couch_filter = 1;
+}
