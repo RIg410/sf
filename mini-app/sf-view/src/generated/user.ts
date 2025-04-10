@@ -6,10 +6,12 @@
 
 /* eslint-disable */
 import { BinaryReader, BinaryWriter } from "@bufbuild/protobuf/wire";
+import { ObjectId } from "./id";
+import { SubscriptionTypeView } from "./subscription";
 
 export const protobufPackage = "user";
 
-export enum Source {
+export enum SourceView {
   UNKNOWN = 0,
   WEBSITE = 1,
   INSTAGRAM = 2,
@@ -27,94 +29,7 @@ export enum Source {
   UNRECOGNIZED = -1,
 }
 
-export function sourceFromJSON(object: any): Source {
-  switch (object) {
-    case 0:
-    case "UNKNOWN":
-      return Source.UNKNOWN;
-    case 1:
-    case "WEBSITE":
-      return Source.WEBSITE;
-    case 2:
-    case "INSTAGRAM":
-      return Source.INSTAGRAM;
-    case 3:
-    case "VK":
-      return Source.VK;
-    case 4:
-    case "YANDEX_MAP":
-      return Source.YANDEX_MAP;
-    case 5:
-    case "YANDEX_DIRECT":
-      return Source.YANDEX_DIRECT;
-    case 6:
-    case "DIRECT_ADDS":
-      return Source.DIRECT_ADDS;
-    case 7:
-    case "VK_ADDS":
-      return Source.VK_ADDS;
-    case 8:
-    case "DOUBLE_GIS":
-      return Source.DOUBLE_GIS;
-    case 9:
-    case "AVITO":
-      return Source.AVITO;
-    case 10:
-    case "RECOMMENDATION":
-      return Source.RECOMMENDATION;
-    case 11:
-    case "OTHER":
-      return Source.OTHER;
-    case 12:
-    case "WEB_SEARCH":
-      return Source.WEB_SEARCH;
-    case 13:
-    case "OLD_BASE":
-      return Source.OLD_BASE;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return Source.UNRECOGNIZED;
-  }
-}
-
-export function sourceToJSON(object: Source): string {
-  switch (object) {
-    case Source.UNKNOWN:
-      return "UNKNOWN";
-    case Source.WEBSITE:
-      return "WEBSITE";
-    case Source.INSTAGRAM:
-      return "INSTAGRAM";
-    case Source.VK:
-      return "VK";
-    case Source.YANDEX_MAP:
-      return "YANDEX_MAP";
-    case Source.YANDEX_DIRECT:
-      return "YANDEX_DIRECT";
-    case Source.DIRECT_ADDS:
-      return "DIRECT_ADDS";
-    case Source.VK_ADDS:
-      return "VK_ADDS";
-    case Source.DOUBLE_GIS:
-      return "DOUBLE_GIS";
-    case Source.AVITO:
-      return "AVITO";
-    case Source.RECOMMENDATION:
-      return "RECOMMENDATION";
-    case Source.OTHER:
-      return "OTHER";
-    case Source.WEB_SEARCH:
-      return "WEB_SEARCH";
-    case Source.OLD_BASE:
-      return "OLD_BASE";
-    case Source.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
-}
-
-export enum Rule {
+export enum RuleView {
   VIEW_PROFILE = 0,
   VIEW_USERS = 1,
   EDIT_USER_RIGHTS = 2,
@@ -182,553 +97,114 @@ export enum Rule {
   UNRECOGNIZED = -1,
 }
 
-export function ruleFromJSON(object: any): Rule {
-  switch (object) {
-    case 0:
-    case "VIEW_PROFILE":
-      return Rule.VIEW_PROFILE;
-    case 1:
-    case "VIEW_USERS":
-      return Rule.VIEW_USERS;
-    case 2:
-    case "EDIT_USER_RIGHTS":
-      return Rule.EDIT_USER_RIGHTS;
-    case 3:
-    case "BLOCK_USER":
-      return Rule.BLOCK_USER;
-    case 4:
-    case "EDIT_USER_INFO":
-      return Rule.EDIT_USER_INFO;
-    case 5:
-    case "EDIT_USER_SUBSCRIPTION":
-      return Rule.EDIT_USER_SUBSCRIPTION;
-    case 6:
-    case "FREEZE_USERS":
-      return Rule.FREEZE_USERS;
-    case 7:
-    case "CHANGE_BALANCE":
-      return Rule.CHANGE_BALANCE;
-    case 8:
-    case "EDIT_MARKETING_INFO":
-      return Rule.EDIT_MARKETING_INFO;
-    case 9:
-    case "EDIT_FAMILY":
-      return Rule.EDIT_FAMILY;
-    case 10:
-    case "VIEW_FAMILY":
-      return Rule.VIEW_FAMILY;
-    case 11:
-    case "EDIT_AI_PROMPT":
-      return Rule.EDIT_AI_PROMPT;
-    case 12:
-    case "VIEW_USER_COMMENTS":
-      return Rule.VIEW_USER_COMMENTS;
-    case 13:
-    case "EDIT_USER_COMMENTS":
-      return Rule.EDIT_USER_COMMENTS;
-    case 14:
-    case "DELETE_USER_COMMENTS":
-      return Rule.DELETE_USER_COMMENTS;
-    case 15:
-    case "EDIT_TRAINING":
-      return Rule.EDIT_TRAINING;
-    case 16:
-    case "CREATE_TRAINING":
-      return Rule.CREATE_TRAINING;
-    case 17:
-    case "EDIT_TRAINING_CLIENTS_LIST":
-      return Rule.EDIT_TRAINING_CLIENTS_LIST;
-    case 18:
-    case "SET_KEEP_OPEN":
-      return Rule.SET_KEEP_OPEN;
-    case 19:
-    case "SET_FREE":
-      return Rule.SET_FREE;
-    case 20:
-    case "EDIT_SCHEDULE":
-      return Rule.EDIT_SCHEDULE;
-    case 21:
-    case "CANCEL_TRAINING":
-      return Rule.CANCEL_TRAINING;
-    case 22:
-    case "REMOVE_TRAINING":
-      return Rule.REMOVE_TRAINING;
-    case 23:
-    case "EDIT_TRAINING_COUCH":
-      return Rule.EDIT_TRAINING_COUCH;
-    case 24:
-    case "SCHEDULE_GROUP_TRAINING":
-      return Rule.SCHEDULE_GROUP_TRAINING;
-    case 25:
-    case "SCHEDULE_PERSONAL_TRAINING":
-      return Rule.SCHEDULE_PERSONAL_TRAINING;
-    case 26:
-    case "SCHEDULE_SUB_RENT":
-      return Rule.SCHEDULE_SUB_RENT;
-    case 27:
-    case "SELECT_PERSONAL_INSTRUCTOR":
-      return Rule.SELECT_PERSONAL_INSTRUCTOR;
-    case 28:
-    case "VIEW_ALL_TRAININGS":
-      return Rule.VIEW_ALL_TRAININGS;
-    case 29:
-    case "CHANGE_TRAINING_SLOT":
-      return Rule.CHANGE_TRAINING_SLOT;
-    case 30:
-    case "CREATE_SUBSCRIPTION":
-      return Rule.CREATE_SUBSCRIPTION;
-    case 31:
-    case "EDIT_SUBSCRIPTION":
-      return Rule.EDIT_SUBSCRIPTION;
-    case 32:
-    case "SELL_SUBSCRIPTION":
-      return Rule.SELL_SUBSCRIPTION;
-    case 33:
-    case "FREE_SELL":
-      return Rule.FREE_SELL;
-    case 34:
-    case "SUB_RENT":
-      return Rule.SUB_RENT;
-    case 35:
-    case "VIEW_FINANCE":
-      return Rule.VIEW_FINANCE;
-    case 36:
-    case "MAKE_PAYMENT":
-      return Rule.MAKE_PAYMENT;
-    case 37:
-    case "MAKE_DEPOSIT":
-      return Rule.MAKE_DEPOSIT;
-    case 38:
-    case "FINANCE_HISTORICAL_DATE":
-      return Rule.FINANCE_HISTORICAL_DATE;
-    case 39:
-    case "DELETE_HISTORY":
-      return Rule.DELETE_HISTORY;
-    case 40:
-    case "VIEW_EMPLOYEES":
-      return Rule.VIEW_EMPLOYEES;
-    case 41:
-    case "EDIT_EMPLOYEE":
-      return Rule.EDIT_EMPLOYEE;
-    case 42:
-    case "EDIT_EMPLOYEE_RATES":
-      return Rule.EDIT_EMPLOYEE_RATES;
-    case 43:
-    case "VIEW_LOGS":
-      return Rule.VIEW_LOGS;
-    case 44:
-    case "CREATE_COUCH":
-      return Rule.CREATE_COUCH;
-    case 45:
-    case "EDIT_COUCH":
-      return Rule.EDIT_COUCH;
-    case 46:
-    case "VIEW_COUCH_RATES":
-      return Rule.VIEW_COUCH_RATES;
-    case 47:
-    case "VIEW_STATISTICS":
-      return Rule.VIEW_STATISTICS;
-    case 48:
-    case "SYSTEM":
-      return Rule.SYSTEM;
-    case 49:
-    case "VIEW_REWARDS":
-      return Rule.VIEW_REWARDS;
-    case 50:
-    case "RECALCULATE_REWARDS":
-      return Rule.RECALCULATE_REWARDS;
-    case 51:
-    case "VIEW_MARKETING_INFO":
-      return Rule.VIEW_MARKETING_INFO;
-    case 52:
-    case "CREATE_REQUEST":
-      return Rule.CREATE_REQUEST;
-    case 53:
-    case "REQUESTS_HISTORY":
-      return Rule.REQUESTS_HISTORY;
-    case 54:
-    case "RECEIVE_NOTIFICATIONS_ABOUT_SUBSCRIPTIONS":
-      return Rule.RECEIVE_NOTIFICATIONS_ABOUT_SUBSCRIPTIONS;
-    case 55:
-    case "RECEIVE_NOTIFICATIONS_ABOUT_BIRTHDAYS":
-      return Rule.RECEIVE_NOTIFICATIONS_ABOUT_BIRTHDAYS;
-    case 56:
-    case "RECEIVE_AI_NOTIFICATIONS":
-      return Rule.RECEIVE_AI_NOTIFICATIONS;
-    case 57:
-    case "MINI_APP":
-      return Rule.MINI_APP;
-    case 58:
-    case "BUY_SUBSCRIPTION":
-      return Rule.BUY_SUBSCRIPTION;
-    case 59:
-    case "VIEW_HIDDEN_PROGRAMS":
-      return Rule.VIEW_HIDDEN_PROGRAMS;
-    case 60:
-    case "HISTORY_VIEWER":
-      return Rule.HISTORY_VIEWER;
-    case 61:
-    case "AI_STATISTIC":
-      return Rule.AI_STATISTIC;
-    case 62:
-    case "AI_USER_INFO":
-      return Rule.AI_USER_INFO;
-    case 63:
-    case "SELECT_MODEL":
-      return Rule.SELECT_MODEL;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return Rule.UNRECOGNIZED;
-  }
-}
-
-export function ruleToJSON(object: Rule): string {
-  switch (object) {
-    case Rule.VIEW_PROFILE:
-      return "VIEW_PROFILE";
-    case Rule.VIEW_USERS:
-      return "VIEW_USERS";
-    case Rule.EDIT_USER_RIGHTS:
-      return "EDIT_USER_RIGHTS";
-    case Rule.BLOCK_USER:
-      return "BLOCK_USER";
-    case Rule.EDIT_USER_INFO:
-      return "EDIT_USER_INFO";
-    case Rule.EDIT_USER_SUBSCRIPTION:
-      return "EDIT_USER_SUBSCRIPTION";
-    case Rule.FREEZE_USERS:
-      return "FREEZE_USERS";
-    case Rule.CHANGE_BALANCE:
-      return "CHANGE_BALANCE";
-    case Rule.EDIT_MARKETING_INFO:
-      return "EDIT_MARKETING_INFO";
-    case Rule.EDIT_FAMILY:
-      return "EDIT_FAMILY";
-    case Rule.VIEW_FAMILY:
-      return "VIEW_FAMILY";
-    case Rule.EDIT_AI_PROMPT:
-      return "EDIT_AI_PROMPT";
-    case Rule.VIEW_USER_COMMENTS:
-      return "VIEW_USER_COMMENTS";
-    case Rule.EDIT_USER_COMMENTS:
-      return "EDIT_USER_COMMENTS";
-    case Rule.DELETE_USER_COMMENTS:
-      return "DELETE_USER_COMMENTS";
-    case Rule.EDIT_TRAINING:
-      return "EDIT_TRAINING";
-    case Rule.CREATE_TRAINING:
-      return "CREATE_TRAINING";
-    case Rule.EDIT_TRAINING_CLIENTS_LIST:
-      return "EDIT_TRAINING_CLIENTS_LIST";
-    case Rule.SET_KEEP_OPEN:
-      return "SET_KEEP_OPEN";
-    case Rule.SET_FREE:
-      return "SET_FREE";
-    case Rule.EDIT_SCHEDULE:
-      return "EDIT_SCHEDULE";
-    case Rule.CANCEL_TRAINING:
-      return "CANCEL_TRAINING";
-    case Rule.REMOVE_TRAINING:
-      return "REMOVE_TRAINING";
-    case Rule.EDIT_TRAINING_COUCH:
-      return "EDIT_TRAINING_COUCH";
-    case Rule.SCHEDULE_GROUP_TRAINING:
-      return "SCHEDULE_GROUP_TRAINING";
-    case Rule.SCHEDULE_PERSONAL_TRAINING:
-      return "SCHEDULE_PERSONAL_TRAINING";
-    case Rule.SCHEDULE_SUB_RENT:
-      return "SCHEDULE_SUB_RENT";
-    case Rule.SELECT_PERSONAL_INSTRUCTOR:
-      return "SELECT_PERSONAL_INSTRUCTOR";
-    case Rule.VIEW_ALL_TRAININGS:
-      return "VIEW_ALL_TRAININGS";
-    case Rule.CHANGE_TRAINING_SLOT:
-      return "CHANGE_TRAINING_SLOT";
-    case Rule.CREATE_SUBSCRIPTION:
-      return "CREATE_SUBSCRIPTION";
-    case Rule.EDIT_SUBSCRIPTION:
-      return "EDIT_SUBSCRIPTION";
-    case Rule.SELL_SUBSCRIPTION:
-      return "SELL_SUBSCRIPTION";
-    case Rule.FREE_SELL:
-      return "FREE_SELL";
-    case Rule.SUB_RENT:
-      return "SUB_RENT";
-    case Rule.VIEW_FINANCE:
-      return "VIEW_FINANCE";
-    case Rule.MAKE_PAYMENT:
-      return "MAKE_PAYMENT";
-    case Rule.MAKE_DEPOSIT:
-      return "MAKE_DEPOSIT";
-    case Rule.FINANCE_HISTORICAL_DATE:
-      return "FINANCE_HISTORICAL_DATE";
-    case Rule.DELETE_HISTORY:
-      return "DELETE_HISTORY";
-    case Rule.VIEW_EMPLOYEES:
-      return "VIEW_EMPLOYEES";
-    case Rule.EDIT_EMPLOYEE:
-      return "EDIT_EMPLOYEE";
-    case Rule.EDIT_EMPLOYEE_RATES:
-      return "EDIT_EMPLOYEE_RATES";
-    case Rule.VIEW_LOGS:
-      return "VIEW_LOGS";
-    case Rule.CREATE_COUCH:
-      return "CREATE_COUCH";
-    case Rule.EDIT_COUCH:
-      return "EDIT_COUCH";
-    case Rule.VIEW_COUCH_RATES:
-      return "VIEW_COUCH_RATES";
-    case Rule.VIEW_STATISTICS:
-      return "VIEW_STATISTICS";
-    case Rule.SYSTEM:
-      return "SYSTEM";
-    case Rule.VIEW_REWARDS:
-      return "VIEW_REWARDS";
-    case Rule.RECALCULATE_REWARDS:
-      return "RECALCULATE_REWARDS";
-    case Rule.VIEW_MARKETING_INFO:
-      return "VIEW_MARKETING_INFO";
-    case Rule.CREATE_REQUEST:
-      return "CREATE_REQUEST";
-    case Rule.REQUESTS_HISTORY:
-      return "REQUESTS_HISTORY";
-    case Rule.RECEIVE_NOTIFICATIONS_ABOUT_SUBSCRIPTIONS:
-      return "RECEIVE_NOTIFICATIONS_ABOUT_SUBSCRIPTIONS";
-    case Rule.RECEIVE_NOTIFICATIONS_ABOUT_BIRTHDAYS:
-      return "RECEIVE_NOTIFICATIONS_ABOUT_BIRTHDAYS";
-    case Rule.RECEIVE_AI_NOTIFICATIONS:
-      return "RECEIVE_AI_NOTIFICATIONS";
-    case Rule.MINI_APP:
-      return "MINI_APP";
-    case Rule.BUY_SUBSCRIPTION:
-      return "BUY_SUBSCRIPTION";
-    case Rule.VIEW_HIDDEN_PROGRAMS:
-      return "VIEW_HIDDEN_PROGRAMS";
-    case Rule.HISTORY_VIEWER:
-      return "HISTORY_VIEWER";
-    case Rule.AI_STATISTIC:
-      return "AI_STATISTIC";
-    case Rule.AI_USER_INFO:
-      return "AI_USER_INFO";
-    case Rule.SELECT_MODEL:
-      return "SELECT_MODEL";
-    case Rule.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
-}
-
-export enum EmployeeRole {
+export enum EmployeeRoleView {
   COUCH = 0,
   MANAGER = 1,
   ADMIN = 2,
   UNRECOGNIZED = -1,
 }
 
-export function employeeRoleFromJSON(object: any): EmployeeRole {
-  switch (object) {
-    case 0:
-    case "COUCH":
-      return EmployeeRole.COUCH;
-    case 1:
-    case "MANAGER":
-      return EmployeeRole.MANAGER;
-    case 2:
-    case "ADMIN":
-      return EmployeeRole.ADMIN;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return EmployeeRole.UNRECOGNIZED;
-  }
-}
-
-export function employeeRoleToJSON(object: EmployeeRole): string {
-  switch (object) {
-    case EmployeeRole.COUCH:
-      return "COUCH";
-    case EmployeeRole.MANAGER:
-      return "MANAGER";
-    case EmployeeRole.ADMIN:
-      return "ADMIN";
-    case EmployeeRole.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
-}
-
-export enum Status {
-  NOT_ACTIVE = 0,
-  ACTIVE = 1,
-  UNRECOGNIZED = -1,
-}
-
-export function statusFromJSON(object: any): Status {
-  switch (object) {
-    case 0:
-    case "NOT_ACTIVE":
-      return Status.NOT_ACTIVE;
-    case 1:
-    case "ACTIVE":
-      return Status.ACTIVE;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return Status.UNRECOGNIZED;
-  }
-}
-
-export function statusToJSON(object: Status): string {
-  switch (object) {
-    case Status.NOT_ACTIVE:
-      return "NOT_ACTIVE";
-    case Status.ACTIVE:
-      return "ACTIVE";
-    case Status.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
-}
-
-export enum SubscriptionType {
-  GROUP = 0,
-  PERSONAL = 1,
-  UNRECOGNIZED = -1,
-}
-
-export function subscriptionTypeFromJSON(object: any): SubscriptionType {
-  switch (object) {
-    case 0:
-    case "GROUP":
-      return SubscriptionType.GROUP;
-    case 1:
-    case "PERSONAL":
-      return SubscriptionType.PERSONAL;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return SubscriptionType.UNRECOGNIZED;
-  }
-}
-
-export function subscriptionTypeToJSON(object: SubscriptionType): string {
-  switch (object) {
-    case SubscriptionType.GROUP:
-      return "GROUP";
-    case SubscriptionType.PERSONAL:
-      return "PERSONAL";
-    case SubscriptionType.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
-}
-
-export interface User {
-  id: string;
+export interface UserView {
+  id: ObjectId | undefined;
   tgId: number;
-  name: UserName | undefined;
-  rights: Rights | undefined;
+  name: UserNameView | undefined;
+  rights: RightsView | undefined;
   phone?: string | undefined;
   isActive: boolean;
-  freeze?: Freeze | undefined;
-  subscriptions: UserSubscription[];
+  freeze?: FreezeView | undefined;
+  subscriptions: UserSubscriptionView[];
   freezeDays: number;
-  createdAt: number;
-  employee?: Employee | undefined;
-  comeFrom?: Source | undefined;
-  family?: Family | undefined;
+  employee?: EmployeeView | undefined;
+  comeFrom?: SourceView | undefined;
+  family?: FamilyView | undefined;
 }
 
-export interface UserName {
+export interface UserNameView {
   tgUserName?: string | undefined;
   firstName: string;
   lastName?: string | undefined;
 }
 
-export interface Freeze {
-  freezeStart: string;
-  freezeEnd: string;
+export interface FreezeView {
+  freezeStart: number;
+  freezeEnd: number;
 }
 
-export interface UserSubscription {
-  id: string;
-  subscriptionId: string;
+export interface UserSubscriptionView {
+  id: ObjectId | undefined;
+  subscriptionId: ObjectId | undefined;
   name: string;
   items: number;
   days: number;
-  status: Status;
-  price: string;
-  tp: SubscriptionType;
+  status: StatusView | undefined;
+  price: number;
+  tp: SubscriptionTypeView | undefined;
   balance: number;
   lockedBalance: number;
   unlimited: boolean;
-  discount?: string | undefined;
-  itemPrice?: string | undefined;
+  discount?: number | undefined;
+  itemPrice?: number | undefined;
 }
 
-export interface Employee {
-  role: EmployeeRole;
+export interface EmployeeView {
+  role: EmployeeRoleView;
   description: string;
-  reward: string;
-  rates: Rate[];
+  reward: number;
+  rates: RateView[];
 }
 
-export interface Family {
-  payerId?: string | undefined;
+export interface FamilyView {
   isIndividual: boolean;
-  payer?: User | undefined;
-  childrenIds: string[];
-  children: User[];
-  members: string[];
+  payer?: UserView | undefined;
+  children: UserView[];
 }
 
-export interface Rights {
+export interface RightsView {
   full: boolean;
-  rights: Rule[];
+  rights: RuleView[];
 }
 
-export interface Rate {
-  fix?: FixRate | undefined;
-  groupTraining?: GroupTrainingRate | undefined;
-  personalTraining?: PersonalTrainingRate | undefined;
+export interface RateView {
+  fix?: FixRateView | undefined;
+  groupTraining?: GroupTrainingRateView | undefined;
+  personalTraining?: PersonalTrainingRateView | undefined;
 }
 
-export interface FixRate {
+export interface FixRateView {
   amount: number;
   nextPaymentDate: number;
-  rewardInterval: Interval | undefined;
+  rewardInterval: IntervalView | undefined;
 }
 
-export interface GroupTrainingRate {
+export interface GroupTrainingRateView {
   percent: number;
   minReward: number;
 }
 
-export interface PersonalTrainingRate {
+export interface PersonalTrainingRateView {
   percent: number;
 }
 
-export interface Interval {
+export interface IntervalView {
   monthNum: number;
 }
 
-export interface ActiveStatus {
+export interface StatusView {
+  notActive?: NotActive | undefined;
+  active?: ActiveStatusView | undefined;
+}
+
+export interface NotActive {
+}
+
+export interface ActiveStatusView {
   startDate: number;
   endDate: number;
 }
 
-export interface GroupSubscription {
-  programFilter: string[];
-}
-
-export interface PersonalSubscription {
-  couchFilter: string;
-}
-
-function createBaseUser(): User {
+function createBaseUserView(): UserView {
   return {
-    id: "",
+    id: undefined,
     tgId: 0,
     name: undefined,
     rights: undefined,
@@ -737,26 +213,25 @@ function createBaseUser(): User {
     freeze: undefined,
     subscriptions: [],
     freezeDays: 0,
-    createdAt: 0,
     employee: undefined,
     comeFrom: undefined,
     family: undefined,
   };
 }
 
-export const User: MessageFns<User> = {
-  encode(message: User, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.id !== "") {
-      writer.uint32(10).string(message.id);
+export const UserView: MessageFns<UserView> = {
+  encode(message: UserView, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== undefined) {
+      ObjectId.encode(message.id, writer.uint32(10).fork()).join();
     }
     if (message.tgId !== 0) {
       writer.uint32(16).int64(message.tgId);
     }
     if (message.name !== undefined) {
-      UserName.encode(message.name, writer.uint32(26).fork()).join();
+      UserNameView.encode(message.name, writer.uint32(26).fork()).join();
     }
     if (message.rights !== undefined) {
-      Rights.encode(message.rights, writer.uint32(34).fork()).join();
+      RightsView.encode(message.rights, writer.uint32(34).fork()).join();
     }
     if (message.phone !== undefined) {
       writer.uint32(42).string(message.phone);
@@ -765,33 +240,30 @@ export const User: MessageFns<User> = {
       writer.uint32(48).bool(message.isActive);
     }
     if (message.freeze !== undefined) {
-      Freeze.encode(message.freeze, writer.uint32(58).fork()).join();
+      FreezeView.encode(message.freeze, writer.uint32(58).fork()).join();
     }
     for (const v of message.subscriptions) {
-      UserSubscription.encode(v!, writer.uint32(66).fork()).join();
+      UserSubscriptionView.encode(v!, writer.uint32(66).fork()).join();
     }
     if (message.freezeDays !== 0) {
       writer.uint32(72).uint32(message.freezeDays);
     }
-    if (message.createdAt !== 0) {
-      writer.uint32(88).uint64(message.createdAt);
-    }
     if (message.employee !== undefined) {
-      Employee.encode(message.employee, writer.uint32(98).fork()).join();
+      EmployeeView.encode(message.employee, writer.uint32(98).fork()).join();
     }
     if (message.comeFrom !== undefined) {
       writer.uint32(104).int32(message.comeFrom);
     }
     if (message.family !== undefined) {
-      Family.encode(message.family, writer.uint32(114).fork()).join();
+      FamilyView.encode(message.family, writer.uint32(114).fork()).join();
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): User {
+  decode(input: BinaryReader | Uint8Array, length?: number): UserView {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseUser();
+    const message = createBaseUserView();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -800,7 +272,7 @@ export const User: MessageFns<User> = {
             break;
           }
 
-          message.id = reader.string();
+          message.id = ObjectId.decode(reader, reader.uint32());
           continue;
         }
         case 2: {
@@ -816,7 +288,7 @@ export const User: MessageFns<User> = {
             break;
           }
 
-          message.name = UserName.decode(reader, reader.uint32());
+          message.name = UserNameView.decode(reader, reader.uint32());
           continue;
         }
         case 4: {
@@ -824,7 +296,7 @@ export const User: MessageFns<User> = {
             break;
           }
 
-          message.rights = Rights.decode(reader, reader.uint32());
+          message.rights = RightsView.decode(reader, reader.uint32());
           continue;
         }
         case 5: {
@@ -848,7 +320,7 @@ export const User: MessageFns<User> = {
             break;
           }
 
-          message.freeze = Freeze.decode(reader, reader.uint32());
+          message.freeze = FreezeView.decode(reader, reader.uint32());
           continue;
         }
         case 8: {
@@ -856,7 +328,7 @@ export const User: MessageFns<User> = {
             break;
           }
 
-          message.subscriptions.push(UserSubscription.decode(reader, reader.uint32()));
+          message.subscriptions.push(UserSubscriptionView.decode(reader, reader.uint32()));
           continue;
         }
         case 9: {
@@ -867,20 +339,12 @@ export const User: MessageFns<User> = {
           message.freezeDays = reader.uint32();
           continue;
         }
-        case 11: {
-          if (tag !== 88) {
-            break;
-          }
-
-          message.createdAt = longToNumber(reader.uint64());
-          continue;
-        }
         case 12: {
           if (tag !== 98) {
             break;
           }
 
-          message.employee = Employee.decode(reader, reader.uint32());
+          message.employee = EmployeeView.decode(reader, reader.uint32());
           continue;
         }
         case 13: {
@@ -896,7 +360,7 @@ export const User: MessageFns<User> = {
             break;
           }
 
-          message.family = Family.decode(reader, reader.uint32());
+          message.family = FamilyView.decode(reader, reader.uint32());
           continue;
         }
       }
@@ -908,106 +372,43 @@ export const User: MessageFns<User> = {
     return message;
   },
 
-  fromJSON(object: any): User {
-    return {
-      id: isSet(object.id) ? globalThis.String(object.id) : "",
-      tgId: isSet(object.tgId) ? globalThis.Number(object.tgId) : 0,
-      name: isSet(object.name) ? UserName.fromJSON(object.name) : undefined,
-      rights: isSet(object.rights) ? Rights.fromJSON(object.rights) : undefined,
-      phone: isSet(object.phone) ? globalThis.String(object.phone) : undefined,
-      isActive: isSet(object.isActive) ? globalThis.Boolean(object.isActive) : false,
-      freeze: isSet(object.freeze) ? Freeze.fromJSON(object.freeze) : undefined,
-      subscriptions: globalThis.Array.isArray(object?.subscriptions)
-        ? object.subscriptions.map((e: any) => UserSubscription.fromJSON(e))
-        : [],
-      freezeDays: isSet(object.freezeDays) ? globalThis.Number(object.freezeDays) : 0,
-      createdAt: isSet(object.createdAt) ? globalThis.Number(object.createdAt) : 0,
-      employee: isSet(object.employee) ? Employee.fromJSON(object.employee) : undefined,
-      comeFrom: isSet(object.comeFrom) ? sourceFromJSON(object.comeFrom) : undefined,
-      family: isSet(object.family) ? Family.fromJSON(object.family) : undefined,
-    };
+  create<I extends Exact<DeepPartial<UserView>, I>>(base?: I): UserView {
+    return UserView.fromPartial(base ?? ({} as any));
   },
-
-  toJSON(message: User): unknown {
-    const obj: any = {};
-    if (message.id !== "") {
-      obj.id = message.id;
-    }
-    if (message.tgId !== 0) {
-      obj.tgId = Math.round(message.tgId);
-    }
-    if (message.name !== undefined) {
-      obj.name = UserName.toJSON(message.name);
-    }
-    if (message.rights !== undefined) {
-      obj.rights = Rights.toJSON(message.rights);
-    }
-    if (message.phone !== undefined) {
-      obj.phone = message.phone;
-    }
-    if (message.isActive !== false) {
-      obj.isActive = message.isActive;
-    }
-    if (message.freeze !== undefined) {
-      obj.freeze = Freeze.toJSON(message.freeze);
-    }
-    if (message.subscriptions?.length) {
-      obj.subscriptions = message.subscriptions.map((e) => UserSubscription.toJSON(e));
-    }
-    if (message.freezeDays !== 0) {
-      obj.freezeDays = Math.round(message.freezeDays);
-    }
-    if (message.createdAt !== 0) {
-      obj.createdAt = Math.round(message.createdAt);
-    }
-    if (message.employee !== undefined) {
-      obj.employee = Employee.toJSON(message.employee);
-    }
-    if (message.comeFrom !== undefined) {
-      obj.comeFrom = sourceToJSON(message.comeFrom);
-    }
-    if (message.family !== undefined) {
-      obj.family = Family.toJSON(message.family);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<User>, I>>(base?: I): User {
-    return User.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<User>, I>>(object: I): User {
-    const message = createBaseUser();
-    message.id = object.id ?? "";
+  fromPartial<I extends Exact<DeepPartial<UserView>, I>>(object: I): UserView {
+    const message = createBaseUserView();
+    message.id = (object.id !== undefined && object.id !== null) ? ObjectId.fromPartial(object.id) : undefined;
     message.tgId = object.tgId ?? 0;
-    message.name = (object.name !== undefined && object.name !== null) ? UserName.fromPartial(object.name) : undefined;
+    message.name = (object.name !== undefined && object.name !== null)
+      ? UserNameView.fromPartial(object.name)
+      : undefined;
     message.rights = (object.rights !== undefined && object.rights !== null)
-      ? Rights.fromPartial(object.rights)
+      ? RightsView.fromPartial(object.rights)
       : undefined;
     message.phone = object.phone ?? undefined;
     message.isActive = object.isActive ?? false;
     message.freeze = (object.freeze !== undefined && object.freeze !== null)
-      ? Freeze.fromPartial(object.freeze)
+      ? FreezeView.fromPartial(object.freeze)
       : undefined;
-    message.subscriptions = object.subscriptions?.map((e) => UserSubscription.fromPartial(e)) || [];
+    message.subscriptions = object.subscriptions?.map((e) => UserSubscriptionView.fromPartial(e)) || [];
     message.freezeDays = object.freezeDays ?? 0;
-    message.createdAt = object.createdAt ?? 0;
     message.employee = (object.employee !== undefined && object.employee !== null)
-      ? Employee.fromPartial(object.employee)
+      ? EmployeeView.fromPartial(object.employee)
       : undefined;
     message.comeFrom = object.comeFrom ?? undefined;
     message.family = (object.family !== undefined && object.family !== null)
-      ? Family.fromPartial(object.family)
+      ? FamilyView.fromPartial(object.family)
       : undefined;
     return message;
   },
 };
 
-function createBaseUserName(): UserName {
+function createBaseUserNameView(): UserNameView {
   return { tgUserName: undefined, firstName: "", lastName: undefined };
 }
 
-export const UserName: MessageFns<UserName> = {
-  encode(message: UserName, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const UserNameView: MessageFns<UserNameView> = {
+  encode(message: UserNameView, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.tgUserName !== undefined) {
       writer.uint32(10).string(message.tgUserName);
     }
@@ -1020,10 +421,10 @@ export const UserName: MessageFns<UserName> = {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): UserName {
+  decode(input: BinaryReader | Uint8Array, length?: number): UserNameView {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseUserName();
+    const message = createBaseUserNameView();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1060,33 +461,11 @@ export const UserName: MessageFns<UserName> = {
     return message;
   },
 
-  fromJSON(object: any): UserName {
-    return {
-      tgUserName: isSet(object.tgUserName) ? globalThis.String(object.tgUserName) : undefined,
-      firstName: isSet(object.firstName) ? globalThis.String(object.firstName) : "",
-      lastName: isSet(object.lastName) ? globalThis.String(object.lastName) : undefined,
-    };
+  create<I extends Exact<DeepPartial<UserNameView>, I>>(base?: I): UserNameView {
+    return UserNameView.fromPartial(base ?? ({} as any));
   },
-
-  toJSON(message: UserName): unknown {
-    const obj: any = {};
-    if (message.tgUserName !== undefined) {
-      obj.tgUserName = message.tgUserName;
-    }
-    if (message.firstName !== "") {
-      obj.firstName = message.firstName;
-    }
-    if (message.lastName !== undefined) {
-      obj.lastName = message.lastName;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<UserName>, I>>(base?: I): UserName {
-    return UserName.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<UserName>, I>>(object: I): UserName {
-    const message = createBaseUserName();
+  fromPartial<I extends Exact<DeepPartial<UserNameView>, I>>(object: I): UserNameView {
+    const message = createBaseUserNameView();
     message.tgUserName = object.tgUserName ?? undefined;
     message.firstName = object.firstName ?? "";
     message.lastName = object.lastName ?? undefined;
@@ -1094,42 +473,42 @@ export const UserName: MessageFns<UserName> = {
   },
 };
 
-function createBaseFreeze(): Freeze {
-  return { freezeStart: "", freezeEnd: "" };
+function createBaseFreezeView(): FreezeView {
+  return { freezeStart: 0, freezeEnd: 0 };
 }
 
-export const Freeze: MessageFns<Freeze> = {
-  encode(message: Freeze, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.freezeStart !== "") {
-      writer.uint32(10).string(message.freezeStart);
+export const FreezeView: MessageFns<FreezeView> = {
+  encode(message: FreezeView, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.freezeStart !== 0) {
+      writer.uint32(8).int64(message.freezeStart);
     }
-    if (message.freezeEnd !== "") {
-      writer.uint32(18).string(message.freezeEnd);
+    if (message.freezeEnd !== 0) {
+      writer.uint32(16).int64(message.freezeEnd);
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): Freeze {
+  decode(input: BinaryReader | Uint8Array, length?: number): FreezeView {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseFreeze();
+    const message = createBaseFreezeView();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
         case 1: {
-          if (tag !== 10) {
+          if (tag !== 8) {
             break;
           }
 
-          message.freezeStart = reader.string();
+          message.freezeStart = longToNumber(reader.int64());
           continue;
         }
         case 2: {
-          if (tag !== 18) {
+          if (tag !== 16) {
             break;
           }
 
-          message.freezeEnd = reader.string();
+          message.freezeEnd = longToNumber(reader.int64());
           continue;
         }
       }
@@ -1141,45 +520,27 @@ export const Freeze: MessageFns<Freeze> = {
     return message;
   },
 
-  fromJSON(object: any): Freeze {
-    return {
-      freezeStart: isSet(object.freezeStart) ? globalThis.String(object.freezeStart) : "",
-      freezeEnd: isSet(object.freezeEnd) ? globalThis.String(object.freezeEnd) : "",
-    };
+  create<I extends Exact<DeepPartial<FreezeView>, I>>(base?: I): FreezeView {
+    return FreezeView.fromPartial(base ?? ({} as any));
   },
-
-  toJSON(message: Freeze): unknown {
-    const obj: any = {};
-    if (message.freezeStart !== "") {
-      obj.freezeStart = message.freezeStart;
-    }
-    if (message.freezeEnd !== "") {
-      obj.freezeEnd = message.freezeEnd;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<Freeze>, I>>(base?: I): Freeze {
-    return Freeze.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<Freeze>, I>>(object: I): Freeze {
-    const message = createBaseFreeze();
-    message.freezeStart = object.freezeStart ?? "";
-    message.freezeEnd = object.freezeEnd ?? "";
+  fromPartial<I extends Exact<DeepPartial<FreezeView>, I>>(object: I): FreezeView {
+    const message = createBaseFreezeView();
+    message.freezeStart = object.freezeStart ?? 0;
+    message.freezeEnd = object.freezeEnd ?? 0;
     return message;
   },
 };
 
-function createBaseUserSubscription(): UserSubscription {
+function createBaseUserSubscriptionView(): UserSubscriptionView {
   return {
-    id: "",
-    subscriptionId: "",
+    id: undefined,
+    subscriptionId: undefined,
     name: "",
     items: 0,
     days: 0,
-    status: 0,
-    price: "",
-    tp: 0,
+    status: undefined,
+    price: 0,
+    tp: undefined,
     balance: 0,
     lockedBalance: 0,
     unlimited: false,
@@ -1188,13 +549,13 @@ function createBaseUserSubscription(): UserSubscription {
   };
 }
 
-export const UserSubscription: MessageFns<UserSubscription> = {
-  encode(message: UserSubscription, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.id !== "") {
-      writer.uint32(10).string(message.id);
+export const UserSubscriptionView: MessageFns<UserSubscriptionView> = {
+  encode(message: UserSubscriptionView, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== undefined) {
+      ObjectId.encode(message.id, writer.uint32(10).fork()).join();
     }
-    if (message.subscriptionId !== "") {
-      writer.uint32(18).string(message.subscriptionId);
+    if (message.subscriptionId !== undefined) {
+      ObjectId.encode(message.subscriptionId, writer.uint32(18).fork()).join();
     }
     if (message.name !== "") {
       writer.uint32(26).string(message.name);
@@ -1205,14 +566,14 @@ export const UserSubscription: MessageFns<UserSubscription> = {
     if (message.days !== 0) {
       writer.uint32(40).uint32(message.days);
     }
-    if (message.status !== 0) {
-      writer.uint32(48).int32(message.status);
+    if (message.status !== undefined) {
+      StatusView.encode(message.status, writer.uint32(50).fork()).join();
     }
-    if (message.price !== "") {
-      writer.uint32(58).string(message.price);
+    if (message.price !== 0) {
+      writer.uint32(56).int64(message.price);
     }
-    if (message.tp !== 0) {
-      writer.uint32(64).int32(message.tp);
+    if (message.tp !== undefined) {
+      SubscriptionTypeView.encode(message.tp, writer.uint32(66).fork()).join();
     }
     if (message.balance !== 0) {
       writer.uint32(72).uint32(message.balance);
@@ -1224,18 +585,18 @@ export const UserSubscription: MessageFns<UserSubscription> = {
       writer.uint32(88).bool(message.unlimited);
     }
     if (message.discount !== undefined) {
-      writer.uint32(98).string(message.discount);
+      writer.uint32(96).int64(message.discount);
     }
     if (message.itemPrice !== undefined) {
-      writer.uint32(106).string(message.itemPrice);
+      writer.uint32(104).int64(message.itemPrice);
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): UserSubscription {
+  decode(input: BinaryReader | Uint8Array, length?: number): UserSubscriptionView {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseUserSubscription();
+    const message = createBaseUserSubscriptionView();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1244,7 +605,7 @@ export const UserSubscription: MessageFns<UserSubscription> = {
             break;
           }
 
-          message.id = reader.string();
+          message.id = ObjectId.decode(reader, reader.uint32());
           continue;
         }
         case 2: {
@@ -1252,7 +613,7 @@ export const UserSubscription: MessageFns<UserSubscription> = {
             break;
           }
 
-          message.subscriptionId = reader.string();
+          message.subscriptionId = ObjectId.decode(reader, reader.uint32());
           continue;
         }
         case 3: {
@@ -1280,27 +641,27 @@ export const UserSubscription: MessageFns<UserSubscription> = {
           continue;
         }
         case 6: {
-          if (tag !== 48) {
+          if (tag !== 50) {
             break;
           }
 
-          message.status = reader.int32() as any;
+          message.status = StatusView.decode(reader, reader.uint32());
           continue;
         }
         case 7: {
-          if (tag !== 58) {
+          if (tag !== 56) {
             break;
           }
 
-          message.price = reader.string();
+          message.price = longToNumber(reader.int64());
           continue;
         }
         case 8: {
-          if (tag !== 64) {
+          if (tag !== 66) {
             break;
           }
 
-          message.tp = reader.int32() as any;
+          message.tp = SubscriptionTypeView.decode(reader, reader.uint32());
           continue;
         }
         case 9: {
@@ -1328,19 +689,19 @@ export const UserSubscription: MessageFns<UserSubscription> = {
           continue;
         }
         case 12: {
-          if (tag !== 98) {
+          if (tag !== 96) {
             break;
           }
 
-          message.discount = reader.string();
+          message.discount = longToNumber(reader.int64());
           continue;
         }
         case 13: {
-          if (tag !== 106) {
+          if (tag !== 104) {
             break;
           }
 
-          message.itemPrice = reader.string();
+          message.itemPrice = longToNumber(reader.int64());
           continue;
         }
       }
@@ -1352,81 +713,25 @@ export const UserSubscription: MessageFns<UserSubscription> = {
     return message;
   },
 
-  fromJSON(object: any): UserSubscription {
-    return {
-      id: isSet(object.id) ? globalThis.String(object.id) : "",
-      subscriptionId: isSet(object.subscriptionId) ? globalThis.String(object.subscriptionId) : "",
-      name: isSet(object.name) ? globalThis.String(object.name) : "",
-      items: isSet(object.items) ? globalThis.Number(object.items) : 0,
-      days: isSet(object.days) ? globalThis.Number(object.days) : 0,
-      status: isSet(object.status) ? statusFromJSON(object.status) : 0,
-      price: isSet(object.price) ? globalThis.String(object.price) : "",
-      tp: isSet(object.tp) ? subscriptionTypeFromJSON(object.tp) : 0,
-      balance: isSet(object.balance) ? globalThis.Number(object.balance) : 0,
-      lockedBalance: isSet(object.lockedBalance) ? globalThis.Number(object.lockedBalance) : 0,
-      unlimited: isSet(object.unlimited) ? globalThis.Boolean(object.unlimited) : false,
-      discount: isSet(object.discount) ? globalThis.String(object.discount) : undefined,
-      itemPrice: isSet(object.itemPrice) ? globalThis.String(object.itemPrice) : undefined,
-    };
+  create<I extends Exact<DeepPartial<UserSubscriptionView>, I>>(base?: I): UserSubscriptionView {
+    return UserSubscriptionView.fromPartial(base ?? ({} as any));
   },
-
-  toJSON(message: UserSubscription): unknown {
-    const obj: any = {};
-    if (message.id !== "") {
-      obj.id = message.id;
-    }
-    if (message.subscriptionId !== "") {
-      obj.subscriptionId = message.subscriptionId;
-    }
-    if (message.name !== "") {
-      obj.name = message.name;
-    }
-    if (message.items !== 0) {
-      obj.items = Math.round(message.items);
-    }
-    if (message.days !== 0) {
-      obj.days = Math.round(message.days);
-    }
-    if (message.status !== 0) {
-      obj.status = statusToJSON(message.status);
-    }
-    if (message.price !== "") {
-      obj.price = message.price;
-    }
-    if (message.tp !== 0) {
-      obj.tp = subscriptionTypeToJSON(message.tp);
-    }
-    if (message.balance !== 0) {
-      obj.balance = Math.round(message.balance);
-    }
-    if (message.lockedBalance !== 0) {
-      obj.lockedBalance = Math.round(message.lockedBalance);
-    }
-    if (message.unlimited !== false) {
-      obj.unlimited = message.unlimited;
-    }
-    if (message.discount !== undefined) {
-      obj.discount = message.discount;
-    }
-    if (message.itemPrice !== undefined) {
-      obj.itemPrice = message.itemPrice;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<UserSubscription>, I>>(base?: I): UserSubscription {
-    return UserSubscription.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<UserSubscription>, I>>(object: I): UserSubscription {
-    const message = createBaseUserSubscription();
-    message.id = object.id ?? "";
-    message.subscriptionId = object.subscriptionId ?? "";
+  fromPartial<I extends Exact<DeepPartial<UserSubscriptionView>, I>>(object: I): UserSubscriptionView {
+    const message = createBaseUserSubscriptionView();
+    message.id = (object.id !== undefined && object.id !== null) ? ObjectId.fromPartial(object.id) : undefined;
+    message.subscriptionId = (object.subscriptionId !== undefined && object.subscriptionId !== null)
+      ? ObjectId.fromPartial(object.subscriptionId)
+      : undefined;
     message.name = object.name ?? "";
     message.items = object.items ?? 0;
     message.days = object.days ?? 0;
-    message.status = object.status ?? 0;
-    message.price = object.price ?? "";
-    message.tp = object.tp ?? 0;
+    message.status = (object.status !== undefined && object.status !== null)
+      ? StatusView.fromPartial(object.status)
+      : undefined;
+    message.price = object.price ?? 0;
+    message.tp = (object.tp !== undefined && object.tp !== null)
+      ? SubscriptionTypeView.fromPartial(object.tp)
+      : undefined;
     message.balance = object.balance ?? 0;
     message.lockedBalance = object.lockedBalance ?? 0;
     message.unlimited = object.unlimited ?? false;
@@ -1436,31 +741,31 @@ export const UserSubscription: MessageFns<UserSubscription> = {
   },
 };
 
-function createBaseEmployee(): Employee {
-  return { role: 0, description: "", reward: "", rates: [] };
+function createBaseEmployeeView(): EmployeeView {
+  return { role: 0, description: "", reward: 0, rates: [] };
 }
 
-export const Employee: MessageFns<Employee> = {
-  encode(message: Employee, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const EmployeeView: MessageFns<EmployeeView> = {
+  encode(message: EmployeeView, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.role !== 0) {
       writer.uint32(8).int32(message.role);
     }
     if (message.description !== "") {
       writer.uint32(18).string(message.description);
     }
-    if (message.reward !== "") {
-      writer.uint32(26).string(message.reward);
+    if (message.reward !== 0) {
+      writer.uint32(24).int64(message.reward);
     }
     for (const v of message.rates) {
-      Rate.encode(v!, writer.uint32(34).fork()).join();
+      RateView.encode(v!, writer.uint32(34).fork()).join();
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): Employee {
+  decode(input: BinaryReader | Uint8Array, length?: number): EmployeeView {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseEmployee();
+    const message = createBaseEmployeeView();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1481,11 +786,11 @@ export const Employee: MessageFns<Employee> = {
           continue;
         }
         case 3: {
-          if (tag !== 26) {
+          if (tag !== 24) {
             break;
           }
 
-          message.reward = reader.string();
+          message.reward = longToNumber(reader.int64());
           continue;
         }
         case 4: {
@@ -1493,7 +798,7 @@ export const Employee: MessageFns<Employee> = {
             break;
           }
 
-          message.rates.push(Rate.decode(reader, reader.uint32()));
+          message.rates.push(RateView.decode(reader, reader.uint32()));
           continue;
         }
       }
@@ -1505,87 +810,44 @@ export const Employee: MessageFns<Employee> = {
     return message;
   },
 
-  fromJSON(object: any): Employee {
-    return {
-      role: isSet(object.role) ? employeeRoleFromJSON(object.role) : 0,
-      description: isSet(object.description) ? globalThis.String(object.description) : "",
-      reward: isSet(object.reward) ? globalThis.String(object.reward) : "",
-      rates: globalThis.Array.isArray(object?.rates) ? object.rates.map((e: any) => Rate.fromJSON(e)) : [],
-    };
+  create<I extends Exact<DeepPartial<EmployeeView>, I>>(base?: I): EmployeeView {
+    return EmployeeView.fromPartial(base ?? ({} as any));
   },
-
-  toJSON(message: Employee): unknown {
-    const obj: any = {};
-    if (message.role !== 0) {
-      obj.role = employeeRoleToJSON(message.role);
-    }
-    if (message.description !== "") {
-      obj.description = message.description;
-    }
-    if (message.reward !== "") {
-      obj.reward = message.reward;
-    }
-    if (message.rates?.length) {
-      obj.rates = message.rates.map((e) => Rate.toJSON(e));
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<Employee>, I>>(base?: I): Employee {
-    return Employee.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<Employee>, I>>(object: I): Employee {
-    const message = createBaseEmployee();
+  fromPartial<I extends Exact<DeepPartial<EmployeeView>, I>>(object: I): EmployeeView {
+    const message = createBaseEmployeeView();
     message.role = object.role ?? 0;
     message.description = object.description ?? "";
-    message.reward = object.reward ?? "";
-    message.rates = object.rates?.map((e) => Rate.fromPartial(e)) || [];
+    message.reward = object.reward ?? 0;
+    message.rates = object.rates?.map((e) => RateView.fromPartial(e)) || [];
     return message;
   },
 };
 
-function createBaseFamily(): Family {
-  return { payerId: undefined, isIndividual: false, payer: undefined, childrenIds: [], children: [], members: [] };
+function createBaseFamilyView(): FamilyView {
+  return { isIndividual: false, payer: undefined, children: [] };
 }
 
-export const Family: MessageFns<Family> = {
-  encode(message: Family, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.payerId !== undefined) {
-      writer.uint32(10).string(message.payerId);
-    }
+export const FamilyView: MessageFns<FamilyView> = {
+  encode(message: FamilyView, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.isIndividual !== false) {
       writer.uint32(16).bool(message.isIndividual);
     }
     if (message.payer !== undefined) {
-      User.encode(message.payer, writer.uint32(26).fork()).join();
-    }
-    for (const v of message.childrenIds) {
-      writer.uint32(34).string(v!);
+      UserView.encode(message.payer, writer.uint32(26).fork()).join();
     }
     for (const v of message.children) {
-      User.encode(v!, writer.uint32(42).fork()).join();
-    }
-    for (const v of message.members) {
-      writer.uint32(50).string(v!);
+      UserView.encode(v!, writer.uint32(42).fork()).join();
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): Family {
+  decode(input: BinaryReader | Uint8Array, length?: number): FamilyView {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseFamily();
+    const message = createBaseFamilyView();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
-        case 1: {
-          if (tag !== 10) {
-            break;
-          }
-
-          message.payerId = reader.string();
-          continue;
-        }
         case 2: {
           if (tag !== 16) {
             break;
@@ -1599,15 +861,7 @@ export const Family: MessageFns<Family> = {
             break;
           }
 
-          message.payer = User.decode(reader, reader.uint32());
-          continue;
-        }
-        case 4: {
-          if (tag !== 34) {
-            break;
-          }
-
-          message.childrenIds.push(reader.string());
+          message.payer = UserView.decode(reader, reader.uint32());
           continue;
         }
         case 5: {
@@ -1615,15 +869,7 @@ export const Family: MessageFns<Family> = {
             break;
           }
 
-          message.children.push(User.decode(reader, reader.uint32()));
-          continue;
-        }
-        case 6: {
-          if (tag !== 50) {
-            break;
-          }
-
-          message.members.push(reader.string());
+          message.children.push(UserView.decode(reader, reader.uint32()));
           continue;
         }
       }
@@ -1635,63 +881,26 @@ export const Family: MessageFns<Family> = {
     return message;
   },
 
-  fromJSON(object: any): Family {
-    return {
-      payerId: isSet(object.payerId) ? globalThis.String(object.payerId) : undefined,
-      isIndividual: isSet(object.isIndividual) ? globalThis.Boolean(object.isIndividual) : false,
-      payer: isSet(object.payer) ? User.fromJSON(object.payer) : undefined,
-      childrenIds: globalThis.Array.isArray(object?.childrenIds)
-        ? object.childrenIds.map((e: any) => globalThis.String(e))
-        : [],
-      children: globalThis.Array.isArray(object?.children) ? object.children.map((e: any) => User.fromJSON(e)) : [],
-      members: globalThis.Array.isArray(object?.members) ? object.members.map((e: any) => globalThis.String(e)) : [],
-    };
+  create<I extends Exact<DeepPartial<FamilyView>, I>>(base?: I): FamilyView {
+    return FamilyView.fromPartial(base ?? ({} as any));
   },
-
-  toJSON(message: Family): unknown {
-    const obj: any = {};
-    if (message.payerId !== undefined) {
-      obj.payerId = message.payerId;
-    }
-    if (message.isIndividual !== false) {
-      obj.isIndividual = message.isIndividual;
-    }
-    if (message.payer !== undefined) {
-      obj.payer = User.toJSON(message.payer);
-    }
-    if (message.childrenIds?.length) {
-      obj.childrenIds = message.childrenIds;
-    }
-    if (message.children?.length) {
-      obj.children = message.children.map((e) => User.toJSON(e));
-    }
-    if (message.members?.length) {
-      obj.members = message.members;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<Family>, I>>(base?: I): Family {
-    return Family.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<Family>, I>>(object: I): Family {
-    const message = createBaseFamily();
-    message.payerId = object.payerId ?? undefined;
+  fromPartial<I extends Exact<DeepPartial<FamilyView>, I>>(object: I): FamilyView {
+    const message = createBaseFamilyView();
     message.isIndividual = object.isIndividual ?? false;
-    message.payer = (object.payer !== undefined && object.payer !== null) ? User.fromPartial(object.payer) : undefined;
-    message.childrenIds = object.childrenIds?.map((e) => e) || [];
-    message.children = object.children?.map((e) => User.fromPartial(e)) || [];
-    message.members = object.members?.map((e) => e) || [];
+    message.payer = (object.payer !== undefined && object.payer !== null)
+      ? UserView.fromPartial(object.payer)
+      : undefined;
+    message.children = object.children?.map((e) => UserView.fromPartial(e)) || [];
     return message;
   },
 };
 
-function createBaseRights(): Rights {
+function createBaseRightsView(): RightsView {
   return { full: false, rights: [] };
 }
 
-export const Rights: MessageFns<Rights> = {
-  encode(message: Rights, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const RightsView: MessageFns<RightsView> = {
+  encode(message: RightsView, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.full !== false) {
       writer.uint32(8).bool(message.full);
     }
@@ -1703,10 +912,10 @@ export const Rights: MessageFns<Rights> = {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): Rights {
+  decode(input: BinaryReader | Uint8Array, length?: number): RightsView {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRights();
+    const message = createBaseRightsView();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1745,57 +954,39 @@ export const Rights: MessageFns<Rights> = {
     return message;
   },
 
-  fromJSON(object: any): Rights {
-    return {
-      full: isSet(object.full) ? globalThis.Boolean(object.full) : false,
-      rights: globalThis.Array.isArray(object?.rights) ? object.rights.map((e: any) => ruleFromJSON(e)) : [],
-    };
+  create<I extends Exact<DeepPartial<RightsView>, I>>(base?: I): RightsView {
+    return RightsView.fromPartial(base ?? ({} as any));
   },
-
-  toJSON(message: Rights): unknown {
-    const obj: any = {};
-    if (message.full !== false) {
-      obj.full = message.full;
-    }
-    if (message.rights?.length) {
-      obj.rights = message.rights.map((e) => ruleToJSON(e));
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<Rights>, I>>(base?: I): Rights {
-    return Rights.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<Rights>, I>>(object: I): Rights {
-    const message = createBaseRights();
+  fromPartial<I extends Exact<DeepPartial<RightsView>, I>>(object: I): RightsView {
+    const message = createBaseRightsView();
     message.full = object.full ?? false;
     message.rights = object.rights?.map((e) => e) || [];
     return message;
   },
 };
 
-function createBaseRate(): Rate {
+function createBaseRateView(): RateView {
   return { fix: undefined, groupTraining: undefined, personalTraining: undefined };
 }
 
-export const Rate: MessageFns<Rate> = {
-  encode(message: Rate, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const RateView: MessageFns<RateView> = {
+  encode(message: RateView, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.fix !== undefined) {
-      FixRate.encode(message.fix, writer.uint32(10).fork()).join();
+      FixRateView.encode(message.fix, writer.uint32(10).fork()).join();
     }
     if (message.groupTraining !== undefined) {
-      GroupTrainingRate.encode(message.groupTraining, writer.uint32(18).fork()).join();
+      GroupTrainingRateView.encode(message.groupTraining, writer.uint32(18).fork()).join();
     }
     if (message.personalTraining !== undefined) {
-      PersonalTrainingRate.encode(message.personalTraining, writer.uint32(26).fork()).join();
+      PersonalTrainingRateView.encode(message.personalTraining, writer.uint32(26).fork()).join();
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): Rate {
+  decode(input: BinaryReader | Uint8Array, length?: number): RateView {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseRate();
+    const message = createBaseRateView();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1804,7 +995,7 @@ export const Rate: MessageFns<Rate> = {
             break;
           }
 
-          message.fix = FixRate.decode(reader, reader.uint32());
+          message.fix = FixRateView.decode(reader, reader.uint32());
           continue;
         }
         case 2: {
@@ -1812,7 +1003,7 @@ export const Rate: MessageFns<Rate> = {
             break;
           }
 
-          message.groupTraining = GroupTrainingRate.decode(reader, reader.uint32());
+          message.groupTraining = GroupTrainingRateView.decode(reader, reader.uint32());
           continue;
         }
         case 3: {
@@ -1820,7 +1011,7 @@ export const Rate: MessageFns<Rate> = {
             break;
           }
 
-          message.personalTraining = PersonalTrainingRate.decode(reader, reader.uint32());
+          message.personalTraining = PersonalTrainingRateView.decode(reader, reader.uint32());
           continue;
         }
       }
@@ -1832,52 +1023,28 @@ export const Rate: MessageFns<Rate> = {
     return message;
   },
 
-  fromJSON(object: any): Rate {
-    return {
-      fix: isSet(object.fix) ? FixRate.fromJSON(object.fix) : undefined,
-      groupTraining: isSet(object.groupTraining) ? GroupTrainingRate.fromJSON(object.groupTraining) : undefined,
-      personalTraining: isSet(object.personalTraining)
-        ? PersonalTrainingRate.fromJSON(object.personalTraining)
-        : undefined,
-    };
+  create<I extends Exact<DeepPartial<RateView>, I>>(base?: I): RateView {
+    return RateView.fromPartial(base ?? ({} as any));
   },
-
-  toJSON(message: Rate): unknown {
-    const obj: any = {};
-    if (message.fix !== undefined) {
-      obj.fix = FixRate.toJSON(message.fix);
-    }
-    if (message.groupTraining !== undefined) {
-      obj.groupTraining = GroupTrainingRate.toJSON(message.groupTraining);
-    }
-    if (message.personalTraining !== undefined) {
-      obj.personalTraining = PersonalTrainingRate.toJSON(message.personalTraining);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<Rate>, I>>(base?: I): Rate {
-    return Rate.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<Rate>, I>>(object: I): Rate {
-    const message = createBaseRate();
-    message.fix = (object.fix !== undefined && object.fix !== null) ? FixRate.fromPartial(object.fix) : undefined;
+  fromPartial<I extends Exact<DeepPartial<RateView>, I>>(object: I): RateView {
+    const message = createBaseRateView();
+    message.fix = (object.fix !== undefined && object.fix !== null) ? FixRateView.fromPartial(object.fix) : undefined;
     message.groupTraining = (object.groupTraining !== undefined && object.groupTraining !== null)
-      ? GroupTrainingRate.fromPartial(object.groupTraining)
+      ? GroupTrainingRateView.fromPartial(object.groupTraining)
       : undefined;
     message.personalTraining = (object.personalTraining !== undefined && object.personalTraining !== null)
-      ? PersonalTrainingRate.fromPartial(object.personalTraining)
+      ? PersonalTrainingRateView.fromPartial(object.personalTraining)
       : undefined;
     return message;
   },
 };
 
-function createBaseFixRate(): FixRate {
+function createBaseFixRateView(): FixRateView {
   return { amount: 0, nextPaymentDate: 0, rewardInterval: undefined };
 }
 
-export const FixRate: MessageFns<FixRate> = {
-  encode(message: FixRate, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const FixRateView: MessageFns<FixRateView> = {
+  encode(message: FixRateView, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.amount !== 0) {
       writer.uint32(8).int64(message.amount);
     }
@@ -1885,15 +1052,15 @@ export const FixRate: MessageFns<FixRate> = {
       writer.uint32(16).int64(message.nextPaymentDate);
     }
     if (message.rewardInterval !== undefined) {
-      Interval.encode(message.rewardInterval, writer.uint32(26).fork()).join();
+      IntervalView.encode(message.rewardInterval, writer.uint32(26).fork()).join();
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): FixRate {
+  decode(input: BinaryReader | Uint8Array, length?: number): FixRateView {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseFixRate();
+    const message = createBaseFixRateView();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -1918,7 +1085,7 @@ export const FixRate: MessageFns<FixRate> = {
             break;
           }
 
-          message.rewardInterval = Interval.decode(reader, reader.uint32());
+          message.rewardInterval = IntervalView.decode(reader, reader.uint32());
           continue;
         }
       }
@@ -1930,48 +1097,26 @@ export const FixRate: MessageFns<FixRate> = {
     return message;
   },
 
-  fromJSON(object: any): FixRate {
-    return {
-      amount: isSet(object.amount) ? globalThis.Number(object.amount) : 0,
-      nextPaymentDate: isSet(object.nextPaymentDate) ? globalThis.Number(object.nextPaymentDate) : 0,
-      rewardInterval: isSet(object.rewardInterval) ? Interval.fromJSON(object.rewardInterval) : undefined,
-    };
+  create<I extends Exact<DeepPartial<FixRateView>, I>>(base?: I): FixRateView {
+    return FixRateView.fromPartial(base ?? ({} as any));
   },
-
-  toJSON(message: FixRate): unknown {
-    const obj: any = {};
-    if (message.amount !== 0) {
-      obj.amount = Math.round(message.amount);
-    }
-    if (message.nextPaymentDate !== 0) {
-      obj.nextPaymentDate = Math.round(message.nextPaymentDate);
-    }
-    if (message.rewardInterval !== undefined) {
-      obj.rewardInterval = Interval.toJSON(message.rewardInterval);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<FixRate>, I>>(base?: I): FixRate {
-    return FixRate.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<FixRate>, I>>(object: I): FixRate {
-    const message = createBaseFixRate();
+  fromPartial<I extends Exact<DeepPartial<FixRateView>, I>>(object: I): FixRateView {
+    const message = createBaseFixRateView();
     message.amount = object.amount ?? 0;
     message.nextPaymentDate = object.nextPaymentDate ?? 0;
     message.rewardInterval = (object.rewardInterval !== undefined && object.rewardInterval !== null)
-      ? Interval.fromPartial(object.rewardInterval)
+      ? IntervalView.fromPartial(object.rewardInterval)
       : undefined;
     return message;
   },
 };
 
-function createBaseGroupTrainingRate(): GroupTrainingRate {
+function createBaseGroupTrainingRateView(): GroupTrainingRateView {
   return { percent: 0, minReward: 0 };
 }
 
-export const GroupTrainingRate: MessageFns<GroupTrainingRate> = {
-  encode(message: GroupTrainingRate, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const GroupTrainingRateView: MessageFns<GroupTrainingRateView> = {
+  encode(message: GroupTrainingRateView, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.percent !== 0) {
       writer.uint32(8).int64(message.percent);
     }
@@ -1981,10 +1126,10 @@ export const GroupTrainingRate: MessageFns<GroupTrainingRate> = {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): GroupTrainingRate {
+  decode(input: BinaryReader | Uint8Array, length?: number): GroupTrainingRateView {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGroupTrainingRate();
+    const message = createBaseGroupTrainingRateView();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2013,51 +1158,33 @@ export const GroupTrainingRate: MessageFns<GroupTrainingRate> = {
     return message;
   },
 
-  fromJSON(object: any): GroupTrainingRate {
-    return {
-      percent: isSet(object.percent) ? globalThis.Number(object.percent) : 0,
-      minReward: isSet(object.minReward) ? globalThis.Number(object.minReward) : 0,
-    };
+  create<I extends Exact<DeepPartial<GroupTrainingRateView>, I>>(base?: I): GroupTrainingRateView {
+    return GroupTrainingRateView.fromPartial(base ?? ({} as any));
   },
-
-  toJSON(message: GroupTrainingRate): unknown {
-    const obj: any = {};
-    if (message.percent !== 0) {
-      obj.percent = Math.round(message.percent);
-    }
-    if (message.minReward !== 0) {
-      obj.minReward = Math.round(message.minReward);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<GroupTrainingRate>, I>>(base?: I): GroupTrainingRate {
-    return GroupTrainingRate.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<GroupTrainingRate>, I>>(object: I): GroupTrainingRate {
-    const message = createBaseGroupTrainingRate();
+  fromPartial<I extends Exact<DeepPartial<GroupTrainingRateView>, I>>(object: I): GroupTrainingRateView {
+    const message = createBaseGroupTrainingRateView();
     message.percent = object.percent ?? 0;
     message.minReward = object.minReward ?? 0;
     return message;
   },
 };
 
-function createBasePersonalTrainingRate(): PersonalTrainingRate {
+function createBasePersonalTrainingRateView(): PersonalTrainingRateView {
   return { percent: 0 };
 }
 
-export const PersonalTrainingRate: MessageFns<PersonalTrainingRate> = {
-  encode(message: PersonalTrainingRate, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const PersonalTrainingRateView: MessageFns<PersonalTrainingRateView> = {
+  encode(message: PersonalTrainingRateView, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.percent !== 0) {
       writer.uint32(8).int64(message.percent);
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): PersonalTrainingRate {
+  decode(input: BinaryReader | Uint8Array, length?: number): PersonalTrainingRateView {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBasePersonalTrainingRate();
+    const message = createBasePersonalTrainingRateView();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2078,44 +1205,32 @@ export const PersonalTrainingRate: MessageFns<PersonalTrainingRate> = {
     return message;
   },
 
-  fromJSON(object: any): PersonalTrainingRate {
-    return { percent: isSet(object.percent) ? globalThis.Number(object.percent) : 0 };
+  create<I extends Exact<DeepPartial<PersonalTrainingRateView>, I>>(base?: I): PersonalTrainingRateView {
+    return PersonalTrainingRateView.fromPartial(base ?? ({} as any));
   },
-
-  toJSON(message: PersonalTrainingRate): unknown {
-    const obj: any = {};
-    if (message.percent !== 0) {
-      obj.percent = Math.round(message.percent);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<PersonalTrainingRate>, I>>(base?: I): PersonalTrainingRate {
-    return PersonalTrainingRate.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<PersonalTrainingRate>, I>>(object: I): PersonalTrainingRate {
-    const message = createBasePersonalTrainingRate();
+  fromPartial<I extends Exact<DeepPartial<PersonalTrainingRateView>, I>>(object: I): PersonalTrainingRateView {
+    const message = createBasePersonalTrainingRateView();
     message.percent = object.percent ?? 0;
     return message;
   },
 };
 
-function createBaseInterval(): Interval {
+function createBaseIntervalView(): IntervalView {
   return { monthNum: 0 };
 }
 
-export const Interval: MessageFns<Interval> = {
-  encode(message: Interval, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const IntervalView: MessageFns<IntervalView> = {
+  encode(message: IntervalView, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.monthNum !== 0) {
       writer.uint32(8).uint32(message.monthNum);
     }
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): Interval {
+  decode(input: BinaryReader | Uint8Array, length?: number): IntervalView {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseInterval();
+    const message = createBaseIntervalView();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2136,34 +1251,118 @@ export const Interval: MessageFns<Interval> = {
     return message;
   },
 
-  fromJSON(object: any): Interval {
-    return { monthNum: isSet(object.monthNum) ? globalThis.Number(object.monthNum) : 0 };
+  create<I extends Exact<DeepPartial<IntervalView>, I>>(base?: I): IntervalView {
+    return IntervalView.fromPartial(base ?? ({} as any));
   },
-
-  toJSON(message: Interval): unknown {
-    const obj: any = {};
-    if (message.monthNum !== 0) {
-      obj.monthNum = Math.round(message.monthNum);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<Interval>, I>>(base?: I): Interval {
-    return Interval.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<Interval>, I>>(object: I): Interval {
-    const message = createBaseInterval();
+  fromPartial<I extends Exact<DeepPartial<IntervalView>, I>>(object: I): IntervalView {
+    const message = createBaseIntervalView();
     message.monthNum = object.monthNum ?? 0;
     return message;
   },
 };
 
-function createBaseActiveStatus(): ActiveStatus {
+function createBaseStatusView(): StatusView {
+  return { notActive: undefined, active: undefined };
+}
+
+export const StatusView: MessageFns<StatusView> = {
+  encode(message: StatusView, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.notActive !== undefined) {
+      NotActive.encode(message.notActive, writer.uint32(10).fork()).join();
+    }
+    if (message.active !== undefined) {
+      ActiveStatusView.encode(message.active, writer.uint32(18).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): StatusView {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseStatusView();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.notActive = NotActive.decode(reader, reader.uint32());
+          continue;
+        }
+        case 2: {
+          if (tag !== 18) {
+            break;
+          }
+
+          message.active = ActiveStatusView.decode(reader, reader.uint32());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  create<I extends Exact<DeepPartial<StatusView>, I>>(base?: I): StatusView {
+    return StatusView.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<StatusView>, I>>(object: I): StatusView {
+    const message = createBaseStatusView();
+    message.notActive = (object.notActive !== undefined && object.notActive !== null)
+      ? NotActive.fromPartial(object.notActive)
+      : undefined;
+    message.active = (object.active !== undefined && object.active !== null)
+      ? ActiveStatusView.fromPartial(object.active)
+      : undefined;
+    return message;
+  },
+};
+
+function createBaseNotActive(): NotActive {
+  return {};
+}
+
+export const NotActive: MessageFns<NotActive> = {
+  encode(_: NotActive, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): NotActive {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseNotActive();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  create<I extends Exact<DeepPartial<NotActive>, I>>(base?: I): NotActive {
+    return NotActive.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<NotActive>, I>>(_: I): NotActive {
+    const message = createBaseNotActive();
+    return message;
+  },
+};
+
+function createBaseActiveStatusView(): ActiveStatusView {
   return { startDate: 0, endDate: 0 };
 }
 
-export const ActiveStatus: MessageFns<ActiveStatus> = {
-  encode(message: ActiveStatus, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+export const ActiveStatusView: MessageFns<ActiveStatusView> = {
+  encode(message: ActiveStatusView, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
     if (message.startDate !== 0) {
       writer.uint32(8).int64(message.startDate);
     }
@@ -2173,10 +1372,10 @@ export const ActiveStatus: MessageFns<ActiveStatus> = {
     return writer;
   },
 
-  decode(input: BinaryReader | Uint8Array, length?: number): ActiveStatus {
+  decode(input: BinaryReader | Uint8Array, length?: number): ActiveStatusView {
     const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
     let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseActiveStatus();
+    const message = createBaseActiveStatusView();
     while (reader.pos < end) {
       const tag = reader.uint32();
       switch (tag >>> 3) {
@@ -2205,151 +1404,13 @@ export const ActiveStatus: MessageFns<ActiveStatus> = {
     return message;
   },
 
-  fromJSON(object: any): ActiveStatus {
-    return {
-      startDate: isSet(object.startDate) ? globalThis.Number(object.startDate) : 0,
-      endDate: isSet(object.endDate) ? globalThis.Number(object.endDate) : 0,
-    };
+  create<I extends Exact<DeepPartial<ActiveStatusView>, I>>(base?: I): ActiveStatusView {
+    return ActiveStatusView.fromPartial(base ?? ({} as any));
   },
-
-  toJSON(message: ActiveStatus): unknown {
-    const obj: any = {};
-    if (message.startDate !== 0) {
-      obj.startDate = Math.round(message.startDate);
-    }
-    if (message.endDate !== 0) {
-      obj.endDate = Math.round(message.endDate);
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<ActiveStatus>, I>>(base?: I): ActiveStatus {
-    return ActiveStatus.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<ActiveStatus>, I>>(object: I): ActiveStatus {
-    const message = createBaseActiveStatus();
+  fromPartial<I extends Exact<DeepPartial<ActiveStatusView>, I>>(object: I): ActiveStatusView {
+    const message = createBaseActiveStatusView();
     message.startDate = object.startDate ?? 0;
     message.endDate = object.endDate ?? 0;
-    return message;
-  },
-};
-
-function createBaseGroupSubscription(): GroupSubscription {
-  return { programFilter: [] };
-}
-
-export const GroupSubscription: MessageFns<GroupSubscription> = {
-  encode(message: GroupSubscription, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    for (const v of message.programFilter) {
-      writer.uint32(10).string(v!);
-    }
-    return writer;
-  },
-
-  decode(input: BinaryReader | Uint8Array, length?: number): GroupSubscription {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBaseGroupSubscription();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1: {
-          if (tag !== 10) {
-            break;
-          }
-
-          message.programFilter.push(reader.string());
-          continue;
-        }
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skip(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): GroupSubscription {
-    return {
-      programFilter: globalThis.Array.isArray(object?.programFilter)
-        ? object.programFilter.map((e: any) => globalThis.String(e))
-        : [],
-    };
-  },
-
-  toJSON(message: GroupSubscription): unknown {
-    const obj: any = {};
-    if (message.programFilter?.length) {
-      obj.programFilter = message.programFilter;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<GroupSubscription>, I>>(base?: I): GroupSubscription {
-    return GroupSubscription.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<GroupSubscription>, I>>(object: I): GroupSubscription {
-    const message = createBaseGroupSubscription();
-    message.programFilter = object.programFilter?.map((e) => e) || [];
-    return message;
-  },
-};
-
-function createBasePersonalSubscription(): PersonalSubscription {
-  return { couchFilter: "" };
-}
-
-export const PersonalSubscription: MessageFns<PersonalSubscription> = {
-  encode(message: PersonalSubscription, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
-    if (message.couchFilter !== "") {
-      writer.uint32(10).string(message.couchFilter);
-    }
-    return writer;
-  },
-
-  decode(input: BinaryReader | Uint8Array, length?: number): PersonalSubscription {
-    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
-    let end = length === undefined ? reader.len : reader.pos + length;
-    const message = createBasePersonalSubscription();
-    while (reader.pos < end) {
-      const tag = reader.uint32();
-      switch (tag >>> 3) {
-        case 1: {
-          if (tag !== 10) {
-            break;
-          }
-
-          message.couchFilter = reader.string();
-          continue;
-        }
-      }
-      if ((tag & 7) === 4 || tag === 0) {
-        break;
-      }
-      reader.skip(tag & 7);
-    }
-    return message;
-  },
-
-  fromJSON(object: any): PersonalSubscription {
-    return { couchFilter: isSet(object.couchFilter) ? globalThis.String(object.couchFilter) : "" };
-  },
-
-  toJSON(message: PersonalSubscription): unknown {
-    const obj: any = {};
-    if (message.couchFilter !== "") {
-      obj.couchFilter = message.couchFilter;
-    }
-    return obj;
-  },
-
-  create<I extends Exact<DeepPartial<PersonalSubscription>, I>>(base?: I): PersonalSubscription {
-    return PersonalSubscription.fromPartial(base ?? ({} as any));
-  },
-  fromPartial<I extends Exact<DeepPartial<PersonalSubscription>, I>>(object: I): PersonalSubscription {
-    const message = createBasePersonalSubscription();
-    message.couchFilter = object.couchFilter ?? "";
     return message;
   },
 };
@@ -2377,15 +1438,9 @@ function longToNumber(int64: { toString(): string }): number {
   return num;
 }
 
-function isSet(value: any): boolean {
-  return value !== null && value !== undefined;
-}
-
 export interface MessageFns<T> {
   encode(message: T, writer?: BinaryWriter): BinaryWriter;
   decode(input: BinaryReader | Uint8Array, length?: number): T;
-  fromJSON(object: any): T;
-  toJSON(message: T): unknown;
   create<I extends Exact<DeepPartial<T>, I>>(base?: I): T;
   fromPartial<I extends Exact<DeepPartial<T>, I>>(object: I): T;
 }

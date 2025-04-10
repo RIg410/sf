@@ -19,80 +19,11 @@ export enum VerifyCodeError {
   UNRECOGNIZED = -1,
 }
 
-export function verifyCodeErrorFromJSON(object: any): VerifyCodeError {
-  switch (object) {
-    case 0:
-    case "INVALID_PHONE":
-      return VerifyCodeError.INVALID_PHONE;
-    case 1:
-    case "INVALID_CODE":
-      return VerifyCodeError.INVALID_CODE;
-    case 2:
-    case "EXPIRED":
-      return VerifyCodeError.EXPIRED;
-    case 3:
-    case "TOO_MANY_ATTEMPTS":
-      return VerifyCodeError.TOO_MANY_ATTEMPTS;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return VerifyCodeError.UNRECOGNIZED;
-  }
-}
-
-export function verifyCodeErrorToJSON(object: VerifyCodeError): string {
-  switch (object) {
-    case VerifyCodeError.INVALID_PHONE:
-      return "INVALID_PHONE";
-    case VerifyCodeError.INVALID_CODE:
-      return "INVALID_CODE";
-    case VerifyCodeError.EXPIRED:
-      return "EXPIRED";
-    case VerifyCodeError.TOO_MANY_ATTEMPTS:
-      return "TOO_MANY_ATTEMPTS";
-    case VerifyCodeError.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
-}
-
 export enum TgAuthError {
   INVALID_TOKEN = 0,
   TOO_OLD_TOKEN = 1,
   USER_NOT_FOUND = 2,
   UNRECOGNIZED = -1,
-}
-
-export function tgAuthErrorFromJSON(object: any): TgAuthError {
-  switch (object) {
-    case 0:
-    case "INVALID_TOKEN":
-      return TgAuthError.INVALID_TOKEN;
-    case 1:
-    case "TOO_OLD_TOKEN":
-      return TgAuthError.TOO_OLD_TOKEN;
-    case 2:
-    case "USER_NOT_FOUND":
-      return TgAuthError.USER_NOT_FOUND;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return TgAuthError.UNRECOGNIZED;
-  }
-}
-
-export function tgAuthErrorToJSON(object: TgAuthError): string {
-  switch (object) {
-    case TgAuthError.INVALID_TOKEN:
-      return "INVALID_TOKEN";
-    case TgAuthError.TOO_OLD_TOKEN:
-      return "TOO_OLD_TOKEN";
-    case TgAuthError.USER_NOT_FOUND:
-      return "USER_NOT_FOUND";
-    case TgAuthError.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
 }
 
 export enum SendVerificationCodeError {
@@ -101,43 +32,6 @@ export enum SendVerificationCodeError {
   ALREADY_SENT = 2,
   NOT_AVAILABLE = 3,
   UNRECOGNIZED = -1,
-}
-
-export function sendVerificationCodeErrorFromJSON(object: any): SendVerificationCodeError {
-  switch (object) {
-    case 0:
-    case "INVALID_PHONE_NUMBER":
-      return SendVerificationCodeError.INVALID_PHONE_NUMBER;
-    case 1:
-    case "V_USER_NOT_FOUND":
-      return SendVerificationCodeError.V_USER_NOT_FOUND;
-    case 2:
-    case "ALREADY_SENT":
-      return SendVerificationCodeError.ALREADY_SENT;
-    case 3:
-    case "NOT_AVAILABLE":
-      return SendVerificationCodeError.NOT_AVAILABLE;
-    case -1:
-    case "UNRECOGNIZED":
-    default:
-      return SendVerificationCodeError.UNRECOGNIZED;
-  }
-}
-
-export function sendVerificationCodeErrorToJSON(object: SendVerificationCodeError): string {
-  switch (object) {
-    case SendVerificationCodeError.INVALID_PHONE_NUMBER:
-      return "INVALID_PHONE_NUMBER";
-    case SendVerificationCodeError.V_USER_NOT_FOUND:
-      return "V_USER_NOT_FOUND";
-    case SendVerificationCodeError.ALREADY_SENT:
-      return "ALREADY_SENT";
-    case SendVerificationCodeError.NOT_AVAILABLE:
-      return "NOT_AVAILABLE";
-    case SendVerificationCodeError.UNRECOGNIZED:
-    default:
-      return "UNRECOGNIZED";
-  }
 }
 
 export interface SendVerificationCodeResponse {
@@ -215,24 +109,6 @@ export const SendVerificationCodeResponse: MessageFns<SendVerificationCodeRespon
     return message;
   },
 
-  fromJSON(object: any): SendVerificationCodeResponse {
-    return {
-      leftTime: isSet(object.leftTime) ? globalThis.Number(object.leftTime) : undefined,
-      error: isSet(object.error) ? sendVerificationCodeErrorFromJSON(object.error) : undefined,
-    };
-  },
-
-  toJSON(message: SendVerificationCodeResponse): unknown {
-    const obj: any = {};
-    if (message.leftTime !== undefined) {
-      obj.leftTime = Math.round(message.leftTime);
-    }
-    if (message.error !== undefined) {
-      obj.error = sendVerificationCodeErrorToJSON(message.error);
-    }
-    return obj;
-  },
-
   create<I extends Exact<DeepPartial<SendVerificationCodeResponse>, I>>(base?: I): SendVerificationCodeResponse {
     return SendVerificationCodeResponse.fromPartial(base ?? ({} as any));
   },
@@ -289,24 +165,6 @@ export const TgAuthResult: MessageFns<TgAuthResult> = {
       reader.skip(tag & 7);
     }
     return message;
-  },
-
-  fromJSON(object: any): TgAuthResult {
-    return {
-      token: isSet(object.token) ? globalThis.String(object.token) : undefined,
-      error: isSet(object.error) ? tgAuthErrorFromJSON(object.error) : undefined,
-    };
-  },
-
-  toJSON(message: TgAuthResult): unknown {
-    const obj: any = {};
-    if (message.token !== undefined) {
-      obj.token = message.token;
-    }
-    if (message.error !== undefined) {
-      obj.error = tgAuthErrorToJSON(message.error);
-    }
-    return obj;
   },
 
   create<I extends Exact<DeepPartial<TgAuthResult>, I>>(base?: I): TgAuthResult {
@@ -367,24 +225,6 @@ export const VerifyCodeResponse: MessageFns<VerifyCodeResponse> = {
     return message;
   },
 
-  fromJSON(object: any): VerifyCodeResponse {
-    return {
-      token: isSet(object.token) ? globalThis.String(object.token) : undefined,
-      error: isSet(object.error) ? verifyCodeErrorFromJSON(object.error) : undefined,
-    };
-  },
-
-  toJSON(message: VerifyCodeResponse): unknown {
-    const obj: any = {};
-    if (message.token !== undefined) {
-      obj.token = message.token;
-    }
-    if (message.error !== undefined) {
-      obj.error = verifyCodeErrorToJSON(message.error);
-    }
-    return obj;
-  },
-
   create<I extends Exact<DeepPartial<VerifyCodeResponse>, I>>(base?: I): VerifyCodeResponse {
     return VerifyCodeResponse.fromPartial(base ?? ({} as any));
   },
@@ -432,18 +272,6 @@ export const TgKeyRequest: MessageFns<TgKeyRequest> = {
     return message;
   },
 
-  fromJSON(object: any): TgKeyRequest {
-    return { key: isSet(object.key) ? globalThis.String(object.key) : "" };
-  },
-
-  toJSON(message: TgKeyRequest): unknown {
-    const obj: any = {};
-    if (message.key !== "") {
-      obj.key = message.key;
-    }
-    return obj;
-  },
-
   create<I extends Exact<DeepPartial<TgKeyRequest>, I>>(base?: I): TgKeyRequest {
     return TgKeyRequest.fromPartial(base ?? ({} as any));
   },
@@ -488,18 +316,6 @@ export const VerificationCodeRequest: MessageFns<VerificationCodeRequest> = {
       reader.skip(tag & 7);
     }
     return message;
-  },
-
-  fromJSON(object: any): VerificationCodeRequest {
-    return { phoneNumber: isSet(object.phoneNumber) ? globalThis.String(object.phoneNumber) : "" };
-  },
-
-  toJSON(message: VerificationCodeRequest): unknown {
-    const obj: any = {};
-    if (message.phoneNumber !== "") {
-      obj.phoneNumber = message.phoneNumber;
-    }
-    return obj;
   },
 
   create<I extends Exact<DeepPartial<VerificationCodeRequest>, I>>(base?: I): VerificationCodeRequest {
@@ -557,24 +373,6 @@ export const VerifyCodeRequest: MessageFns<VerifyCodeRequest> = {
       reader.skip(tag & 7);
     }
     return message;
-  },
-
-  fromJSON(object: any): VerifyCodeRequest {
-    return {
-      phoneNumber: isSet(object.phoneNumber) ? globalThis.String(object.phoneNumber) : "",
-      code: isSet(object.code) ? globalThis.String(object.code) : "",
-    };
-  },
-
-  toJSON(message: VerifyCodeRequest): unknown {
-    const obj: any = {};
-    if (message.phoneNumber !== "") {
-      obj.phoneNumber = message.phoneNumber;
-    }
-    if (message.code !== "") {
-      obj.code = message.code;
-    }
-    return obj;
   },
 
   create<I extends Exact<DeepPartial<VerifyCodeRequest>, I>>(base?: I): VerifyCodeRequest {
@@ -778,10 +576,6 @@ type KeysOfUnion<T> = T extends T ? keyof T : never;
 export type Exact<P, I extends P> = P extends Builtin ? P
   : P & { [K in keyof P]: Exact<P[K], I[K]> } & { [K in Exclude<keyof I, KeysOfUnion<P>>]: never };
 
-function isSet(value: any): boolean {
-  return value !== null && value !== undefined;
-}
-
 export class GrpcWebError extends globalThis.Error {
   constructor(message: string, public code: grpc.Code, public metadata: grpc.Metadata) {
     super(message);
@@ -791,8 +585,6 @@ export class GrpcWebError extends globalThis.Error {
 export interface MessageFns<T> {
   encode(message: T, writer?: BinaryWriter): BinaryWriter;
   decode(input: BinaryReader | Uint8Array, length?: number): T;
-  fromJSON(object: any): T;
-  toJSON(message: T): unknown;
   create<I extends Exact<DeepPartial<T>, I>>(base?: I): T;
   fromPartial<I extends Exact<DeepPartial<T>, I>>(object: I): T;
 }
