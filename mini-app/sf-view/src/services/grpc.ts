@@ -12,7 +12,6 @@ export class gRPC {
     constructor(grpcClient: GrpcWebImpl) {
         this.authService = new AuthServiceClientImpl(grpcClient);
         this.userService = new UsersServiceClientImpl(grpcClient);
-
     }
 }
 
