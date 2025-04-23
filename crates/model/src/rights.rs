@@ -199,7 +199,7 @@ pub trait HasRule {
 
 impl HasRule for Rights {
     fn has_rule(&self, rule: Rule) -> bool {
-        Rights::has_rule(&self, rule)
+        Rights::has_rule(self, rule)
     }
 }
 

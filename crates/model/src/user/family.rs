@@ -251,9 +251,8 @@ pub enum FindFor {
 mod tests {
     use bson::oid::ObjectId;
     use chrono::{DateTime, Utc};
-
+    use decimal::Decimal;
     use crate::{
-        decimal::Decimal,
         program::TrainingType,
         rights::Rights,
         statistics::source::Source,

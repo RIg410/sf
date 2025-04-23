@@ -36,7 +36,7 @@ impl UsersService for UserServer {
             .id
             .map(|id| id.to_model())
             .transpose()?
-            .unwrap_or_else(|| ctx.me.id);
+            .unwrap_or(ctx.me.id);
 
         let is_me = ctx.is_me(user_id);
 

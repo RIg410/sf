@@ -158,7 +158,7 @@ impl UserStore {
             .await?;
         self.cache_user(session, &mut user).await?;
 
-        return Ok(user);
+        Ok(user)
     }
 
     pub async fn find_by_phone(&self, session: &mut Session, phone: &str) -> Result<Option<User>> {

@@ -3,7 +3,6 @@ use super::{
 };
 use ai::Ai;
 use chrono::{DateTime, Datelike as _, Local, NaiveDate};
-use storage::session::Session;
 
 mod advertising;
 

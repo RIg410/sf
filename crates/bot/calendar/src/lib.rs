@@ -21,9 +21,6 @@ use teloxide::types::{InlineKeyboardButton, InlineKeyboardMarkup};
 use teloxide::utils::markdown::escape;
 
 mod schedule;
-// mod personal;
-// mod sub_rent;
-// mod place;
 
 #[derive(Default)]
 pub struct CalendarView {

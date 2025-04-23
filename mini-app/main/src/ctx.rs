@@ -35,11 +35,11 @@ impl ContextBuilder {
             } else {
                 sleep(std::time::Duration::from_secs(1)).await;
                 warn!("Failed to decode token: {}", token);
-                return Err(Status::unauthenticated("Invalid token"));
+                Err(Status::unauthenticated("Invalid token"))
             }
         } else {
             sleep(std::time::Duration::from_secs(1)).await;
-            return Err(Status::unauthenticated("No Authorization header"));
+            Err(Status::unauthenticated("No Authorization header"))
         }
     }
 

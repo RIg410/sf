@@ -1,6 +1,6 @@
 use async_trait::async_trait;
 use bot_core::{
-    callback_data::{CallbackDateTime, Calldata as _},
+    callback_data::Calldata as _,
     calldata,
     context::Context,
     widget::{Jmp, View},
@@ -75,7 +75,7 @@ impl View for StatisticsView {
             Calldata::Statistics(statistic_type) => match statistic_type {
                 StatisticType::AdvertisingStat => {
                     statistic_type
-                        .send_statistic(ctx, self.range.clone())
+                        .send_statistic(ctx, self.range)
                         .await?;
                 }
             },
