@@ -21,3 +21,4 @@ storage.workspace = true
 thiserror.workspace = true
 tx_macro.workspace = true
 yookassa.workspace = true
+backup.workspace = true

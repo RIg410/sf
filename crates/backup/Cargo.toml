@@ -1,0 +1,15 @@
+[package]
+name = "backup"
+
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+version.workspace = true
+
+[dependencies]
+bson.workspace = true
+eyre.workspace = true
+storage.workspace = true
+tracing.workspace = true
+tx_macro.workspace = true
+zip.workspace = true

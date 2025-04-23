@@ -24,13 +24,16 @@ members = [
   "mini-app/main",
   "crates/decimal",
   "crates/decimal",
-  "crates/stat", "crates/services",
+  "crates/stat",
+  "crates/services",
+  "crates/backup",
 ]
 
 resolver = "2"
 
 [workspace.dependencies]
 ai = {path = "crates/ai"}
+backup = {path = "crates/backup"}
 bg-process = {path = "crates/bg-process"}
 bot-calendar = {path = "crates/bot/calendar"}
 bot-core = {path = "crates/bot/core"}
@@ -47,9 +50,9 @@ bot-views = {path = "crates/bot/views"}
 decimal = {path = "crates/decimal"}
 error = {path = "crates/error"}
 graph = {path = "crates/graph"}
+services = {path = "crates/services"}
 stat = {path = "crates/stat"}
 time = {path = "crates/time"}
-services = {path = "crates/services"}
 
 mini-app-main = {path = "mini-app/main"}
 

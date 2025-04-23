@@ -200,6 +200,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "backup"
+version = "0.1.0"
+dependencies = [
+ "bson",
+ "eyre",
+ "storage",
+ "tracing",
+ "tx_macro",
+ "zip",
+]
+
+[[package]]
 name = "base64"
 version = "0.13.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3254,6 +3266,7 @@ name = "services"
 version = "0.1.0"
 dependencies = [
  "ai",
+ "backup",
  "chrono",
  "decimal",
  "env",
