@@ -1,11 +1,9 @@
+use decimal::Decimal;
 use error::LedgerError;
 use eyre::Result;
-use model::{
-    decimal::Decimal,
-    user::{
-        employee::Employee,
-        rate::{EmployeeRole, Rate},
-    },
+use model::user::{
+    employee::Employee,
+    rate::{EmployeeRole, Rate},
 };
 use mongodb::bson::oid::ObjectId;
 use storage::session::Session;

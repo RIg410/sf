@@ -1,5 +1,5 @@
 [package]
-name = "model"
+name = "users"
 
 edition.workspace = true
 license.workspace = true
@@ -7,15 +7,9 @@ publish.workspace = true
 version.workspace = true
 
 [dependencies]
-bincode.workspace = true
 bson.workspace = true
 chrono.workspace = true
-eyre.workspace = true
-hex.workspace = true
-rand.workspace = true
 serde.workspace = true
-strum.workspace = true
-thiserror.workspace = true
-time.workspace = true
-tracing.workspace = true
+eyre.workspace = true
 decimal.workspace = true
+

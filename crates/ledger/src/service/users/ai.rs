@@ -1,13 +1,13 @@
 use ai::{AiContext, AiModel};
 use bson::oid::ObjectId;
 use chrono::Local;
-use eyre::eyre;
+use decimal::Decimal;
 use eyre::Error;
-use model::decimal::Decimal;
+use eyre::eyre;
 use model::{
     history::HistoryRow,
     subscription::UserSubscription,
-    user::{extension::UserExtension, User},
+    user::{User, extension::UserExtension},
 };
 use storage::session::Session;
 

@@ -7,9 +7,9 @@ use bot_core::{
 };
 use bot_viewer::day::fmt_dt;
 use chrono::Local;
+use decimal::Decimal;
 use eyre::Result;
 use model::{
-    decimal::Decimal,
     reward::{Reward, RewardSource},
     rights::Rule,
 };

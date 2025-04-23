@@ -4,7 +4,7 @@ pub mod prepare_payment;
 use env::Env;
 use eyre::Error;
 use intent::Intent;
-use model::decimal::Decimal;
+use decimal::Decimal;
 use prepare_payment::{Amount, Confirmation, PaymentRequest, PaymentResponse};
 use uuid::Uuid;
 

@@ -5,7 +5,7 @@ use chrono::{DateTime, Local, Utc};
 use dashmap::DashMap;
 use eyre::{bail, eyre, Error, Result};
 use futures_util::stream::TryStreamExt;
-use model::decimal::Decimal;
+use decimal::Decimal;
 use model::rights::{self, Rule};
 use model::statistics::source::Source;
 use model::subscription::{SubscriptionStatus, Subscription, UserSubscription};

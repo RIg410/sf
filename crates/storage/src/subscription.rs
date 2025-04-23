@@ -1,7 +1,8 @@
 use crate::session::{Db, Session};
 use bson::{doc, oid::ObjectId};
+use decimal::Decimal;
 use eyre::Error;
-use model::{decimal::Decimal, subscription::Subscription};
+use model::subscription::Subscription;
 use mongodb::Collection;
 use tracing::info;
 

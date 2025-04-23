@@ -1,4 +1,3 @@
-use ai::AiModel;
 use async_trait::async_trait;
 use bot_core::{
     callback_data::{CallbackDateTime, Calldata as _},
@@ -6,7 +5,7 @@ use bot_core::{
     context::Context,
     widget::{Jmp, View},
 };
-use bot_viewer::day::{fmt_date, fmt_dt};
+use bot_viewer::day::fmt_date;
 use chrono::Local;
 use eyre::Error;
 use eyre::Result;

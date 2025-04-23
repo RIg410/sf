@@ -6,11 +6,9 @@ use super::{confirm::ConfirmSell, View};
 use async_trait::async_trait;
 use bot_core::{callback_data::Calldata as _, calldata, context::Context, widget::Jmp};
 use bot_viewer::fmt_phone;
+use decimal::Decimal;
 use eyre::Result;
-use model::{
-    decimal::Decimal, request::Request, rights::Rule, statistics::source::Source,
-    user::sanitize_phone,
-};
+use model::{request::Request, rights::Rule, statistics::source::Source, user::sanitize_phone};
 use mongodb::bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
 use teloxide::{

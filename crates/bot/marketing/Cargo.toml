@@ -26,3 +26,4 @@ strum.workspace = true
 teloxide.workspace = true
 time.workspace = true
 tracing.workspace = true
+decimal.workspace = true

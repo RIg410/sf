@@ -1,9 +1,8 @@
 use bson::oid::ObjectId;
 use chrono::{DateTime, Datelike, Local, Timelike as _, Utc};
 use serde::{Deserialize, Serialize};
-
+use decimal::Decimal;
 use crate::{
-    decimal::Decimal,
     ids::DayId,
     program::{Program, TrainingType},
     rooms::Room,

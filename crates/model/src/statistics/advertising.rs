@@ -1,6 +1,6 @@
 use std::collections::HashMap;
 
-use crate::decimal::Decimal;
+use decimal::Decimal;
 
 use super::source::Source;
 

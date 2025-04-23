@@ -5,7 +5,7 @@ use chrono::Local;
 use env::Env;
 use error::LedgerError;
 use eyre::{eyre, Context as _, Result};
-use model::decimal::Decimal;
+use decimal::Decimal;
 use model::training::TrainingStatus;
 use model::treasury::subs::UserId;
 use model::user::family::FindFor;

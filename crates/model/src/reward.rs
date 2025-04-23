@@ -1,8 +1,8 @@
 use bson::oid::ObjectId;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
-
-use crate::{decimal::Decimal, training::TrainingId, user::employee::UserRewardContribution};
+use decimal::Decimal;
+use crate::{training::TrainingId, user::employee::UserRewardContribution};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Reward {

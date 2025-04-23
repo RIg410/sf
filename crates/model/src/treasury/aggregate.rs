@@ -3,7 +3,8 @@ use std::collections::HashMap;
 use chrono::{DateTime, Local};
 use serde::{Deserialize, Serialize};
 
-use crate::{decimal::Decimal, statistics::source::Source};
+use crate::statistics::source::Source;
+use decimal::Decimal;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TreasuryAggregate {

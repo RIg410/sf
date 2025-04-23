@@ -1,4 +1,4 @@
-use model::decimal::Decimal;
+use decimal::Decimal;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug)]

@@ -5,8 +5,9 @@ use bot_core::{
     context::Context,
     widget::{Jmp, View},
 };
+use decimal::Decimal;
 use eyre::Result;
-use model::{decimal::Decimal, rights::Rule};
+use model::rights::Rule;
 use mongodb::bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
 use teloxide::{

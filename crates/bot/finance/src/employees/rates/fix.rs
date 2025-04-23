@@ -4,11 +4,9 @@ use bot_core::{
     widget::{Jmp, View},
 };
 use chrono::{Local, TimeZone as _, Utc};
+use decimal::Decimal;
 use eyre::{Error, Result};
-use model::{
-    decimal::Decimal,
-    user::rate::{Interval, Rate},
-};
+use model::user::rate::{Interval, Rate};
 use mongodb::bson::oid::ObjectId;
 use teloxide::types::{InlineKeyboardMarkup, Message};
 

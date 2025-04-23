@@ -1,11 +1,11 @@
 use crate::{
-    decimal::Decimal,
     ids::DayId,
     slot::Slot,
     training::{Statistics, Training},
 };
 use bson::oid::ObjectId;
 use chrono::{DateTime, Datelike, Local, Utc};
+use decimal::Decimal;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]

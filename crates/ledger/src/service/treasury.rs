@@ -1,15 +1,15 @@
 use chrono::{DateTime, Local, Utc};
+use decimal::Decimal;
 use eyre::Error;
 use model::{
-    decimal::Decimal,
     statistics::source::Source,
     subscription::Subscription,
     treasury::{
+        Event, TreasuryEvent,
         aggregate::{AggIncome, AggOutcome, TreasuryAggregate},
         income::Income,
         outcome::Outcome,
         subs::{SellSubscription, UserId},
-        Event, TreasuryEvent,
     },
 };
 use mongodb::bson::oid::ObjectId;

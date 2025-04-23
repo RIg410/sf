@@ -1,7 +1,7 @@
 use bson::oid::ObjectId;
 use chrono::{Duration, Local};
+use decimal::Decimal;
 use model::{
-    decimal::Decimal,
     statistics::user::{Statistics, SubscriptionStat},
     training::CLOSE_SING_UP,
 };

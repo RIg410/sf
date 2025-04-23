@@ -4,7 +4,7 @@ use bot_core::calldata;
 use bot_core::widget::Jmp;
 use bot_core::{context::Context, widget::View};
 use eyre::Result;
-use model::decimal::Decimal;
+use decimal::Decimal;
 use model::rights::Rule;
 use mongodb::bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};

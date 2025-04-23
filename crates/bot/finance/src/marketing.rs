@@ -5,8 +5,9 @@ use bot_core::{
     context::Context,
     widget::{Jmp, View},
 };
+use decimal::Decimal;
 use eyre::Result;
-use model::{decimal::Decimal, rights::Rule, statistics::source::Source};
+use model::{rights::Rule, statistics::source::Source};
 use serde::{Deserialize, Serialize};
 use teloxide::{
     types::{InlineKeyboardMarkup, Message},

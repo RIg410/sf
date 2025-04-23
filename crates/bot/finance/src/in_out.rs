@@ -8,8 +8,9 @@ use bot_core::{
     widget::{Jmp, View},
 };
 use chrono::{DateTime, Local, NaiveDateTime, TimeZone};
+use decimal::Decimal;
 use eyre::Result;
-use model::{decimal::Decimal, rights::Rule};
+use model::rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::{
     types::{InlineKeyboardButton, InlineKeyboardMarkup, Message},

@@ -1,5 +1,6 @@
-use crate::{decimal::Decimal, subscription::Subscription};
+use crate::subscription::Subscription;
 use bson::oid::ObjectId;
+use decimal::Decimal;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]

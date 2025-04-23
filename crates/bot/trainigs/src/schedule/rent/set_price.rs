@@ -5,7 +5,7 @@ use bot_core::{
     widget::{Jmp, View},
 };
 use eyre::Result;
-use model::decimal::Decimal;
+use decimal::Decimal;
 use teloxide::types::{InlineKeyboardMarkup, Message};
 
 #[derive(Default)]

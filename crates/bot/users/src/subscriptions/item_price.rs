@@ -5,8 +5,9 @@ use bot_core::{
     context::Context,
     widget::{Jmp, View},
 };
+use decimal::Decimal;
 use eyre::Error;
-use model::{decimal::Decimal, rights::Rule};
+use model::rights::Rule;
 use mongodb::bson::oid::ObjectId;
 use teloxide::{
     types::{InlineKeyboardMarkup, Message},

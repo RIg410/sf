@@ -4,7 +4,7 @@ use bot_core::{
     widget::{Jmp, View},
 };
 use eyre::Result;
-use model::decimal::Decimal;
+use decimal::Decimal;
 use model::user::rate::Rate;
 use mongodb::bson::oid::ObjectId;
 use teloxide::types::{InlineKeyboardMarkup, Message};

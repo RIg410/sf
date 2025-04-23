@@ -3,13 +3,13 @@ use std::{ops::Deref, sync::Arc};
 use chrono::{DateTime, Local, Utc};
 use eyre::Result;
 use model::{
-    decimal::Decimal,
     history::{Action, HistoryRow},
     rooms::Room,
     subscription::{Subscription, UserSubscription},
     training::Training,
     user::UserName,
 };
+use     decimal::Decimal;
 use mongodb::bson::oid::ObjectId;
 use storage::history::HistoryStore;
 use storage::session::Session;

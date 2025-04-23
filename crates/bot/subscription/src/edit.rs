@@ -1,8 +1,9 @@
 use super::View;
 use async_trait::async_trait;
 use bot_core::{callback_data::Calldata as _, calldata, context::Context, widget::Jmp};
+use decimal::Decimal;
 use eyre::Result;
-use model::{decimal::Decimal, rights::Rule};
+use model::rights::Rule;
 use mongodb::bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
 use std::num::NonZero;

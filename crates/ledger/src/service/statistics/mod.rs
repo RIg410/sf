@@ -1,9 +1,8 @@
 use super::{
     calendar::Calendar, history::History, requests::Requests, treasury::Treasury, users::Users,
 };
-use ai::{Ai, AiContext, AiModel};
+use ai::Ai;
 use chrono::{DateTime, Datelike as _, Local, NaiveDate};
-use eyre::Error;
 use storage::session::Session;
 
 mod advertising;

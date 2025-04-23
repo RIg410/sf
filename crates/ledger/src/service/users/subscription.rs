@@ -1,7 +1,8 @@
 use super::Users;
 use chrono::Utc;
-use eyre::{eyre, Result};
-use model::{decimal::Decimal, subscription::UserSubscription};
+use decimal::Decimal;
+use eyre::{Result, eyre};
+use model::subscription::UserSubscription;
 use mongodb::bson::oid::ObjectId;
 use storage::session::Session;
 use tracing::{info, warn};

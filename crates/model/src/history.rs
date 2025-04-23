@@ -1,13 +1,12 @@
-use bson::oid::ObjectId;
-use chrono::{DateTime, Local, Utc};
-use serde::{Deserialize, Serialize};
-
 use crate::{
-    decimal::Decimal,
     rooms::Room,
     subscription::{Subscription, UserSubscription},
     user::UserName,
 };
+use bson::oid::ObjectId;
+use chrono::{DateTime, Local, Utc};
+use decimal::Decimal;
+use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct HistoryRow {

@@ -1,14 +1,13 @@
-use eyre::{eyre, Error};
-use model::{decimal::Decimal, subscription::Subscription};
+use super::{history::History, programs::Programs, users::Users};
+use decimal::Decimal;
+use eyre::{Error, eyre};
+use model::subscription::Subscription;
 use mongodb::bson::oid::ObjectId;
+use std::{ops::Deref, sync::Arc};
 use storage::session::Session;
 use storage::subscription::SubscriptionsStore;
 use thiserror::Error;
 use tx_macro::tx;
-
-use std::{ops::Deref, sync::Arc};
-
-use super::{history::History, programs::Programs, users::Users};
 
 pub struct Subscriptions {
     pub store: Arc<SubscriptionsStore>,

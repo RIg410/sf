@@ -19,3 +19,4 @@ serde.workspace = true
 storage.workspace = true
 strum.workspace = true
 teloxide.workspace = true
+decimal.workspace = true

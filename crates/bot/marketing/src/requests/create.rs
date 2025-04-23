@@ -10,10 +10,8 @@ use bot_core::{
 };
 use bot_viewer::{day::fmt_dt, fmt_phone};
 use chrono::{Local, NaiveDateTime, TimeZone as _};
-use model::{
-    decimal::Decimal, request::RemindLater, rights::Rule, statistics::source::Source,
-    user::sanitize_phone,
-};
+use decimal::Decimal;
+use model::{request::RemindLater, rights::Rule, statistics::source::Source, user::sanitize_phone};
 use mongodb::bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
 use teloxide::{
@@ -254,8 +252,7 @@ impl View for SetRemindLater {
     }
 
     async fn show(&mut self, ctx: &mut bot_core::context::Context) -> Result<(), eyre::Error> {
-        let text =
-            "Напомнить через:\nВыберите вариант или ввидите дату в формате *дд\\.мм\\.гггг чч\\:мм*";
+        let text = "Напомнить через:\nВыберите вариант или ввидите дату в формате *дд\\.мм\\.гггг чч\\:мм*";
         let markup = InlineKeyboardMarkup::default();
         let mut markup = markup
             .append_row(RememberLaterCalldata::new(chrono::Duration::hours(1)).btn_row("час"));
@@ -500,8 +497,10 @@ impl View for SelectSubscriptionsView {
         let mut keymap = InlineKeyboardMarkup::default();
         let subscriptions = ctx.ledger.subscriptions.get_all(&mut ctx.session).await?;
         for subscription in &subscriptions {
-            keymap = keymap.append_row(vec![SelectSubscriptionsCallback(subscription.id.bytes())
-                .button(subscription.name.clone())]);
+            keymap = keymap.append_row(vec![
+                SelectSubscriptionsCallback(subscription.id.bytes())
+                    .button(subscription.name.clone()),
+            ]);
         }
         ctx.bot.edit_origin(text, keymap).await?;
         Ok(())
@@ -572,17 +571,13 @@ impl View for ConfirmSellSubscription {
             markup = markup.append_row(vec![
                 ConfirmSellSubscriptionCallback::AddDiscount(Decimal::int(10))
                     .button("👨‍👩‍👧‍👦 Cкидка 10%"),
-                ConfirmSellSubscriptionCallback::AddDiscount(
-                    Decimal::from_str("13.043478").unwrap(),
-                )
-                .button("Cкидка 13.043478%"),
                 ConfirmSellSubscriptionCallback::AddDiscount(Decimal::int(20))
                     .button("👨‍👩‍👧‍👦 Cкидка 20%"),
             ]);
         } else {
-            markup = markup
-                .append_row(vec![ConfirmSellSubscriptionCallback::RemoveFamilyDiscount
-                    .button("👨‍👩‍👧‍👦 Убрать скидку")]);
+            markup = markup.append_row(vec![
+                ConfirmSellSubscriptionCallback::RemoveFamilyDiscount.button("👨‍👩‍👧‍👦 Убрать скидку"),
+            ]);
         }
 
         ctx.bot.edit_origin(&text, markup).await?;

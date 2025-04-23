@@ -27,7 +27,7 @@ impl UserStore {
         &self,
         session: &mut Session,
         id: ObjectId,
-        reward: model::decimal::Decimal,
+        reward: decimal::Decimal,
         update_rates: Option<Vec<Rate>>,
     ) -> std::result::Result<(), Error> {
         self.user_cache.remove(&id);

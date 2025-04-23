@@ -1,10 +1,10 @@
 use std::{ops::Deref, sync::Arc};
 
 use chrono::{DateTime, Local, Utc};
+use decimal::Decimal;
 use error::LedgerError;
 use eyre::{Error, Result};
 use model::{
-    decimal::Decimal,
     ids::DayId,
     slot::Slot,
     training::{Training, TrainingId, TrainingStatus},

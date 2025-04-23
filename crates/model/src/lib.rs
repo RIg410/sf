@@ -1,5 +1,4 @@
 pub mod day;
-pub mod decimal;
 pub mod history;
 pub mod ids;
 pub mod notification;

@@ -2,7 +2,7 @@ use bot_core::context::Context;
 use chrono::{Local, Utc};
 use eyre::Error;
 use eyre::Result;
-use model::decimal::Decimal;
+use decimal::Decimal;
 use model::user::employee::Employee;
 use model::user::rate::Rate;
 use model::{

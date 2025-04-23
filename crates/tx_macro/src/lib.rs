@@ -35,7 +35,7 @@ pub fn tx(_args: TokenStream, input: TokenStream) -> TokenStream {
         .collect();
 
     let wrapped_fn_name = quote::format_ident!("{}_txless", fn_name);
-    let gen = quote! {
+    let gn = quote! {
         #vis async fn #wrapped_fn_name(#fn_args) #fn_return {
             #block
         }
@@ -55,5 +55,5 @@ pub fn tx(_args: TokenStream, input: TokenStream) -> TokenStream {
         }
     };
 
-    TokenStream::from(gen)
+    TokenStream::from(gn)
 }

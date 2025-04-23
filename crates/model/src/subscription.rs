@@ -1,6 +1,7 @@
-use crate::{decimal::Decimal, training::Training};
+use crate::training::Training;
 use bson::oid::ObjectId;
 use chrono::{DateTime, Local, TimeZone, Utc};
+use decimal::Decimal;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone, Default)]

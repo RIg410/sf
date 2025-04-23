@@ -2,7 +2,7 @@ use std::collections::HashMap;
 
 use bson::oid::ObjectId;
 
-use crate::decimal::Decimal;
+use decimal::Decimal;
 
 #[derive(Default)]
 pub struct Statistics {
