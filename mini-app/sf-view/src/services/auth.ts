@@ -1,23 +1,14 @@
-import { grpc } from "@improbable-eng/grpc-web";
 import { is_telegram_context, initData } from "./tg";
-import { AuthService, AuthServiceClientImpl, GrpcWebImpl, SendVerificationCodeResponse, TgAuthError, VerifyCodeError } from "@/generated/auth";
+import { SendVerificationCodeResponse, TgAuthError } from "@/generated/auth";
+import { getGRPC, initGRPC } from "./grpc";
 
 export class Auth {
     private token: string | null;
     private auth_type: AuthType;
-    private auth_service: AuthService | null;
-    private rpc_client: GrpcWebImpl;
-
 
     constructor() {
         this.token = get_auth_token();
         this.auth_type = auth_type();
-        this.auth_service = null;
-        const metadata = new grpc.Metadata();
-        metadata.set("Authorization", this.token ? `Bearer ${this.token}` : "");
-        this.rpc_client = new GrpcWebImpl("api", {
-            metadata,
-        });
     }
 
     getToken(): string | null {
@@ -36,37 +27,28 @@ export class Auth {
         this.token = get_auth_token();
     }
 
-    getRpcClient(): GrpcWebImpl {
-        return this.rpc_client;
-    }
-
     setToken(token: string | null) {
         this.token = token;
-        const metadata = new grpc.Metadata();
-        metadata.set("Authorization", this.token ? `Bearer ${this.token}` : "");
-        this.rpc_client = new GrpcWebImpl("api", {
-            metadata,
-        });
         if (token) {
             localStorage.setItem('token', token);
         } else {
             localStorage.removeItem('token');
         }
+        initGRPC();
     }
 
     async authThroughTelegram(): Promise<string | null> {
+        const auth_client = getGRPC().authService;
+
         if (this.isAuthenticated()) {
             return null;
         }
         if (this.auth_type !== "telegram") {
             return "Неизвестный тип авторизации. Пожалуйста, перезайдите в приложение.";
         }
-        if (this.auth_service === null) {
-            this.auth_service = new AuthServiceClientImpl(this.rpc_client);
-        }
 
         try {
-            const result = await this.auth_service.tg_auth({
+            const result = await auth_client.tg_auth({
                 key: initData(),
             });
             if (result.error) {
@@ -101,11 +83,9 @@ export class Auth {
         if (this.auth_type !== "phone") {
             throw new Error("Неизвестный тип авторизации. Пожалуйста, перезайдите в приложение.");
         }
-        if (this.auth_service === null) {
-            this.auth_service = new AuthServiceClientImpl(this.rpc_client);
-        }
+        const auth_client = getGRPC().authService;
 
-        return await this.auth_service.send_verification_code({
+        return await auth_client.send_verification_code({
             phoneNumber: phone,
         });
     }
@@ -114,11 +94,9 @@ export class Auth {
         if (this.auth_type !== "phone") {
             throw new Error("Неизвестный тип авторизации. Пожалуйста, перезайдите в приложение.");
         }
-        if (this.auth_service === null) {
-            this.auth_service = new AuthServiceClientImpl(this.rpc_client);
-        }
+        const auth_client = getGRPC().authService;
 
-        const result = await this.auth_service.verify_code({
+        const result = await auth_client.verify_code({
             phoneNumber: phone,
             code: code,
         });

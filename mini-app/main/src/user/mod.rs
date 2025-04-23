@@ -1,7 +1,10 @@
 use crate::{
     adapters::{ToModel as _, ToView as _},
     ctx::ContextBuilder,
-    pb::{id::ObjectId, user::UserView, users::users_service_server::UsersService},
+    pb::{
+        user::UserView,
+        users::{users_service_server::UsersService, UserRequest},
+    },
 };
 use model::rights::Rule;
 use tonic::async_trait;
@@ -24,10 +27,16 @@ impl UserServer {
 impl UsersService for UserServer {
     async fn get(
         &self,
-        request: tonic::Request<ObjectId>,
+        request: tonic::Request<UserRequest>,
     ) -> std::result::Result<tonic::Response<UserView>, tonic::Status> {
         let mut ctx = self.context_builder.with_request(&request).await?;
-        let user_id = request.into_inner().to_model()?;
+
+        let user_id = request
+            .into_inner()
+            .id
+            .map(|id| id.to_model())
+            .transpose()?
+            .unwrap_or_else(|| ctx.me.id);
 
         let is_me = ctx.is_me(user_id);
 

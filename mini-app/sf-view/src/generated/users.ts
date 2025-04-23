@@ -13,8 +13,58 @@ import { UserView } from "./user";
 
 export const protobufPackage = "users";
 
+export interface UserRequest {
+  id?: ObjectId | undefined;
+}
+
 export interface UserFilter {
 }
+
+function createBaseUserRequest(): UserRequest {
+  return { id: undefined };
+}
+
+export const UserRequest: MessageFns<UserRequest> = {
+  encode(message: UserRequest, writer: BinaryWriter = new BinaryWriter()): BinaryWriter {
+    if (message.id !== undefined) {
+      ObjectId.encode(message.id, writer.uint32(10).fork()).join();
+    }
+    return writer;
+  },
+
+  decode(input: BinaryReader | Uint8Array, length?: number): UserRequest {
+    const reader = input instanceof BinaryReader ? input : new BinaryReader(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseUserRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1: {
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = ObjectId.decode(reader, reader.uint32());
+          continue;
+        }
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skip(tag & 7);
+    }
+    return message;
+  },
+
+  create<I extends Exact<DeepPartial<UserRequest>, I>>(base?: I): UserRequest {
+    return UserRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<UserRequest>, I>>(object: I): UserRequest {
+    const message = createBaseUserRequest();
+    message.id = (object.id !== undefined && object.id !== null) ? ObjectId.fromPartial(object.id) : undefined;
+    return message;
+  },
+};
 
 function createBaseUserFilter(): UserFilter {
   return {};
@@ -51,7 +101,7 @@ export const UserFilter: MessageFns<UserFilter> = {
 };
 
 export interface UsersService {
-  get(request: DeepPartial<ObjectId>, metadata?: grpc.Metadata): Promise<UserView>;
+  get(request: DeepPartial<UserRequest>, metadata?: grpc.Metadata): Promise<UserView>;
 }
 
 export class UsersServiceClientImpl implements UsersService {
@@ -62,8 +112,8 @@ export class UsersServiceClientImpl implements UsersService {
     this.get = this.get.bind(this);
   }
 
-  get(request: DeepPartial<ObjectId>, metadata?: grpc.Metadata): Promise<UserView> {
-    return this.rpc.unary(UsersServicegetDesc, ObjectId.fromPartial(request), metadata);
+  get(request: DeepPartial<UserRequest>, metadata?: grpc.Metadata): Promise<UserView> {
+    return this.rpc.unary(UsersServicegetDesc, UserRequest.fromPartial(request), metadata);
   }
 }
 
@@ -76,7 +126,7 @@ export const UsersServicegetDesc: UnaryMethodDefinitionish = {
   responseStream: false,
   requestType: {
     serializeBinary() {
-      return ObjectId.encode(this).finish();
+      return UserRequest.encode(this).finish();
     },
   } as any,
   responseType: {

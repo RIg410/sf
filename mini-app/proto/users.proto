@@ -5,9 +5,12 @@ import "user.proto";
 import "id.proto";
 
 service UsersService {
-    rpc get(id.ObjectId) returns (user.UserView);
+    rpc get(UserRequest) returns (user.UserView);
 }
 
+message UserRequest {
+    optional id.ObjectId id = 1;
+}
 
 message UserFilter {
   
