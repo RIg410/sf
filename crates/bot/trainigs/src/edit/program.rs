@@ -26,10 +26,10 @@ impl View for ChangeProgram {
     }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
-        let msg = "Тренировочные программы: 🤸🏼".to_string();
+        let _msg = "Тренировочные программы: 🤸🏼".to_string();
         let mut keymap = InlineKeyboardMarkup::default();
 
-        let trainings = ctx.ledger.programs.get_all(&mut ctx.session, false).await?;
+        let trainings = ctx.services.programs.get_all(&mut ctx.session, false).await?;
 
         for training in trainings {
             let name = if training.visible {
@@ -45,7 +45,7 @@ impl View for ChangeProgram {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {
+    async fn handle_callback(&mut self, _: &mut Context, _: &str) -> Result<Jmp, eyre::Error> {
         Ok(Jmp::Stay)
     }
 }

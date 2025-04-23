@@ -35,7 +35,7 @@ impl View for EmployeeList {
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let msg = "Сотрудники ❤️";
         let mut keymap = InlineKeyboardMarkup::default();
-        let employee = ctx.ledger.users.employees(&mut ctx.session).await?;
+        let employee = ctx.services.users.employees(&mut ctx.session).await?;
 
         for instruct in employee {
             keymap = keymap.append_row(vec![render_button(

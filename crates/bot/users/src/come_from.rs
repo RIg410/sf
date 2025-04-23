@@ -27,7 +27,7 @@ impl View for MarketingInfoView {
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::EditMarketingInfo)?;
-        let user = ctx.ledger.get_user(&mut ctx.session, self.id).await?;
+        let user = ctx.services.get_user(&mut ctx.session, self.id).await?;
         let txt = format!("Источник : _{}_\n", user.come_from.name());
         let mut markup = InlineKeyboardMarkup::default();
         for come_from in Source::iter() {
@@ -41,23 +41,23 @@ impl View for MarketingInfoView {
         ctx.ensure(Rule::EditMarketingInfo)?;
         let come_from = calldata!(data);
 
-        let user = ctx.ledger.get_user(&mut ctx.session, self.id).await?;
+        let user = ctx.services.get_user(&mut ctx.session, self.id).await?;
         if let Some(phone) = user.phone {
             let request = ctx
-                .ledger
+                .services
                 .requests
                 .get_by_phone(&mut ctx.session, &sanitize_phone(&phone))
                 .await?;
             if let Some(mut request) = request {
                 request.come_from = come_from;
-                ctx.ledger
+                ctx.services
                     .requests
                     .update(&mut ctx.session, &request)
                     .await?;
             }
         }
 
-        ctx.ledger
+        ctx.services
             .users
             .update_come_from(&mut ctx.session, self.id, come_from)
             .await?;

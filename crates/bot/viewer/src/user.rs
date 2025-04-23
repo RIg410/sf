@@ -76,8 +76,8 @@ pub async fn render_profile_msg(
     ctx: &mut Context,
     id: ObjectId,
 ) -> Result<(String, User, UserExtension), Error> {
-    let user = ctx.ledger.get_user(&mut ctx.session, id).await?;
-    let extension = ctx.ledger.users.get_extension(&mut ctx.session, id).await?;
+    let user = ctx.services.get_user(&mut ctx.session, id).await?;
+    let extension = ctx.services.users.get_extension(&mut ctx.session, id).await?;
 
     let mut msg = user_base_info(&user, &extension);
     if ctx.has_right(Rule::ViewMarketingInfo) {
@@ -95,7 +95,7 @@ pub async fn render_profile_msg(
 
 async fn render_trainings(ctx: &mut Context, msg: &mut String, user: &User) -> Result<(), Error> {
     let trainings = ctx
-        .ledger
+        .services
         .calendar
         .find_trainings(
             &mut ctx.session,

@@ -1,5 +1,5 @@
 use decimal::Decimal;
-use error::LedgerError;
+use error::SfError;
 use eyre::Result;
 use model::user::{
     employee::Employee,
@@ -18,15 +18,15 @@ impl Users {
         session: &mut Session,
         id: ObjectId,
         description: String,
-    ) -> Result<(), LedgerError> {
+    ) -> Result<(), SfError> {
         let user = self
             .store
             .get(session, id)
             .await?
-            .ok_or_else(|| LedgerError::UserNotFound(id))?;
+            .ok_or_else(|| SfError::UserNotFound(id))?;
         let employee = user
             .employee
-            .ok_or_else(|| LedgerError::UserNotEmployee { user_id: id })?;
+            .ok_or_else(|| SfError::UserNotEmployee { user_id: id })?;
         let employee = Employee {
             description: description.clone(),
             reward: employee.reward,
@@ -46,14 +46,14 @@ impl Users {
         description: String,
         rates: Vec<Rate>,
         role: EmployeeRole,
-    ) -> Result<(), LedgerError> {
+    ) -> Result<(), SfError> {
         let user = self
             .store
             .get(session, id)
             .await?
-            .ok_or_else(|| LedgerError::UserNotFound(id))?;
+            .ok_or_else(|| SfError::UserNotFound(id))?;
         if user.employee.is_some() {
-            return Err(LedgerError::UserAlreadyEmployee { user_id: id });
+            return Err(SfError::UserAlreadyEmployee { user_id: id });
         }
 
         let employee = Employee {
@@ -72,21 +72,21 @@ impl Users {
         session: &mut Session,
         id: ObjectId,
         rate: Rate,
-    ) -> Result<(), LedgerError> {
+    ) -> Result<(), SfError> {
         let user = self
             .store
             .get(session, id)
             .await?
-            .ok_or_else(|| LedgerError::UserNotFound(id))?;
+            .ok_or_else(|| SfError::UserNotFound(id))?;
         let mut employee = user
             .employee
-            .ok_or_else(|| LedgerError::UserNotEmployee { user_id: id })?;
+            .ok_or_else(|| SfError::UserNotEmployee { user_id: id })?;
 
         let rates = employee.rates.len();
         employee.rates.retain(|r| r != &rate);
 
         if rates == employee.rates.len() {
-            return Err(LedgerError::RateNotFound { user_id: id, rate });
+            return Err(SfError::RateNotFound { user_id: id, rate });
         }
 
         self.store.set_employee(session, user.id, &employee).await?;
@@ -100,21 +100,21 @@ impl Users {
         id: ObjectId,
         old_date: Rate,
         new_rate: Rate,
-    ) -> Result<(), LedgerError> {
+    ) -> Result<(), SfError> {
         let user = self
             .store
             .get(session, id)
             .await?
-            .ok_or_else(|| LedgerError::UserNotFound(id))?;
+            .ok_or_else(|| SfError::UserNotFound(id))?;
         let mut employee = user
             .employee
-            .ok_or_else(|| LedgerError::UserNotEmployee { user_id: id })?;
+            .ok_or_else(|| SfError::UserNotEmployee { user_id: id })?;
 
         let rates = employee.rates.len();
         employee.rates.retain(|r| r != &old_date);
 
         if rates == employee.rates.len() {
-            return Err(LedgerError::RateNotFound {
+            return Err(SfError::RateNotFound {
                 user_id: id,
                 rate: old_date,
             });
@@ -122,7 +122,7 @@ impl Users {
 
         for rate in &mut employee.rates {
             if rate.as_u8() == old_date.as_u8() {
-                return Err(LedgerError::RateTypeAlreadyExists {
+                return Err(SfError::RateTypeAlreadyExists {
                     user_id: id,
                     rate: new_rate,
                 });
@@ -140,18 +140,18 @@ impl Users {
         session: &mut Session,
         id: ObjectId,
         rate: Rate,
-    ) -> Result<(), LedgerError> {
+    ) -> Result<(), SfError> {
         let user = self
             .store
             .get(session, id)
             .await?
-            .ok_or_else(|| LedgerError::UserNotFound(id))?;
+            .ok_or_else(|| SfError::UserNotFound(id))?;
         let mut employee = user
             .employee
-            .ok_or_else(|| LedgerError::UserNotEmployee { user_id: id })?;
+            .ok_or_else(|| SfError::UserNotEmployee { user_id: id })?;
 
         if employee.rates.iter().any(|r| r.as_u8() == rate.as_u8()) {
-            return Err(LedgerError::RateTypeAlreadyExists { user_id: id, rate });
+            return Err(SfError::RateTypeAlreadyExists { user_id: id, rate });
         }
 
         employee.rates.push(rate);

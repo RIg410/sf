@@ -1,3 +1,4 @@
+use ai::AiModel;
 use async_trait::async_trait;
 use bot_core::{
     callback_data::Calldata as _,
@@ -9,22 +10,23 @@ use bot_viewer::day::fmt_date;
 use chrono::Local;
 use eyre::Error;
 use eyre::Result;
-use model::{rights::Rule, statistics::range::Range};
+use model::rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::types::InlineKeyboardMarkup;
+use time::range::Range;
 
 mod advertising;
-mod budget;
-mod instructors;
 
 pub struct StatisticsView {
     range: Range,
+    ai: Option<AiModel>,
 }
 
 impl Default for StatisticsView {
     fn default() -> Self {
         Self {
             range: Range::Day(Local::now()),
+            ai: None,
         }
     }
 }
@@ -45,13 +47,25 @@ impl View for StatisticsView {
             Calldata::PrevMonth.button("⬅️"),
             Calldata::NextMonth.button("➡️"),
         ]);
-        keymap = keymap
-            .append_row(Calldata::Statistics(StatisticType::AdvertisingStat).btn_row("Реклама 📈"));
+
+        if ctx.has_right(Rule::AIStatistic) {
+            if self.ai.is_none() {
+                keymap = keymap.append_row(
+                    Calldata::SetAi(Some(AiModel::Gpt4oMini)).btn_row("Использовать ИИ 🤖"),
+                );
+            } else {
+                keymap = keymap.append_row(Calldata::SetAi(None).btn_row("Сбросить ИИ 🤖"));
+            }
+        }
+
+        keymap = keymap.append_row(
+            Calldata::Statistics(StatisticType::AdvertisingStat).btn_row("Конверсия каналов 📈"),
+        );
 
         let (from, to) = self.range.range()?;
         ctx.edit_origin(
             &format!(
-                "📊 Статистика \nс *{}* по *{}*",
+                "📊 Статистика с *{}* по *{}*",
                 fmt_date(&from),
                 fmt_date(&to)
             ),
@@ -72,10 +86,13 @@ impl View for StatisticsView {
             Calldata::PrevMonth => {
                 self.range = self.range.prev()?;
             }
+            Calldata::SetAi(ai) => {
+                self.ai = ai;
+            }
             Calldata::Statistics(statistic_type) => match statistic_type {
                 StatisticType::AdvertisingStat => {
                     statistic_type
-                        .send_statistic(ctx, self.range)
+                        .send_statistic(ctx, self.range, self.ai)
                         .await?;
                 }
             },
@@ -88,6 +105,7 @@ impl View for StatisticsView {
 enum Calldata {
     NextMonth,
     PrevMonth,
+    SetAi(Option<AiModel>),
     Statistics(StatisticType),
 }
 
@@ -97,9 +115,14 @@ pub enum StatisticType {
 }
 
 impl StatisticType {
-    pub async fn send_statistic(&self, ctx: &mut Context, range: Range) -> Result<(), Error> {
+    pub async fn send_statistic(
+        &self,
+        ctx: &mut Context,
+        range: Range,
+        ai: Option<AiModel>,
+    ) -> Result<(), Error> {
         match self {
-            StatisticType::AdvertisingStat => advertising::send_statistic(ctx, range).await,
+            StatisticType::AdvertisingStat => advertising::send_conversion(ctx, range, ai).await,
         }
     }
 }

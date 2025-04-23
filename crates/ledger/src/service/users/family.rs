@@ -1,4 +1,4 @@
-use error::LedgerError;
+use error::SfError;
 use eyre::Result;
 use model::{
     rights::Rights,
@@ -17,12 +17,12 @@ impl Users {
         session: &mut Session,
         member_id: ObjectId,
         is_individual: bool,
-    ) -> Result<(), LedgerError> {
+    ) -> Result<(), SfError> {
         let mut user = self
             .store
             .get(session, member_id)
             .await?
-            .ok_or_else(|| LedgerError::UserNotFound(member_id))?;
+            .ok_or_else(|| SfError::UserNotFound(member_id))?;
         user.family.is_individual = is_individual;
         self.store.update(session, &mut user).await?;
         Ok(())
@@ -34,12 +34,12 @@ impl Users {
         session: &mut Session,
         user_id: ObjectId,
         member_id: ObjectId,
-    ) -> Result<(), LedgerError> {
+    ) -> Result<(), SfError> {
         let mut user = self
             .store
             .get(session, user_id)
             .await?
-            .ok_or_else(|| LedgerError::UserNotFound(user_id))?;
+            .ok_or_else(|| SfError::UserNotFound(user_id))?;
 
         let family = &mut user.family;
 
@@ -47,7 +47,7 @@ impl Users {
         if let Some(idx) = member_idx {
             family.children_ids.remove(idx);
         } else {
-            return Err(LedgerError::MemberNotFound { user_id, member_id });
+            return Err(SfError::MemberNotFound { user_id, member_id });
         }
         self.store.update(session, &mut user).await?;
 
@@ -55,12 +55,12 @@ impl Users {
             .store
             .get(session, member_id)
             .await?
-            .ok_or_else(|| LedgerError::UserNotFound(member_id))?;
+            .ok_or_else(|| SfError::UserNotFound(member_id))?;
 
         if member.family.payer_id == Some(user_id) {
             member.family.payer_id = None;
         } else {
-            return Err(LedgerError::WrongFamilyMember { user_id, member_id });
+            return Err(SfError::WrongFamilyMember { user_id, member_id });
         }
         self.store.update(session, &mut member).await?;
 
@@ -78,12 +78,12 @@ impl Users {
         user_id: ObjectId,
         name: &str,
         surname: &Option<String>,
-    ) -> Result<(), LedgerError> {
+    ) -> Result<(), SfError> {
         let mut user = self
             .store
             .get(session, user_id)
             .await?
-            .ok_or_else(|| LedgerError::UserNotFound(user_id))?;
+            .ok_or_else(|| SfError::UserNotFound(user_id))?;
 
         let mut child = User::new(
             -1,
@@ -116,23 +116,23 @@ impl Users {
         session: &mut Session,
         parent_id: ObjectId,
         member_id: ObjectId,
-    ) -> Result<(), LedgerError> {
+    ) -> Result<(), SfError> {
         let mut parent = self
             .store
             .get(session, parent_id)
             .await?
-            .ok_or_else(|| LedgerError::UserNotFound(parent_id))?;
+            .ok_or_else(|| SfError::UserNotFound(parent_id))?;
 
         if let Some(payer_id) = parent.family.payer_id {
             parent = self
                 .store
                 .get(session, payer_id)
                 .await?
-                .ok_or_else(|| LedgerError::UserNotFound(payer_id))?;
+                .ok_or_else(|| SfError::UserNotFound(payer_id))?;
         }
 
         if parent.family.children_ids.contains(&member_id) {
-            return Err(LedgerError::UserAlreadyInFamily {
+            return Err(SfError::UserAlreadyInFamily {
                 user_id: parent.id,
                 member_id,
             });
@@ -145,10 +145,10 @@ impl Users {
             .store
             .get(session, member_id)
             .await?
-            .ok_or_else(|| LedgerError::UserNotFound(member_id))?;
+            .ok_or_else(|| SfError::UserNotFound(member_id))?;
 
         if member.family.exists() {
-            return Err(LedgerError::UserAlreadyInFamily {
+            return Err(SfError::UserAlreadyInFamily {
                 user_id: parent.id,
                 member_id,
             });

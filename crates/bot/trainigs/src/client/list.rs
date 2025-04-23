@@ -39,7 +39,7 @@ impl ClientsList {
         ctx.ensure(Rule::EditTrainingClientsList)?;
 
         let training = ctx
-            .ledger
+            .services
             .calendar
             .get_training_by_id(&mut ctx.session, self.id)
             .await?
@@ -49,7 +49,7 @@ impl ClientsList {
                 .await;
             return Ok(Jmp::Stay);
         }
-        ctx.ledger
+        ctx.services
             .sign_out(&mut ctx.session, training.id(), id, true)
             .await?;
         ctx.send_notification("Клиент удален из тренировки").await;
@@ -69,7 +69,7 @@ impl View for ClientsList {
         }
 
         let training = ctx
-            .ledger
+            .services
             .calendar
             .get_training_by_id(&mut ctx.session, self.id)
             .await?
@@ -86,7 +86,7 @@ impl View for ClientsList {
         let mut keymap = InlineKeyboardMarkup::default();
         for client in &training.clients {
             let user = ctx
-                .ledger
+                .services
                 .users
                 .get(&mut ctx.session, *client)
                 .await?

@@ -2,7 +2,7 @@ use std::{ops::Deref, sync::Arc};
 
 use chrono::{DateTime, Local, Utc};
 use decimal::Decimal;
-use error::LedgerError;
+use error::SfError;
 use eyre::{Error, Result};
 use model::{
     ids::DayId,
@@ -98,9 +98,9 @@ impl Calendar {
         id: TrainingId,
         new_slot: Slot,
         all: bool,
-    ) -> Result<(), LedgerError> {
+    ) -> Result<(), SfError> {
         if id.day_id() != new_slot.day_id() {
-            return Err(LedgerError::DayIdMismatch {
+            return Err(SfError::DayIdMismatch {
                 old: id.day_id(),
                 new: new_slot.day_id(),
             });
@@ -109,17 +109,17 @@ impl Calendar {
         let mut training = self
             .get_training_by_id(session, id)
             .await?
-            .ok_or(LedgerError::TrainingNotFound(id))?;
+            .ok_or(SfError::TrainingNotFound(id))?;
 
         if training.is_processed {
-            return Err(LedgerError::TrainingIsProcessed(training.id()));
+            return Err(SfError::TrainingIsProcessed(training.id()));
         }
 
         training.set_slot(new_slot);
         self.calendar.delete_training(session, id).await?;
         let collision = self.check_time_slot(session, new_slot, true).await?;
         if let Some(collision) = collision {
-            return Err(LedgerError::TimeSlotCollision(collision));
+            return Err(SfError::TimeSlotCollision(collision));
         }
         self.calendar.add_training(session, &training).await?;
 
@@ -131,7 +131,7 @@ impl Calendar {
                 let training = day.training.iter_mut().find(|slot| slot.id == training.id);
                 if let Some(training) = training {
                     if training.is_processed {
-                        return Err(LedgerError::TrainingIsProcessed(training.id()));
+                        return Err(SfError::TrainingIsProcessed(training.id()));
                     }
                     self.calendar
                         .delete_training(session, training.id())
@@ -142,7 +142,7 @@ impl Calendar {
 
                     let collision = self.check_time_slot(session, new_slot, true).await?;
                     if let Some(collision) = dbg!(collision) {
-                        return Err(LedgerError::TimeSlotCollision(collision));
+                        return Err(SfError::TimeSlotCollision(collision));
                     }
                     self.calendar.add_training(session, training).await?;
                 }
@@ -189,10 +189,10 @@ impl Calendar {
         session: &mut Session,
         id: TrainingId,
         all: bool,
-    ) -> Result<(), LedgerError> {
+    ) -> Result<(), SfError> {
         if let Some(training) = self.get_training_by_id(session, id).await? {
             if !training.clients.is_empty() {
-                return Err(LedgerError::TrainingHasClients(id));
+                return Err(SfError::TrainingHasClients(id));
             }
 
             self.calendar.delete_training(session, id).await?;
@@ -205,7 +205,7 @@ impl Calendar {
                     let training = day.training.iter().find(|slot| slot.id == training.id);
                     if let Some(training) = training {
                         if !training.clients.is_empty() {
-                            return Err(LedgerError::TrainingHasClients(id));
+                            return Err(SfError::TrainingHasClients(id));
                         }
                         self.calendar
                             .delete_training(session, training.id())
@@ -214,7 +214,7 @@ impl Calendar {
                 }
             }
         } else {
-            return Err(LedgerError::TrainingNotFound(id));
+            return Err(SfError::TrainingNotFound(id));
         }
 
         Ok(())
@@ -229,11 +229,11 @@ impl Calendar {
         room: ObjectId,
         price: Decimal,
         renter: String,
-    ) -> Result<(), LedgerError> {
+    ) -> Result<(), SfError> {
         let slot = Slot::new(start_at.with_timezone(&Utc), duration_min, room);
         let collision = self.check_time_slot(session, slot, true).await?;
         if let Some(collision) = collision {
-            return Err(LedgerError::TimeSlotCollision(collision));
+            return Err(SfError::TimeSlotCollision(collision));
         }
 
         let name = format!("аренда:{}-{}", renter, duration_min);
@@ -255,25 +255,25 @@ impl Calendar {
         start_at: DateTime<Local>,
         duration_min: u32,
         room: ObjectId,
-    ) -> Result<TrainingId, LedgerError> {
+    ) -> Result<TrainingId, SfError> {
         let instructor = self
             .users
             .get(session, instructor)
             .await?
-            .ok_or_else(|| LedgerError::InstructorNotFound(instructor))?;
+            .ok_or_else(|| SfError::InstructorNotFound(instructor))?;
         if !instructor.is_couch() {
-            return Err(LedgerError::InstructorHasNoRights(instructor.id));
+            return Err(SfError::InstructorHasNoRights(instructor.id));
         }
         let client = self
             .users
             .get(session, client)
             .await?
-            .ok_or(LedgerError::ClientNotFound(client))?;
+            .ok_or(SfError::ClientNotFound(client))?;
 
         let slot = Slot::new(start_at.with_timezone(&Utc), duration_min, room);
         let collision = self.check_time_slot(session, slot, true).await?;
         if let Some(collision) = collision {
-            return Err(LedgerError::TimeSlotCollision(collision));
+            return Err(SfError::TimeSlotCollision(collision));
         }
 
         let name = format!(
@@ -306,32 +306,32 @@ impl Calendar {
         room: ObjectId,
         instructor: ObjectId,
         is_one_time: bool,
-    ) -> Result<(), LedgerError> {
+    ) -> Result<(), SfError> {
         let program = self
             .programs
             .get_by_id(session, program_id)
             .await?
-            .ok_or_else(|| LedgerError::ProgramNotFound(program_id))?;
+            .ok_or_else(|| SfError::ProgramNotFound(program_id))?;
 
         let instructor = self
             .users
             .get(session, instructor)
             .await?
-            .ok_or_else(|| LedgerError::InstructorNotFound(instructor))?;
+            .ok_or_else(|| SfError::InstructorNotFound(instructor))?;
         if !instructor.is_couch() {
-            return Err(LedgerError::InstructorHasNoRights(instructor.id));
+            return Err(SfError::InstructorHasNoRights(instructor.id));
         }
 
         let day_id = DayId::from(start_at);
         let slot = Slot::new(start_at.with_timezone(&Utc), program.duration_min, room);
         let collision = self.check_time_slot(session, slot, is_one_time).await?;
         if let Some(collision) = collision {
-            return Err(LedgerError::TimeSlotCollision(collision));
+            return Err(SfError::TimeSlotCollision(collision));
         }
 
         let mut training = Training::new_group(program, start_at, instructor.id, is_one_time, room);
         if !training.status(Local::now()).can_sign_in() {
-            return Err(LedgerError::TooCloseToStart { start_at });
+            return Err(SfError::TooCloseToStart { start_at });
         }
 
         self.calendar.add_training(session, &training).await?;

@@ -79,7 +79,7 @@ impl View for SetDateTime {
                 let slot = Slot::new(date_time.with_timezone(&Utc), duration, room);
 
                 if let Some(collision) = ctx
-                    .ledger
+                    .services
                     .calendar
                     .check_time_slot(&mut ctx.session, slot, true)
                     .await?

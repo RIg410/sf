@@ -40,7 +40,7 @@ impl View for SetInstructor {
         match calldata!(data) {
             Callback::SelectInstructor(instructor_id) => {
                 let instructor = ctx
-                    .ledger
+                    .services
                     .users
                     .get(&mut ctx.session, ObjectId::from_bytes(instructor_id))
                     .await?
@@ -58,7 +58,7 @@ async fn render(
 ) -> Result<(String, InlineKeyboardMarkup)> {
     let mut keymap = InlineKeyboardMarkup::default();
 
-    let instructors = ctx.ledger.users.instructors(&mut ctx.session).await?;
+    let instructors = ctx.services.users.instructors(&mut ctx.session).await?;
     for instructor in instructors {
         keymap
             .inline_keyboard

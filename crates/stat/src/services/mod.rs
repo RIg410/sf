@@ -1,40 +1,17 @@
+use advertising::AdvertisingStatService;
 use ai::Ai;
-use chrono::{DateTime, Datelike as _, Local, NaiveDate};
-use ledger::service::{
-    calendar::Calendar, history::History, requests::Requests, treasury::Treasury, users::Users,
-};
+use ledger::service::{history::History, requests::Requests, users::Users};
 
 pub mod advertising;
 
 pub struct Statistics {
-    calendar: Calendar,
-    history: History,
-    users: Users,
-    requests: Requests,
-    treasury: Treasury,
-    ai: Ai,
+    pub advertising: AdvertisingStatService,
 }
 
 impl Statistics {
-    pub fn new(
-        calendar: Calendar,
-        history: History,
-        users: Users,
-        requests: Requests,
-        ai: Ai,
-        treasury: Treasury,
-    ) -> Self {
+    pub fn new(history: History, users: Users, requests: Requests, ai: Ai) -> Self {
         Self {
-            calendar,
-            history,
-            users,
-            requests,
-            ai,
-            treasury,
+            advertising: AdvertisingStatService::new(requests, users, history, ai),
         }
     }
-}
-
-pub fn month_id(date: DateTime<Local>) -> NaiveDate {
-    NaiveDate::from_ymd_opt(date.year(), date.month(), 1).unwrap()
 }

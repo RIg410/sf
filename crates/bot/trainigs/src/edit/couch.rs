@@ -28,7 +28,7 @@ impl ChangeCouch {
     async fn change_couch(&self, ctx: &mut Context, id: ObjectId) -> Result<()> {
         ctx.ensure(Rule::EditTrainingCouch)?;
         let training = ctx
-            .ledger
+            .services
             .calendar
             .get_training_by_id(&mut ctx.session, self.id)
             .await?
@@ -45,14 +45,14 @@ impl ChangeCouch {
         }
         let old_couch = training.instructor;
         let new_couch = id;
-        ctx.ledger
+        ctx.services
             .calendar
             .change_couch(&mut ctx.session, training.id(), id, self.all)
             .await?;
 
         ctx.send_notification("Тренер успешно изменен").await;
-        let old_couch = ctx.ledger.get_user(&mut ctx.session, old_couch).await?;
-        let new_couch = ctx.ledger.get_user(&mut ctx.session, new_couch).await?;
+        let old_couch = ctx.services.get_user(&mut ctx.session, old_couch).await?;
+        let new_couch = ctx.services.get_user(&mut ctx.session, new_couch).await?;
         let msg = format!(
             "Произошла замена инструктора *{}* ➡️ *{}* на тренировке: *{}* в *{}*",
             escape(&old_couch.name.first_name),
@@ -63,7 +63,7 @@ impl ChangeCouch {
         ctx.notify(ChatId(old_couch.tg_id), &msg, true).await;
         ctx.notify(ChatId(new_couch.tg_id), &msg, true).await;
         for client in training.clients.iter() {
-            let client = ctx.ledger.get_user(&mut ctx.session, *client).await?;
+            let client = ctx.services.get_user(&mut ctx.session, *client).await?;
             ctx.notify(ChatId(client.tg_id), &msg, true).await;
         }
 
@@ -80,7 +80,7 @@ impl View for ChangeCouch {
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let msg = "Наши инструкторы ❤️";
         let mut keymap = InlineKeyboardMarkup::default();
-        let instructs = ctx.ledger.users.instructors(&mut ctx.session).await?;
+        let instructs = ctx.services.users.instructors(&mut ctx.session).await?;
 
         for instruct in instructs {
             keymap = keymap.append_row(vec![render_button(&instruct)]);

@@ -437,6 +437,7 @@ dependencies = [
  "bot-views",
  "chrono",
  "decimal",
+ "error",
  "eyre",
  "graph",
  "hex",
@@ -3381,9 +3382,14 @@ dependencies = [
  "ai",
  "chrono",
  "decimal",
+ "error",
  "eyre",
  "ledger",
  "model",
+ "serde",
+ "serde_json",
+ "storage",
+ "time 0.1.0",
 ]
 
 [[package]]

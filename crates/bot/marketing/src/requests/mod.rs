@@ -49,7 +49,7 @@ impl View for Requests {
 
         if let Some(phone) = &self.phone {
             let request = ctx
-                .ledger
+                .services
                 .requests
                 .get_by_phone(&mut ctx.session, &sanitize_phone(phone))
                 .await?;
@@ -66,7 +66,7 @@ impl View for Requests {
                 text.push_str("Заявка не найдена");
             }
         } else if let Some(id) = self.id {
-            let request = ctx.ledger.requests.get(&mut ctx.session, id).await?;
+            let request = ctx.services.requests.get(&mut ctx.session, id).await?;
             if let Some(request) = request {
                 self.phone = Some(request.phone);
                 return self.show(ctx).await;

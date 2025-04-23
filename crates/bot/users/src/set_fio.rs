@@ -40,7 +40,7 @@ impl View for SetFio {
 
         let name = parts[0];
         let last_name = parts[1];
-        ctx.ledger
+        ctx.services
             .users
             .set_name(&mut ctx.session, self.id, name, last_name)
             .await?;

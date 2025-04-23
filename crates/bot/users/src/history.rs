@@ -38,25 +38,31 @@ impl View for HistoryList {
     }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
-        let logs = ctx
-            .ledger
+        let mut logs = ctx
+            .services
             .history
             .actor_logs(
                 &mut ctx.session,
                 self.id,
-                LIMIT as usize,
+                Some(LIMIT as usize),
                 self.offset as usize,
+                vec![]
             )
             .await?;
         let mut msg = "*История:*".to_string();
-        for log in &logs {
-            msg.push_str(&format!("\n\n📌{}", fmt_row(ctx, log).await?));
+
+        let mut log_len = 0;
+        while let Some(log) = logs.next(&mut ctx.session).await {
+            log_len += 1;
+            let log = log?;
+            msg.push_str(&format!("\n\n📌{}", fmt_row(ctx, &log).await?));
         }
+
         let mut keymap = vec![];
         if self.offset > 0 {
             keymap.push(Calldata::Offset(self.offset - LIMIT).button("⬅️"));
         }
-        if logs.len() as u64 >= LIMIT {
+        if log_len >= LIMIT {
             keymap.push(Calldata::Offset(self.offset + LIMIT).button("➡️"));
         }
 
@@ -81,7 +87,7 @@ enum Calldata {
 }
 
 async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
-    let actor = ctx.ledger.get_user(&mut ctx.session, log.actor).await;
+    let actor = ctx.services.get_user(&mut ctx.session, log.actor).await;
     let (actor, is_actor) = if let Ok(actor) = actor {
         let is_actor = actor.id == ctx.me.id;
         (actor, is_actor)
@@ -154,7 +160,7 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
         } => {
             if ctx.has_right(Rule::HistoryViewer) {
                 let sub = if let Some(subject) = log.sub_actors.first() {
-                    let user = ctx.ledger.get_user(&mut ctx.session, *subject).await?;
+                    let user = ctx.services.get_user(&mut ctx.session, *subject).await?;
                     format!(
                         "{} {}",
                         link_to_user(&user),
@@ -192,7 +198,7 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
         } => {
             if is_actor {
                 let sub = if let Some(subject) = log.sub_actors.first() {
-                    ctx.ledger
+                    ctx.services
                         .get_user(&mut ctx.session, *subject)
                         .await?
                         .name
@@ -294,7 +300,7 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
         }
         model::history::Action::Freeze { days } => {
             let sub = if let Some(subject) = log.sub_actors.first() {
-                ctx.ledger
+                ctx.services
                     .get_user(&mut ctx.session, *subject)
                     .await?
                     .name
@@ -314,7 +320,7 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
         }
         model::history::Action::Unfreeze {} => {
             let sub: String = if let Some(subject) = log.sub_actors.first() {
-                ctx.ledger
+                ctx.services
                     .get_user(&mut ctx.session, *subject)
                     .await?
                     .name
@@ -330,7 +336,7 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
         }
         model::history::Action::ChangeBalance { amount } => {
             let sub = if let Some(subject) = log.sub_actors.first() {
-                ctx.ledger
+                ctx.services
                     .get_user(&mut ctx.session, *subject)
                     .await?
                     .name
@@ -353,7 +359,7 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
         }
         model::history::Action::ChangeReservedBalance { amount } => {
             let sub = if let Some(subject) = log.sub_actors.first() {
-                ctx.ledger
+                ctx.services
                     .get_user(&mut ctx.session, *subject)
                     .await?
                     .name
@@ -376,7 +382,7 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
         }
         model::history::Action::PayReward { amount } => {
             let sub = if let Some(subject) = log.sub_actors.first() {
-                ctx.ledger
+                ctx.services
                     .get_user(&mut ctx.session, *subject)
                     .await?
                     .name
@@ -409,7 +415,7 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
             let main_id = log.sub_actors.first();
             let member_id = log.sub_actors.get(1);
             let main = if let Some(id) = main_id {
-                ctx.ledger
+                ctx.services
                     .get_user(&mut ctx.session, *id)
                     .await?
                     .name
@@ -419,7 +425,7 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
             };
 
             let member = if let Some(id) = member_id {
-                ctx.ledger
+                ctx.services
                     .get_user(&mut ctx.session, *id)
                     .await?
                     .name
@@ -439,7 +445,7 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
             let main_id = log.sub_actors.first();
             let member_id = log.sub_actors.get(1);
             let main = if let Some(id) = main_id {
-                ctx.ledger
+                ctx.services
                     .get_user(&mut ctx.session, *id)
                     .await?
                     .name
@@ -449,7 +455,7 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
             };
 
             let member = if let Some(id) = member_id {
-                ctx.ledger
+                ctx.services
                     .get_user(&mut ctx.session, *id)
                     .await?
                     .name
@@ -467,7 +473,7 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
         }
         model::history::Action::ChangeSubscriptionDays { delta } => {
             let sub = if let Some(subject) = log.sub_actors.first() {
-                ctx.ledger
+                ctx.services
                     .get_user(&mut ctx.session, *subject)
                     .await?
                     .name

@@ -41,7 +41,7 @@ impl View for SetClient {
         match calldata!(data) {
             Callback::SelectClient(client) => {
                 let client = ctx
-                    .ledger
+                    .services
                     .users
                     .get(&mut ctx.session, ObjectId::from_bytes(client))
                     .await?
@@ -60,7 +60,7 @@ async fn render(
     let mut keymap = InlineKeyboardMarkup::default();
 
     let clients = ctx
-        .ledger
+        .services
         .users
         .find_users_for_personal_training(&mut ctx.session, instructor)
         .await?;

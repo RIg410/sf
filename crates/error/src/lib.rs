@@ -9,7 +9,7 @@ use model::{
 };
 
 #[derive(Error, Debug)]
-pub enum LedgerError {
+pub enum SfError {
     // common
     #[error("Common error: {0}")]
     Eyre(#[from] eyre::Error),

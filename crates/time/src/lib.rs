@@ -1,5 +1,4 @@
 pub use chrono;
-#[deprecated]
 pub mod range;
 
 use chrono::{DateTime, Datelike as _, Duration, Local, Months, TimeZone as _, Weekday};

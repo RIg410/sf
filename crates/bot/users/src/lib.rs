@@ -52,12 +52,12 @@ impl View for UsersView {
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         let count = ctx
-            .ledger
+            .services
             .users
             .count(&mut ctx.session, self.query.only_with_subscriptions)
             .await?;
         let users = ctx
-            .ledger
+            .services
             .users
             .find(
                 &mut ctx.session,
@@ -188,7 +188,7 @@ async fn render_message(
         users_count += 1;
 
         for child in user.family.children_ids.iter() {
-            let child = ctx.ledger.get_user(&mut ctx.session, *child).await?;
+            let child = ctx.services.get_user(&mut ctx.session, *child).await?;
             if child.phone.is_none() {
                 if ids.contains(&child.id) {
                     continue;

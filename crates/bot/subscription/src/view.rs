@@ -34,7 +34,7 @@ impl SubscriptionOption {
 
     async fn buy(&mut self, ctx: &mut Context) -> Result<Jmp> {
         let sub = ctx
-            .ledger
+            .services
             .subscriptions
             .get(&mut ctx.session, self.id)
             .await?
@@ -64,7 +64,7 @@ impl View for SubscriptionOption {
         match calldata!(data) {
             Callback::Delete => {
                 ctx.ensure(Rule::EditSubscription)?;
-                ctx.ledger
+                ctx.services
                     .subscriptions
                     .delete(&mut ctx.session, self.id)
                     .await?;
@@ -115,7 +115,7 @@ async fn render_sub(
     ctx: &mut Context,
 ) -> Result<(String, InlineKeyboardMarkup), Error> {
     let sub = ctx
-        .ledger
+        .services
         .subscriptions
         .get(&mut ctx.session, id)
         .await?

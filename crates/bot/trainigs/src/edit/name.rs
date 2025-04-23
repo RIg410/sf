@@ -40,7 +40,7 @@ impl View for ChangeName {
             return Ok(Jmp::Stay);
         }
 
-        ctx.ledger
+        ctx.services
             .calendar
             .update_training_name(&mut ctx.session, self.id, name)
             .await?;

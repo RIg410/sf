@@ -31,7 +31,7 @@ impl View for SetRoom {
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let training = ctx
-            .ledger
+            .services
             .programs
             .get_by_id(&mut ctx.session, self.preset.program_id()?)
             .await?

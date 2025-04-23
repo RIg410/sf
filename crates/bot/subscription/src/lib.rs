@@ -53,7 +53,7 @@ async fn render(ctx: &mut Context) -> Result<(String, InlineKeyboardMarkup)> {
     let mut msg = "💪 Тарифы:\n\n".to_string();
 
     let mut keymap = InlineKeyboardMarkup::default();
-    let subscriptions = ctx.ledger.subscriptions.get_all(&mut ctx.session).await?;
+    let subscriptions = ctx.services.subscriptions.get_all(&mut ctx.session).await?;
 
     let can_sell = ctx.has_right(Rule::SellSubscription);
 

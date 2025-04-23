@@ -72,7 +72,7 @@ impl View for ChangeTime {
         };
 
         let training = ctx
-            .ledger
+            .services
             .calendar
             .get_training_by_id(&mut ctx.session, self.id)
             .await?
@@ -135,7 +135,7 @@ impl View for ConfirmChangeTime {
             ConfirmCallback::Confirm => {
                 ctx.ensure(Rule::ChangeTrainingSlot)?;
 
-                ctx.ledger
+                ctx.services
                     .calendar
                     .change_slot(&mut ctx.session, self.id, self.slot, self.all)
                     .await?;

@@ -1,4 +1,4 @@
-use bson::{doc, oid::ObjectId, Regex};
+use bson::{Regex, doc, oid::ObjectId};
 use chrono::{DateTime, Local, Utc};
 use eyre::Error;
 use model::request::Request;
@@ -105,12 +105,17 @@ impl RequestStore {
         to: Option<DateTime<Local>>,
     ) -> Result<SessionCursor<Request>, Error> {
         let mut query = doc! {};
+        let mut created_filter = doc! {};
         if let Some(from) = from {
-            query.insert("created", doc! { "$gte": from });
+            created_filter.insert("$gte", from);
         }
         if let Some(to) = to {
-            query.insert("created", doc! { "$lt": to });
+            created_filter.insert("$lt", to);
         }
+        if !created_filter.is_empty() {
+            query.insert("created", created_filter);
+        }
+
         let cursor = self.store.find(query).session(&mut *session).await?;
         Ok(cursor)
     }

@@ -55,7 +55,7 @@ impl View for Finish {
                     .ok_or_else(|| eyre::eyre!("Client is missing"))?;
                 let room = preset.room.ok_or_else(|| eyre::eyre!("Room is missing"))?;
 
-                ctx.ledger
+                ctx.services
                     .schedule_personal_training(
                         &mut ctx.session,
                         client,

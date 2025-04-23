@@ -46,7 +46,7 @@ impl View for ConfirmSell {
             Callback::Sell => {
                 ctx.ensure(Rule::SellSubscription)?;
                 let result = ctx
-                    .ledger
+                    .services
                     .sell_subscription(
                         &mut ctx.session,
                         self.sub,
@@ -83,14 +83,14 @@ async fn render(
     discount: Option<Decimal>,
 ) -> Result<(String, InlineKeyboardMarkup), Error> {
     let sub = ctx
-        .ledger
+        .services
         .subscriptions
         .get(&mut ctx.session, sub)
         .await?
         .ok_or_else(|| eyre::eyre!("Subscription {} not found", sub))?;
 
     let user = ctx
-        .ledger
+        .services
         .users
         .get(&mut ctx.session, user_id)
         .await?

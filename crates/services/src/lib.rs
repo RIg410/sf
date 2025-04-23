@@ -4,7 +4,7 @@ use ai::Ai;
 use chrono::Local;
 use decimal::Decimal;
 use env::Env;
-use error::LedgerError;
+use error::SfError;
 use eyre::{Context as _, Result, eyre};
 use ledger::service::backup::{self, Backup};
 use ledger::service::calendar::Calendar;
@@ -12,17 +12,17 @@ use ledger::service::history::History;
 use ledger::service::programs::Programs;
 use ledger::service::requests::Requests;
 use ledger::service::rewards::Rewards;
+use ledger::service::subscriptions::Subscriptions;
 use ledger::service::treasury::Treasury;
 use ledger::service::users::Users;
-use stat::services::Statistics;
-use ledger::service::subscriptions::Subscriptions;
 use model::training::TrainingStatus;
 use model::treasury::subs::UserId;
 use model::user::family::FindFor;
 use model::user::{User, sanitize_phone};
 use mongodb::bson::oid::ObjectId;
-use storage::session::{Db, Session};
+use stat::services::Statistics;
 use storage::Storage;
+use storage::session::{Db, Session};
 use thiserror::Error;
 use tx_macro::tx;
 
@@ -66,14 +66,8 @@ impl Services {
         let rewards = Rewards::new(storage.rewards);
         let requests = Requests::new(storage.requests, users.clone());
 
-        let statistics = Statistics::new(
-            calendar.clone(),
-            history.clone(),
-            users.clone(),
-            requests.clone(),
-            ai.clone(),
-            treasury.clone(),
-        );
+        let statistics =
+            Statistics::new(history.clone(), users.clone(), requests.clone(), ai.clone());
 
         Services {
             users,
@@ -294,7 +288,7 @@ impl Services {
         &self,
         session: &mut Session,
         id: ObjectId,
-    ) -> Result<(), LedgerError> {
+    ) -> Result<(), SfError> {
         let has_trainings = !self
             .calendar
             .find_trainings(session, model::training::Filter::Instructor(id), 1, 0)
@@ -305,18 +299,18 @@ impl Services {
             .users
             .get(session, id)
             .await?
-            .ok_or_else(|| LedgerError::UserNotFound(id))?;
+            .ok_or_else(|| SfError::UserNotFound(id))?;
 
         if let Some(employee) = user.employee {
             if employee.reward != Decimal::zero() {
-                return Err(LedgerError::EmployeeHasReward { user_id: id });
+                return Err(SfError::EmployeeHasReward { user_id: id });
             }
         } else {
-            return Err(LedgerError::UserNotEmployee { user_id: id });
+            return Err(SfError::UserNotEmployee { user_id: id });
         }
 
         if has_trainings {
-            return Err(LedgerError::CouchHasTrainings(id));
+            return Err(SfError::CouchHasTrainings(id));
         } else {
             self.users.delete_employee(session, id).await?;
             Ok(())

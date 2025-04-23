@@ -51,7 +51,7 @@ impl View for SetBirthday {
             Ok(date) => {
                 let forced = ctx.has_right(Rule::EditUserInfo);
                 let result = ctx
-                    .ledger
+                    .services
                     .users
                     .set_user_birthday(&mut ctx.session, self.id, date, forced)
                     .await;

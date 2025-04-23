@@ -39,7 +39,7 @@ impl View for FamilySignIn {
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let training = ctx
-            .ledger
+            .services
             .calendar
             .get_training_by_id(&mut ctx.session, self.id)
             .await?

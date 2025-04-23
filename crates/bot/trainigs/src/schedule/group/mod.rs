@@ -78,7 +78,7 @@ pub async fn render_msg(
 
     let instructor = if let Some(tg_id) = preset.instructor {
         let user = ctx
-            .ledger
+            .services
             .users
             .get(&mut ctx.session, tg_id)
             .await?

@@ -1,7 +1,7 @@
 use bson::{doc, oid::ObjectId};
 use chrono::{DateTime, Local, Utc};
 use eyre::Error;
-use model::history::HistoryRow;
+use model::history::{ActionType, HistoryRow};
 use mongodb::{Collection, IndexModel, SessionCursor};
 
 use crate::session::Session;
@@ -70,24 +70,32 @@ impl HistoryStore {
         actor: ObjectId,
         limit: Option<usize>,
         offset: usize,
-    ) -> Result<Vec<HistoryRow>, Error> {
-        let mut cursor = self
+        actions: Vec<ActionType>,
+    ) -> Result<SessionCursor<HistoryRow>, Error> {
+        let mut filter = doc! { "$or": [ { "actor": actor }, { "sub_actors": { "$elemMatch": { "$eq": actor } } } ] };
+
+        if !actions.is_empty() {
+            let mut action_filter = doc! {};
+
+            for action in actions {
+                action_filter.insert(
+                    format!("action.{}", action.name()),
+                    doc! { "$exists": true },
+                );
+            }
+            action_filter = doc! { "$or": [ action_filter ] };
+
+            filter = doc! { "$and": [ filter, action_filter ] };
+        }
+
+        Ok(self
             .store
-            .find(doc! { "$or": [ { "actor": actor }, { "sub_actors": { "$elemMatch": { "$eq": actor } } } ] })
+            .find(filter)
             .sort(doc! { "date_time": -1 })
             .skip(offset as u64)
+            .limit(limit.map(|l| l as i64).unwrap_or(i64::MAX))
             .session(&mut *session)
-            .await?;
-        let mut logs = Vec::with_capacity(limit.unwrap_or(100));
-        while let Some(log) = cursor.next(&mut *session).await {
-            logs.push(log?);
-            if let Some(limit) = limit {
-                if logs.len() >= limit {
-                    break;
-                }
-            }
-        }
-        Ok(logs)
+            .await?)
     }
 
     pub async fn get_logs(

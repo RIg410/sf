@@ -53,7 +53,7 @@ impl StageYesNo<State> for Confirm {
                 eyre::bail!("User, description or rate not found");
             };
 
-        ctx.ledger
+        ctx.services
             .users
             .make_user_employee(
                 &mut ctx.session,
@@ -107,7 +107,7 @@ impl StageList<State> for UserList {
         offset: usize,
     ) -> Result<(String, Vec<Vec<ListItem>>), Error> {
         let mut users_stream = ctx
-            .ledger
+            .services
             .users
             .find(
                 &mut ctx.session,
@@ -145,7 +145,7 @@ impl StageList<State> for UserList {
         id: ListId,
     ) -> Result<Dispatch<State>, Error> {
         let id = id.as_object_id().ok_or_else(|| eyre::eyre!("Invalid id"))?;
-        let user = ctx.ledger.get_user(&mut ctx.session, id).await?;
+        let user = ctx.services.get_user(&mut ctx.session, id).await?;
         if user.employee.is_some() {
             ctx.send_notification("Пользователь уже инструктор").await;
             Ok(Dispatch::None)

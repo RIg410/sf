@@ -33,13 +33,13 @@ impl View for EditPrograms {
         let msg = "*Выберите программы*";
 
         let subscription = ctx
-            .ledger
+            .services
             .subscriptions
             .get(&mut ctx.session, self.id)
             .await?
             .ok_or_else(|| eyre::eyre!("Subscription not found"))?;
 
-        let programs = ctx.ledger.programs.get_all(&mut ctx.session, false).await?;
+        let programs = ctx.services.programs.get_all(&mut ctx.session, false).await?;
 
         if let SubscriptionType::Group { program_filter } = subscription.subscription_type {
             for program in programs {
@@ -68,14 +68,14 @@ impl View for EditPrograms {
         match calldata!(data) {
             Callback::Select(program_id) => {
                 let program_id = ObjectId::from_bytes(program_id);
-                ctx.ledger
+                ctx.services
                     .subscriptions
                     .edit_program_list(&mut ctx.session, self.id, program_id, true)
                     .await?;
             }
             Callback::Unselect(program_id) => {
                 let program_id = ObjectId::from_bytes(program_id);
-                ctx.ledger
+                ctx.services
                     .subscriptions
                     .edit_program_list(&mut ctx.session, self.id, program_id, false)
                     .await?;

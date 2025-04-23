@@ -41,7 +41,7 @@ impl View for Comments {
         ctx.ensure(Rule::ViewUserComments)?;
 
         let user = ctx
-            .ledger
+            .services
             .users
             .get_extension(&mut ctx.session, self.user_id)
             .await?;
@@ -90,7 +90,7 @@ impl View for Comments {
         ctx.ensure(Rule::EditUserComments)?;
 
         if let Some(msg) = message.text() {
-            ctx.ledger
+            ctx.services
                 .users
                 .add_comment(&mut ctx.session, self.user_id, msg, ctx.me.id)
                 .await?;
@@ -114,7 +114,7 @@ impl View for Comments {
             Calldata::Delete => {
                 ctx.ensure(Rule::DeleteUserComments)?;
                 if let Some(comment) = self.comments.get(self.index) {
-                    ctx.ledger
+                    ctx.services
                         .users
                         .delete_comment(&mut ctx.session, self.user_id, comment.id)
                         .await?;

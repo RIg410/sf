@@ -63,7 +63,7 @@ impl View for Confirm {
         ctx.ensure(Rule::System)?;
         match calldata!(data) {
             Calldata::Yes => {
-                ctx.ledger
+                ctx.services
                     .users
                     .extend_subscriptions(&mut ctx.session, self.days)
                     .await?;

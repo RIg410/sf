@@ -45,7 +45,7 @@ impl View for RewardsList {
         }
 
         let logs = ctx
-            .ledger
+            .services
             .rewards
             .get(&mut ctx.session, self.id, LIMIT as i64, self.offset)
             .await?;
@@ -115,7 +115,7 @@ async fn fmt_row(log: &Reward, ctx: &mut Context) -> Result<String> {
         } => {
             let mut from_users = String::new();
             for rew in user_originals {
-                let user = ctx.ledger.get_user(&mut ctx.session, rew.user).await?;
+                let user = ctx.services.get_user(&mut ctx.session, rew.user).await?;
                 from_users.push_str(&escape(&format!(
                     "- {} цена занятий :{}. {}% = {}\n",
                     user.name.first_name,

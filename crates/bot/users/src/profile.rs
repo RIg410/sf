@@ -23,10 +23,7 @@ use model::{
 };
 use mongodb::bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
-use teloxide::{
-    types::{InlineKeyboardMarkup, Message},
-    utils::markdown::escape,
-};
+use teloxide::{types::InlineKeyboardMarkup, utils::markdown::escape};
 
 pub struct UserProfile {
     id: ObjectId,
@@ -44,12 +41,12 @@ impl UserProfile {
     async fn block_user(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
         ctx.ensure(Rule::BlockUser)?;
         let user = ctx
-            .ledger
+            .services
             .users
             .get(&mut ctx.session, self.id)
             .await?
             .ok_or_else(|| eyre::eyre!("User not found"))?;
-        ctx.ledger
+        ctx.services
             .block_user(&mut ctx.session, self.id, !user.is_active)
             .await?;
         ctx.reload_user().await?;
@@ -77,7 +74,7 @@ impl UserProfile {
     }
 
     async fn training_list(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
-        let user = ctx.ledger.get_user(&mut ctx.session, self.id).await?;
+        let user = ctx.services.get_user(&mut ctx.session, self.id).await?;
         if user.employee.is_some() {
             Ok(TrainingList::couches(user.id).into())
         } else {
@@ -86,12 +83,12 @@ impl UserProfile {
     }
 
     async fn history_list(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
-        let user = ctx.ledger.get_user(&mut ctx.session, self.id).await?;
+        let user = ctx.services.get_user(&mut ctx.session, self.id).await?;
         Ok(HistoryList::new(user.id).into())
     }
 
     async fn rewards_list(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
-        let user = ctx.ledger.get_user(&mut ctx.session, self.id).await?;
+        let user = ctx.services.get_user(&mut ctx.session, self.id).await?;
         if user.employee.is_some() && (ctx.is_me(user.id) || ctx.has_right(Rule::ViewRewards)) {
             Ok(RewardsList::new(user.id).into())
         } else {
@@ -125,7 +122,10 @@ impl UserProfile {
 
     async fn unfreeze_user(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
         ctx.ensure(Rule::FreezeUsers)?;
-        ctx.ledger.users.unfreeze(&mut ctx.session, self.id).await?;
+        ctx.services
+            .users
+            .unfreeze(&mut ctx.session, self.id)
+            .await?;
         ctx.reload_user().await?;
         Ok(Jmp::Stay)
     }
@@ -134,7 +134,7 @@ impl UserProfile {
         ctx.ensure(Rule::ViewStatistics)?;
 
         let user_stat = ctx
-            .ledger
+            .services
             .users
             .collect_statistics(&mut ctx.session, &self.id)
             .await?;
@@ -222,39 +222,6 @@ impl View for UserProfile {
         let (msg, keymap) = render_user_profile(ctx, self.id).await?;
         ctx.edit_origin(&msg, keymap).await?;
         Ok(())
-    }
-
-    async fn handle_message(
-        &mut self,
-        ctx: &mut Context,
-        message: &Message,
-    ) -> Result<Jmp, eyre::Error> {
-        ctx.delete_msg(message.id).await?;
-        if ctx.has_right(Rule::AIUserInfo) {
-            if let Some(text) = message.text() {
-                let ai_response = ctx
-                    .ledger
-                    .users
-                    .ask_ai(
-                        &mut ctx.session,
-                        self.id,
-                        ai::AiModel::Gpt4o,
-                        text.to_string(),
-                    )
-                    .await;
-                match ai_response {
-                    Ok(resp) => {
-                        let msg = format!("\n\nВопрос: {}\nОтвет: {}", escape(text), escape(&resp));
-                        self.skip_show = true;
-                        ctx.send_notification(&msg).await;
-                    }
-                    Err(err) => {
-                        ctx.send_notification(&format!("Ошибка: {}", err)).await;
-                    }
-                }
-            }
-        }
-        Ok(Jmp::Stay)
     }
 
     async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {

@@ -114,7 +114,7 @@ impl View for TreasuryOp {
             Callback::Save => match &self.state {
                 State::Finish(description, amount, date) => match self.io {
                     Op::Deposit => {
-                        ctx.ledger
+                        ctx.services
                             .treasury
                             .deposit(&mut ctx.session, *amount, description.to_string(), date)
                             .await?;
@@ -122,7 +122,7 @@ impl View for TreasuryOp {
                         Ok(Jmp::Back)
                     }
                     Op::Payment => {
-                        ctx.ledger
+                        ctx.services
                             .treasury
                             .payment(&mut ctx.session, *amount, description.to_string(), date)
                             .await?;

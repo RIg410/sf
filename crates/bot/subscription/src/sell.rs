@@ -48,7 +48,7 @@ impl View for SellView {
             }
             SellViewState::FindByPhone(phone) => {
                 let user = ctx
-                    .ledger
+                    .services
                     .users
                     .get_by_phone(&mut ctx.session, phone)
                     .await?;
@@ -91,7 +91,7 @@ impl View for SellView {
 
         if let SellViewState::FindByPhone(phone) = &self.state {
             if let Some(user) = ctx
-                .ledger
+                .services
                 .users
                 .get_by_phone(&mut ctx.session, phone)
                 .await?
@@ -100,7 +100,7 @@ impl View for SellView {
             }
 
             if let Some(request) = ctx
-                .ledger
+                .services
                 .requests
                 .get_by_phone(&mut ctx.session, phone)
                 .await?
@@ -288,7 +288,7 @@ impl View for CreateUserAndSell {
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let sub = ctx
-            .ledger
+            .services
             .subscriptions
             .get(&mut ctx.session, self.sub_id)
             .await?
@@ -354,7 +354,7 @@ impl View for CreateUserAndSell {
             Callback::Sell => {
                 ctx.ensure(Rule::SellSubscription)?;
                 let result = ctx
-                    .ledger
+                    .services
                     .presell_subscription(
                         &mut ctx.session,
                         self.sub_id,
@@ -367,12 +367,12 @@ impl View for CreateUserAndSell {
                     .await;
 
                 let request = ctx
-                    .ledger
+                    .services
                     .requests
                     .get_by_phone(&mut ctx.session, &self.phone)
                     .await?;
                 if request.is_none() {
-                    ctx.ledger
+                    ctx.services
                         .requests
                         .create(
                             &mut ctx.session,

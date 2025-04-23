@@ -38,7 +38,7 @@ impl View for AddNotification {
         match calldata!(data) {
             CalldataYesNo::Yes => Ok(Jmp::Next(SetRemindLater { id: self.id }.into())),
             CalldataYesNo::No => {
-                ctx.ledger
+                ctx.services
                     .requests
                     .add_notification(&mut ctx.session, self.id, None)
                     .await?;
@@ -103,7 +103,7 @@ impl View for SetRemindLater {
             .ok()
             .and_then(|dt| Local.from_local_datetime(&dt).single());
         if let Some(dt) = dt {
-            ctx.ledger
+            ctx.services
                 .requests
                 .add_notification(
                     &mut ctx.session,
@@ -129,7 +129,7 @@ impl View for SetRemindLater {
         let now = chrono::Local::now();
         let remind_later = now + chrono::Duration::seconds(remind_later.remind_later as i64);
 
-        ctx.ledger
+        ctx.services
             .requests
             .add_notification(
                 &mut ctx.session,

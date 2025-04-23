@@ -34,7 +34,7 @@ impl View for AddComment {
             return Ok(Jmp::Back);
         }
 
-        ctx.ledger
+        ctx.services
             .requests
             .add_comment(&mut ctx.session, self.id, comment)
             .await?;

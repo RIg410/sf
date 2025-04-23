@@ -33,7 +33,7 @@ impl View for FinanceOperation {
         ctx.ensure(Rule::MakePayment)?;
 
         let event = ctx
-            .ledger
+            .services
             .treasury
             .get(&mut ctx.session, self.id)
             .await?
@@ -54,7 +54,7 @@ impl View for FinanceOperation {
         match calldata!(data) {
             Callback::Delete => {
                 ctx.ensure(Rule::DeleteHistory)?;
-                ctx.ledger
+                ctx.services
                     .treasury
                     .remove(&mut ctx.session, self.id)
                     .await?;
@@ -69,7 +69,7 @@ async fn render_event(ctx: &mut Context, event: &TreasuryEvent) -> Result<String
         model::treasury::Event::SellSubscription(sell_subscription) => {
             let user = match sell_subscription.buyer_id.clone() {
                 model::treasury::subs::UserId::Id(object_id) => ctx
-                    .ledger
+                    .services
                     .get_user(&mut ctx.session, object_id)
                     .await
                     .ok()
@@ -88,7 +88,7 @@ async fn render_event(ctx: &mut Context, event: &TreasuryEvent) -> Result<String
         model::treasury::Event::Reward(user_id) => {
             let user = match user_id {
                 model::treasury::subs::UserId::Id(object_id) => ctx
-                    .ledger
+                    .services
                     .get_user(&mut ctx.session, *object_id)
                     .await
                     .ok()

@@ -33,7 +33,7 @@ impl View for RequestHistory {
         ctx.ensure(Rule::RequestsHistory)?;
 
         let requests = ctx
-            .ledger
+            .services
             .requests
             .get_all_page(&mut ctx.session, LIMIT as i64, self.offset)
             .await?;

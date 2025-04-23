@@ -1,6 +1,6 @@
 use crate::Services;
 use chrono::{DateTime, Local};
-use error::LedgerError;
+use error::SfError;
 use model::{
     rooms::Room,
     training::{Training, TrainingId},
@@ -16,7 +16,7 @@ impl Services {
         &self,
         session: &mut Session,
         training: &Training,
-    ) -> Result<Vec<ObjectId>, LedgerError> {
+    ) -> Result<Vec<ObjectId>, SfError> {
         for client in &training.clients {
             self.sign_out_tx_less(session, training, *client, true)
                 .await?;
@@ -39,7 +39,7 @@ impl Services {
         start_at: DateTime<Local>,
         duration_min: u32,
         room: ObjectId,
-    ) -> Result<(), LedgerError> {
+    ) -> Result<(), SfError> {
         let id = self
             .calendar
             .schedule_personal_training(session, client, instructor, start_at, duration_min, room)
@@ -55,34 +55,34 @@ impl Services {
         id: TrainingId,
         client: ObjectId,
         forced: bool,
-    ) -> Result<(), LedgerError> {
+    ) -> Result<(), SfError> {
         let training = self
             .calendar
             .get_training_by_id(session, id)
             .await?
-            .ok_or_else(|| LedgerError::TrainingNotFound(id))?;
+            .ok_or_else(|| SfError::TrainingNotFound(id))?;
         let status = training.status(Local::now());
         if !forced && !status.can_sign_in() {
-            return Err(LedgerError::TrainingNotOpenToSignUp(id, status));
+            return Err(SfError::TrainingNotOpenToSignUp(id, status));
         }
 
         if training.is_processed {
-            return Err(LedgerError::TrainingNotOpenToSignUp(id, status));
+            return Err(SfError::TrainingNotOpenToSignUp(id, status));
         }
 
         if training.clients.contains(&client) {
-            return Err(LedgerError::ClientAlreadySignedUp(client, id));
+            return Err(SfError::ClientAlreadySignedUp(client, id));
         }
 
         if training.clients.len() as u32 >= training.capacity {
-            return Err(LedgerError::TrainingIsFull(id));
+            return Err(SfError::TrainingIsFull(id));
         }
 
         let mut user = self
             .users
             .get(session, client)
             .await?
-            .ok_or_else(|| LedgerError::ClientNotFound(client))?;
+            .ok_or_else(|| SfError::ClientNotFound(client))?;
         let user_id = user.id;
 
         self.users.resolve_family(session, &mut user).await?;
@@ -91,10 +91,10 @@ impl Services {
         if training.tp.is_not_free() {
             let subscription = payer
                 .find_subscription(FindFor::Lock, &training)
-                .ok_or_else(|| LedgerError::NotEnoughBalance(user_id))?;
+                .ok_or_else(|| SfError::NotEnoughBalance(user_id))?;
 
             if !subscription.lock_balance() {
-                return Err(LedgerError::NotEnoughBalance(user_id));
+                return Err(SfError::NotEnoughBalance(user_id));
             }
             self.users.update(session, &mut payer).await?;
         }
@@ -121,12 +121,12 @@ impl Services {
         id: TrainingId,
         client: ObjectId,
         forced: bool,
-    ) -> Result<(), LedgerError> {
+    ) -> Result<(), SfError> {
         let training = self
             .calendar
             .get_training_by_id(session, id)
             .await?
-            .ok_or_else(|| LedgerError::TrainingNotFound(id))?;
+            .ok_or_else(|| SfError::TrainingNotFound(id))?;
         self.sign_out_tx_less(session, &training, client, forced)
             .await?;
 
@@ -144,25 +144,25 @@ impl Services {
         training: &Training,
         client: ObjectId,
         forced: bool,
-    ) -> Result<(), LedgerError> {
+    ) -> Result<(), SfError> {
         let status = training.status(Local::now());
         if !forced && !status.can_sign_out() {
-            return Err(LedgerError::TrainingNotOpenToSignOut(training.id()));
+            return Err(SfError::TrainingNotOpenToSignOut(training.id()));
         }
 
         if training.is_processed {
-            return Err(LedgerError::TrainingNotOpenToSignOut(training.id()));
+            return Err(SfError::TrainingNotOpenToSignOut(training.id()));
         }
 
         if !training.clients.contains(&client) {
-            return Err(LedgerError::ClientNotSignedUp(client, training.id()));
+            return Err(SfError::ClientNotSignedUp(client, training.id()));
         }
 
         let mut user = self
             .users
             .get(session, client)
             .await?
-            .ok_or_else(|| LedgerError::UserNotFound(client))?;
+            .ok_or_else(|| SfError::UserNotFound(client))?;
         self.users.resolve_family(session, &mut user).await?;
 
         let user_id = user.id;
@@ -171,10 +171,10 @@ impl Services {
         if training.tp.is_not_free() {
             let sub = payer
                 .find_subscription(FindFor::Unlock, training)
-                .ok_or_else(|| LedgerError::NotEnoughReservedBalance(client))?;
+                .ok_or_else(|| SfError::NotEnoughReservedBalance(client))?;
 
             if !sub.unlock_balance() {
-                return Err(LedgerError::NotEnoughReservedBalance(client));
+                return Err(SfError::NotEnoughReservedBalance(client));
             }
             self.users.update(session, &mut payer).await?;
         }

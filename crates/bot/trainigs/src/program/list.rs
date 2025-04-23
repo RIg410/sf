@@ -58,7 +58,7 @@ async fn render(ctx: &mut Context) -> Result<(String, InlineKeyboardMarkup), Err
 
     let can_see_hidden_program = ctx.has_right(Rule::ViewHiddenPrograms);
     let trainings = ctx
-        .ledger
+        .services
         .programs
         .get_all(&mut ctx.session, !can_see_hidden_program)
         .await?;

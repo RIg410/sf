@@ -222,7 +222,7 @@ impl View for CreateSubscription {
             }
             State::SubscriptionTypeFilter => {
                 text.push_str("*Выберите инструктора*");
-                let couch_list = ctx.ledger.users.instructors(&mut ctx.session).await?;
+                let couch_list = ctx.services.users.instructors(&mut ctx.session).await?;
                 for couch in couch_list {
                     keymap = keymap.append_row(vec![
                         Callback::Couch(couch.id.bytes()).button(&couch.name.first_name)
@@ -246,7 +246,7 @@ impl View for CreateSubscription {
             State::SetName => {
                 let name = text.to_string();
                 let sub = ctx
-                    .ledger
+                    .services
                     .subscriptions
                     .get_by_name(&mut ctx.session, &name)
                     .await?;
@@ -325,7 +325,7 @@ impl View for CreateSubscription {
                 ctx.ensure(Rule::CreateSubscription)?;
                 let sub = mem::take(&mut self.subscription);
                 let result = ctx
-                    .ledger
+                    .services
                     .subscriptions
                     .create_subscription(&mut ctx.session, sub)
                     .await;

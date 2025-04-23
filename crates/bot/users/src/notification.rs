@@ -28,7 +28,7 @@ impl View for NotificationView {
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         let user = ctx
-            .ledger
+            .services
             .users
             .get_extension(&mut ctx.session, self.id)
             .await?;

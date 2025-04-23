@@ -2,7 +2,7 @@ use std::{ops::Deref, sync::Arc};
 
 use bson::oid::ObjectId;
 use chrono::Utc;
-use error::LedgerError;
+use error::SfError;
 use eyre::Error;
 use eyre::Result;
 use model::request::Request;
@@ -36,7 +36,7 @@ impl Requests {
         id: ObjectId,
         come_from: Source,
         comment: String,
-    ) -> Result<(), LedgerError> {
+    ) -> Result<(), SfError> {
         if let Some(mut request) = self.requests.get(session, id).await? {
             request.history.push(RequestHistoryRow {
                 comment: request.comment.clone(),
@@ -57,7 +57,7 @@ impl Requests {
                     .await?;
             }
         } else {
-            return Err(LedgerError::RequestNotFound { id });
+            return Err(SfError::RequestNotFound { id });
         }
         Ok(())
     }
@@ -68,7 +68,7 @@ impl Requests {
         session: &mut Session,
         id: ObjectId,
         comment: String,
-    ) -> Result<(), LedgerError> {
+    ) -> Result<(), SfError> {
         if let Some(mut request) = self.requests.get(session, id).await? {
             request.history.push(RequestHistoryRow {
                 comment: request.comment.clone(),
@@ -78,7 +78,7 @@ impl Requests {
             request.comment = comment;
             self.requests.update(session, &request).await?;
         } else {
-            return Err(LedgerError::RequestNotFound { id });
+            return Err(SfError::RequestNotFound { id });
         }
         Ok(())
     }
@@ -89,12 +89,12 @@ impl Requests {
         session: &mut Session,
         id: ObjectId,
         remember_later: Option<RemindLater>,
-    ) -> Result<(), LedgerError> {
+    ) -> Result<(), SfError> {
         if let Some(mut request) = self.requests.get(session, id).await? {
             request.remind_later = remember_later;
             self.requests.update(session, &request).await?;
         } else {
-            return Err(LedgerError::RequestNotFound { id });
+            return Err(SfError::RequestNotFound { id });
         }
         Ok(())
     }

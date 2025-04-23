@@ -45,7 +45,7 @@ impl View for DeleteEmployeeConfirm {
         ctx.ensure(Rule::EditEmployee)?;
         match calldata!(callback) {
             CallbackQuery::Yes => {
-                ctx.ledger
+                ctx.services
                     .delete_employee(&mut ctx.session, self.user_id)
                     .await?;
                 ctx.send_notification("Сотрудник удален").await;

@@ -6,10 +6,15 @@ publish.workspace = true
 version.workspace = true
 
 [dependencies]
-decimal.workspace = true
-model.workspace = true
-ledger.workspace = true
 ai.workspace = true
+decimal.workspace = true
+ledger.workspace = true
+model.workspace = true
+storage.workspace = true
+time.workspace = true
 
 chrono.workspace = true
+error.workspace = true
 eyre.workspace = true
+serde.workspace = true
+serde_json.workspace = true

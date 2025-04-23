@@ -120,7 +120,7 @@ impl View for Confirm {
         match calldata!(data) {
             Callback::Confirm => {
                 ctx.ensure(Rule::MakePayment)?;
-                ctx.ledger
+                ctx.services
                     .treasury
                     .pay_for_marketing(&mut ctx.session, self.amount, self.come_from)
                     .await?;

@@ -76,7 +76,7 @@ async fn render(
     let mut msg = "🫶🏻 Тренировки:\n".to_owned();
     let mut keymap = InlineKeyboardMarkup::default();
     let trainings = ctx
-        .ledger
+        .services
         .calendar
         .find_trainings(
             &mut ctx.session,

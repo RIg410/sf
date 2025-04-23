@@ -33,13 +33,13 @@ impl TrainingView {
 
     async fn couch_info(&mut self, ctx: &mut Context) -> Result<Jmp> {
         let training = ctx
-            .ledger
+            .services
             .calendar
             .get_training_by_id(&mut ctx.session, self.id)
             .await?
             .ok_or_else(|| eyre::eyre!("Training not found"))?;
         let user = ctx
-            .ledger
+            .services
             .get_user(&mut ctx.session, training.instructor)
             .await?;
         if let Some(couch) = user.employee {
@@ -51,7 +51,7 @@ impl TrainingView {
     async fn restore_training(&mut self, ctx: &mut Context) -> Result<Jmp> {
         ctx.ensure(Rule::CancelTraining)?;
         let training = ctx
-            .ledger
+            .services
             .calendar
             .get_training_by_id(&mut ctx.session, self.id)
             .await?
@@ -60,7 +60,7 @@ impl TrainingView {
             bail!("Can't delete personal training");
         }
 
-        ctx.ledger
+        ctx.services
             .calendar
             .restore_training(&mut ctx.session, &training)
             .await?;
@@ -83,7 +83,7 @@ impl View for TrainingView {
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let training = ctx
-            .ledger
+            .services
             .calendar
             .get_training_by_id(&mut ctx.session, self.id)
             .await?
@@ -130,7 +130,7 @@ async fn render(ctx: &mut Context, training: &Training) -> Result<(String, Inlin
     let signed = training.clients.contains(&ctx.me.id);
 
     let couch = ctx
-        .ledger
+        .services
         .users
         .get(&mut ctx.session, training.instructor)
         .await?
@@ -265,13 +265,13 @@ impl ConfirmCancelTraining {
     async fn cancel_training(&mut self, ctx: &mut Context) -> Result<Jmp> {
         ctx.ensure(Rule::CancelTraining)?;
         let training = ctx
-            .ledger
+            .services
             .calendar
             .get_training_by_id(&mut ctx.session, self.id)
             .await?
             .ok_or_else(|| eyre::eyre!("Training not found"))?;
         let to_notify = ctx
-            .ledger
+            .services
             .cancel_training(&mut ctx.session, &training)
             .await?;
         let msg = format!(
@@ -280,7 +280,7 @@ impl ConfirmCancelTraining {
             fmt_dt(&training.get_slot().start_at())
         );
         for client in to_notify {
-            if let Ok(user) = ctx.ledger.get_user(&mut ctx.session, client).await {
+            if let Ok(user) = ctx.services.get_user(&mut ctx.session, client).await {
                 ctx.bot.notify(ChatId(user.tg_id), &msg, true).await;
             }
         }
@@ -300,7 +300,7 @@ impl View for ConfirmCancelTraining {
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let training = ctx
-            .ledger
+            .services
             .calendar
             .get_training_by_id(&mut ctx.session, self.id)
             .await?
@@ -343,7 +343,7 @@ enum CancelCallback {
 
 pub async fn sign_up(ctx: &mut Context, id: TrainingId, user_id: ObjectId) -> Result<Jmp> {
     let training = ctx
-        .ledger
+        .services
         .calendar
         .get_training_by_id(&mut ctx.session, id)
         .await?
@@ -360,7 +360,7 @@ pub async fn sign_up(ctx: &mut Context, id: TrainingId, user_id: ObjectId) -> Re
         return Ok(Jmp::Stay);
     }
 
-    let mut user = ctx.ledger.get_user(&mut ctx.session, user_id).await?;
+    let mut user = ctx.services.get_user(&mut ctx.session, user_id).await?;
 
     if training.tp.is_not_free() {
         let mut payer = user.payer_mut()?;
@@ -384,7 +384,7 @@ pub async fn sign_up(ctx: &mut Context, id: TrainingId, user_id: ObjectId) -> Re
         return Ok(Jmp::Stay);
     }
 
-    ctx.ledger
+    ctx.services
         .sign_up(&mut ctx.session, id, user.id, false)
         .await?;
     Ok(Jmp::Stay)
@@ -392,7 +392,7 @@ pub async fn sign_up(ctx: &mut Context, id: TrainingId, user_id: ObjectId) -> Re
 
 pub async fn sign_out(ctx: &mut Context, id: TrainingId, user_id: ObjectId) -> Result<Jmp> {
     let training = ctx
-        .ledger
+        .services
         .calendar
         .get_training_by_id(&mut ctx.session, id)
         .await?
@@ -401,7 +401,7 @@ pub async fn sign_out(ctx: &mut Context, id: TrainingId, user_id: ObjectId) -> R
         ctx.send_msg("Запись на тренировку закрыта").await?;
         return Ok(Jmp::Stay);
     }
-    ctx.ledger
+    ctx.services
         .sign_out(&mut ctx.session, training.id(), user_id, false)
         .await?;
 
@@ -409,7 +409,7 @@ pub async fn sign_out(ctx: &mut Context, id: TrainingId, user_id: ObjectId) -> R
         Ok(Jmp::Stay)
     } else {
         let instructor = ctx
-            .ledger
+            .services
             .get_user(&mut ctx.session, training.instructor)
             .await?;
         ctx.bot

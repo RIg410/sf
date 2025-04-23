@@ -28,7 +28,7 @@ impl View for SetAiPrompt {
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let ext = ctx
-            .ledger
+            .services
             .users
             .get_extension(&mut ctx.session, self.id)
             .await?;
@@ -49,7 +49,7 @@ impl View for SetAiPrompt {
         let prompt = message.text().unwrap_or_default().to_string();
         let prompt = if prompt == "-" { None } else { Some(prompt) };
 
-        ctx.ledger
+        ctx.services
             .users
             .set_ai_prompt(&mut ctx.session, self.id, prompt)
             .await?;

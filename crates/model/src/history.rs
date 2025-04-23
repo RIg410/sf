@@ -116,3 +116,47 @@ pub enum Action {
     RemoveFamilyMember {},
     AddFamilyMember {},
 }
+
+pub enum ActionType {
+    SignUp,
+    SignOut,
+    SellSub,
+    FinalizedTraining,
+    FinalizedCanceledTraining,
+    Payment,
+    Deposit,
+    CreateUser,
+    Freeze,
+    Unfreeze,
+    ChangeBalance,
+    ChangeReservedBalance,
+    ChangeSubscriptionDays,
+    PayReward,
+    ExpireSubscription,
+    RemoveFamilyMember,
+    AddFamilyMember,
+}
+
+impl ActionType {
+    pub fn name(&self) -> &'static str {
+        match self {
+            ActionType::SignUp => "SignUp",
+            ActionType::SignOut => "SignOut",
+            ActionType::SellSub => "SellSub",
+            ActionType::FinalizedTraining => "FinalizedTraining",
+            ActionType::FinalizedCanceledTraining => "FinalizedCanceledTraining",
+            ActionType::Payment => "Payment",
+            ActionType::Deposit => "Deposit",
+            ActionType::CreateUser => "CreateUser",
+            ActionType::Freeze => "Freeze",
+            ActionType::Unfreeze => "Unfreeze",
+            ActionType::ChangeBalance => "ChangeBalance",
+            ActionType::ChangeReservedBalance => "ChangeReservedBalance",
+            ActionType::ChangeSubscriptionDays => "ChangeSubscriptionDays",
+            ActionType::PayReward => "PayReward",
+            ActionType::ExpireSubscription => "ExpireSubscription",
+            ActionType::RemoveFamilyMember => "RemoveFamilyMember",
+            ActionType::AddFamilyMember => "AddFamilyMember",
+        }
+    }
+}

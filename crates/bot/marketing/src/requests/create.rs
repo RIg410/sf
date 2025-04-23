@@ -79,7 +79,7 @@ impl View for SetComeFrom {
         let come_from: Source = calldata!(data);
 
         let request = ctx
-            .ledger
+            .services
             .requests
             .get_by_phone(&mut ctx.session, &sanitize_phone(&self.phone))
             .await?;
@@ -398,7 +398,7 @@ impl View for Confirm {
         match calldata!(data) {
             CalldataYesNo::Yes => {
                 ctx.ensure(Rule::CreateRequest)?;
-                ctx.ledger
+                ctx.services
                     .requests
                     .create_request(
                         &mut ctx.session,
@@ -494,7 +494,7 @@ impl View for SelectSubscriptionsView {
         ctx.ensure(Rule::SellSubscription)?;
         let text = "Выберите абонемент";
         let mut keymap = InlineKeyboardMarkup::default();
-        let subscriptions = ctx.ledger.subscriptions.get_all(&mut ctx.session).await?;
+        let subscriptions = ctx.services.subscriptions.get_all(&mut ctx.session).await?;
         for subscription in &subscriptions {
             keymap = keymap.append_row(vec![
                 SelectSubscriptionsCallback(subscription.id.bytes())
@@ -544,7 +544,7 @@ impl View for ConfirmSellSubscription {
     async fn show(&mut self, ctx: &mut bot_core::context::Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::SellSubscription)?;
         let sub = ctx
-            .ledger
+            .services
             .subscriptions
             .get(&mut ctx.session, self.subscription_id)
             .await?
@@ -587,7 +587,7 @@ impl View for ConfirmSellSubscription {
         ctx.ensure(Rule::SellSubscription)?;
         match calldata!(data) {
             ConfirmSellSubscriptionCallback::Yes => {
-                ctx.ledger
+                ctx.services
                     .presell_subscription(
                         &mut ctx.session,
                         self.subscription_id,

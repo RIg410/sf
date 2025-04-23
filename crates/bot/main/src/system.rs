@@ -39,7 +39,7 @@ impl View for SystemView {
         ctx.ensure(Rule::System)?;
         match calldata!(data) {
             Calldata::Dump => {
-                let dump_file = ctx.ledger.backup.make_backup(&mut ctx.session).await?;
+                let dump_file = ctx.services.backup.make_backup(&mut ctx.session).await?;
                 ctx.send_document(dump_file, "dump.zip").await?;
             }
             Calldata::ExtendSubscription => {
@@ -81,7 +81,7 @@ impl View for ApplyDump {
         if let Some(document) = msg.document() {
             info!("Apply dump {:?}", document);
             let dump = ctx.bot.load_document(&document.file).await?;
-            ctx.ledger
+            ctx.services
                 .backup
                 .apply_backup(&mut ctx.session, dump)
                 .await?;

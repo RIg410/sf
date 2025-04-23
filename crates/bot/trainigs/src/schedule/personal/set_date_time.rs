@@ -81,7 +81,7 @@ impl View for SetDateTime {
                 );
 
                 if let Some(collision) = ctx
-                    .ledger
+                    .services
                     .calendar
                     .check_time_slot(&mut ctx.session, slot, true)
                     .await?

@@ -44,7 +44,7 @@ impl EditTraining {
         ctx.ensure(Rule::RemoveTraining)?;
 
         let training = ctx
-            .ledger
+            .services
             .calendar
             .get_training_by_id(&mut ctx.session, self.id)
             .await?
@@ -53,7 +53,7 @@ impl EditTraining {
             bail!("Can't delete personal training");
         }
 
-        ctx.ledger
+        ctx.services
             .calendar
             .delete_training(&mut ctx.session, training.id(), all)
             .await?;
@@ -63,7 +63,7 @@ impl EditTraining {
     async fn keep_open(&mut self, ctx: &mut Context, keep_open: bool) -> Result<Jmp> {
         ctx.ensure(Rule::SetKeepOpen)?;
         let training = ctx
-            .ledger
+            .services
             .calendar
             .get_training_by_id(&mut ctx.session, self.id)
             .await?
@@ -71,7 +71,7 @@ impl EditTraining {
         if !training.is_group() {
             bail!("Can't delete personal training");
         }
-        ctx.ledger
+        ctx.services
             .calendar
             .set_keep_open(&mut ctx.session, training.id(), keep_open)
             .await?;
@@ -82,7 +82,7 @@ impl EditTraining {
         ctx.ensure(Rule::SetFree)?;
 
         let training = ctx
-            .ledger
+            .services
             .calendar
             .get_training_by_id(&mut ctx.session, self.id)
             .await?
@@ -99,7 +99,7 @@ impl EditTraining {
         let mut tp = training.tp;
         tp.set_is_free(free);
 
-        ctx.ledger
+        ctx.services
             .calendar
             .set_training_type(&mut ctx.session, training.id(), tp)
             .await?;
@@ -115,7 +115,7 @@ impl View for EditTraining {
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let training = ctx
-            .ledger
+            .services
             .calendar
             .get_training_by_id(&mut ctx.session, self.id)
             .await?

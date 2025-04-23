@@ -34,7 +34,7 @@ impl View for FreezeProfile {
         match self.state {
             State::SetDays => {
                 let user = ctx
-                    .ledger
+                    .services
                     .users
                     .get(&mut ctx.session, self.id)
                     .await?
@@ -95,7 +95,7 @@ impl View for FreezeProfile {
                 let can_freeze = ctx.has_right(Rule::FreezeUsers);
 
                 let user = ctx
-                    .ledger
+                    .services
                     .users
                     .get(&mut ctx.session, self.id)
                     .await?
@@ -115,7 +115,7 @@ impl View for FreezeProfile {
                     return Ok(Jmp::Back);
                 }
 
-                ctx.ledger
+                ctx.services
                     .users
                     .freeze(&mut ctx.session, user.id, self.days, can_freeze)
                     .await

@@ -40,7 +40,7 @@ impl View for AddMember {
         if let Some(request) = &self.request {
             let request = sanitize_phone(request);
             if let Some(user) = ctx
-                .ledger
+                .services
                 .users
                 .find_by_phone(&mut ctx.session, &request)
                 .await?
@@ -129,7 +129,7 @@ impl View for AddMemberConfirm {
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::EditFamily)?;
 
-        let child = ctx.ledger.get_user(&mut ctx.session, self.child_id).await?;
+        let child = ctx.services.get_user(&mut ctx.session, self.child_id).await?;
         let msg = format!(
             "Вы уверены, что хотите добавить члена семьи {} {}?",
             escape(&child.name.first_name),
@@ -149,7 +149,7 @@ impl View for AddMemberConfirm {
 
         match calldata!(data) {
             ConfirmCalldata::AddMember => {
-                ctx.ledger
+                ctx.services
                     .users
                     .add_family_member(&mut ctx.session, self.parent_id, self.child_id)
                     .await?;
@@ -262,7 +262,7 @@ impl View for CreateMemberConfirm {
         match calldata!(data) {
             ConfirmCalldata::AddMember => {
                 let result = ctx
-                    .ledger
+                    .services
                     .users
                     .create_family_member(
                         &mut ctx.session,

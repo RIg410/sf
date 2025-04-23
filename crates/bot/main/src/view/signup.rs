@@ -5,14 +5,14 @@ use bot_core::{
     widget::{Jmp, View},
 };
 use eyre::{Context as _, Ok};
-use services::Services;
-use tracing::info;
 use model::user::UserName;
 use mongodb::bson::oid::ObjectId;
+use services::Services;
 use storage::session::Session;
 use teloxide::types::{
     ButtonRequest, Contact, KeyboardButton, KeyboardMarkup, KeyboardRemove, Message, ReplyMarkup,
 };
+use tracing::info;
 
 const GREET_START: &str =
     "\nПожалуйста, оставьте ваш номер телефона\\. Для этого нажмите на кнопку ниже\\.";
@@ -48,9 +48,15 @@ impl View for SignUpView {
         }
 
         if let Some(contact) = msg.contact() {
-            let id = create_user(&ctx.ledger, msg.chat.id.0, contact, from, &mut ctx.session)
-                .await
-                .context("Failed to create user")?;
+            let id = create_user(
+                &ctx.services,
+                msg.chat.id.0,
+                contact,
+                from,
+                &mut ctx.session,
+            )
+            .await
+            .context("Failed to create user")?;
             ctx.send_replay_markup(
                 "Добро пожаловать\\!",
                 ReplyMarkup::KeyboardRemove(KeyboardRemove::new()),

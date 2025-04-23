@@ -21,7 +21,7 @@ impl StageText<State> for CouchDescription {
         state: &mut State,
         query: &str,
     ) -> Result<Dispatch<State>, Error> {
-        ctx.ledger
+        ctx.services
             .users
             .update_employee_description(&mut ctx.session, state.id, query.to_string())
             .await?;

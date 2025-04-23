@@ -185,7 +185,7 @@ pub async fn render_week(
     }
     buttons = buttons.append_row(row);
     let mut day = ctx
-        .ledger
+        .services
         .calendar
         .get_day(&mut ctx.session, selected_day_id)
         .await?;

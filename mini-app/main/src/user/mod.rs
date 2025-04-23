@@ -45,7 +45,7 @@ impl UsersService for UserServer {
         }
 
         let user = ctx
-            .ledger
+            .services
             .get_user(&mut ctx.session, user_id)
             .await
             .map_err(|err| {

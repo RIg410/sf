@@ -19,7 +19,6 @@ use thiserror::Error;
 use tracing::info;
 use tx_macro::tx;
 
-pub mod ai;
 pub mod comments;
 pub mod employee;
 pub mod family;

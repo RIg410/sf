@@ -80,7 +80,7 @@ pub async fn render_msg(
 
     let instructor = if let Some(id) = preset.instructor {
         let user = ctx
-            .ledger
+            .services
             .users
             .get(&mut ctx.session, id)
             .await?
@@ -96,7 +96,7 @@ pub async fn render_msg(
 
     let client = if let Some(id) = preset.client {
         let user = ctx
-            .ledger
+            .services
             .users
             .get(&mut ctx.session, id)
             .await?

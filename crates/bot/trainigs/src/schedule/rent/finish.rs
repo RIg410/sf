@@ -59,7 +59,7 @@ impl View for Finish {
                     .renter
                     .ok_or_else(|| eyre::eyre!("Renter is missing"))?;
 
-                ctx.ledger
+                ctx.services
                     .calendar
                     .schedule_rent(&mut ctx.session, date_time, duration, room, price, renter)
                     .await?;

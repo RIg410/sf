@@ -1,6 +1,6 @@
 use crate::{context::Context, widget::Jmp};
 use chrono::Local;
-use error::LedgerError;
+use error::SfError;
 use eyre::{Error, Result};
 use model::{training::TrainingId, user::rate::Rate};
 use mongodb::bson::oid::ObjectId;
@@ -10,7 +10,7 @@ pub async fn handle_result(ctx: &mut Context, result: Result<Jmp, Error>) -> Res
     match result {
         Ok(jmp) => Ok(jmp),
         Err(err) => {
-            let ledger_err = err.downcast::<LedgerError>()?;
+            let ledger_err = err.downcast::<SfError>()?;
             if let Some(notification) = bassness_error(ctx, &ledger_err).await? {
                 ctx.send_notification(&notification).await;
                 Ok(Jmp::Stay)
@@ -21,13 +21,13 @@ pub async fn handle_result(ctx: &mut Context, result: Result<Jmp, Error>) -> Res
     }
 }
 
-pub async fn bassness_error(ctx: &mut Context, err: &LedgerError) -> Result<Option<String>> {
+pub async fn bassness_error(ctx: &mut Context, err: &SfError) -> Result<Option<String>> {
     Ok(Some(match err {
-        LedgerError::Eyre(_) => return Ok(None),
-        LedgerError::UserNotFound(object_id) => {
+        SfError::Eyre(_) => return Ok(None),
+        SfError::UserNotFound(object_id) => {
             format!("Ошибка: *Пользователь {} не найден*", obj_id(object_id))
         }
-        LedgerError::MemberNotFound { user_id, member_id } => {
+        SfError::MemberNotFound { user_id, member_id } => {
             let user = user_name(ctx, *user_id).await?;
             let member = user_name(ctx, *member_id).await?;
             format!(
@@ -35,7 +35,7 @@ pub async fn bassness_error(ctx: &mut Context, err: &LedgerError) -> Result<Opti
                 member, user
             )
         }
-        LedgerError::WrongFamilyMember { user_id, member_id } => {
+        SfError::WrongFamilyMember { user_id, member_id } => {
             let user = user_name(ctx, *user_id).await?;
             let member = user_name(ctx, *member_id).await?;
             format!(
@@ -43,8 +43,8 @@ pub async fn bassness_error(ctx: &mut Context, err: &LedgerError) -> Result<Opti
                 member, user
             )
         }
-        LedgerError::MongoError(_) => return Ok(None),
-        LedgerError::UserAlreadyInFamily { user_id, member_id } => {
+        SfError::MongoError(_) => return Ok(None),
+        SfError::UserAlreadyInFamily { user_id, member_id } => {
             let user = user_name(ctx, *user_id).await?;
             let member = user_name(ctx, *member_id).await?;
             format!(
@@ -52,23 +52,23 @@ pub async fn bassness_error(ctx: &mut Context, err: &LedgerError) -> Result<Opti
                 member, user
             )
         }
-        LedgerError::UserAlreadyEmployee { user_id } => format!(
+        SfError::UserAlreadyEmployee { user_id } => format!(
             "Ошибка:*Пользователь {} уже является сотрудником*",
             user_name(ctx, *user_id).await?
         ),
-        LedgerError::UserNotEmployee { user_id } => format!(
+        SfError::UserNotEmployee { user_id } => format!(
             "Ошибка:*Пользователь {} не является сотрудником*",
             user_name(ctx, *user_id).await?
         ),
-        LedgerError::EmployeeHasReward { user_id } => format!(
+        SfError::EmployeeHasReward { user_id } => format!(
             "Ошибка:*У сотрудника {} есть не выданная награда*",
             user_name(ctx, *user_id).await?
         ),
-        LedgerError::CouchHasTrainings(user_id) => format!(
+        SfError::CouchHasTrainings(user_id) => format!(
             "Ошибка:*Тренер {} имеет незавершенные тренировки*",
             user_name(ctx, *user_id).await?
         ),
-        LedgerError::RateNotFound { user_id, rate } => {
+        SfError::RateNotFound { user_id, rate } => {
             let user = user_name(ctx, *user_id).await?;
             format!(
                 "Ошибка:*{} тариф не найден у пользователя {}*",
@@ -76,7 +76,7 @@ pub async fn bassness_error(ctx: &mut Context, err: &LedgerError) -> Result<Opti
                 user
             )
         }
-        LedgerError::RateTypeAlreadyExists { user_id, rate } => {
+        SfError::RateTypeAlreadyExists { user_id, rate } => {
             let user = user_name(ctx, *user_id).await?;
             format!(
                 "Ошибка:*{} тариф уже существует у пользователя {}*",
@@ -84,106 +84,106 @@ pub async fn bassness_error(ctx: &mut Context, err: &LedgerError) -> Result<Opti
                 user
             )
         }
-        LedgerError::NoRatesFound { user_id } => {
+        SfError::NoRatesFound { user_id } => {
             let user = user_name(ctx, *user_id).await?;
             format!("Ошибка:*У пользователя {} нет тарифов*", user)
         }
-        LedgerError::WrongTrainingClients { .. } => return Ok(None),
-        LedgerError::RequestNotFound { id } => format!("Ошибка:*Заявка {} не найдена*", id),
-        LedgerError::ProgramNotFound(object_id) => {
+        SfError::WrongTrainingClients { .. } => return Ok(None),
+        SfError::RequestNotFound { id } => format!("Ошибка:*Заявка {} не найдена*", id),
+        SfError::ProgramNotFound(object_id) => {
             format!("Ошибка:*Программа {} не найдена*", object_id)
         }
-        LedgerError::InstructorNotFound(object_id) => {
+        SfError::InstructorNotFound(object_id) => {
             format!(
                 "Ошибка:*Тренер {} не найден*",
                 user_name(ctx, *object_id).await?
             )
         }
-        LedgerError::ClientNotFound(object_id) => {
+        SfError::ClientNotFound(object_id) => {
             format!(
                 "Ошибка:*Клиент {} не найден*",
                 user_name(ctx, *object_id).await?
             )
         }
-        LedgerError::InstructorHasNoRights(object_id) => {
+        SfError::InstructorHasNoRights(object_id) => {
             format!(
                 "Ошибка:*Пользователь {} не имеет прав на проведение тренировки*",
                 user_name(ctx, *object_id).await?
             )
         }
-        LedgerError::TooCloseToStart { start_at: _ } => {
+        SfError::TooCloseToStart { start_at: _ } => {
             "Ошибка:*Тренировка должна начаться не ранее чем за 3 часа от начала*".to_string()
         }
-        LedgerError::TimeSlotCollision(training) => {
+        SfError::TimeSlotCollision(training) => {
             format!(
                 "Ошибка:*Тренировка пересекается с тренировкой {} в {}*",
                 escape(&training.name),
                 training.get_slot().start_at().format("%d\\.%m\\.%Y %H:%M")
             )
         }
-        LedgerError::TrainingNotOpenToSignUp(training_id, _) => {
+        SfError::TrainingNotOpenToSignUp(training_id, _) => {
             format!(
                 "Ошибка:*Тренировка {} в {} закрыта для записи*",
                 training_name(ctx, training_id).await?,
                 training_id.start_at().format("%d\\.%m\\.%Y %H:%M")
             )
         }
-        LedgerError::ClientAlreadySignedUp(object_id, training_id) => {
+        SfError::ClientAlreadySignedUp(object_id, training_id) => {
             format!(
                 "Ошибка:*Клиент {} уже записан на тренировку {}*",
                 user_name(ctx, *object_id).await?,
                 training_name(ctx, training_id).await?
             )
         }
-        LedgerError::TrainingIsFull(training_id) => {
+        SfError::TrainingIsFull(training_id) => {
             format!(
                 "Ошибка:*На тренировке {} в {} нет свободных мест*",
                 training_name(ctx, training_id).await?,
                 training_id.start_at().format("%d\\.%m\\.%Y %H:%M")
             )
         }
-        LedgerError::NotEnoughBalance(_) => "Ошибка:*Нет подходящего абонемента*".to_string(),
-        LedgerError::TrainingNotFound(training_id) => {
+        SfError::NotEnoughBalance(_) => "Ошибка:*Нет подходящего абонемента*".to_string(),
+        SfError::TrainingNotFound(training_id) => {
             format!(
                 "Ошибка:*Тренировка {} не найдена*",
                 training_id.start_at().format("%d\\.%m\\.%Y %H:%M")
             )
         }
-        LedgerError::TrainingNotOpenToSignOut(training_id) => {
+        SfError::TrainingNotOpenToSignOut(training_id) => {
             format!(
                 "Ошибка:*Тренировка {} в {} закрыта для отмены записи*",
                 training_name(ctx, training_id).await?,
                 training_id.start_at().format("%d\\.%m\\.%Y %H:%M")
             )
         }
-        LedgerError::ClientNotSignedUp(object_id, training_id) => {
+        SfError::ClientNotSignedUp(object_id, training_id) => {
             format!(
                 "Ошибка:*Клиент {} не записан на тренировку {}*",
                 user_name(ctx, *object_id).await?,
                 training_name(ctx, training_id).await?
             )
         }
-        LedgerError::NotEnoughReservedBalance(object_id) => {
+        SfError::NotEnoughReservedBalance(object_id) => {
             format!(
                 "Ошибка:*У пользователя {} недостаточно зарезервированных средств*",
                 user_name(ctx, *object_id).await?
             )
         }
-        LedgerError::TrainingHasClients(training_id) => {
+        SfError::TrainingHasClients(training_id) => {
             format!(
                 "Ошибка:*Тренировка {} в {} имеет записанных клиентов*",
                 training_name(ctx, training_id).await?,
                 training_id.start_at().format("%d\\.%m\\.%Y %H:%M")
             )
         }
-        LedgerError::DayIdMismatch { old, new } => {
+        SfError::DayIdMismatch { old, new } => {
             format!(
                 "Ошибка:*День {} не совпадает с днем {}*",
                 old.id().with_timezone(&Local).format("%d\\.%m\\.%Y"),
                 new.id().with_timezone(&Local).format("%d\\.%m\\.%Y")
             )
         }
-        LedgerError::TrainingIsProcessed(training_id) => {
+        SfError::TrainingIsProcessed(training_id) => {
             format!(
                 "Ошибка:*Тренировка {} в {} уже обработана*",
                 training_name(ctx, training_id).await?,
@@ -194,7 +194,7 @@ pub async fn bassness_error(ctx: &mut Context, err: &LedgerError) -> Result<Opti
 }
 
 async fn user_name(ctx: &mut Context, user_id: ObjectId) -> Result<String> {
-    let user = ctx.ledger.users.get(&mut ctx.session, user_id).await?;
+    let user = ctx.services.users.get(&mut ctx.session, user_id).await?;
     Ok(user
         .map(|u| escape(&u.name.first_name))
         .unwrap_or_else(|| obj_id(&user_id)))
@@ -202,7 +202,7 @@ async fn user_name(ctx: &mut Context, user_id: ObjectId) -> Result<String> {
 
 async fn training_name(ctx: &mut Context, training_id: &TrainingId) -> Result<String> {
     let training = ctx
-        .ledger
+        .services
         .calendar
         .get_training_by_id(&mut ctx.session, *training_id)
         .await?;

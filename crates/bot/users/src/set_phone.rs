@@ -36,7 +36,7 @@ impl View for SetPhone {
             return Ok(Jmp::Stay);
         }
 
-        ctx.ledger
+        ctx.services
             .users
             .set_phone(&mut ctx.session, self.id, text)
             .await?;

@@ -26,7 +26,7 @@ impl View for UserRightsView {
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         let user = ctx
-            .ledger
+            .services
             .users
             .get(&mut ctx.session, self.id)
             .await?
@@ -43,7 +43,7 @@ impl View for UserRightsView {
                 ctx.ensure(Rule::EditUserRights)?;
 
                 let rule = Rule::try_from(rule_id)?;
-                ctx.ledger
+                ctx.services
                     .users
                     .edit_user_rule(&mut ctx.session, self.id, rule, is_active)
                     .await?;

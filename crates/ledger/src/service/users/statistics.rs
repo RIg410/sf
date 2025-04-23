@@ -16,9 +16,10 @@ impl Users {
         user: &ObjectId,
     ) -> Result<Statistics, eyre::Error> {
         let mut statistics = Statistics::default();
-        let history = self.logs.get_actor_logs(session, *user, None, 0).await?;
+        let mut history = self.logs.get_actor_logs(session, *user, None, 0, vec![]).await?;
 
-        for row in history {
+        while let Some(row) = history.next(session).await {
+            let row = row?;
             match row.action {
                 model::history::Action::RemoveFamilyMember {}
                 | model::history::Action::AddFamilyMember {}

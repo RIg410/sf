@@ -15,7 +15,7 @@ pub async fn fmt_subscription_type(
 
             for program_id in program_filter {
                 let program = ctx
-                    .ledger
+                    .services
                     .programs
                     .get_by_id(&mut ctx.session, *program_id)
                     .await?;
@@ -31,7 +31,7 @@ pub async fn fmt_subscription_type(
         }
         SubscriptionType::Personal { couch_filter } => {
             let user = ctx
-                .ledger
+                .services
                 .users
                 .get(&mut ctx.session, *couch_filter)
                 .await?;

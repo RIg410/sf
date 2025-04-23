@@ -31,7 +31,7 @@ impl View for SetDateTime {
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let training = ctx
-            .ledger
+            .services
             .programs
             .get_by_id(&mut ctx.session, self.preset.program_id()?)
             .await?
@@ -83,7 +83,7 @@ impl View for SetDateTime {
 
             if let Some(date_time) = date_time {
                 let program = ctx
-                    .ledger
+                    .services
                     .programs
                     .get_by_id(&mut ctx.session, self.preset.program_id()?)
                     .await?
@@ -95,7 +95,7 @@ impl View for SetDateTime {
                 );
 
                 if let Some(collision) = ctx
-                    .ledger
+                    .services
                     .calendar
                     .check_time_slot(&mut ctx.session, slot, preset.is_one_time.unwrap_or(true))
                     .await?

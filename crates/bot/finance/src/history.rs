@@ -36,7 +36,7 @@ impl StageList<State> for FinanceView {
     ) -> Result<(String, Vec<Vec<ListItem>>)> {
         ctx.ensure(Rule::MakePayment)?;
         let page = ctx
-            .ledger
+            .services
             .treasury
             .page(&mut ctx.session, limit as u64, offset as u64)
             .await?;

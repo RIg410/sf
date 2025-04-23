@@ -32,7 +32,7 @@ impl View for PayReward {
     }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
-        let user = ctx.ledger.get_user(&mut ctx.session, self.id).await?;
+        let user = ctx.services.get_user(&mut ctx.session, self.id).await?;
         let reward = user.employee.map(|e| e.reward).unwrap_or_default();
 
         let msg = format!(
@@ -57,7 +57,7 @@ impl View for PayReward {
         };
         if let Ok(sum) = txt.parse::<Decimal>() {
             let user = ctx
-                .ledger
+                .services
                 .get_user(&mut ctx.session, self.id)
                 .await?
                 .employee
@@ -94,7 +94,7 @@ impl View for ConfirmSum {
     }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
-        let user = ctx.ledger.get_user(&mut ctx.session, self.id).await?;
+        let user = ctx.services.get_user(&mut ctx.session, self.id).await?;
 
         let msg = format!(
             "Выплатить _{}_ пользователю _{}_?",
@@ -114,7 +114,7 @@ impl View for ConfirmSum {
         match calldata!(data) {
             ConfirmCallback::Confirm => {
                 ctx.ensure(Rule::MakePayment)?;
-                ctx.ledger
+                ctx.services
                     .pay_reward(&mut ctx.session, self.id, self.sum)
                     .await?;
                 ctx.send_msg("Операция выполнена").await?;

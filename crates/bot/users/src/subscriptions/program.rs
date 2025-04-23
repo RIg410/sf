@@ -33,7 +33,7 @@ impl View for EditPrograms {
         let mut keymap = InlineKeyboardMarkup::default();
         let msg = "*Выберите программы*";
 
-        let user = ctx.ledger.get_user(&mut ctx.session, self.user_id).await?;
+        let user = ctx.services.get_user(&mut ctx.session, self.user_id).await?;
         let payer = user.payer()?;
         let subscription = payer
             .subscriptions()
@@ -41,7 +41,7 @@ impl View for EditPrograms {
             .find(|s| s.id == self.id)
             .ok_or_else(|| eyre::eyre!("Subscription not found"))?;
 
-        let programs = ctx.ledger.programs.get_all(&mut ctx.session, false).await?;
+        let programs = ctx.services.programs.get_all(&mut ctx.session, false).await?;
 
         if let SubscriptionType::Group { program_filter } = &subscription.tp {
             for program in programs {
@@ -70,7 +70,7 @@ impl View for EditPrograms {
         match calldata!(data) {
             Callback::Select(program_id) => {
                 let program_id = ObjectId::from_bytes(program_id);
-                ctx.ledger
+                ctx.services
                     .users
                     .change_subscription_program(
                         &mut ctx.session,
@@ -83,7 +83,7 @@ impl View for EditPrograms {
             }
             Callback::Unselect(program_id) => {
                 let program_id = ObjectId::from_bytes(program_id);
-                ctx.ledger
+                ctx.services
                     .users
                     .change_subscription_program(
                         &mut ctx.session,

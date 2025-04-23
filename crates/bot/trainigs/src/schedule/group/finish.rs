@@ -30,7 +30,7 @@ impl View for Finish {
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let training = ctx
-            .ledger
+            .services
             .programs
             .get_by_id(&mut ctx.session, self.preset.program_id()?)
             .await?
@@ -62,7 +62,7 @@ impl View for Finish {
 
                 let room = preset.room.ok_or_else(|| eyre::eyre!("Room is missing"))?;
 
-                ctx.ledger
+                ctx.services
                     .calendar
                     .schedule_group(
                         &mut ctx.session,

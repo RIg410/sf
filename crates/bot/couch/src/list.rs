@@ -38,7 +38,7 @@ impl View for CouchingList {
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let msg = "Наши инструкторы ❤️";
         let mut keymap = InlineKeyboardMarkup::default();
-        let instructs = ctx.ledger.users.instructors(&mut ctx.session).await?;
+        let instructs = ctx.services.users.instructors(&mut ctx.session).await?;
 
         for instruct in instructs {
             keymap = keymap.append_row(vec![render_button(&instruct)]);

@@ -11,7 +11,7 @@ use storage::session::Session;
 pub struct Context {
     pub bot: TgBot,
     pub me: User,
-    pub ledger: Arc<Services>,
+    pub services: Arc<Services>,
     pub session: Session,
     pub is_real_user: bool,
 }
@@ -27,7 +27,7 @@ impl Context {
         Context {
             bot,
             me,
-            ledger,
+            services: ledger,
             session,
             is_real_user,
         }
@@ -66,12 +66,12 @@ impl Context {
 
     pub async fn reload_user(&mut self) -> Result<(), eyre::Error> {
         let mut user = self
-            .ledger
+            .services
             .users
             .get(&mut self.session, self.me.id)
             .await?
             .ok_or_else(|| eyre::eyre!("Failed to load existing user:{}", self.me.id))?;
-        self.ledger
+        self.services
             .users
             .resolve_family(&mut self.session, &mut user)
             .await?;

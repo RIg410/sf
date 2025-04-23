@@ -1,2 +1,2 @@
-mod advertising;
+pub mod advertising;
 

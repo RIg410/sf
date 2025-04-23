@@ -31,12 +31,12 @@ impl EmployeeProfile {
     async fn block_user(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
         ctx.ensure(Rule::BlockUser)?;
         let user = ctx
-            .ledger
+            .services
             .users
             .get(&mut ctx.session, self.id)
             .await?
             .ok_or_else(|| eyre::eyre!("User not found"))?;
-        ctx.ledger
+        ctx.services
             .block_user(&mut ctx.session, self.id, !user.is_active)
             .await?;
         ctx.reload_user().await?;
@@ -57,7 +57,7 @@ impl EmployeeProfile {
     }
 
     async fn training_list(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
-        let user = ctx.ledger.get_user(&mut ctx.session, self.id).await?;
+        let user = ctx.services.get_user(&mut ctx.session, self.id).await?;
         if user.employee.is_some() {
             Ok(TrainingList::couches(user.id).into())
         } else {
@@ -66,12 +66,12 @@ impl EmployeeProfile {
     }
 
     async fn history_list(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
-        let user = ctx.ledger.get_user(&mut ctx.session, self.id).await?;
+        let user = ctx.services.get_user(&mut ctx.session, self.id).await?;
         Ok(HistoryList::new(user.id).into())
     }
 
     async fn rewards_list(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
-        let user = ctx.ledger.get_user(&mut ctx.session, self.id).await?;
+        let user = ctx.services.get_user(&mut ctx.session, self.id).await?;
         if user.employee.is_some() && (ctx.is_me(user.id) || ctx.has_right(Rule::ViewRewards)) {
             Ok(RewardsList::new(user.id).into())
         } else {

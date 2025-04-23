@@ -113,12 +113,12 @@ impl View for ConfirmCreationRate {
         match calldata!(data) {
             ConfirmCallback::Yes => {
                 if let Some(old) = &self.old_data {
-                    ctx.ledger
+                    ctx.services
                         .users
                         .update_rate(&mut ctx.session, self.employee_id, *old, self.new_data)
                         .await?;
                 } else {
-                    ctx.ledger
+                    ctx.services
                         .users
                         .add_rate(&mut ctx.session, self.employee_id, self.new_data)
                         .await?;

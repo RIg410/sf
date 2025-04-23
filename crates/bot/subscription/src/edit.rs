@@ -29,7 +29,7 @@ impl EditSubscription {
 
     pub async fn edit_price(&self, ctx: &mut Context, value: Decimal) -> Result<Jmp> {
         ctx.ensure(Rule::EditSubscription)?;
-        ctx.ledger
+        ctx.services
             .subscriptions
             .edit_price(&mut ctx.session, self.id, value)
             .await?;
@@ -38,7 +38,7 @@ impl EditSubscription {
 
     pub async fn edit_items(&self, ctx: &mut Context, value: u32) -> Result<Jmp> {
         ctx.ensure(Rule::EditSubscription)?;
-        ctx.ledger
+        ctx.services
             .subscriptions
             .edit_items(&mut ctx.session, self.id, value)
             .await?;
@@ -47,7 +47,7 @@ impl EditSubscription {
 
     pub async fn edit_freeze_days(&self, ctx: &mut Context, value: u32) -> Result<Jmp> {
         ctx.ensure(Rule::EditSubscription)?;
-        ctx.ledger
+        ctx.services
             .subscriptions
             .edit_freeze_days(&mut ctx.session, self.id, value)
             .await?;
@@ -56,7 +56,7 @@ impl EditSubscription {
 
     pub async fn edit_expiration_days(&self, ctx: &mut Context, value: u32) -> Result<Jmp> {
         ctx.ensure(Rule::EditSubscription)?;
-        ctx.ledger
+        ctx.services
             .subscriptions
             .edit_expiration_days(&mut ctx.session, self.id, value)
             .await?;
@@ -65,7 +65,7 @@ impl EditSubscription {
 
     pub async fn edit_can_buy_by_user(&self, ctx: &mut Context, value: bool) -> Result<Jmp> {
         ctx.ensure(Rule::EditSubscription)?;
-        ctx.ledger
+        ctx.services
             .subscriptions
             .edit_can_buy_by_user(&mut ctx.session, self.id, value)
             .await?;
@@ -74,7 +74,7 @@ impl EditSubscription {
 
     pub async fn edit_name(&self, ctx: &mut Context, value: String) -> Result<Jmp> {
         ctx.ensure(Rule::EditSubscription)?;
-        ctx.ledger
+        ctx.services
             .subscriptions
             .edit_name(&mut ctx.session, self.id, value)
             .await?;

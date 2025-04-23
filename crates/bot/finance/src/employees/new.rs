@@ -51,7 +51,7 @@ impl View for MakeEmployee {
         };
 
         let user = ctx
-            .ledger
+            .services
             .users
             .find_by_phone(&mut ctx.session, &phone)
             .await?;
@@ -132,7 +132,7 @@ impl View for EmployeeRoleView {
 
     async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {
         let role: EmployeeRole = calldata!(data);
-        ctx.ledger
+        ctx.services
             .users
             .make_user_employee(
                 &mut ctx.session,

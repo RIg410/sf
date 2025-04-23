@@ -3,14 +3,14 @@ use std::{ops::Deref, sync::Arc};
 use chrono::{DateTime, Local, Utc};
 use eyre::Result;
 use model::{
-    history::{Action, HistoryRow},
+    history::{Action, ActionType, HistoryRow},
     rooms::Room,
     subscription::{Subscription, UserSubscription},
     training::Training,
     user::UserName,
 };
 use     decimal::Decimal;
-use mongodb::bson::oid::ObjectId;
+use mongodb::{bson::oid::ObjectId, SessionCursor};
 use storage::history::HistoryStore;
 use storage::session::Session;
 
@@ -58,11 +58,12 @@ impl History {
         &self,
         session: &mut Session,
         actor: ObjectId,
-        limit: usize,
+        limit: Option<usize>,
         offset: usize,
-    ) -> Result<Vec<HistoryRow>> {
+        actions: Vec<ActionType>,
+    ) -> Result<SessionCursor<HistoryRow>> {
         self.store
-            .get_actor_logs(session, actor, Some(limit), offset)
+            .get_actor_logs(session, actor, limit, offset, actions)
             .await
     }
 

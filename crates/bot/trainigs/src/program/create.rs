@@ -57,7 +57,7 @@ impl View for CreateProgram {
         self.state = Some(match state {
             State::SetName(mut training) => {
                 if ctx
-                    .ledger
+                    .services
                     .programs
                     .get_by_name(&mut ctx.session, msg)
                     .await?
@@ -93,7 +93,7 @@ impl View for CreateProgram {
                 if let Ok(capacity) = msg.parse::<u32>() {
                     program.capacity = capacity;
                     ctx.ensure(Rule::CreateTraining)?;
-                    ctx.ledger
+                    ctx.services
                         .programs
                         .create(
                             &mut ctx.session,

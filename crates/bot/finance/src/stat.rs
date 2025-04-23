@@ -39,7 +39,7 @@ impl View for Stat {
             .unwrap_or((None, None));
 
         let stat = ctx
-            .ledger
+            .services
             .treasury
             .aggregate(&mut ctx.session, from, to)
             .await?;

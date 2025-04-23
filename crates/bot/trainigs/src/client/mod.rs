@@ -41,7 +41,7 @@ impl ClientView {
 
     async fn training(&self, ctx: &mut Context) -> Result<Training> {
         let training = ctx
-            .ledger
+            .services
             .calendar
             .get_training_by_id(&mut ctx.session, self.training_id)
             .await?
@@ -57,11 +57,11 @@ impl ClientView {
                 .await;
             return Ok(());
         }
-        ctx.ledger
+        ctx.services
             .sign_up(&mut ctx.session, training.id(), self.id, true)
             .await?;
 
-        let user = ctx.ledger.get_user(&mut ctx.session, self.id).await?;
+        let user = ctx.services.get_user(&mut ctx.session, self.id).await?;
 
         ctx.send_notification(&format!(
             "{} добавлен в тренировку",
@@ -73,7 +73,7 @@ impl ClientView {
         let balance = payer.available_balance_for_training(&training);
         if balance <= 1 {
             if let Ok(users) = ctx
-                .ledger
+                .services
                 .users
                 .find_users_with_right(
                     &mut ctx.session,
@@ -110,7 +110,7 @@ impl ClientView {
                 .await;
             return Ok(());
         }
-        ctx.ledger
+        ctx.services
             .sign_out(&mut ctx.session, training.id(), self.id, true)
             .await?;
 
