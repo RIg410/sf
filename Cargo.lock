@@ -4071,17 +4071,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "users"
-version = "0.1.0"
-dependencies = [
- "bson",
- "chrono",
- "decimal",
- "eyre",
- "serde",
-]
-
-[[package]]
 name = "uuid"
 version = "1.11.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"

@@ -22,7 +22,6 @@ members = [
   "crates/ai",
   "crates/error",
   "mini-app/main",
-  "crates/users",
   "crates/decimal",
   "crates/decimal",
 ]
@@ -48,7 +47,6 @@ decimal = {path = "crates/decimal"}
 error = {path = "crates/error"}
 graph = {path = "crates/graph"}
 time = {path = "crates/time"}
-users = {path = "crates/users"}
 
 mini-app-main = {path = "mini-app/main"}
 
