@@ -1,12 +1,11 @@
 [package]
-name = "time"
-
 edition.workspace = true
 license.workspace = true
+name = "stat"
 publish.workspace = true
 version.workspace = true
 
 [dependencies]
-chrono.workspace = true
-eyre.workspace = true
-serde.workspace = true
+decimal.workspace = true
+model.workspace = true
+

@@ -72,11 +72,11 @@ impl View for FinanceView {
             }
             Callback::StatAll => {
                 ctx.ensure(Rule::ViewFinance)?;
-                Ok(Stat::new(Range::Full).into())
+                Ok(Stat::new(None).into())
             }
             Callback::StatByMonth => {
                 ctx.ensure(Rule::ViewFinance)?;
-                Ok(Stat::new(Range::Month(Local::now().with_day(1).unwrap_or_default())).into())
+                Ok(Stat::new(Some(Range::Month(Local::now().with_day(1).unwrap_or_default()))).into())
             }
             Callback::PayMarketing => {
                 ctx.ensure(Rule::MakePayment)?;

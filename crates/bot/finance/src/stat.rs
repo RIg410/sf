@@ -14,11 +14,11 @@ use teloxide::{types::InlineKeyboardMarkup, utils::markdown::escape};
 use time::range::Range;
 
 pub struct Stat {
-    range: Range,
+    range: Option<Range>,
 }
 
 impl Stat {
-    pub fn new(range: Range) -> Self {
+    pub fn new(range: Option<Range>) -> Self {
         Self { range }
     }
 }
@@ -31,7 +31,13 @@ impl View for Stat {
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         ctx.ensure(Rule::ViewFinance)?;
-        let (from, to) = self.range.range();
+
+        let (from, to) = self
+            .range
+            .map(|r| r.range().map(|r| (Some(r.0), Some(r.1))))
+            .transpose()?
+            .unwrap_or((None, None));
+
         let stat = ctx
             .ledger
             .treasury
@@ -90,7 +96,8 @@ impl View for Stat {
 
         let mut keymap = InlineKeyboardMarkup::default();
 
-        if let Range::Month(date) = self.range {
+        if let Some(range) = self.range {
+            let date = range.base_date();
             let mut row = Vec::new();
             row.push(Calldata::PrevMonth.button("🔙"));
 
@@ -108,10 +115,10 @@ impl View for Stat {
     async fn handle_callback(&mut self, _: &mut Context, data: &str) -> Result<Jmp> {
         match calldata!(data) {
             Calldata::NextMonth => {
-                self.range = self.range.next_month();
+                self.range = self.range.map(|r| r.next()).transpose()?;
             }
             Calldata::PrevMonth => {
-                self.range = self.range.prev_month();
+                self.range = self.range.map(|r| r.prev()).transpose()?;
             }
         }
         Ok(Jmp::Stay)
