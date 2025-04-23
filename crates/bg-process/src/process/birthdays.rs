@@ -4,7 +4,7 @@ use bot_core::{bot::TgBot, CommonLocation};
 use bot_viewer::fmt_phone;
 use chrono::{Datelike as _, Local};
 use eyre::Error;
-use ledger::Ledger;
+use services::Services;
 use tracing::info;
 use model::{rights::Rule, user::User};
 use std::sync::Arc;
@@ -15,7 +15,7 @@ use teloxide::{
 
 #[derive(Clone)]
 pub struct BirthdaysNotifier {
-    pub ledger: Arc<Ledger>,
+    pub ledger: Arc<Services>,
     pub bot: Arc<TgBot>,
 }
 
@@ -49,7 +49,7 @@ impl Task for BirthdaysNotifier {
 }
 
 impl BirthdaysNotifier {
-    pub fn new(ledger: Arc<Ledger>, bot: Arc<TgBot>) -> BirthdaysNotifier {
+    pub fn new(ledger: Arc<Services>, bot: Arc<TgBot>) -> BirthdaysNotifier {
         BirthdaysNotifier { ledger, bot }
     }
 

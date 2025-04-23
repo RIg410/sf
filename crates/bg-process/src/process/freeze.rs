@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use crate::{Ledger, Task};
+use crate::{Services, Task};
 use async_trait::async_trait;
 use chrono::Local;
 use eyre::{Error, Result};
@@ -8,7 +8,7 @@ use tracing::{info, warn};
 
 #[derive(Clone)]
 pub struct FreezeBg {
-    ledger: Arc<Ledger>,
+    ledger: Arc<Services>,
 }
 
 #[async_trait]
@@ -44,7 +44,7 @@ impl Task for FreezeBg {
 }
 
 impl FreezeBg {
-    pub fn new(ledger: Arc<Ledger>) -> FreezeBg {
+    pub fn new(ledger: Arc<Services>) -> FreezeBg {
         FreezeBg { ledger }
     }
 }

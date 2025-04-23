@@ -24,7 +24,7 @@ members = [
   "mini-app/main",
   "crates/decimal",
   "crates/decimal",
-  "crates/stat",
+  "crates/stat", "crates/services",
 ]
 
 resolver = "2"
@@ -49,6 +49,7 @@ error = {path = "crates/error"}
 graph = {path = "crates/graph"}
 stat = {path = "crates/stat"}
 time = {path = "crates/time"}
+services = {path = "crates/services"}
 
 mini-app-main = {path = "mini-app/main"}
 

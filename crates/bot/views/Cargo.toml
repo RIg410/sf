@@ -19,3 +19,4 @@ storage.workspace = true
 strum.workspace = true
 teloxide.workspace = true
 tracing.workspace = true
+services.workspace = true

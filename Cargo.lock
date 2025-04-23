@@ -241,6 +241,7 @@ dependencies = [
  "ledger",
  "model",
  "mongodb",
+ "services",
  "storage",
  "teloxide",
  "tokio",
@@ -335,6 +336,7 @@ dependencies = [
  "parking_lot",
  "serde",
  "serde_json",
+ "services",
  "storage",
  "strum",
  "teloxide",
@@ -416,6 +418,7 @@ dependencies = [
  "model",
  "mongodb",
  "serde",
+ "services",
  "storage",
  "strum",
  "teloxide",
@@ -558,6 +561,7 @@ dependencies = [
  "model",
  "mongodb",
  "serde",
+ "services",
  "storage",
  "strum",
  "teloxide",
@@ -1881,6 +1885,7 @@ dependencies = [
  "eyre",
  "ledger",
  "mini-app-main",
+ "services",
  "storage",
  "tokio",
  "tracing",
@@ -2048,6 +2053,7 @@ dependencies = [
  "serde",
  "serde_json",
  "serde_qs",
+ "services",
  "sha2",
  "teloxide",
  "tokio",
@@ -3243,6 +3249,26 @@ dependencies = [
 ]
 
 [[package]]
+name = "services"
+version = "0.1.0"
+dependencies = [
+ "ai",
+ "chrono",
+ "decimal",
+ "env",
+ "error",
+ "eyre",
+ "ledger",
+ "model",
+ "mongodb",
+ "stat",
+ "storage",
+ "thiserror 1.0.63",
+ "tx_macro",
+ "yookassa",
+]
+
+[[package]]
 name = "sha-1"
 version = "0.10.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3352,7 +3378,11 @@ checksum = "6980e8d7511241f8acf4aebddbb1ff938df5eebe98691418c4468d0b72a96a67"
 name = "stat"
 version = "0.1.0"
 dependencies = [
+ "ai",
+ "chrono",
  "decimal",
+ "eyre",
+ "ledger",
  "model",
 ]
 

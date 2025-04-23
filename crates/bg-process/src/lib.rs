@@ -3,7 +3,7 @@ use std::sync::Arc;
 use bot_core::bot::{Origin, TgBot, ValidToken};
 use bot_main::BotApp;
 use eyre::{Context, Error};
-use ledger::Ledger;
+use services::Services;
 use tracing::info;
 use process::{
     ai_messages::MotivationNotifier, birthdays::BirthdaysNotifier, freeze::FreezeBg,
@@ -15,7 +15,7 @@ use tokio_cron_scheduler::{Job, JobScheduler};
 use tracing::error;
 mod process;
 
-pub async fn start(ledger: Arc<Ledger>, bot: BotApp) -> Result<(), Error> {
+pub async fn start(ledger: Arc<Services>, bot: BotApp) -> Result<(), Error> {
     let bot = Arc::new(TgBot::new(
         bot.bot,
         bot.state.tokens(),

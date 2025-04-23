@@ -36,6 +36,7 @@ tower.workspace = true
 tracing.workspace = true
 url.workspace = true
 serde_qs.workspace = true
+services.workspace = true
 
 [build-dependencies]
 tonic-build.workspace = true

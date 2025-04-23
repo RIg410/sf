@@ -2,19 +2,19 @@ use std::sync::Arc;
 
 use super::build_context;
 use crate::{
+    BACK_NAME, ERROR,
     context::Context,
     err::handle_result,
     state::{State, StateHolder},
     widget::Widget,
-    BACK_NAME, ERROR,
 };
 use env::Env;
-use ledger::Ledger;
+use services::Services;
 use teloxide::{
+    Bot,
     prelude::{Requester as _, ResponseResult},
     types::Message,
     utils::markdown::escape,
-    Bot,
 };
 use tracing::error;
 
@@ -22,7 +22,7 @@ pub async fn message_handler(
     bot: Bot,
     env: Env,
     msg: Message,
-    ledger: Arc<Ledger>,
+    ledger: Arc<Services>,
     state_holder: StateHolder,
     system_handler: impl Fn() -> Widget,
 ) -> ResponseResult<()> {

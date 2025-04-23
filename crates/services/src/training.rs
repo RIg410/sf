@@ -1,4 +1,4 @@
-use crate::Ledger;
+use crate::Services;
 use chrono::{DateTime, Local};
 use error::LedgerError;
 use model::{
@@ -10,7 +10,7 @@ use mongodb::bson::oid::ObjectId;
 use storage::session::Session;
 use tx_macro::tx;
 
-impl Ledger {
+impl Services {
     #[tx]
     pub async fn cancel_training(
         &self,

@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use crate::{Ledger, Task};
+use crate::{Services, Task};
 use async_trait::async_trait;
 use bot_core::{bot::TgBot, CommonLocation};
 use bot_viewer::{fmt_phone, user::link_to_user};
@@ -22,7 +22,7 @@ use tx_macro::tx;
 
 #[derive(Clone)]
 pub struct TriningBg {
-    ledger: Arc<Ledger>,
+    ledger: Arc<Services>,
     bot: Arc<TgBot>,
 }
 
@@ -79,7 +79,7 @@ impl Task for TriningBg {
 }
 
 impl TriningBg {
-    pub fn new(ledger: Arc<Ledger>, bot: Arc<TgBot>) -> TriningBg {
+    pub fn new(ledger: Arc<Services>, bot: Arc<TgBot>) -> TriningBg {
         TriningBg { ledger, bot }
     }
 

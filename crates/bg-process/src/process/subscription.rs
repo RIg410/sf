@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use crate::{Ledger, Task};
+use crate::{Services, Task};
 use async_trait::async_trait;
 use bot_core::{bot::TgBot, CommonLocation};
 use bot_viewer::{fmt_phone, user::tg_link};
@@ -15,7 +15,7 @@ use tracing::warn;
 
 #[derive(Clone)]
 pub struct SubscriptionBg {
-    ledger: Arc<Ledger>,
+    ledger: Arc<Services>,
     bot: Arc<TgBot>,
 }
 
@@ -99,7 +99,7 @@ impl Task for SubscriptionBg {
 }
 
 impl SubscriptionBg {
-    pub fn new(ledger: Arc<Ledger>, bot: Arc<TgBot>) -> SubscriptionBg {
+    pub fn new(ledger: Arc<Services>, bot: Arc<TgBot>) -> SubscriptionBg {
         SubscriptionBg { ledger, bot }
     }
 }

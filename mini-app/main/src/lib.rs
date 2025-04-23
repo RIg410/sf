@@ -1,10 +1,10 @@
 use auth::AuthServer;
 use bot_main::BotApp;
 use eyre::Result;
-use ledger::Ledger;
 use pb::{
     auth::auth_service_server::AuthServiceServer, users::users_service_server::UsersServiceServer,
 };
+use services::Services;
 use std::sync::Arc;
 use tonic::transport::Server;
 use tonic_web::GrpcWebLayer;
@@ -17,7 +17,7 @@ pub(crate) mod ctx;
 pub(crate) mod pb;
 pub(crate) mod user;
 
-pub fn spawn(ledger: Arc<Ledger>, bot: BotApp) -> Result<()> {
+pub fn spawn(ledger: Arc<Services>, bot: BotApp) -> Result<()> {
     let ctx_builder = ctx::ContextBuilder::new(ledger.clone(), bot.clone());
 
     tokio::spawn(async move {

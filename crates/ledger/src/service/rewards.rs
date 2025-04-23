@@ -6,7 +6,7 @@ pub struct Rewards {
 }
 
 impl Rewards {
-    pub(crate) fn new(store: Arc<RewardsStore>) -> Self {
+    pub fn new(store: Arc<RewardsStore>) -> Self {
         Rewards { store }
     }
 }

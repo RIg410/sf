@@ -13,6 +13,7 @@ mini-app-main.workspace = true
 storage.workspace = true
 bg-process.workspace = true
 env.workspace = true
+services.workspace = true
 
 color-eyre.workspace = true
 dotenv.workspace = true

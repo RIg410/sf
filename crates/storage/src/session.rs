@@ -55,6 +55,10 @@ impl Session {
     }
 
     pub async fn start_transaction(&mut self) -> Result<(), mongodb::error::Error> {
+        if self.in_transaction {
+            return Ok(());
+        }
+
         let result = self.client_session.start_transaction().await;
         if result.is_ok() {
             self.in_transaction = true;
@@ -63,11 +67,18 @@ impl Session {
     }
 
     pub async fn commit_transaction(&mut self) -> Result<(), mongodb::error::Error> {
+        if !self.in_transaction {
+            return Ok(());
+        }
+
         self.in_transaction = false;
         self.client_session.commit_transaction().await
     }
 
     pub async fn abort_transaction(&mut self) -> Result<(), mongodb::error::Error> {
+        if !self.in_transaction {
+            return Ok(());
+        }
         self.in_transaction = false;
         self.client_session.abort_transaction().await
     }

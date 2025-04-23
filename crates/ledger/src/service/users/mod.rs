@@ -1,21 +1,22 @@
 use super::history::History;
 use ::ai::Ai;
 use chrono::{DateTime, Local};
-use eyre::{bail, eyre, Result};
+use eyre::{Result, bail, eyre};
 use model::{
     rights::{Rights, Rule},
     statistics::source::Source,
     user::{
+        User, UserName,
         extension::{Birthday, UserExtension},
-        sanitize_phone, User, UserName,
+        sanitize_phone,
     },
 };
-use mongodb::{bson::oid::ObjectId, SessionCursor};
-use tracing::info;
+use mongodb::{SessionCursor, bson::oid::ObjectId};
 use std::{ops::Deref, sync::Arc};
 use storage::session::Session;
 use storage::user::UserStore;
 use thiserror::Error;
+use tracing::info;
 use tx_macro::tx;
 
 pub mod ai;
@@ -33,7 +34,7 @@ pub struct Users {
 }
 
 impl Users {
-    pub(crate) fn new(store: Arc<UserStore>, logs: History, ai: Ai) -> Self {
+    pub fn new(store: Arc<UserStore>, logs: History, ai: Ai) -> Self {
         Users { store, logs, ai }
     }
 

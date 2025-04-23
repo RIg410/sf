@@ -4,16 +4,16 @@ use bot_core::bot::TgBot;
 use bot_viewer::day::fmt_time;
 use chrono::{DateTime, Local};
 use eyre::Error;
-use ledger::Ledger;
 use model::{ids::DayId, training::Notified};
 use mongodb::bson::oid::ObjectId;
+use services::Services;
 use std::sync::Arc;
 use storage::session::Session;
 use teloxide::{types::ChatId, utils::markdown::escape};
 
 #[derive(Clone)]
 pub struct TrainingNotifier {
-    pub ledger: Arc<Ledger>,
+    pub ledger: Arc<Services>,
     pub bot: Arc<TgBot>,
 }
 
@@ -31,7 +31,7 @@ impl Task for TrainingNotifier {
 }
 
 impl TrainingNotifier {
-    pub fn new(ledger: Arc<Ledger>, bot: Arc<TgBot>) -> TrainingNotifier {
+    pub fn new(ledger: Arc<Services>, bot: Arc<TgBot>) -> TrainingNotifier {
         TrainingNotifier { ledger, bot }
     }
 

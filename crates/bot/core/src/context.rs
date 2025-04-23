@@ -1,7 +1,7 @@
 use crate::bot::TgBot;
-use ledger::Ledger;
 use model::{rights::Rule, user::User};
 use mongodb::bson::oid::ObjectId;
+use services::Services;
 use std::{
     ops::{Deref, DerefMut},
     sync::Arc,
@@ -11,7 +11,7 @@ use storage::session::Session;
 pub struct Context {
     pub bot: TgBot,
     pub me: User,
-    pub ledger: Arc<Ledger>,
+    pub ledger: Arc<Services>,
     pub session: Session,
     pub is_real_user: bool,
 }
@@ -20,7 +20,7 @@ impl Context {
     pub fn new(
         bot: TgBot,
         me: User,
-        ledger: Arc<Ledger>,
+        ledger: Arc<Services>,
         session: Session,
         is_real_user: bool,
     ) -> Context {

@@ -24,7 +24,7 @@ pub struct Calendar {
 }
 
 impl Calendar {
-    pub(crate) fn new(calendar: Arc<CalendarStore>, users: Users, programs: Programs) -> Self {
+    pub fn new(calendar: Arc<CalendarStore>, users: Users, programs: Programs) -> Self {
         Calendar {
             calendar,
             users,
@@ -41,7 +41,7 @@ impl Calendar {
         Ok(day.training.iter().find(|slot| slot.id() == id).cloned())
     }
 
-    pub(crate) async fn cancel_training(
+    pub async fn cancel_training(
         &self,
         session: &mut Session,
         training: &Training,
@@ -247,7 +247,7 @@ impl Calendar {
         Ok(())
     }
 
-    pub(crate) async fn schedule_personal_training(
+    pub async fn schedule_personal_training(
         &self,
         session: &mut Session,
         client: ObjectId,
@@ -380,7 +380,7 @@ impl Calendar {
 }
 
 impl Calendar {
-    pub(crate) async fn edit_duration(
+    pub async fn edit_duration(
         &self,
         session: &mut Session,
         program_id: ObjectId,

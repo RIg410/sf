@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use crate::{Ledger, Task};
+use crate::{Services, Task};
 use async_trait::async_trait;
 use chrono::Local;
 use eyre::Error;
@@ -10,7 +10,7 @@ use tx_macro::tx;
 
 #[derive(Clone)]
 pub struct RewardsBg {
-    ledger: Arc<Ledger>,
+    ledger: Arc<Services>,
 }
 
 #[async_trait]
@@ -26,7 +26,7 @@ impl Task for RewardsBg {
 }
 
 impl RewardsBg {
-    pub fn new(ledger: Arc<Ledger>) -> RewardsBg {
+    pub fn new(ledger: Arc<Services>) -> RewardsBg {
         RewardsBg { ledger }
     }
 

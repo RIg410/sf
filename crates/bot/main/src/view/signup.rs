@@ -5,7 +5,7 @@ use bot_core::{
     widget::{Jmp, View},
 };
 use eyre::{Context as _, Ok};
-use ledger::Ledger;
+use services::Services;
 use tracing::info;
 use model::user::UserName;
 use mongodb::bson::oid::ObjectId;
@@ -76,7 +76,7 @@ impl View for SignUpView {
 }
 
 pub async fn create_user(
-    ledger: &Ledger,
+    ledger: &Services,
     chat_id: i64,
     contact: &Contact,
     from: &teloxide::types::User,

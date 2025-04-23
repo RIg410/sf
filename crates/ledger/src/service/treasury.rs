@@ -41,7 +41,7 @@ impl Treasury {
         self.store.list(session, limit, offset).await
     }
 
-    pub(crate) async fn sell(
+    pub async fn sell(
         &self,
         session: &mut Session,
         buyer_id: ObjectId,
@@ -193,7 +193,7 @@ impl Treasury {
         Ok(())
     }
 
-    pub(crate) async fn reward_employee(
+    pub async fn reward_employee(
         &self,
         session: &mut Session,
         to: UserId,

@@ -8,4 +8,8 @@ version.workspace = true
 [dependencies]
 decimal.workspace = true
 model.workspace = true
+ledger.workspace = true
+ai.workspace = true
 
+chrono.workspace = true
+eyre.workspace = true

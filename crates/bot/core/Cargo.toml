@@ -27,4 +27,4 @@ storage.workspace = true
 strum.workspace = true
 teloxide.workspace = true
 error.workspace = true
-
+services.workspace = true

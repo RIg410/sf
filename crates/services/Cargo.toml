@@ -1,0 +1,23 @@
+[package]
+name = "services"
+
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+version.workspace = true
+
+[dependencies]
+ai.workspace = true
+chrono.workspace = true
+decimal.workspace = true
+env.workspace = true
+error.workspace = true
+eyre.workspace = true
+ledger.workspace = true
+model.workspace = true
+mongodb.workspace = true
+stat.workspace = true
+storage.workspace = true
+thiserror.workspace = true
+tx_macro.workspace = true
+yookassa.workspace = true
