@@ -252,8 +252,8 @@ mod tests {
     use bson::oid::ObjectId;
     use chrono::{DateTime, Utc};
     use decimal::Decimal;
+    use program::model::TrainingType;
     use crate::{
-        program::TrainingType,
         rights::Rights,
         statistics::source::Source,
         subscription::{SubscriptionStatus, SubscriptionType, UserSubscription},

@@ -6,8 +6,12 @@ use bot_core::{CommonLocation, bot::TgBot};
 use bot_viewer::{fmt_phone, user::link_to_user};
 use eyre::{Error, Result, bail, eyre};
 use model::{
-    program::TrainingType, rights::Rule, subscription::UserSubscription, training::Training, user::{family::FindFor, User}
+    rights::Rule,
+    subscription::UserSubscription,
+    training::Training,
+    user::{User, family::FindFor},
 };
+use program::model::TrainingType;
 use rewards::model::user::UserRewardContribution;
 use store::session::Session;
 use teloxide::{

@@ -2,7 +2,6 @@ pub mod calendar;
 pub mod history;
 pub mod notification;
 pub mod payment;
-pub mod program;
 pub mod requests;
 pub mod subscription;
 pub mod treasury;
@@ -23,7 +22,6 @@ pub struct Storage {
     pub db: Arc<Db>,
     pub users: Arc<UserStore>,
     pub calendar: Arc<calendar::CalendarStore>,
-    pub programs: Arc<program::ProgramStore>,
     pub treasury: Arc<treasury::TreasuryStore>,
     pub subscriptions: Arc<subscription::SubscriptionsStore>,
     pub history: Arc<HistoryStore>,
@@ -36,7 +34,6 @@ impl Storage {
         let db = Db::new(uri, DB_NAME).await?;
         let users = UserStore::new(&db).await?;
         let calendar = calendar::CalendarStore::new(&db).await?;
-        let programs = program::ProgramStore::new(&db);
         let treasury = treasury::TreasuryStore::new(&db).await?;
         let subscriptions = subscription::SubscriptionsStore::new(&db);
         let history = history::HistoryStore::new(&db).await?;
@@ -47,7 +44,6 @@ impl Storage {
             db: Arc::new(db),
             users: Arc::new(users),
             calendar: Arc::new(calendar),
-            programs: Arc::new(programs),
             treasury: Arc::new(treasury),
             subscriptions: Arc::new(subscriptions),
             history: Arc::new(history),

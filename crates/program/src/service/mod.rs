@@ -1,9 +1,11 @@
+use crate::{
+    model::{Program, TrainingType},
+    storage::ProgramStore,
+};
 use eyre::Error;
-use model::program::{Program, TrainingType};
 use mongodb::bson::oid::ObjectId;
-use store::session::Session;
 use std::{ops::Deref, sync::Arc};
-use storage::program::ProgramStore;
+use store::session::{Db, Session};
 use tx_macro::tx;
 
 #[derive(Clone)]
@@ -12,8 +14,10 @@ pub struct Programs {
 }
 
 impl Programs {
-    pub fn new(store: Arc<ProgramStore>) -> Self {
-        Programs { store }
+    pub fn new(store: &Db) -> Self {
+        Programs {
+            store: Arc::new(ProgramStore::new(store)),
+        }
     }
 
     #[tx]

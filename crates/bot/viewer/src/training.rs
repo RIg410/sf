@@ -1,4 +1,5 @@
-use model::{day::StatisticsSummary, program::TrainingType};
+use model::day::StatisticsSummary;
+use program::model::TrainingType;
 use trainings::model::status::TrainingStatus;
 
 pub fn fmt_training_status(
@@ -8,11 +9,7 @@ pub fn fmt_training_status(
     my: bool,
 ) -> &'static str {
     if is_processed {
-        if my {
-            "✔️❤️"
-        } else {
-            "✔️"
-        }
+        if my { "✔️❤️" } else { "✔️" }
     } else {
         match training {
             TrainingStatus::Finished => {

@@ -256,6 +256,7 @@ dependencies = [
  "ledger",
  "model",
  "mongodb",
+ "program",
  "rewards",
  "services",
  "storage",
@@ -511,6 +512,7 @@ dependencies = [
  "ledger",
  "model",
  "mongodb",
+ "program",
  "serde",
  "storage",
  "strum",
@@ -560,6 +562,7 @@ dependencies = [
  "ledger",
  "model",
  "mongodb",
+ "program",
  "serde",
  "storage",
  "strum",
@@ -1863,6 +1866,7 @@ dependencies = [
  "futures-util",
  "model",
  "mongodb",
+ "program",
  "serde",
  "serde_json",
  "storage",
@@ -2115,6 +2119,7 @@ dependencies = [
  "decimal",
  "eyre",
  "hex",
+ "program",
  "rand",
  "rewards",
  "serde",
@@ -2596,6 +2601,20 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "37d3544b3f2748c54e147655edb5025752e2303145b5aefb3c3ea2c78b973bb0"
 dependencies = [
  "unicode-ident",
+]
+
+[[package]]
+name = "program"
+version = "0.1.0"
+dependencies = [
+ "bson",
+ "decimal",
+ "eyre",
+ "futures-util",
+ "mongodb",
+ "serde",
+ "store",
+ "tx_macro",
 ]
 
 [[package]]
@@ -3283,6 +3302,7 @@ dependencies = [
  "ledger",
  "model",
  "mongodb",
+ "program",
  "rewards",
  "stat",
  "storage",
@@ -3430,6 +3450,7 @@ dependencies = [
  "futures-util",
  "model",
  "mongodb",
+ "program",
  "serde",
  "serde_json",
  "serde_with 3.9.0",

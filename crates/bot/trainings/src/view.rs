@@ -11,6 +11,7 @@ use chrono::Local;
 use eyre::{bail, Result};
 use model::{rights::Rule, training::Training, user::family::FindFor};
 use mongodb::bson::oid::ObjectId;
+use program::model::TrainingType;
 use serde::{Deserialize, Serialize};
 use trainings::model::{id::TrainingId, status::TrainingStatus};
 use std::vec;
@@ -141,9 +142,9 @@ async fn render(ctx: &mut Context, training: &Training) -> Result<(String, Inlin
         .unwrap_or_default();
 
     let tp = match training.tp {
-        model::program::TrainingType::Group { .. } => "групповая тренировка",
-        model::program::TrainingType::Personal { .. } => "персональная тренировка",
-        model::program::TrainingType::SubRent { .. } => "аренда",
+        TrainingType::Group { .. } => "групповая тренировка",
+        TrainingType::Personal { .. } => "персональная тренировка",
+        TrainingType::SubRent { .. } => "аренда",
     };
 
     let msg = format!(
@@ -304,9 +305,9 @@ impl View for ConfirmCancelTraining {
             .ok_or_else(|| eyre::eyre!("Training not found"))?;
 
         let tp = match training.tp {
-            model::program::TrainingType::Group { .. } => "групповую тренировку",
-            model::program::TrainingType::Personal { .. } => "персональную тренировку",
-            model::program::TrainingType::SubRent { .. } => "аренду",
+            TrainingType::Group { .. } => "групповую тренировку",
+            TrainingType::Personal { .. } => "персональную тренировку",
+            TrainingType::SubRent { .. } => "аренду",
         };
 
         let msg = format!(

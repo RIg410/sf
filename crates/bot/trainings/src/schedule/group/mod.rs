@@ -3,8 +3,9 @@ use bot_viewer::rooms::fmt_room;
 use chrono::{DateTime, Local};
 use eyre::Result;
 use is_one_time::SetOneTime;
-use model::{program::Program, rooms::Room};
+use model::rooms::Room;
 use mongodb::bson::oid::ObjectId;
+use program::model::Program;
 use set_date_time::SetDateTime;
 use set_instructor::SetInstructor;
 use set_room::SetRoom;
@@ -109,6 +110,6 @@ pub async fn render_msg(
             .room
             .map(|r| fmt_room(Room::from(r)))
             .unwrap_or_else(|| "❓"),
-        escape(if request.is_empty() {"."} else {request}),
+        escape(if request.is_empty() { "." } else { request }),
     ))
 }

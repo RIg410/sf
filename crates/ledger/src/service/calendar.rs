@@ -6,12 +6,16 @@ use error::SfError;
 use eyre::{Error, Result};
 use model::{ids::DayId, slot::Slot, training::Training};
 use mongodb::bson::oid::ObjectId;
+use program::service::Programs;
 use storage::calendar::CalendarStore;
 use store::session::Session;
-use trainings::{error::TrainingError, model::{id::TrainingId, status::TrainingStatus}};
+use trainings::{
+    error::TrainingError,
+    model::{id::TrainingId, status::TrainingStatus},
+};
 use tx_macro::tx;
 
-use super::{programs::Programs, users::Users};
+use super::users::Users;
 
 #[derive(Clone)]
 pub struct Calendar {

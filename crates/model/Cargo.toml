@@ -21,3 +21,4 @@ tracing.workspace = true
 decimal.workspace = true
 trainings.workspace = true
 rewards.workspace = true
+program.workspace = true

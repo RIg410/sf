@@ -10,8 +10,9 @@ use bot_core::{
 };
 use bot_viewer::training::fmt_training_type;
 use eyre::Result;
-use model::{program::Program, rights::Rule};
+use model::rights::Rule;
 use mongodb::bson::oid::ObjectId;
+use program::model::Program;
 use serde::{Deserialize, Serialize};
 use teloxide::{types::InlineKeyboardMarkup, utils::markdown::escape};
 
@@ -123,11 +124,15 @@ async fn render(ctx: &Context, training: &Program) -> Result<(String, InlineKeyb
 
     if ctx.has_right(Rule::EditTraining) {
         keymap.push(vec![
-            Callback::EditDuration.button("🕤Изменить продолжительность")
+            Callback::EditDuration.button("🕤Изменить продолжительность"),
         ]);
-        keymap.push(vec![Callback::EditCapacity.button("👥Изменить вместимость")]);
+        keymap.push(vec![
+            Callback::EditCapacity.button("👥Изменить вместимость"),
+        ]);
         keymap.push(vec![Callback::EditName.button("📝Изменить название")]);
-        keymap.push(vec![Callback::EditDescription.button("📝Изменить описание")]);
+        keymap.push(vec![
+            Callback::EditDescription.button("📝Изменить описание"),
+        ]);
 
         if training.visible {
             keymap.push(vec![Callback::Hide(true).button("🔒Скрыть")]);

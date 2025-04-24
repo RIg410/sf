@@ -4,7 +4,6 @@ use eyre::Result;
 use model::{
     day::Day,
     ids::DayId,
-    program::TrainingType,
     training::{Filter, Training},
 };
 use mongodb::{
@@ -12,6 +11,7 @@ use mongodb::{
     bson::{doc, oid::ObjectId},
     options::{FindOneOptions, FindOptions, IndexOptions, UpdateOptions},
 };
+use program::model::TrainingType;
 use store::session::Session;
 use tracing::info;
 use trainings::model::{id::TrainingId, notification::Notified, statistics::Statistics};

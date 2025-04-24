@@ -4,7 +4,8 @@ use bot_core::{
     widget::{Jmp, View},
 };
 use eyre::Result;
-use model::{program::Program, rights::Rule};
+use model::rights::Rule;
+use program::model::Program;
 use teloxide::types::{InlineKeyboardMarkup, Message};
 
 pub struct CreateProgram {

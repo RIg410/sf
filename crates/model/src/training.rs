@@ -1,12 +1,12 @@
 use crate::{
     ids::DayId,
-    program::{Program, TrainingType},
     rooms::Room,
     slot::Slot,
 };
 use bson::oid::ObjectId;
 use chrono::{DateTime, Datelike, Local, Timelike as _, Utc};
 use decimal::Decimal;
+use program::model::{Program, TrainingType};
 use serde::{Deserialize, Serialize};
 use trainings::model::{id::TrainingId, notification::Notified, statistics::Statistics, status::TrainingStatus};
 

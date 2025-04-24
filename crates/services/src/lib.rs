@@ -1,5 +1,6 @@
 use std::sync::Arc;
 
+use program::service::Programs;
 use ::store::session::{Db, Session};
 use ai::Ai;
 use backup::Backup;
@@ -11,7 +12,6 @@ use eyre::Error as EyError;
 use eyre::{Context as _, Result, eyre};
 use ledger::service::calendar::Calendar;
 use ledger::service::history::History;
-use ledger::service::programs::Programs;
 use ledger::service::requests::Requests;
 use ledger::service::subscriptions::Subscriptions;
 use ledger::service::treasury::Treasury;
@@ -51,7 +51,7 @@ impl Services {
         let backup = Backup::new(storage.db.clone());
 
         let history = History::new(storage.history.clone());
-        let programs = Programs::new(storage.programs.clone());
+        let programs = Programs::new(&storage.db);
 
         let ai = Ai::new(env.ai_base_url().to_owned(), env.ai_api_key().to_owned());
 

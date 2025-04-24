@@ -23,6 +23,7 @@ members = [
   "crates/rewards",
   "crates/trainings",
   "crates/core/*",
+  "crates/program",
 ]
 
 resolver = "2"
@@ -45,6 +46,7 @@ bot-viewer = {path = "crates/bot/viewer"}
 decimal = {path = "crates/core/decimal"}
 error = {path = "crates/error"}
 graph = {path = "crates/core/graph"}
+program = {path = "crates/program"}
 rewards = {path = "crates/rewards"}
 services = {path = "crates/services"}
 stat = {path = "crates/stat"}

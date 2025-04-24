@@ -28,3 +28,4 @@ services.workspace = true
 trainings.workspace = true
 store.workspace = true
 rewards.workspace = true
+program.workspace = true

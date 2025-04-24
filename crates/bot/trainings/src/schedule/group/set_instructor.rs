@@ -1,4 +1,4 @@
-use super::{render_msg, ScheduleTrainingPreset};
+use super::{ScheduleTrainingPreset, render_msg};
 use async_trait::async_trait;
 use bot_core::{
     callback_data::Calldata,
@@ -7,8 +7,9 @@ use bot_core::{
     widget::{Jmp, View},
 };
 use eyre::Result;
-use model::{program::Program, user::User};
+use model::user::User;
 use mongodb::bson::oid::ObjectId;
+use program::model::Program;
 use serde::{Deserialize, Serialize};
 use teloxide::types::{InlineKeyboardButton, InlineKeyboardMarkup};
 

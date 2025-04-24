@@ -27,3 +27,4 @@ tx_macro.workspace = true
 yookassa.workspace = true
 trainings.workspace = true
 rewards.workspace = true
+program.workspace = true

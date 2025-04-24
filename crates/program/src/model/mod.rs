@@ -1,6 +1,5 @@
 use bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
-
 use decimal::Decimal;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
