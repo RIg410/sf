@@ -187,12 +187,12 @@ pub mod tests {
     #[test]
     fn test_display() {
         let decimal = Decimal::int(123456);
-        assert_eq!("123456.00", format!("{}", decimal));
+        assert_eq!("123456", format!("{}", decimal));
 
         let decimal = Decimal::int(-123456);
-        assert_eq!("-123456.00", format!("{}", decimal));
+        assert_eq!("-123456", format!("{}", decimal));
         let decimal = Decimal::int(0);
-        assert_eq!("0.00", format!("{}", decimal));
+        assert_eq!("0", format!("{}", decimal));
     }
 
     #[test]
@@ -204,22 +204,22 @@ pub mod tests {
         assert_eq!("-123456.78", format!("{}", decimal));
 
         let decimal = Decimal::from(123456.0);
-        assert_eq!("123456.00", format!("{}", decimal));
+        assert_eq!("123456", format!("{}", decimal));
 
         let decimal = Decimal::from(-123456.0);
-        assert_eq!("-123456.00", format!("{}", decimal));
+        assert_eq!("-123456", format!("{}", decimal));
 
         let decimal = Decimal::from(0.0);
-        assert_eq!("0.00", format!("{}", decimal));
+        assert_eq!("0", format!("{}", decimal));
 
         let decimal = Decimal::from(0.000);
-        assert_eq!("0.00", format!("{}", decimal));
+        assert_eq!("0", format!("{}", decimal));
 
         let decimal = Decimal::from(0.0001);
-        assert_eq!("0.00", format!("{}", decimal));
+        assert_eq!("0", format!("{}", decimal));
 
         let decimal = Decimal::from(0.001);
-        assert_eq!("0.00", format!("{}", decimal));
+        assert_eq!("0", format!("{}", decimal));
 
         let decimal = Decimal::from(0.01);
         assert_eq!("0.01", format!("{}", decimal));
@@ -258,25 +258,25 @@ pub mod tests {
         assert_eq!("-123456.78", format!("{}", decimal));
 
         let decimal = Decimal::try_from("123456").unwrap();
-        assert_eq!("123456.00", format!("{}", decimal));
+        assert_eq!("123456", format!("{}", decimal));
 
         let decimal = Decimal::try_from("-123456").unwrap();
-        assert_eq!("-123456.00", format!("{}", decimal));
+        assert_eq!("-123456", format!("{}", decimal));
 
         let decimal = Decimal::try_from("0").unwrap();
-        assert_eq!("0.00", format!("{}", decimal));
+        assert_eq!("0", format!("{}", decimal));
 
         let decimal = Decimal::try_from("0.0").unwrap();
-        assert_eq!("0.00", format!("{}", decimal));
+        assert_eq!("0", format!("{}", decimal));
 
         let decimal = Decimal::try_from("0.000").unwrap();
-        assert_eq!("0.00", format!("{}", decimal));
+        assert_eq!("0", format!("{}", decimal));
 
         let decimal = Decimal::try_from("0.0001").unwrap();
-        assert_eq!("0.00", format!("{}", decimal));
+        assert_eq!("0", format!("{}", decimal));
 
         let decimal = Decimal::try_from("0.001").unwrap();
-        assert_eq!("0.00", format!("{}", decimal));
+        assert_eq!("0", format!("{}", decimal));
 
         let decimal = Decimal::try_from("0.01").unwrap();
         assert_eq!("0.01", format!("{}", decimal));
