@@ -1,9 +1,9 @@
-use crate::session::{Db, Session};
 use bson::{doc, oid::ObjectId};
 use decimal::Decimal;
 use eyre::Error;
 use model::subscription::Subscription;
 use mongodb::Collection;
+use store::session::{Db, Session};
 use tracing::info;
 
 const TABLE_NAME: &str = "subscriptions";

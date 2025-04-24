@@ -8,7 +8,7 @@ use eyre::{Context as _, Ok};
 use model::user::UserName;
 use mongodb::bson::oid::ObjectId;
 use services::Services;
-use storage::session::Session;
+use store::session::Session;
 use teloxide::types::{
     ButtonRequest, Contact, KeyboardButton, KeyboardMarkup, KeyboardRemove, Message, ReplyMarkup,
 };
@@ -119,7 +119,7 @@ pub async fn create_user(
 
 fn relay() -> ReplyMarkup {
     let keymap = KeyboardMarkup::new(vec![vec![
-        KeyboardButton::new("📱 Отправить номер").request(ButtonRequest::Contact)
+        KeyboardButton::new("📱 Отправить номер").request(ButtonRequest::Contact),
     ]]);
     ReplyMarkup::Keyboard(keymap.one_time_keyboard())
 }

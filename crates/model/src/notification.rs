@@ -3,8 +3,7 @@ use std::hash::{DefaultHasher, Hash as _, Hasher as _};
 use bson::oid::ObjectId;
 use chrono::{DateTime, Local, Utc};
 use serde::{Deserialize, Serialize};
-
-use crate::training::TrainingId;
+use trainings::model::id::TrainingId;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Notification {

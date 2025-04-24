@@ -1,13 +1,10 @@
 use crate::Services;
 use chrono::{DateTime, Local};
 use error::SfError;
-use model::{
-    rooms::Room,
-    training::{Training, TrainingId},
-    user::family::FindFor,
-};
+use model::{rooms::Room, training::Training, user::family::FindFor};
 use mongodb::bson::oid::ObjectId;
-use storage::session::Session;
+use store::session::Session;
+use trainings::{error::TrainingError, model::id::TrainingId};
 use tx_macro::tx;
 
 impl Services {
@@ -60,22 +57,22 @@ impl Services {
             .calendar
             .get_training_by_id(session, id)
             .await?
-            .ok_or_else(|| SfError::TrainingNotFound(id))?;
+            .ok_or_else(|| TrainingError::TrainingNotFound(id))?;
         let status = training.status(Local::now());
         if !forced && !status.can_sign_in() {
-            return Err(SfError::TrainingNotOpenToSignUp(id, status));
+            return Err(TrainingError::TrainingNotOpenToSignUp(id, status).into());
         }
 
         if training.is_processed {
-            return Err(SfError::TrainingNotOpenToSignUp(id, status));
+            return Err(TrainingError::TrainingNotOpenToSignUp(id, status).into());
         }
 
         if training.clients.contains(&client) {
-            return Err(SfError::ClientAlreadySignedUp(client, id));
+            return Err(TrainingError::ClientAlreadySignedUp(client, id).into());
         }
 
         if training.clients.len() as u32 >= training.capacity {
-            return Err(SfError::TrainingIsFull(id));
+            return Err(TrainingError::TrainingIsFull(id).into());
         }
 
         let mut user = self
@@ -91,10 +88,10 @@ impl Services {
         if training.tp.is_not_free() {
             let subscription = payer
                 .find_subscription(FindFor::Lock, &training)
-                .ok_or_else(|| SfError::NotEnoughBalance(user_id))?;
+                .ok_or_else(|| TrainingError::NotEnoughBalance(user_id))?;
 
             if !subscription.lock_balance() {
-                return Err(SfError::NotEnoughBalance(user_id));
+                return Err(TrainingError::NotEnoughBalance(user_id).into());
             }
             self.users.update(session, &mut payer).await?;
         }
@@ -126,7 +123,7 @@ impl Services {
             .calendar
             .get_training_by_id(session, id)
             .await?
-            .ok_or_else(|| SfError::TrainingNotFound(id))?;
+            .ok_or_else(|| TrainingError::TrainingNotFound(id))?;
         self.sign_out_tx_less(session, &training, client, forced)
             .await?;
 
@@ -147,15 +144,15 @@ impl Services {
     ) -> Result<(), SfError> {
         let status = training.status(Local::now());
         if !forced && !status.can_sign_out() {
-            return Err(SfError::TrainingNotOpenToSignOut(training.id()));
+            return Err(TrainingError::TrainingNotOpenToSignOut(training.id()).into());
         }
 
         if training.is_processed {
-            return Err(SfError::TrainingNotOpenToSignOut(training.id()));
+            return Err(TrainingError::TrainingNotOpenToSignOut(training.id()).into());
         }
 
         if !training.clients.contains(&client) {
-            return Err(SfError::ClientNotSignedUp(client, training.id()));
+            return Err(TrainingError::ClientNotSignedUp(client, training.id()).into());
         }
 
         let mut user = self
@@ -171,10 +168,10 @@ impl Services {
         if training.tp.is_not_free() {
             let sub = payer
                 .find_subscription(FindFor::Unlock, training)
-                .ok_or_else(|| SfError::NotEnoughReservedBalance(client))?;
+                .ok_or_else(|| TrainingError::NotEnoughReservedBalance(client))?;
 
             if !sub.unlock_balance() {
-                return Err(SfError::NotEnoughReservedBalance(client));
+                return Err(TrainingError::NotEnoughReservedBalance(client).into());
             }
             self.users.update(session, &mut payer).await?;
         }

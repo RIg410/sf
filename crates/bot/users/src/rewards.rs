@@ -9,12 +9,10 @@ use bot_viewer::day::fmt_dt;
 use chrono::Local;
 use decimal::Decimal;
 use eyre::Result;
-use model::{
-    reward::{Reward, RewardSource},
-    rights::Rule,
-};
+use model::rights::Rule;
 use mongodb::bson::oid::ObjectId;
 use recalc::AddRecalcReward;
+use rewards::model::{Reward, RewardSource};
 use serde::{Deserialize, Serialize};
 use teloxide::{types::InlineKeyboardMarkup, utils::markdown::escape};
 

@@ -21,4 +21,5 @@ serde_with.workspace = true
 strum.workspace = true
 tracing.workspace = true
 decimal.workspace = true
-
+store.workspace = true
+trainings.workspace = true

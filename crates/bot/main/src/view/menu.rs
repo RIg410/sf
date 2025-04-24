@@ -10,7 +10,7 @@ use bot_couch::list::CouchingList;
 use bot_finance::FinanceView;
 use bot_marketing::Marketing;
 use bot_subscription::SubscriptionView;
-use bot_trainigs::program::list::ProgramList;
+use bot_trainings::program::list::ProgramList;
 use bot_users::{profile::UserProfile, Query, UsersView};
 use eyre::{bail, Ok, Result};
 use model::rights::Rule;

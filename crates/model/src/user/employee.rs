@@ -1,11 +1,9 @@
-use crate::{
-    reward::{Reward, RewardSource},
-    training::Training,
-};
+use crate::training::Training;
 use bson::oid::ObjectId;
 use chrono::{DateTime, Local, Utc};
 use decimal::Decimal;
 use eyre::{Error, bail};
+use rewards::model::{Reward, RewardSource, user::UserRewardContribution};
 use serde::{Deserialize, Serialize};
 
 use super::rate::{EmployeeRole, Rate};
@@ -149,12 +147,4 @@ impl Employee {
     pub fn is_couch(&self) -> bool {
         self.role == EmployeeRole::Couch
     }
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct UserRewardContribution {
-    pub user: ObjectId,
-    pub lesson_price: Decimal,
-    pub subscription_price: Decimal,
-    pub lessons_count: u32,
 }

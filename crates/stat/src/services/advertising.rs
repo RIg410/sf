@@ -1,13 +1,12 @@
+use crate::models::advertising::{AdvertisingConversionStat, SourceStat};
 use ai::{Ai, AiContext, AiModel};
 use error::SfError;
 use eyre::{Context, Result};
 use ledger::service::{history::History, requests::Requests, users::Users};
 use model::{history::ActionType, statistics::source::Source};
+use store::session::Session;
 use std::collections::HashMap;
-use storage::session::Session;
 use time::range::Range;
-
-use crate::models::advertising::{AdvertisingConversionStat, SourceStat};
 
 pub struct AdvertisingStatService {
     requests: Requests,

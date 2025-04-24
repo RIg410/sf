@@ -3,7 +3,6 @@ pub mod history;
 pub mod notification;
 pub mod programs;
 pub mod requests;
-pub mod rewards;
 pub mod subscriptions;
 pub mod treasury;
 pub mod users;

@@ -1,6 +1,7 @@
 use chrono::{DateTime, Datelike as _, Local, Utc, Weekday};
 use serde::{Deserialize, Serialize};
 use time::{at_midnight, at_mondays_midnight};
+use trainings::model::id::TrainingId;
 
 #[derive(Debug, Clone, Copy, Serialize, Deserialize)]
 pub struct WeekId(DateTime<Utc>);
@@ -100,6 +101,12 @@ impl From<DateTime<Local>> for DayId {
 impl From<DateTime<Utc>> for DayId {
     fn from(date_time: DateTime<Utc>) -> Self {
         DayId::from(date_time.with_timezone(&Local))
+    }
+}
+
+impl From<TrainingId> for DayId {
+    fn from(training_id: TrainingId) -> Self {
+        DayId::from(training_id.start_at)
     }
 }
 

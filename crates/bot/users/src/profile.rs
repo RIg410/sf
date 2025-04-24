@@ -14,7 +14,7 @@ use bot_core::{
     context::Context,
     widget::{Jmp, View},
 };
-use bot_trainigs::list::TrainingList;
+use bot_trainings::list::TrainingList;
 use bot_viewer::user::render_profile_msg;
 use eyre::Error;
 use model::{

@@ -5,7 +5,7 @@ use model::{
     statistics::user::{Statistics, SubscriptionStat},
     training::CLOSE_SING_UP,
 };
-use storage::session::Session;
+use store::session::Session;
 
 use super::Users;
 

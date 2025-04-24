@@ -5,7 +5,7 @@ use bot_core::{
     context::Context,
     widget::{Jmp, View},
 };
-use bot_trainigs::{
+use bot_trainings::{
     program::list::ProgramList,
     schedule::{group::ScheduleTrainingPreset, personal::PersonalTrainingPreset, rent::RentPreset},
 };

@@ -29,3 +29,7 @@ tracing.workspace = true
 tx_macro.workspace = true
 yookassa.workspace = true
 zip.workspace = true
+store.workspace = true
+trainings.workspace = true
+
+

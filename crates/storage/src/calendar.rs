@@ -5,16 +5,16 @@ use model::{
     day::Day,
     ids::DayId,
     program::TrainingType,
-    training::{Filter, Notified, Statistics, Training, TrainingId},
+    training::{Filter, Notified, Statistics, Training},
 };
 use mongodb::{
+    Collection, Database, IndexModel, SessionCursor,
     bson::{doc, oid::ObjectId},
     options::{FindOneOptions, FindOptions, IndexOptions, UpdateOptions},
-    Collection, Database, IndexModel, SessionCursor,
 };
+use store::session::Session;
 use tracing::info;
-
-use crate::session::Session;
+use trainings::model::id::TrainingId;
 
 const COLLECTION: &str = "days";
 
@@ -576,7 +576,7 @@ impl CalendarStore {
 
 fn training_filter(id: TrainingId) -> bson::Document {
     doc! {
-        "date_time": id.day_id().id(),
+        "date_time": DayId::from(id).id(),
         "training":{
             "$elemMatch": {
                 "start_at": id.start_at,

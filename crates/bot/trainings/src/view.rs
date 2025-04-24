@@ -9,13 +9,10 @@ use bot_core::{
 use bot_viewer::{day::fmt_dt, fmt_phone, training::fmt_training_type};
 use chrono::Local;
 use eyre::{bail, Result};
-use model::{
-    rights::Rule,
-    training::{Training, TrainingId, TrainingStatus},
-    user::family::FindFor,
-};
+use model::{rights::Rule, training::Training, user::family::FindFor};
 use mongodb::bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
+use trainings::model::{id::TrainingId, status::TrainingStatus};
 use std::vec;
 use teloxide::{
     types::{ChatId, InlineKeyboardMarkup},

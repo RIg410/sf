@@ -5,7 +5,7 @@ use model::{
     user::{User, UserName},
 };
 use mongodb::bson::oid::ObjectId;
-use storage::session::Session;
+use store::session::Session;
 use tx_macro::tx;
 
 use super::Users;

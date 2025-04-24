@@ -1,7 +1,11 @@
 [package]
-edition = "2021"
 name = "bot-subscription"
-version = "0.1.0"
+
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+version.workspace = true
+
 
 [dependencies]
 async-trait.workspace = true

@@ -3,8 +3,7 @@ use chrono::{DateTime, Local, Utc};
 use eyre::Error;
 use model::request::Request;
 use mongodb::{Collection, IndexModel, SessionCursor};
-
-use crate::session::Session;
+use store::session::Session;
 
 const COLLECTION: &str = "requests";
 

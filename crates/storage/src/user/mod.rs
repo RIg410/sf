@@ -3,23 +3,22 @@ mod employee;
 use bson::to_document;
 use chrono::{DateTime, Local, Utc};
 use dashmap::DashMap;
-use eyre::{bail, eyre, Error, Result};
-use futures_util::stream::TryStreamExt;
 use decimal::Decimal;
+use eyre::{Error, Result, bail, eyre};
+use futures_util::stream::TryStreamExt;
 use model::rights::{self, Rule};
 use model::statistics::source::Source;
-use model::subscription::{SubscriptionStatus, Subscription, UserSubscription};
+use model::subscription::{Subscription, SubscriptionStatus, UserSubscription};
 use model::user::extension::UserExtension;
 use model::user::{Freeze, User, UserName};
 use mongodb::options::UpdateOptions;
 use mongodb::{
-    bson::{doc, oid::ObjectId},
     Collection, Database,
+    bson::{doc, oid::ObjectId},
 };
 use mongodb::{IndexModel, SessionCursor};
+use store::session::Session;
 use tracing::info;
-
-use crate::session::Session;
 
 const COLLECTION: &str = "users";
 

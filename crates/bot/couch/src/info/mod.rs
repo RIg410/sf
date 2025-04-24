@@ -7,7 +7,7 @@ use bot_core::{
     },
     widget::Widget,
 };
-use bot_trainigs::view::TrainingView;
+use bot_trainings::view::TrainingView;
 use bot_viewer::{day::fmt_weekday, training::fmt_training_status};
 use chrono::{DateTime, Datelike, Local};
 use eyre::{Error, Result};

@@ -11,6 +11,7 @@ decimal.workspace = true
 ledger.workspace = true
 model.workspace = true
 storage.workspace = true
+store.workspace = true
 time.workspace = true
 
 chrono.workspace = true

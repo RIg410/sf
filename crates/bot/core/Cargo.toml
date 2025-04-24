@@ -28,3 +28,5 @@ strum.workspace = true
 teloxide.workspace = true
 error.workspace = true
 services.workspace = true
+trainings.workspace = true
+store.workspace = true

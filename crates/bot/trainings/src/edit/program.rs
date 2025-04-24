@@ -4,9 +4,9 @@ use bot_core::{
     context::Context,
     widget::{Jmp, View},
 };
-use model::training::TrainingId;
 use serde::{Deserialize, Serialize};
 use teloxide::types::InlineKeyboardMarkup;
+use trainings::model::id::TrainingId;
 
 pub struct ChangeProgram {
     id: TrainingId,

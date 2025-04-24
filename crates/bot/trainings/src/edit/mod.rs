@@ -8,9 +8,10 @@ use bot_core::{
 use bot_viewer::day::fmt_dt;
 use couch::ChangeCouch;
 use eyre::{bail, Result};
-use model::{rights::Rule, training::TrainingId};
+use model::rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::{types::InlineKeyboardMarkup, utils::markdown::escape};
+use trainings::model::id::TrainingId;
 
 pub mod couch;
 pub mod name;

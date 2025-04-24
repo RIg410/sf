@@ -4,9 +4,8 @@ use bson::{doc, Bson};
 use futures_util::{StreamExt as _, TryStreamExt as _};
 use mongodb::Collection;
 use serde::{Deserialize, Serialize};
-use ::storage::session::Db;
-use storage::session::Session;
 use eyre::Result;
+use store::session::{Db, Session};
 
 pub struct BackupStorage {
     db: Arc<Db>,

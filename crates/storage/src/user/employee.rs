@@ -1,14 +1,13 @@
-use crate::session::Session;
-
 use super::UserStore;
 use bson::oid::ObjectId;
 use bson::{to_bson, to_document};
 use eyre::{Error, Result};
 use futures_util::TryStreamExt as _;
+use model::user::User;
 use model::user::employee::Employee;
 use model::user::rate::Rate;
-use model::user::User;
 use mongodb::bson::doc;
+use store::session::Session;
 use tracing::info;
 
 impl UserStore {

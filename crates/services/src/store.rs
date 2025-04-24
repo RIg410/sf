@@ -2,9 +2,10 @@ use eyre::Result;
 use std::sync::Arc;
 use storage::{
     calendar::CalendarStore, history::HistoryStore, notification::NotificationStore,
-    program::ProgramStore, requests::RequestStore, rewards::RewardsStore, session::Db,
-    subscription::SubscriptionsStore, treasury::TreasuryStore, user::UserStore,
+    program::ProgramStore, requests::RequestStore, subscription::SubscriptionsStore,
+    treasury::TreasuryStore, user::UserStore,
 };
+use store::session::Db;
 
 const DB_NAME: &str = "ledger_db";
 
@@ -17,7 +18,6 @@ pub struct Storage {
     pub treasury: Arc<TreasuryStore>,
     pub subscriptions: Arc<SubscriptionsStore>,
     pub history: Arc<HistoryStore>,
-    pub rewards: Arc<RewardsStore>,
     pub requests: Arc<RequestStore>,
     pub notification: Arc<NotificationStore>,
 }
@@ -31,7 +31,6 @@ impl Storage {
         let treasury = TreasuryStore::new(&db).await?;
         let subscriptions = SubscriptionsStore::new(&db);
         let history = HistoryStore::new(&db).await?;
-        let rewards = RewardsStore::new(&db).await?;
         let requests = RequestStore::new(&db).await?;
         let notification = NotificationStore::new(&db).await?;
 
@@ -43,7 +42,6 @@ impl Storage {
             treasury: Arc::new(treasury),
             subscriptions: Arc::new(subscriptions),
             history: Arc::new(history),
-            rewards: Arc::new(rewards),
             requests: Arc::new(requests),
             notification: Arc::new(notification),
         })

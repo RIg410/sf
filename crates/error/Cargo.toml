@@ -1,5 +1,6 @@
 [package]
 name = "error"
+
 edition.workspace = true
 license.workspace = true
 publish.workspace = true
@@ -12,3 +13,4 @@ model.workspace = true
 thiserror.workspace = true
 mongodb.workspace = true
 eyre.workspace = true
+trainings.workspace = true

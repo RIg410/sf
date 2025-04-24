@@ -1,4 +1,5 @@
-use model::{day::StatisticsSummary, program::TrainingType, training::TrainingStatus};
+use model::{day::StatisticsSummary, program::TrainingType};
+use trainings::model::status::TrainingStatus;
 
 pub fn fmt_training_status(
     training: TrainingStatus,

@@ -1,7 +1,10 @@
 [package]
-edition = "2021"
-name = "bot-trainigs"
-version = "0.1.0"
+name = "bot-trainings"
+
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+version.workspace = true
 
 [dependencies]
 async-trait.workspace = true
@@ -9,6 +12,7 @@ bincode.workspace = true
 bot-core.workspace = true
 bot-viewer.workspace = true
 chrono.workspace = true
+decimal.workspace = true
 eyre.workspace = true
 hex.workspace = true
 itertools.workspace = true
@@ -20,4 +24,4 @@ storage.workspace = true
 strum.workspace = true
 teloxide.workspace = true
 tracing.workspace = true
-decimal.workspace = true
+trainings.workspace = true

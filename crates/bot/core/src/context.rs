@@ -2,11 +2,11 @@ use crate::bot::TgBot;
 use model::{rights::Rule, user::User};
 use mongodb::bson::oid::ObjectId;
 use services::Services;
+use store::session::Session;
 use std::{
     ops::{Deref, DerefMut},
     sync::Arc,
 };
-use storage::session::Session;
 
 pub struct Context {
     pub bot: TgBot,

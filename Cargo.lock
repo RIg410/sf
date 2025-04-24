@@ -208,7 +208,7 @@ dependencies = [
  "futures-util",
  "mongodb",
  "serde",
- "storage",
+ "store",
  "tracing",
  "tx_macro",
  "zip",
@@ -256,12 +256,15 @@ dependencies = [
  "ledger",
  "model",
  "mongodb",
+ "rewards",
  "services",
  "storage",
+ "store",
  "teloxide",
  "tokio",
  "tokio-cron-scheduler",
  "tracing",
+ "trainings",
  "tx_macro",
 ]
 
@@ -314,7 +317,7 @@ dependencies = [
  "async-trait",
  "bincode",
  "bot-core",
- "bot-trainigs",
+ "bot-trainings",
  "bot-viewer",
  "bot-views",
  "chrono",
@@ -353,9 +356,11 @@ dependencies = [
  "serde_json",
  "services",
  "storage",
+ "store",
  "strum",
  "teloxide",
  "tracing",
+ "trainings",
 ]
 
 [[package]]
@@ -365,7 +370,7 @@ dependencies = [
  "async-trait",
  "bincode",
  "bot-core",
- "bot-trainigs",
+ "bot-trainings",
  "bot-viewer",
  "chrono",
  "eyre",
@@ -389,7 +394,7 @@ dependencies = [
  "async-trait",
  "bincode",
  "bot-core",
- "bot-trainigs",
+ "bot-trainings",
  "bot-users",
  "bot-viewer",
  "chrono",
@@ -421,7 +426,7 @@ dependencies = [
  "bot-finance",
  "bot-marketing",
  "bot-subscription",
- "bot-trainigs",
+ "bot-trainings",
  "bot-users",
  "bot-viewer",
  "chrono",
@@ -435,6 +440,7 @@ dependencies = [
  "serde",
  "services",
  "storage",
+ "store",
  "strum",
  "teloxide",
  "tracing",
@@ -492,7 +498,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "bot-trainigs"
+name = "bot-trainings"
 version = "0.1.0"
 dependencies = [
  "async-trait",
@@ -512,6 +518,7 @@ dependencies = [
  "strum",
  "teloxide",
  "tracing",
+ "trainings",
 ]
 
 [[package]]
@@ -522,7 +529,7 @@ dependencies = [
  "async-trait",
  "bincode",
  "bot-core",
- "bot-trainigs",
+ "bot-trainings",
  "bot-viewer",
  "bot-views",
  "chrono",
@@ -533,6 +540,7 @@ dependencies = [
  "ledger",
  "model",
  "mongodb",
+ "rewards",
  "serde",
  "storage",
  "strum",
@@ -560,6 +568,7 @@ dependencies = [
  "strum",
  "teloxide",
  "tracing",
+ "trainings",
 ]
 
 [[package]]
@@ -1141,6 +1150,7 @@ dependencies = [
  "model",
  "mongodb",
  "thiserror 1.0.63",
+ "trainings",
 ]
 
 [[package]]
@@ -1881,9 +1891,11 @@ dependencies = [
  "serde",
  "serde_json",
  "storage",
+ "store",
  "thiserror 1.0.63",
  "tokio",
  "tracing",
+ "trainings",
  "tx_macro",
  "yookassa",
  "zip",
@@ -2129,11 +2141,13 @@ dependencies = [
  "eyre",
  "hex",
  "rand",
+ "rewards",
  "serde",
  "strum",
  "thiserror 1.0.63",
  "time 0.1.0",
  "tracing",
+ "trainings",
 ]
 
 [[package]]
@@ -2901,6 +2915,16 @@ dependencies = [
 [[package]]
 name = "rewards"
 version = "0.1.0"
+dependencies = [
+ "bson",
+ "chrono",
+ "decimal",
+ "eyre",
+ "mongodb",
+ "serde",
+ "store",
+ "trainings",
+]
 
 [[package]]
 name = "ring"
@@ -3284,9 +3308,12 @@ dependencies = [
  "ledger",
  "model",
  "mongodb",
+ "rewards",
  "stat",
  "storage",
+ "store",
  "thiserror 1.0.63",
+ "trainings",
  "tx_macro",
  "yookassa",
 ]
@@ -3411,6 +3438,7 @@ dependencies = [
  "serde",
  "serde_json",
  "storage",
+ "store",
  "time 0.1.0",
 ]
 
@@ -3430,8 +3458,20 @@ dependencies = [
  "serde",
  "serde_json",
  "serde_with 3.9.0",
+ "store",
  "strum",
  "tracing",
+ "trainings",
+]
+
+[[package]]
+name = "store"
+version = "0.1.0"
+dependencies = [
+ "bson",
+ "chrono",
+ "eyre",
+ "mongodb",
 ]
 
 [[package]]
@@ -4044,6 +4084,18 @@ dependencies = [
  "tracing",
  "tracing-core",
  "tracing-log",
+]
+
+[[package]]
+name = "trainings"
+version = "0.1.0"
+dependencies = [
+ "bson",
+ "chrono",
+ "eyre",
+ "mongodb",
+ "serde",
+ "thiserror 1.0.63",
 ]
 
 [[package]]

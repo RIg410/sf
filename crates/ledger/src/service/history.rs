@@ -12,7 +12,7 @@ use model::{
 use     decimal::Decimal;
 use mongodb::{bson::oid::ObjectId, SessionCursor};
 use storage::history::HistoryStore;
-use storage::session::Session;
+use store::session::Session;
 
 #[derive(Clone)]
 pub struct History {

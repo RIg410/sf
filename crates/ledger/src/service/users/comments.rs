@@ -2,7 +2,7 @@ use super::Users;
 use bson::oid::ObjectId;
 use eyre::Error;
 use model::user::comments::Comment;
-use storage::session::Session;
+use store::session::Session;
 use tx_macro::tx;
 
 impl Users {

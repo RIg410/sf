@@ -7,13 +7,14 @@ use bot_core::{
 };
 use bot_viewer::day::fmt_dt;
 use eyre::{bail, Result};
-use model::{rights::Rule, training::TrainingId, user::User};
+use model::{rights::Rule, user::User};
 use mongodb::bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
 use teloxide::{
     types::{ChatId, InlineKeyboardButton, InlineKeyboardMarkup},
     utils::markdown::escape,
 };
+use trainings::model::id::TrainingId;
 
 pub struct ChangeCouch {
     id: TrainingId,

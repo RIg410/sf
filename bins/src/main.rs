@@ -24,7 +24,7 @@ async fn main() -> eyre::Result<()> {
         .await
         .context("Failed to create storage")?;
     info!("creating ledger");
-    let ledger = Arc::new(Services::new(storage, env.clone()));
+    let ledger = Arc::new(Services::new(storage, env.clone()).await?);
     info!("Starting bot...");
     let bot: bot_main::BotApp = bot_main::BotApp::new(env);
     info!("Starting mini app...");

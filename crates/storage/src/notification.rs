@@ -1,9 +1,9 @@
-use crate::session::{Db, Session};
 use bson::{doc, oid::ObjectId};
 use eyre::Result;
 use futures_util::TryStreamExt as _;
 use model::notification::{Notification, NotificationId};
 use mongodb::{options::IndexOptions, Collection, IndexModel};
+use store::session::{Db, Session};
 
 const TABLE_NAME: &str = "notifications";
 

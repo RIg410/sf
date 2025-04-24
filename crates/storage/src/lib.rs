@@ -4,8 +4,6 @@ pub mod notification;
 pub mod payment;
 pub mod program;
 pub mod requests;
-pub mod rewards;
-pub mod session;
 pub mod subscription;
 pub mod treasury;
 pub mod user;
@@ -14,9 +12,8 @@ use eyre::Result;
 use history::HistoryStore;
 use notification::NotificationStore;
 use requests::RequestStore;
-use rewards::RewardsStore;
-use session::Db;
 use std::sync::Arc;
+use store::session::Db;
 use user::UserStore;
 
 const DB_NAME: &str = "ledger_db";
@@ -30,7 +27,6 @@ pub struct Storage {
     pub treasury: Arc<treasury::TreasuryStore>,
     pub subscriptions: Arc<subscription::SubscriptionsStore>,
     pub history: Arc<HistoryStore>,
-    pub rewards: Arc<RewardsStore>,
     pub requests: Arc<RequestStore>,
     pub notification: Arc<NotificationStore>,
 }
@@ -44,7 +40,6 @@ impl Storage {
         let treasury = treasury::TreasuryStore::new(&db).await?;
         let subscriptions = subscription::SubscriptionsStore::new(&db);
         let history = history::HistoryStore::new(&db).await?;
-        let rewards = RewardsStore::new(&db).await?;
         let requests = RequestStore::new(&db).await?;
         let notification = NotificationStore::new(&db).await?;
 
@@ -56,7 +51,6 @@ impl Storage {
             treasury: Arc::new(treasury),
             subscriptions: Arc::new(subscriptions),
             history: Arc::new(history),
-            rewards: Arc::new(rewards),
             requests: Arc::new(requests),
             notification: Arc::new(notification),
         })

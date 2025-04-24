@@ -7,8 +7,8 @@ use eyre::Error;
 use model::{ids::DayId, training::Notified};
 use mongodb::bson::oid::ObjectId;
 use services::Services;
+use store::session::Session;
 use std::sync::Arc;
-use storage::session::Session;
 use teloxide::{types::ChatId, utils::markdown::escape};
 
 #[derive(Clone)]

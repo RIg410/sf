@@ -2,8 +2,9 @@ use std::fmt::Debug;
 
 use bson::oid::ObjectId;
 use chrono::{DateTime, Local, Timelike, Utc};
+use trainings::model::id::TrainingId;
 
-use crate::{ids::DayId, training::TrainingId};
+use crate::ids::DayId;
 
 #[derive(Clone, PartialEq, Eq, Copy)]
 pub struct Slot {

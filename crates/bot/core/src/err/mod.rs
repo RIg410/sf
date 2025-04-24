@@ -1,10 +1,13 @@
+mod training;
+
 use crate::{context::Context, widget::Jmp};
 use chrono::Local;
 use error::SfError;
 use eyre::{Error, Result};
-use model::{training::TrainingId, user::rate::Rate};
+use model::user::rate::Rate;
 use mongodb::bson::oid::ObjectId;
 use teloxide::utils::markdown::escape;
+use training::training_error;
 
 pub async fn handle_result(ctx: &mut Context, result: Result<Jmp, Error>) -> Result<Jmp, Error> {
     match result {
@@ -88,7 +91,6 @@ pub async fn bassness_error(ctx: &mut Context, err: &SfError) -> Result<Option<S
             let user = user_name(ctx, *user_id).await?;
             format!("Ошибка:*У пользователя {} нет тарифов*", user)
         }
-        SfError::WrongTrainingClients { .. } => return Ok(None),
         SfError::RequestNotFound { id } => format!("Ошибка:*Заявка {} не найдена*", id),
         SfError::ProgramNotFound(object_id) => {
             format!("Ошибка:*Программа {} не найдена*", object_id)
@@ -121,61 +123,10 @@ pub async fn bassness_error(ctx: &mut Context, err: &SfError) -> Result<Option<S
                 training.get_slot().start_at().format("%d\\.%m\\.%Y %H:%M")
             )
         }
-        SfError::TrainingNotOpenToSignUp(training_id, _) => {
-            format!(
-                "Ошибка:*Тренировка {} в {} закрыта для записи*",
-                training_name(ctx, training_id).await?,
-                training_id.start_at().format("%d\\.%m\\.%Y %H:%M")
-            )
-        }
-        SfError::ClientAlreadySignedUp(object_id, training_id) => {
-            format!(
-                "Ошибка:*Клиент {} уже записан на тренировку {}*",
-                user_name(ctx, *object_id).await?,
-                training_name(ctx, training_id).await?
-            )
-        }
-        SfError::TrainingIsFull(training_id) => {
-            format!(
-                "Ошибка:*На тренировке {} в {} нет свободных мест*",
-                training_name(ctx, training_id).await?,
-                training_id.start_at().format("%d\\.%m\\.%Y %H:%M")
-            )
-        }
-        SfError::NotEnoughBalance(_) => "Ошибка:*Нет подходящего абонемента*".to_string(),
-        SfError::TrainingNotFound(training_id) => {
-            format!(
-                "Ошибка:*Тренировка {} не найдена*",
-                training_id.start_at().format("%d\\.%m\\.%Y %H:%M")
-            )
-        }
-        SfError::TrainingNotOpenToSignOut(training_id) => {
-            format!(
-                "Ошибка:*Тренировка {} в {} закрыта для отмены записи*",
-                training_name(ctx, training_id).await?,
-                training_id.start_at().format("%d\\.%m\\.%Y %H:%M")
-            )
-        }
-        SfError::ClientNotSignedUp(object_id, training_id) => {
-            format!(
-                "Ошибка:*Клиент {} не записан на тренировку {}*",
-                user_name(ctx, *object_id).await?,
-                training_name(ctx, training_id).await?
-            )
-        }
-        SfError::NotEnoughReservedBalance(object_id) => {
-            format!(
-                "Ошибка:*У пользователя {} недостаточно зарезервированных средств*",
-                user_name(ctx, *object_id).await?
-            )
-        }
-        SfError::TrainingHasClients(training_id) => {
-            format!(
-                "Ошибка:*Тренировка {} в {} имеет записанных клиентов*",
-                training_name(ctx, training_id).await?,
-                training_id.start_at().format("%d\\.%m\\.%Y %H:%M")
-            )
-        }
+        SfError::TrainingsError(err) => match training_error(ctx, err).await? {
+            Some(error) => error,
+            None => return Ok(None),
+        },
         SfError::DayIdMismatch { old, new } => {
             format!(
                 "Ошибка:*День {} не совпадает с днем {}*",
@@ -183,32 +134,14 @@ pub async fn bassness_error(ctx: &mut Context, err: &SfError) -> Result<Option<S
                 new.id().with_timezone(&Local).format("%d\\.%m\\.%Y")
             )
         }
-        SfError::TrainingIsProcessed(training_id) => {
-            format!(
-                "Ошибка:*Тренировка {} в {} уже обработана*",
-                training_name(ctx, training_id).await?,
-                training_id.start_at().format("%d\\.%m\\.%Y %H:%M")
-            )
-        }
     }))
 }
 
-async fn user_name(ctx: &mut Context, user_id: ObjectId) -> Result<String> {
+pub async fn user_name(ctx: &mut Context, user_id: ObjectId) -> Result<String> {
     let user = ctx.services.users.get(&mut ctx.session, user_id).await?;
     Ok(user
         .map(|u| escape(&u.name.first_name))
         .unwrap_or_else(|| obj_id(&user_id)))
-}
-
-async fn training_name(ctx: &mut Context, training_id: &TrainingId) -> Result<String> {
-    let training = ctx
-        .services
-        .calendar
-        .get_training_by_id(&mut ctx.session, *training_id)
-        .await?;
-    Ok(training
-        .map(|t| escape(&t.name))
-        .unwrap_or_else(|| "Тренировка не найдена".to_string()))
 }
 
 fn rate_name(rate: &Rate) -> &'static str {

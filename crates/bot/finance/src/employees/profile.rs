@@ -5,7 +5,7 @@ use bot_core::{
     context::Context,
     widget::{Jmp, View},
 };
-use bot_trainigs::list::TrainingList;
+use bot_trainings::list::TrainingList;
 use bot_users::{
     history::HistoryList, rewards::RewardsList, rights::UserRightsView, set_ai_prompt::SetAiPrompt,
     set_birthday::SetBirthday, set_fio::SetFio, set_phone::SetPhone,

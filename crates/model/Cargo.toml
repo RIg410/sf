@@ -19,3 +19,5 @@ thiserror.workspace = true
 time.workspace = true
 tracing.workspace = true
 decimal.workspace = true
+trainings.workspace = true
+rewards.workspace = true

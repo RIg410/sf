@@ -10,7 +10,7 @@ use model::request::RequestHistoryRow;
 use model::user::sanitize_phone;
 use model::{request::RemindLater, statistics::source::Source};
 use storage::requests::RequestStore;
-use storage::session::Session;
+use store::session::Session;
 use tx_macro::tx;
 
 use super::users::Users;

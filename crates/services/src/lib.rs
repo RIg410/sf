@@ -1,33 +1,34 @@
 use std::sync::Arc;
 
+use ::store::session::{Db, Session};
 use ai::Ai;
 use backup::Backup;
 use chrono::Local;
 use decimal::Decimal;
 use env::Env;
 use error::SfError;
+use eyre::Error as EyError;
 use eyre::{Context as _, Result, eyre};
 use ledger::service::calendar::Calendar;
 use ledger::service::history::History;
 use ledger::service::programs::Programs;
 use ledger::service::requests::Requests;
-use ledger::service::rewards::Rewards;
 use ledger::service::subscriptions::Subscriptions;
 use ledger::service::treasury::Treasury;
 use ledger::service::users::Users;
-use model::training::TrainingStatus;
 use model::treasury::subs::UserId;
 use model::user::family::FindFor;
 use model::user::{User, sanitize_phone};
 use mongodb::bson::oid::ObjectId;
+use rewards::service::Rewards;
 use stat::services::Statistics;
 use storage::Storage;
-use storage::session::{Db, Session};
 use thiserror::Error;
+use trainings::model::status::TrainingStatus;
 use tx_macro::tx;
 
-pub mod training;
 pub mod store;
+pub mod training;
 
 pub struct Services {
     pub db: Arc<Db>,
@@ -46,7 +47,7 @@ pub struct Services {
 }
 
 impl Services {
-    pub fn new(storage: Storage, env: Env) -> Self {
+    pub async fn new(storage: Storage, env: Env) -> Result<Self, EyError> {
         let backup = Backup::new(storage.db.clone());
 
         let history = History::new(storage.history.clone());
@@ -64,13 +65,13 @@ impl Services {
             programs.clone(),
             users.clone(),
         );
-        let rewards = Rewards::new(storage.rewards);
+        let rewards = Rewards::new(&storage.db).await?;
         let requests = Requests::new(storage.requests, users.clone());
 
         let statistics =
             Statistics::new(history.clone(), users.clone(), requests.clone(), ai.clone());
 
-        Services {
+        Ok(Services {
             users,
             calendar,
             programs,
@@ -84,7 +85,7 @@ impl Services {
             requests,
             yookassa: yookassa::Yookassa::new(&env),
             ai,
-        }
+        })
     }
 
     pub async fn get_user(&self, session: &mut Session, id: ObjectId) -> Result<User> {

@@ -10,16 +10,14 @@ use bot_viewer::{
     user::{link_to_user, render_profile_msg},
 };
 use eyre::Result;
-use model::{
-    rights::Rule,
-    training::{Training, TrainingId},
-};
+use model::{rights::Rule, training::Training};
 use mongodb::bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
 use teloxide::{
     types::{ChatId, InlineKeyboardMarkup},
     utils::markdown::escape,
 };
+use trainings::model::id::TrainingId;
 
 pub mod add;
 pub mod list;

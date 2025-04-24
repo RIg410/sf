@@ -12,8 +12,8 @@ use model::{
     },
 };
 use mongodb::{SessionCursor, bson::oid::ObjectId};
+use store::session::Session;
 use std::{ops::Deref, sync::Arc};
-use storage::session::Session;
 use storage::user::UserStore;
 use thiserror::Error;
 use tracing::info;
@@ -29,12 +29,12 @@ pub mod subscription;
 pub struct Users {
     pub(super) store: Arc<UserStore>,
     pub(super) logs: History,
-    pub(crate) ai: Ai,
+    pub(crate) _ai: Ai,
 }
 
 impl Users {
     pub fn new(store: Arc<UserStore>, logs: History, ai: Ai) -> Self {
-        Users { store, logs, ai }
+        Users { store, logs, _ai: ai }
     }
 
     #[tx]

@@ -13,27 +13,23 @@ members = [
   "crates/ledger",
   "crates/model",
   "crates/storage",
-  "crates/tx_macro",
   "bins",
-  "crates/env",
   "crates/payment/yookassa",
-  "crates/time",
   "crates/graph",
-  "crates/ai",
   "crates/error",
   "mini-app/main",
-  "crates/decimal",
-  "crates/decimal",
   "crates/stat",
   "crates/services",
-  "crates/backup", 
+  "crates/backup",
   "crates/rewards",
+  "crates/trainings",
+  "crates/core/*",
 ]
 
 resolver = "2"
 
 [workspace.dependencies]
-ai = {path = "crates/ai"}
+ai = {path = "crates/core/ai"}
 backup = {path = "crates/backup"}
 bg-process = {path = "crates/bg-process"}
 bot-calendar = {path = "crates/bot/calendar"}
@@ -44,25 +40,27 @@ bot-main = {path = "crates/bot/main"}
 bot-marketing = {path = "crates/bot/marketing"}
 bot-statistic = {path = "crates/bot/statistic"}
 bot-subscription = {path = "crates/bot/subscription"}
-bot-trainigs = {path = "crates/bot/trainigs"}
+bot-trainings = {path = "crates/bot/trainings"}
 bot-users = {path = "crates/bot/users"}
 bot-viewer = {path = "crates/bot/viewer"}
 bot-views = {path = "crates/bot/views"}
-decimal = {path = "crates/decimal"}
+decimal = {path = "crates/core/decimal"}
 error = {path = "crates/error"}
 graph = {path = "crates/graph"}
+rewards = {path = "crates/rewards"}
 services = {path = "crates/services"}
 stat = {path = "crates/stat"}
-time = {path = "crates/time"}
-rewards = {path = "crates/rewards"}
+store = {path = "crates/core/store"}
+time = {path = "crates/core/time"}
+trainings = {path = "crates/trainings"}
 
 mini-app-main = {path = "mini-app/main"}
 
-env = {path = "crates/env"}
+env = {path = "crates/core/env"}
 ledger = {path = "crates/ledger"}
 model = {path = "crates/model"}
 storage = {path = "crates/storage"}
-tx_macro = {path = "crates/tx_macro"}
+tx_macro = {path = "crates/core/tx_macro"}
 yookassa = {path = "crates/payment/yookassa"}
 
 #libs 

@@ -7,8 +7,7 @@ use mongodb::{
     options::UpdateOptions,
     Collection,
 };
-
-use crate::session::Session;
+use store::session::Session;
 
 const COLLECTION: &str = "training";
 

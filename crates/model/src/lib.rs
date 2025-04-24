@@ -5,7 +5,6 @@ pub mod notification;
 pub mod payment;
 pub mod program;
 pub mod request;
-pub mod reward;
 pub mod rights;
 pub mod rooms;
 pub mod slot;

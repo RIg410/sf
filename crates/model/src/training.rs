@@ -2,6 +2,7 @@ use bson::oid::ObjectId;
 use chrono::{DateTime, Datelike, Local, Timelike as _, Utc};
 use serde::{Deserialize, Serialize};
 use decimal::Decimal;
+use trainings::model::{id::TrainingId, status::TrainingStatus};
 use crate::{
     ids::DayId,
     program::{Program, TrainingType},
@@ -276,40 +277,6 @@ impl Training {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Copy)]
-pub enum TrainingStatus {
-    OpenToSignup { close_sign_out: bool },
-    ClosedToSignup,
-    InProgress,
-    Cancelled,
-    Finished,
-}
-
-impl TrainingStatus {
-    pub fn can_be_canceled(&self) -> bool {
-        matches!(
-            self,
-            TrainingStatus::OpenToSignup { .. } | TrainingStatus::ClosedToSignup
-        )
-    }
-
-    pub fn can_be_uncanceled(&self) -> bool {
-        matches!(self, TrainingStatus::Cancelled)
-    }
-
-    pub fn can_sign_out(&self) -> bool {
-        if let TrainingStatus::OpenToSignup { close_sign_out } = self {
-            !close_sign_out
-        } else {
-            false
-        }
-    }
-
-    pub fn can_sign_in(&self) -> bool {
-        matches!(self, TrainingStatus::OpenToSignup { .. })
-    }
-}
-
 #[derive(Debug, Clone)]
 pub enum Filter {
     Client(ObjectId),
@@ -354,20 +321,4 @@ impl Default for Notified {
 
 fn default_room_id() -> ObjectId {
     Room::Adult.id()
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq, Hash)]
-pub struct TrainingId {
-    pub start_at: DateTime<Utc>,
-    pub room: ObjectId,
-}
-
-impl TrainingId {
-    pub fn day_id(&self) -> DayId {
-        DayId::from(self.start_at)
-    }
-
-    pub fn start_at(&self) -> DateTime<Local> {
-        self.start_at.with_timezone(&Local)
-    }
 }

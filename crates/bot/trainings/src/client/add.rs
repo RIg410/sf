@@ -1,3 +1,4 @@
+use crate::client::{ClientView, Reason};
 use async_trait::async_trait;
 use bot_core::{
     callback_data::Calldata as _,
@@ -7,15 +8,14 @@ use bot_core::{
 };
 use bot_viewer::user::fmt_user_type;
 use eyre::{Error, Result};
-use model::{rights::Rule, training::TrainingId, user::User};
+use model::{rights::Rule, user::User};
 use mongodb::bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
 use teloxide::{
     types::{InlineKeyboardButton, InlineKeyboardMarkup, Message},
     utils::markdown::escape,
 };
-
-use crate::client::{ClientView, Reason};
+use trainings::model::id::TrainingId;
 
 pub const LIMIT: u64 = 7;
 

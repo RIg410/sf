@@ -2,22 +2,24 @@ use std::sync::Arc;
 
 use crate::{Services, Task};
 use async_trait::async_trait;
-use bot_core::{bot::TgBot, CommonLocation};
+use bot_core::{CommonLocation, bot::TgBot};
 use bot_viewer::{fmt_phone, user::link_to_user};
-use eyre::{bail, eyre, Error, Result};
-use tracing::{error, info};
+use eyre::{Error, Result, bail, eyre};
 use model::{
     program::TrainingType,
     rights::Rule,
     subscription::UserSubscription,
-    training::{Statistics, Training, TrainingStatus},
-    user::{employee::UserRewardContribution, family::FindFor, User},
+    training::{Statistics, Training},
+    user::{User, family::FindFor},
 };
-use storage::session::Session;
+use rewards::model::user::UserRewardContribution;
+use store::session::Session;
 use teloxide::{
     types::{ChatId, InlineKeyboardMarkup},
     utils::markdown::escape,
 };
+use tracing::{error, info};
+use trainings::model::status::TrainingStatus;
 use tx_macro::tx;
 
 #[derive(Clone)]

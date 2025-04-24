@@ -4,14 +4,11 @@ use chrono::{DateTime, Local, Utc};
 use decimal::Decimal;
 use error::SfError;
 use eyre::{Error, Result};
-use model::{
-    ids::DayId,
-    slot::Slot,
-    training::{Training, TrainingId, TrainingStatus},
-};
+use model::{ids::DayId, slot::Slot, training::Training};
 use mongodb::bson::oid::ObjectId;
 use storage::calendar::CalendarStore;
-use storage::session::Session;
+use store::session::Session;
+use trainings::{error::TrainingError, model::{id::TrainingId, status::TrainingStatus}};
 use tx_macro::tx;
 
 use super::{programs::Programs, users::Users};
@@ -99,9 +96,9 @@ impl Calendar {
         new_slot: Slot,
         all: bool,
     ) -> Result<(), SfError> {
-        if id.day_id() != new_slot.day_id() {
+        if DayId::from(id) != new_slot.day_id() {
             return Err(SfError::DayIdMismatch {
-                old: id.day_id(),
+                old: DayId::from(id),
                 new: new_slot.day_id(),
             });
         }
@@ -109,10 +106,10 @@ impl Calendar {
         let mut training = self
             .get_training_by_id(session, id)
             .await?
-            .ok_or(SfError::TrainingNotFound(id))?;
+            .ok_or(TrainingError::TrainingNotFound(id))?;
 
         if training.is_processed {
-            return Err(SfError::TrainingIsProcessed(training.id()));
+            return Err(TrainingError::TrainingIsProcessed(training.id()).into());
         }
 
         training.set_slot(new_slot);
@@ -131,7 +128,7 @@ impl Calendar {
                 let training = day.training.iter_mut().find(|slot| slot.id == training.id);
                 if let Some(training) = training {
                     if training.is_processed {
-                        return Err(SfError::TrainingIsProcessed(training.id()));
+                        return Err(TrainingError::TrainingIsProcessed(training.id()).into());
                     }
                     self.calendar
                         .delete_training(session, training.id())
@@ -192,7 +189,7 @@ impl Calendar {
     ) -> Result<(), SfError> {
         if let Some(training) = self.get_training_by_id(session, id).await? {
             if !training.clients.is_empty() {
-                return Err(SfError::TrainingHasClients(id));
+                return Err(TrainingError::TrainingHasClients(id).into());
             }
 
             self.calendar.delete_training(session, id).await?;
@@ -205,7 +202,7 @@ impl Calendar {
                     let training = day.training.iter().find(|slot| slot.id == training.id);
                     if let Some(training) = training {
                         if !training.clients.is_empty() {
-                            return Err(SfError::TrainingHasClients(id));
+                            return Err(TrainingError::TrainingHasClients(id).into());
                         }
                         self.calendar
                             .delete_training(session, training.id())
@@ -214,7 +211,7 @@ impl Calendar {
                 }
             }
         } else {
-            return Err(SfError::TrainingNotFound(id));
+            return Err(TrainingError::TrainingNotFound(id).into());
         }
 
         Ok(())

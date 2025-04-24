@@ -1,12 +1,8 @@
 use bson::oid::ObjectId;
 use chrono::Local;
+use model::{ids::DayId, training::Training, user::rate::Rate};
 use thiserror::Error;
-
-use model::{
-    ids::DayId,
-    training::{Training, TrainingId, TrainingStatus},
-    user::rate::Rate,
-};
+use trainings::error::TrainingError;
 
 #[derive(Error, Debug)]
 pub enum SfError {
@@ -33,7 +29,6 @@ pub enum SfError {
         user_id: ObjectId,
         member_id: ObjectId,
     },
-
     #[error("User already employee")]
     UserAlreadyEmployee { user_id: ObjectId },
     #[error("User not employee")]
@@ -48,11 +43,8 @@ pub enum SfError {
     RateNotFound { user_id: ObjectId, rate: Rate },
     #[error("Rate already exists")]
     RateTypeAlreadyExists { user_id: ObjectId, rate: Rate },
-    #[error("Wrong numbers of users")]
-    WrongTrainingClients { training_id: TrainingId },
     #[error("Request not found")]
     RequestNotFound { id: ObjectId },
-
     //new training
     #[error("Program not found:{0}")]
     ProgramNotFound(ObjectId),
@@ -68,29 +60,6 @@ pub enum SfError {
     TimeSlotCollision(Training),
     #[error("Day id mismatch")]
     DayIdMismatch { old: DayId, new: DayId },
-    #[error("Training is processed")]
-    TrainingIsProcessed(TrainingId),
-    //signin
-    #[error("Training not open to sign up")]
-    TrainingNotOpenToSignUp(TrainingId, TrainingStatus),
-    #[error("Client already signed up:{0:?} {1:?}")]
-    ClientAlreadySignedUp(ObjectId, TrainingId),
-    #[error("Training is full:{0:?}")]
-    TrainingIsFull(TrainingId),
-    #[error("Not enough balance:{0:?}")]
-    NotEnoughBalance(ObjectId),
-
-    //signout
-    #[error("Training not found:{0:?}")]
-    TrainingNotFound(TrainingId),
-    #[error("Training is not open to sign out:{0:?}")]
-    TrainingNotOpenToSignOut(TrainingId),
-    #[error("Client not signed up:{0:?} {1:?}")]
-    ClientNotSignedUp(ObjectId, TrainingId),
-    #[error("Not enough reserved balance:{0:?}")]
-    NotEnoughReservedBalance(ObjectId),
-
-    // delete training
-    #[error("Training has clients")]
-    TrainingHasClients(TrainingId),
+    #[error("Training error:{0}")]
+    TrainingsError(#[from] TrainingError),
 }
