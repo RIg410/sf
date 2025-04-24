@@ -13,3 +13,6 @@ storage.workspace = true
 tracing.workspace = true
 tx_macro.workspace = true
 zip.workspace = true
+serde.workspace = true
+futures-util.workspace = true
+mongodb.workspace = true

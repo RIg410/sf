@@ -23,7 +23,7 @@ pub struct CalendarStore {
 }
 
 impl CalendarStore {
-    pub(crate) async fn new(db: &Database) -> Result<Self> {
+    pub async fn new(db: &Database) -> Result<Self> {
         let days = db.collection(COLLECTION);
         let index = IndexModel::builder()
             .keys(doc! { "date_time": 1 })

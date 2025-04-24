@@ -1,23 +1,10 @@
-pub mod calendar;
-pub mod history;
-pub mod notification;
-pub mod payment;
-pub mod program;
-pub mod requests;
-pub mod rewards;
-pub mod session;
-pub mod subscription;
-pub mod treasury;
-pub mod user;
-
 use eyre::Result;
-use history::HistoryStore;
-use notification::NotificationStore;
-use requests::RequestStore;
-use rewards::RewardsStore;
-use session::Db;
 use std::sync::Arc;
-use user::UserStore;
+use storage::{
+    calendar::CalendarStore, history::HistoryStore, notification::NotificationStore,
+    program::ProgramStore, requests::RequestStore, rewards::RewardsStore, session::Db,
+    subscription::SubscriptionsStore, treasury::TreasuryStore, user::UserStore,
+};
 
 const DB_NAME: &str = "ledger_db";
 
@@ -25,10 +12,10 @@ const DB_NAME: &str = "ledger_db";
 pub struct Storage {
     pub db: Arc<Db>,
     pub users: Arc<UserStore>,
-    pub calendar: Arc<calendar::CalendarStore>,
-    pub programs: Arc<program::ProgramStore>,
-    pub treasury: Arc<treasury::TreasuryStore>,
-    pub subscriptions: Arc<subscription::SubscriptionsStore>,
+    pub calendar: Arc<CalendarStore>,
+    pub programs: Arc<ProgramStore>,
+    pub treasury: Arc<TreasuryStore>,
+    pub subscriptions: Arc<SubscriptionsStore>,
     pub history: Arc<HistoryStore>,
     pub rewards: Arc<RewardsStore>,
     pub requests: Arc<RequestStore>,
@@ -39,11 +26,11 @@ impl Storage {
     pub async fn new(uri: &str) -> Result<Self> {
         let db = Db::new(uri, DB_NAME).await?;
         let users = UserStore::new(&db).await?;
-        let calendar = calendar::CalendarStore::new(&db).await?;
-        let programs = program::ProgramStore::new(&db);
-        let treasury = treasury::TreasuryStore::new(&db).await?;
-        let subscriptions = subscription::SubscriptionsStore::new(&db);
-        let history = history::HistoryStore::new(&db).await?;
+        let calendar = CalendarStore::new(&db).await?;
+        let programs = ProgramStore::new(&db);
+        let treasury = TreasuryStore::new(&db).await?;
+        let subscriptions = SubscriptionsStore::new(&db);
+        let history = HistoryStore::new(&db).await?;
         let rewards = RewardsStore::new(&db).await?;
         let requests = RequestStore::new(&db).await?;
         let notification = NotificationStore::new(&db).await?;

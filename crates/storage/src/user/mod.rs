@@ -31,7 +31,7 @@ pub struct UserStore {
 }
 
 impl UserStore {
-    pub(crate) async fn new(db: &Database) -> Result<Self> {
+    pub async fn new(db: &Database) -> Result<Self> {
         let users = db.collection(COLLECTION);
         users
             .create_index(IndexModel::builder().keys(doc! { "tg_id": 1 }).build())

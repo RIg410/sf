@@ -27,6 +27,7 @@ use thiserror::Error;
 use tx_macro::tx;
 
 pub mod training;
+pub mod store;
 
 pub struct Services {
     pub db: Arc<Db>,
@@ -46,7 +47,7 @@ pub struct Services {
 
 impl Services {
     pub fn new(storage: Storage, env: Env) -> Self {
-        let backup = Backup::new(storage.clone());
+        let backup = Backup::new(storage.db.clone());
 
         let history = History::new(storage.history.clone());
         let programs = Programs::new(storage.programs.clone());

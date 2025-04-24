@@ -13,7 +13,7 @@ pub struct HistoryStore {
 }
 
 impl HistoryStore {
-    pub(crate) async fn new(db: &mongodb::Database) -> Result<Self, Error> {
+    pub async fn new(db: &mongodb::Database) -> Result<Self, Error> {
         let store = db.collection(COLLECTION);
         store
             .create_index(IndexModel::builder().keys(doc! { "date_time": -1 }).build())

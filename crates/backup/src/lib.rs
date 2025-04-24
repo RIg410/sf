@@ -1,21 +1,26 @@
+use ::storage::session::{Db, Session};
 use eyre::{Context, Error};
-use tracing::info;
 use std::{
     collections::HashMap,
     io::{Cursor, Read, Write as _},
+    sync::Arc,
 };
-use storage::session::Session;
-use storage::{CollectionBackup, Storage};
+use storage::{BackupStorage, CollectionBackup};
+use tracing::info;
 use tx_macro::tx;
 use zip::write::SimpleFileOptions;
 
+pub mod storage;
+
 pub struct Backup {
-    store: Storage,
+    store: BackupStorage,
 }
 
 impl Backup {
-    pub fn new(store: Storage) -> Backup {
-        Backup { store }
+    pub fn new(store: Arc<Db>) -> Backup {
+        Backup {
+            store: BackupStorage::new(store),
+        }
     }
 
     #[tx]

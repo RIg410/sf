@@ -10,7 +10,7 @@ pub struct Db {
 }
 
 impl Db {
-    pub(crate) async fn new(uri: &str, db_name: &str) -> Result<Self, Error> {
+    pub async fn new(uri: &str, db_name: &str) -> Result<Self, Error> {
         let client = Client::with_uri_str(uri)
             .await
             .context("Failed to connect to MongoDB")?;

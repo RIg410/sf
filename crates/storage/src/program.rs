@@ -17,7 +17,7 @@ pub struct ProgramStore {
 }
 
 impl ProgramStore {
-    pub(crate) fn new(db: &mongodb::Database) -> Self {
+    pub fn new(db: &mongodb::Database) -> Self {
         let store = db.collection(COLLECTION);
         ProgramStore { store }
     }

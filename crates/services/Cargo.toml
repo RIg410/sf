@@ -8,11 +8,14 @@ version.workspace = true
 
 [dependencies]
 ai.workspace = true
+backup.workspace = true
+bson.workspace = true
 chrono.workspace = true
 decimal.workspace = true
 env.workspace = true
 error.workspace = true
 eyre.workspace = true
+futures-util.workspace = true
 ledger.workspace = true
 model.workspace = true
 mongodb.workspace = true
@@ -21,4 +24,3 @@ storage.workspace = true
 thiserror.workspace = true
 tx_macro.workspace = true
 yookassa.workspace = true
-backup.workspace = true
