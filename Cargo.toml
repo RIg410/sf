@@ -15,7 +15,6 @@ members = [
   "crates/storage",
   "bins",
   "crates/payment/yookassa",
-  "crates/graph",
   "crates/error",
   "mini-app/main",
   "crates/stat",
@@ -43,10 +42,9 @@ bot-subscription = {path = "crates/bot/subscription"}
 bot-trainings = {path = "crates/bot/trainings"}
 bot-users = {path = "crates/bot/users"}
 bot-viewer = {path = "crates/bot/viewer"}
-bot-views = {path = "crates/bot/views"}
 decimal = {path = "crates/core/decimal"}
 error = {path = "crates/error"}
-graph = {path = "crates/graph"}
+graph = {path = "crates/core/graph"}
 rewards = {path = "crates/rewards"}
 services = {path = "crates/services"}
 stat = {path = "crates/stat"}

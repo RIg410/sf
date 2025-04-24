@@ -14,7 +14,6 @@ bincode.workspace = true
 bot-core.workspace = true
 bot-trainings.workspace = true
 bot-viewer.workspace = true
-bot-views.workspace = true
 rewards.workspace = true
 
 chrono.workspace = true

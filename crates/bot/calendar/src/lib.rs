@@ -8,7 +8,6 @@ use bot_trainings::view::TrainingView;
 use bot_viewer::day::{fmt_dm, fmt_month, fmt_weekday};
 use bot_viewer::rooms::fmt_room_emoji;
 use bot_viewer::training::{fmt_statistics_summary, fmt_training_status};
-use bot_views::Filter;
 use chrono::{Datelike, Duration, Local, Weekday};
 use eyre::Error;
 use model::ids::{DayId, WeekId};
@@ -21,6 +20,11 @@ use teloxide::types::{InlineKeyboardButton, InlineKeyboardMarkup};
 use teloxide::utils::markdown::escape;
 
 mod schedule;
+
+#[derive(Debug, Default, Clone)]
+pub struct Filter {
+    pub proto_id: Option<ObjectId>,
+}
 
 #[derive(Default)]
 pub struct CalendarView {

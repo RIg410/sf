@@ -319,7 +319,6 @@ dependencies = [
  "bot-core",
  "bot-trainings",
  "bot-viewer",
- "bot-views",
  "chrono",
  "eyre",
  "hex",
@@ -455,7 +454,6 @@ dependencies = [
  "bincode",
  "bot-core",
  "bot-viewer",
- "bot-views",
  "chrono",
  "decimal",
  "error",
@@ -531,7 +529,6 @@ dependencies = [
  "bot-core",
  "bot-trainings",
  "bot-viewer",
- "bot-views",
  "chrono",
  "decimal",
  "eyre",
@@ -569,28 +566,6 @@ dependencies = [
  "teloxide",
  "tracing",
  "trainings",
-]
-
-[[package]]
-name = "bot-views"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "bincode",
- "bot-core",
- "chrono",
- "eyre",
- "hex",
- "itertools 0.2.9",
- "ledger",
- "model",
- "mongodb",
- "serde",
- "services",
- "storage",
- "strum",
- "teloxide",
- "tracing",
 ]
 
 [[package]]
