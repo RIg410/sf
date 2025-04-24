@@ -5,7 +5,7 @@ use model::{
     day::Day,
     ids::DayId,
     program::TrainingType,
-    training::{Filter, Notified, Statistics, Training},
+    training::{Filter, Training},
 };
 use mongodb::{
     Collection, Database, IndexModel, SessionCursor,
@@ -14,7 +14,7 @@ use mongodb::{
 };
 use store::session::Session;
 use tracing::info;
-use trainings::model::id::TrainingId;
+use trainings::model::{id::TrainingId, notification::Notified, statistics::Statistics};
 
 const COLLECTION: &str = "days";
 

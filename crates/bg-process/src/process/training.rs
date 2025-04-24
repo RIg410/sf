@@ -6,11 +6,7 @@ use bot_core::{CommonLocation, bot::TgBot};
 use bot_viewer::{fmt_phone, user::link_to_user};
 use eyre::{Error, Result, bail, eyre};
 use model::{
-    program::TrainingType,
-    rights::Rule,
-    subscription::UserSubscription,
-    training::{Statistics, Training},
-    user::{User, family::FindFor},
+    program::TrainingType, rights::Rule, subscription::UserSubscription, training::Training, user::{family::FindFor, User}
 };
 use rewards::model::user::UserRewardContribution;
 use store::session::Session;
@@ -19,7 +15,7 @@ use teloxide::{
     utils::markdown::escape,
 };
 use tracing::{error, info};
-use trainings::model::status::TrainingStatus;
+use trainings::model::{statistics::Statistics, status::TrainingStatus};
 use tx_macro::tx;
 
 #[derive(Clone)]

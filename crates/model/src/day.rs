@@ -1,12 +1,9 @@
-use crate::{
-    ids::DayId,
-    slot::Slot,
-    training::{Statistics, Training},
-};
+use crate::{ids::DayId, slot::Slot, training::Training};
 use bson::oid::ObjectId;
 use chrono::{DateTime, Datelike, Local, Utc};
 use decimal::Decimal;
 use serde::{Deserialize, Serialize};
+use trainings::model::statistics::Statistics;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct Day {

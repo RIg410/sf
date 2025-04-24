@@ -4,11 +4,12 @@ use bot_core::bot::TgBot;
 use bot_viewer::day::fmt_time;
 use chrono::{DateTime, Local};
 use eyre::Error;
-use model::{ids::DayId, training::Notified};
+use model::ids::DayId;
 use mongodb::bson::oid::ObjectId;
 use services::Services;
-use store::session::Session;
+use trainings::model::notification::Notified;
 use std::sync::Arc;
+use store::session::Session;
 use teloxide::{types::ChatId, utils::markdown::escape};
 
 #[derive(Clone)]

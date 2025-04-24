@@ -1,14 +1,14 @@
-use bson::oid::ObjectId;
-use chrono::{DateTime, Datelike, Local, Timelike as _, Utc};
-use serde::{Deserialize, Serialize};
-use decimal::Decimal;
-use trainings::model::{id::TrainingId, status::TrainingStatus};
 use crate::{
     ids::DayId,
     program::{Program, TrainingType},
     rooms::Room,
     slot::Slot,
 };
+use bson::oid::ObjectId;
+use chrono::{DateTime, Datelike, Local, Timelike as _, Utc};
+use decimal::Decimal;
+use serde::{Deserialize, Serialize};
+use trainings::model::{id::TrainingId, notification::Notified, statistics::Statistics, status::TrainingStatus};
 
 pub const CLOSE_SING_UP: u32 = 3 * 60; // 3 hours
 
@@ -291,31 +291,6 @@ impl Filter {
             Filter::Instructor(instructor) => training.instructor == *instructor,
             Filter::Program(program) => training.proto_id == *program,
         }
-    }
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, Default)]
-pub struct Statistics {
-    pub earned: Decimal,
-    pub couch_rewards: Decimal,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq, PartialOrd, Ord)]
-pub enum Notified {
-    None {},
-    Tomorrow {},
-    ByHours(Vec<ObjectId>),
-}
-
-impl Notified {
-    pub fn is_notified(&self) -> bool {
-        !matches!(self, Notified::None {})
-    }
-}
-
-impl Default for Notified {
-    fn default() -> Self {
-        Notified::None {}
     }
 }
 

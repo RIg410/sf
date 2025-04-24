@@ -13,3 +13,4 @@ eyre.workspace = true
 chrono.workspace = true
 thiserror.workspace = true
 mongodb.workspace = true
+decimal.workspace = true
