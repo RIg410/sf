@@ -35,6 +35,10 @@ impl Decimal {
     pub fn int_part(&self) -> i64 {
         self.0 / 10i64.pow(DECIMALS as u32)
     }
+
+    pub fn change_sign(&self) -> Decimal {
+        Decimal(-self.0)
+    }
 }
 
 impl Debug for Decimal {

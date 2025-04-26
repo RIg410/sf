@@ -68,6 +68,7 @@ impl Treasury {
             credit: Decimal::zero(),
             actor: session.actor(),
             description: None,
+            amount: debit,
         };
         self.store.insert(session, event).await?;
         Ok(())
@@ -92,6 +93,7 @@ impl Treasury {
             credit: amount,
             actor: session.actor(),
             description: None,
+            amount: amount.change_sign(),
         };
 
         self.store.insert(session, event).await?;
@@ -112,6 +114,7 @@ impl Treasury {
             credit: amount,
             actor: session.actor(),
             description: None,
+            amount: amount.change_sign(),
         };
 
         self.store.insert(session, event).await?;
@@ -137,6 +140,7 @@ impl Treasury {
             credit: amount,
             actor: session.actor(),
             description: None,
+            amount: amount.change_sign(),
         };
 
         self.store.insert(session, event).await?;
@@ -162,6 +166,7 @@ impl Treasury {
             credit: Decimal::zero(),
             actor: session.actor(),
             description: Some(description),
+            amount: amount,
         };
 
         self.store.insert(session, event).await?;
@@ -187,6 +192,7 @@ impl Treasury {
             credit: Decimal::zero(),
             actor: session.actor(),
             description: None,
+            amount: amount,
         };
 
         self.store.insert(session, event).await?;
@@ -208,6 +214,7 @@ impl Treasury {
             credit: amount,
             actor: session.actor(),
             description: None,
+            amount: amount.change_sign(),
         };
 
         self.store.insert(session, event).await?;

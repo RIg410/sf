@@ -1,7 +1,6 @@
 pub mod calendar;
 pub mod history;
 pub mod notification;
-pub mod payment;
 pub mod requests;
 pub mod subscription;
 pub mod treasury;

@@ -24,6 +24,8 @@ pub struct TreasuryEvent {
     pub debit: Decimal,
     pub credit: Decimal,
     #[serde(default)]
+    pub amount: Decimal,
+    #[serde(default)]
     pub description: Option<String>,
 }
 
