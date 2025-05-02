@@ -1,8 +1,8 @@
 use std::{sync::Arc, time::Instant};
 
 use bson::oid::ObjectId;
-use model::user::sanitize_phone;
 use rand::Rng as _;
+use users::model::{sanitize_phone, User};
 
 #[derive(Default, Clone)]
 pub struct Codes {
@@ -14,7 +14,7 @@ impl Codes {
         self.code_requests.get(phone).map(|v| v.clone())
     }
 
-    pub fn generate_code(&self, user: model::user::User) -> VerificationCode {
+    pub fn generate_code(&self, user: User) -> VerificationCode {
         let code = VerificationCode::new(user.id);
         self.code_requests
             .insert(PhoneNumber::new(user.phone.unwrap()), code.clone());

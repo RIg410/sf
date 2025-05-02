@@ -1,4 +1,3 @@
-use ::store::session::Db;
 use ai::Ai;
 use backup::Backup;
 use calendar::service::Calendar;
@@ -12,6 +11,7 @@ use rewards::service::Rewards;
 use sales::Sales;
 use stat::services::Statistics;
 use std::sync::Arc;
+use store::Db;
 use subscription::service::Subscriptions;
 use training_adjuster::TrainingAdjuster;
 use treasury::service::Treasury;

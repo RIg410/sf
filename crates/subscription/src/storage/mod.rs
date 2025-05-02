@@ -2,7 +2,7 @@ use bson::{doc, oid::ObjectId};
 use decimal::Decimal;
 use eyre::Error;
 use mongodb::Collection;
-use store::session::{Db, Session};
+use store::{Db, session::Session};
 use tracing::info;
 
 use crate::model::Subscription;

@@ -1,27 +1,20 @@
 use crate::{
     adapters::ToView,
     pb::{
-        subscription::{subscription_type_view, Group, Personal, SubscriptionTypeView},
+        subscription::{Group, Personal, SubscriptionTypeView, subscription_type_view},
         user::{
-            rate_view, status_view, ActiveStatusView, EmployeeRoleView, EmployeeView, FamilyView,
-            FixRateView, FreezeView, GroupTrainingRateView, IntervalView, NotActive,
-            PersonalTrainingRateView, RateView, RightsView, RuleView, SourceView, StatusView,
-            UserNameView, UserSubscriptionView, UserView,
+            ActiveStatusView, EmployeeRoleView, EmployeeView, FamilyView, FixRateView, FreezeView,
+            GroupTrainingRateView, IntervalView, NotActive, PersonalTrainingRateView, RateView,
+            RightsView, RuleView, SourceView, StatusView, UserNameView, UserSubscriptionView,
+            UserView, rate_view, status_view,
         },
     },
 };
 use bot_viewer::fmt_phone_escape_less;
-use model::{
-    rights::{HasRule, Rights, Rule},
-    statistics::source::Source,
-    subscription::{SubscriptionStatus, SubscriptionType, UserSubscription},
-    user::{
-        employee::Employee,
-        family::Family,
-        rate::{EmployeeRole, Interval, Rate},
-        Freeze, User,
-    },
-};
+use ident::source::Source;
+use rights::{HasRule, Rights, Rule};
+use subscription::model::{SubscriptionStatus, SubscriptionType, UserSubscription};
+use users::model::{employee::Employee, family::Family, rate::{EmployeeRole, Interval, Rate}, Freeze, User, UserName};
 
 impl ToView<UserView> for User {
     fn to_view<R: HasRule>(self, rights: &R) -> UserView {
@@ -52,7 +45,7 @@ impl ToView<UserView> for User {
     }
 }
 
-impl ToView<UserNameView> for model::user::UserName {
+impl ToView<UserNameView> for UserName {
     fn to_view<R: HasRule>(self, _: &R) -> UserNameView {
         UserNameView {
             tg_user_name: self.tg_user_name,

@@ -7,7 +7,7 @@ use eyre::{Error, Result};
 use ident::{day::DayId, slot::Slot, training::TrainingId};
 use mongodb::bson::oid::ObjectId;
 use program::service::Programs;
-use store::session::{Db, Session};
+use store::{session::Session, Db};
 use trainings::{error::TrainingError, model::Training};
 use tx_macro::tx;
 use users::{log::UserLog, service::Users};
@@ -366,7 +366,6 @@ impl<L: UserLog> Calendar<L> {
 
         Ok(())
     }
-
 }
 
 impl<L> Deref for Calendar<L> {

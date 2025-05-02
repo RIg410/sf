@@ -1,11 +1,11 @@
 use eyre::{Context, Error};
-use store::session::{Db, Session};
 use std::{
     collections::HashMap,
     io::{Cursor, Read, Write as _},
     sync::Arc,
 };
 use storage::{BackupStorage, CollectionBackup};
+use store::{session::Session, Db};
 use tracing::info;
 use tx_macro::tx;
 use zip::write::SimpleFileOptions;

@@ -11,7 +11,7 @@ use eyre::{Error, Result};
 use ident::rooms::Room;
 use mongodb::{SessionCursor, bson::oid::ObjectId};
 use std::{ops::Deref, sync::Arc};
-use store::session::{Db, Session};
+use store::{session::Session, Db};
 use subscription::model::{Subscription, UserSubscription};
 use trainings::model::Training;
 use users::model::UserName;

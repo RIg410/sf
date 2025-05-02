@@ -2,7 +2,7 @@ use crate::model::Reward;
 use bson::{doc, oid::ObjectId};
 use eyre::Error;
 use mongodb::Collection;
-use store::session::{Db, Session};
+use store::{Db, session::Session};
 
 const REWARD_COLLECTION: &str = "reward";
 

@@ -1,8 +1,7 @@
-use eyre::Error;
-use store::session::Db;
-
 use crate::storage::RewardsStore;
+use eyre::Error;
 use std::{ops::Deref, sync::Arc};
+use store::Db;
 
 #[derive(Clone)]
 pub struct Rewards {

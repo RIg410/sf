@@ -1,8 +1,7 @@
-use std::sync::Arc;
-
 use env::Env;
-use eyre::Context;
 use services::SfServices;
+use std::sync::Arc;
+use store::{Db, SF_DB_NAME};
 use tracing::info;
 use tracing_subscriber::EnvFilter;
 
@@ -11,7 +10,11 @@ async fn main() -> eyre::Result<()> {
     let env = Env::load()?;
 
     tracing_subscriber::fmt()
-        .with_env_filter(EnvFilter::builder().parse_lossy("debug,teloxide=error,hyper=error,reqwest=warn,tonic_web=warn,h2=warn"))
+        .with_env_filter(
+            EnvFilter::builder().parse_lossy(
+                "debug,teloxide=error,hyper=error,reqwest=warn,tonic_web=warn,h2=warn",
+            ),
+        )
         .with_file(true)
         .with_line_number(true)
         .with_target(true)
@@ -20,9 +23,7 @@ async fn main() -> eyre::Result<()> {
 
     color_eyre::install()?;
     info!("connecting to mongo");
-    let storage = storage::Storage::new(env.mongo_url())
-        .await
-        .context("Failed to create storage")?;
+    let storage = Arc::new(Db::new(env.mongo_url(), SF_DB_NAME).await?);
     info!("creating ledger");
     let ledger = Arc::new(SfServices::new(storage, env.clone()).await?);
     info!("Starting bot...");

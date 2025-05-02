@@ -1,11 +1,11 @@
 use std::{collections::HashMap, sync::Arc};
 
-use bson::{doc, Bson};
+use bson::{Bson, doc};
+use eyre::Result;
 use futures_util::{StreamExt as _, TryStreamExt as _};
 use mongodb::Collection;
 use serde::{Deserialize, Serialize};
-use eyre::Result;
-use store::session::{Db, Session};
+use store::{Db, session::Session};
 
 pub struct BackupStorage {
     db: Arc<Db>,

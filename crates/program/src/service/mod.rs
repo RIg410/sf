@@ -5,7 +5,7 @@ use crate::{
 use eyre::Error;
 use mongodb::bson::oid::ObjectId;
 use std::{ops::Deref, sync::Arc};
-use store::session::{Db, Session};
+use store::{Db, session::Session};
 use tx_macro::tx;
 
 #[derive(Clone)]

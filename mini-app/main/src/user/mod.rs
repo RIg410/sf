@@ -3,10 +3,10 @@ use crate::{
     ctx::ContextBuilder,
     pb::{
         user::UserView,
-        users::{users_service_server::UsersService, UserRequest},
+        users::{UserRequest, users_service_server::UsersService},
     },
 };
-use model::rights::Rule;
+use rights::Rule;
 use tonic::async_trait;
 use tracing::warn;
 
@@ -46,6 +46,7 @@ impl UsersService for UserServer {
 
         let user = ctx
             .services
+            .users
             .get_user(&mut ctx.session, user_id)
             .await
             .map_err(|err| {

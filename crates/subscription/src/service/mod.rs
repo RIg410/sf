@@ -2,7 +2,7 @@ use crate::{model::Subscription, storage::SubscriptionsStore};
 use decimal::Decimal;
 use eyre::Error;
 use std::{ops::Deref, sync::Arc};
-use store::session::{Db, Session};
+use store::{session::Session, Db};
 use thiserror::Error;
 use tx_macro::tx;
 

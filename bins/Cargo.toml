@@ -15,6 +15,7 @@ env.workspace = true
 eyre.workspace = true
 mini-app-main.workspace = true
 services.workspace = true
+store.workspace = true
 tokio.workspace = true
 tracing-subscriber = {workspace = true, features = ["fmt", "env-filter"]}
 tracing.workspace = true

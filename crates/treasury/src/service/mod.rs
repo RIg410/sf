@@ -17,7 +17,7 @@ use ident::source::Source;
 use log::TreasuryLog;
 use mongodb::bson::oid::ObjectId;
 use std::{ops::Deref, sync::Arc};
-use store::session::{Db, Session};
+use store::{Db, session::Session};
 use subscription::model::Subscription;
 use tx_macro::tx;
 

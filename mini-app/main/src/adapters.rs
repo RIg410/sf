@@ -1,6 +1,6 @@
 use crate::pb::id::ObjectId as ObjectIdView;
 use bson::oid::ObjectId;
-use model::rights::HasRule;
+use rights::HasRule;
 use tonic::Status;
 
 pub trait ToView<T> {
