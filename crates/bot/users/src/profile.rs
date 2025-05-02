@@ -73,7 +73,11 @@ impl UserProfile {
     }
 
     async fn training_list(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
-        let user = ctx.services.get_user(&mut ctx.session, self.id).await?;
+        let user = ctx
+            .services
+            .users
+            .get_user(&mut ctx.session, self.id)
+            .await?;
         if user.employee.is_some() {
             Ok(TrainingList::couches(user.id).into())
         } else {
@@ -82,12 +86,20 @@ impl UserProfile {
     }
 
     async fn history_list(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
-        let user = ctx.services.get_user(&mut ctx.session, self.id).await?;
+        let user = ctx
+            .services
+            .users
+            .get_user(&mut ctx.session, self.id)
+            .await?;
         Ok(HistoryList::new(user.id).into())
     }
 
     async fn rewards_list(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
-        let user = ctx.services.get_user(&mut ctx.session, self.id).await?;
+        let user = ctx
+            .services
+            .users
+            .get_user(&mut ctx.session, self.id)
+            .await?;
         if user.employee.is_some() && (ctx.is_me(user.id) || ctx.has_right(Rule::ViewRewards)) {
             Ok(RewardsList::new(user.id).into())
         } else {

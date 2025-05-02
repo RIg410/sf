@@ -3,6 +3,7 @@ use std::sync::Arc;
 use crate::{SfServices, Task};
 use async_trait::async_trait;
 use chrono::Local;
+use employee::reward::EmployeeReward as _;
 use eyre::Error;
 use store::session::Session;
 use tracing::info;

@@ -116,7 +116,11 @@ async fn render(
 
         keymap = keymap.append_row(vec![make_button(&user)]);
         for child_id in &user.family.children_ids {
-            let child = ctx.services.get_user(&mut ctx.session, *child_id).await?;
+            let child = ctx
+                .services
+                .users
+                .get_user(&mut ctx.session, *child_id)
+                .await?;
             if child.phone.is_none() {
                 if ids.contains(child_id) {
                     continue;

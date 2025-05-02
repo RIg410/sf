@@ -5,8 +5,8 @@ use bot_core::{
     context::Context,
     widget::{Jmp, View},
 };
-use model::rights::Rule;
 use mongodb::bson::oid::ObjectId;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::types::InlineKeyboardMarkup;
 
@@ -46,6 +46,7 @@ impl View for DeleteEmployeeConfirm {
         match calldata!(callback) {
             CallbackQuery::Yes => {
                 ctx.services
+                    .employee
                     .delete_employee(&mut ctx.session, self.user_id)
                     .await?;
                 ctx.send_notification("Сотрудник удален").await;

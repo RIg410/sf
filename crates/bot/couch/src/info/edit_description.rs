@@ -1,7 +1,7 @@
 use async_trait::async_trait;
 use bot_core::{
     context::Context,
-    script::{text::StageText, Dispatch, Stage},
+    script::{Dispatch, Stage, text::StageText},
 };
 use eyre::Error;
 
@@ -22,7 +22,7 @@ impl StageText<State> for CouchDescription {
         query: &str,
     ) -> Result<Dispatch<State>, Error> {
         ctx.services
-            .users
+            .employee
             .update_employee_description(&mut ctx.session, state.id, query.to_string())
             .await?;
         Ok(Dispatch::Stage(Stage::list(CouchInfo)))

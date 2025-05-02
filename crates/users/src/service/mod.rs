@@ -1,4 +1,5 @@
 use crate::{
+    error::UserError,
     log::UserLog,
     model::{
         User, UserName,
@@ -9,7 +10,7 @@ use crate::{
 };
 use ::ai::Ai;
 use chrono::{DateTime, Local};
-use eyre::{Error, Result, bail, eyre};
+use eyre::{Context as _, Error, Result, bail, eyre};
 use ident::source::Source;
 use mongodb::{SessionCursor, bson::oid::ObjectId};
 use rights::{Rights, Rule};
@@ -20,7 +21,6 @@ use tracing::info;
 use tx_macro::tx;
 
 pub mod comments;
-pub mod employee;
 pub mod family;
 pub mod statistics;
 pub mod subscription;
@@ -39,6 +39,13 @@ impl<L: UserLog> Users<L> {
             logs,
             _ai: ai,
         })
+    }
+
+    pub async fn get_user(&self, session: &mut Session, id: ObjectId) -> Result<User, UserError> {
+        self.get(session, id)
+            .await
+            .context("get_user")?
+            .ok_or_else(|| UserError::UserNotFound(id))
     }
 
     #[tx]

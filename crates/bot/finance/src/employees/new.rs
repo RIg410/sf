@@ -5,10 +5,9 @@ use bot_core::{
     context::Context,
     widget::{Jmp, View},
 };
-// use bot_viewer::error::notify;
-use model::user::{rate::EmployeeRole, sanitize_phone};
 use mongodb::bson::oid::ObjectId;
 use teloxide::types::{InlineKeyboardMarkup, Message};
+use users::model::{rate::EmployeeRole, sanitize_phone};
 
 pub struct MakeEmployee {}
 
@@ -133,7 +132,7 @@ impl View for EmployeeRoleView {
     async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {
         let role: EmployeeRole = calldata!(data);
         ctx.services
-            .users
+            .employee
             .make_user_employee(
                 &mut ctx.session,
                 self.user_id,

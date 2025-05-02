@@ -8,10 +8,11 @@ use bot_core::{
 use bot_viewer::day::fmt_dt;
 use chrono::Local;
 use eyre::eyre;
-use model::{rights::Rule, treasury::TreasuryEvent};
 use mongodb::bson::oid::ObjectId;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::{types::InlineKeyboardMarkup, utils::markdown::escape};
+use treasury::model::{Event, TreasuryEvent, subs::UserId};
 
 pub struct FinanceOperation {
     id: ObjectId,
@@ -66,17 +67,18 @@ impl View for FinanceOperation {
 
 async fn render_event(ctx: &mut Context, event: &TreasuryEvent) -> Result<String, eyre::Error> {
     let env_text = match &event.event {
-        model::treasury::Event::SellSubscription(sell_subscription) => {
+        Event::SellSubscription(sell_subscription) => {
             let user = match sell_subscription.buyer_id.clone() {
-                model::treasury::subs::UserId::Id(object_id) => ctx
+                UserId::Id(object_id) => ctx
                     .services
+                    .users
                     .get_user(&mut ctx.session, object_id)
                     .await
                     .ok()
                     .map(|user| user.name.to_string())
                     .unwrap_or_else(|| "-".to_string()),
-                model::treasury::subs::UserId::Phone(phone) => phone.to_owned(),
-                model::treasury::subs::UserId::None => "-".to_string(),
+                UserId::Phone(phone) => phone.to_owned(),
+                UserId::None => "-".to_string(),
             };
 
             format!(
@@ -85,41 +87,42 @@ async fn render_event(ctx: &mut Context, event: &TreasuryEvent) -> Result<String
                 user
             )
         }
-        model::treasury::Event::Reward(user_id) => {
+        Event::Reward(user_id) => {
             let user = match user_id {
-                model::treasury::subs::UserId::Id(object_id) => ctx
+                UserId::Id(object_id) => ctx
                     .services
+                    .users
                     .get_user(&mut ctx.session, *object_id)
                     .await
                     .ok()
                     .map(|user| user.name.to_string())
                     .unwrap_or_else(|| "-".to_string()),
-                model::treasury::subs::UserId::Phone(phone) => phone.to_owned(),
-                model::treasury::subs::UserId::None => "-".to_string(),
+                UserId::Phone(phone) => phone.to_owned(),
+                UserId::None => "-".to_string(),
             };
             format!("🎁 Выплата награды: {} пользователю {}", event.sum(), user)
         }
-        model::treasury::Event::Outcome(outcome) => {
+        Event::Outcome(outcome) => {
             format!(
                 "📉 Расход: {} руб.\nОписание: {}",
                 event.sum(),
                 outcome.description
             )
         }
-        model::treasury::Event::Income(income) => {
+        Event::Income(income) => {
             format!(
                 "📈 Поступление: {} руб.\nОписание:{}",
                 event.sum(),
                 income.description
             )
         }
-        model::treasury::Event::SubRent => {
+        Event::SubRent => {
             format!("🏠 Субаренда: {} руб.", event.sum())
         }
-        model::treasury::Event::Rent => {
+        Event::Rent => {
             format!("🏠 Аренда: {} руб.", event.sum())
         }
-        model::treasury::Event::Marketing(come_from) => {
+        Event::Marketing(come_from) => {
             format!("📊 Маркетинг: {} руб. ({})", event.sum(), come_from.name())
         }
     };

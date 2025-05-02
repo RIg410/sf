@@ -5,7 +5,6 @@ use bot_core::{
     widget::{Jmp, View},
 };
 use eyre::{Context as _, Ok};
-use model::user::UserName;
 use mongodb::bson::oid::ObjectId;
 use services::SfServices;
 use store::session::Session;
@@ -13,6 +12,7 @@ use teloxide::types::{
     ButtonRequest, Contact, KeyboardButton, KeyboardMarkup, KeyboardRemove, Message, ReplyMarkup,
 };
 use tracing::info;
+use users::model::UserName;
 
 const GREET_START: &str =
     "\nПожалуйста, оставьте ваш номер телефона\\. Для этого нажмите на кнопку ниже\\.";

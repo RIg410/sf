@@ -12,10 +12,11 @@ use bot_users::{
 };
 use bot_viewer::user::render_profile_msg;
 use eyre::Error;
-use model::{rights::Rule, user::rate::EmployeeRole};
 use mongodb::bson::oid::ObjectId;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::types::{InlineKeyboardMarkup, Message};
+use users::model::rate::EmployeeRole;
 
 use super::{delete::DeleteEmployeeConfirm, rates::list::RatesList, reward::PayReward};
 
@@ -37,6 +38,7 @@ impl EmployeeProfile {
             .await?
             .ok_or_else(|| eyre::eyre!("User not found"))?;
         ctx.services
+            .users
             .block_user(&mut ctx.session, self.id, !user.is_active)
             .await?;
         ctx.reload_user().await?;
@@ -57,7 +59,11 @@ impl EmployeeProfile {
     }
 
     async fn training_list(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
-        let user = ctx.services.get_user(&mut ctx.session, self.id).await?;
+        let user = ctx
+            .services
+            .users
+            .get_user(&mut ctx.session, self.id)
+            .await?;
         if user.employee.is_some() {
             Ok(TrainingList::couches(user.id).into())
         } else {
@@ -66,12 +72,20 @@ impl EmployeeProfile {
     }
 
     async fn history_list(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
-        let user = ctx.services.get_user(&mut ctx.session, self.id).await?;
+        let user = ctx
+            .services
+            .users
+            .get_user(&mut ctx.session, self.id)
+            .await?;
         Ok(HistoryList::new(user.id).into())
     }
 
     async fn rewards_list(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
-        let user = ctx.services.get_user(&mut ctx.session, self.id).await?;
+        let user = ctx
+            .services
+            .users
+            .get_user(&mut ctx.session, self.id)
+            .await?;
         if user.employee.is_some() && (ctx.is_me(user.id) || ctx.has_right(Rule::ViewRewards)) {
             Ok(RewardsList::new(user.id).into())
         } else {

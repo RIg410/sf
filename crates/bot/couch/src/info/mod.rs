@@ -47,6 +47,7 @@ impl CouchInfo {
     ) -> Result<Dispatch<State>> {
         ctx.ensure(Rule::EditCouch)?;
         ctx.services
+            .employee
             .delete_employee(&mut ctx.session, state.id)
             .await?;
         ctx.send_notification("🗑️ Удалено").await;
@@ -63,7 +64,11 @@ impl StageList<State> for CouchInfo {
         limit: usize,
         offset: usize,
     ) -> Result<(String, Vec<Vec<ListItem>>)> {
-        let user = ctx.services.get_user(&mut ctx.session, state.id).await?;
+        let user = ctx
+            .services
+            .users
+            .get_user(&mut ctx.session, state.id)
+            .await?;
         let couch = if let Some(couch) = user.employee.as_ref() {
             couch
         } else {
@@ -78,12 +83,7 @@ impl StageList<State> for CouchInfo {
         let trainings = ctx
             .services
             .calendar
-            .find_trainings(
-                &mut ctx.session,
-                Filter::Instructor(user.id),
-                limit,
-                offset,
-            )
+            .find_trainings(&mut ctx.session, Filter::Instructor(user.id), limit, offset)
             .await?;
 
         let now = Local::now();

@@ -241,23 +241,30 @@ version = "0.1.0"
 dependencies = [
  "ai",
  "async-trait",
+ "booking",
  "bot-core",
  "bot-main",
  "bot-viewer",
  "chrono",
+ "employee",
  "eyre",
  "futures-util",
+ "ident",
  "mongodb",
  "program",
+ "requests",
  "rewards",
+ "rights",
  "services",
  "store",
+ "subscription",
  "teloxide",
  "tokio",
  "tokio-cron-scheduler",
  "tracing",
  "trainings",
  "tx_macro",
+ "users",
 ]
 
 [[package]]
@@ -409,16 +416,21 @@ dependencies = [
  "bot-viewer",
  "chrono",
  "decimal",
+ "employee",
  "error",
  "eyre",
  "hex",
+ "ident",
  "itertools 0.2.9",
  "mongodb",
+ "rights",
  "serde",
  "strum",
  "teloxide",
  "time 0.1.0",
  "tracing",
+ "treasury",
+ "users",
 ]
 
 [[package]]
@@ -442,12 +454,14 @@ dependencies = [
  "hex",
  "itertools 0.2.9",
  "mongodb",
+ "rights",
  "serde",
  "services",
  "store",
  "strum",
  "teloxide",
  "tracing",
+ "users",
 ]
 
 [[package]]
@@ -1053,6 +1067,26 @@ name = "either"
 version = "1.13.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "60b1af1c220855b6ceac025d3f6ecdd2b7c4894bfe9cd9bda4fbb4bc7c0d4cf0"
+
+[[package]]
+name = "employee"
+version = "0.1.0"
+dependencies = [
+ "bson",
+ "calendar",
+ "chrono",
+ "decimal",
+ "eyre",
+ "history",
+ "ident",
+ "program",
+ "rewards",
+ "store",
+ "trainings",
+ "treasury",
+ "tx_macro",
+ "users",
+]
 
 [[package]]
 name = "encoding_rs"
@@ -3330,6 +3364,7 @@ dependencies = [
  "calendar",
  "chrono",
  "decimal",
+ "employee",
  "env",
  "error",
  "eyre",

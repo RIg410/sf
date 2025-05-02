@@ -7,7 +7,7 @@ use bot_core::{
 };
 use chrono::Local;
 use eyre::Result;
-use model::rights::Rule;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use std::fmt::Write;
 use teloxide::{types::InlineKeyboardMarkup, utils::markdown::escape};

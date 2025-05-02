@@ -36,6 +36,7 @@ impl View for EditPrograms {
 
         let user = ctx
             .services
+            .users
             .get_user(&mut ctx.session, self.user_id)
             .await?;
         let payer = user.payer()?;

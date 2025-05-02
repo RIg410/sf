@@ -6,7 +6,7 @@ use bot_core::{
     widget::{Jmp, View},
 };
 use eyre::eyre;
-use model::rights::Rule;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::types::{InlineKeyboardMarkup, Message};
 

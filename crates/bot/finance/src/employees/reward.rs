@@ -7,8 +7,8 @@ use bot_core::{
 };
 use decimal::Decimal;
 use eyre::Result;
-use model::rights::Rule;
 use mongodb::bson::oid::ObjectId;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::{
     types::{InlineKeyboardMarkup, Message},
@@ -32,7 +32,11 @@ impl View for PayReward {
     }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
-        let user = ctx.services.get_user(&mut ctx.session, self.id).await?;
+        let user = ctx
+            .services
+            .users
+            .get_user(&mut ctx.session, self.id)
+            .await?;
         let reward = user.employee.map(|e| e.reward).unwrap_or_default();
 
         let msg = format!(
@@ -58,6 +62,7 @@ impl View for PayReward {
         if let Ok(sum) = txt.parse::<Decimal>() {
             let user = ctx
                 .services
+                .users
                 .get_user(&mut ctx.session, self.id)
                 .await?
                 .employee
@@ -94,7 +99,11 @@ impl View for ConfirmSum {
     }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
-        let user = ctx.services.get_user(&mut ctx.session, self.id).await?;
+        let user = ctx
+            .services
+            .users
+            .get_user(&mut ctx.session, self.id)
+            .await?;
 
         let msg = format!(
             "Выплатить _{}_ пользователю _{}_?",
@@ -115,6 +124,7 @@ impl View for ConfirmSum {
             ConfirmCallback::Confirm => {
                 ctx.ensure(Rule::MakePayment)?;
                 ctx.services
+                    .employee
                     .pay_reward(&mut ctx.session, self.id, self.sum)
                     .await?;
                 ctx.send_msg("Операция выполнена").await?;

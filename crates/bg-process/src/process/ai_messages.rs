@@ -2,7 +2,7 @@ use crate::Task;
 use async_trait::async_trait;
 use bot_core::bot::TgBot;
 use eyre::Error;
-use model::rights::Rule;
+use rights::Rule;
 use services::SfServices;
 use std::sync::Arc;
 use teloxide::{types::ChatId, utils::markdown::escape};

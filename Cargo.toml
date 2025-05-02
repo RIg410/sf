@@ -30,6 +30,7 @@ members = [
   "crates/booking",
   "crates/sales",
   "crates/training_adjuster",
+  "crates/employee",
 ]
 
 resolver = "2"
@@ -52,6 +53,7 @@ bot-users = {path = "crates/bot/users"}
 bot-viewer = {path = "crates/bot/viewer"}
 calendar = {path = "crates/calendar"}
 decimal = {path = "crates/core/decimal"}
+employee = {path = "crates/employee"}
 env = {path = "crates/core/env"}
 error = {path = "crates/core/error"}
 graph = {path = "crates/core/graph"}

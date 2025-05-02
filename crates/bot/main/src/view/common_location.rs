@@ -1,8 +1,8 @@
-use bot_core::{context::Context, widget::Jmp, CommonLocation};
+use bot_core::{CommonLocation, context::Context, widget::Jmp};
 use bot_marketing::requests::Requests;
 use bot_users::profile::UserProfile;
 use eyre::Result;
-use model::rights::Rule;
+use rights::Rule;
 
 pub async fn handle_common_location(ctx: &mut Context, location: CommonLocation) -> Result<Jmp> {
     Ok(match location {

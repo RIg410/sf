@@ -7,7 +7,8 @@ use bot_core::{
 };
 use decimal::Decimal;
 use eyre::Result;
-use model::{rights::Rule, statistics::source::Source};
+use ident::source::Source;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::{
     types::{InlineKeyboardMarkup, Message},

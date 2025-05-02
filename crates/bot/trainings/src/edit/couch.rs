@@ -6,7 +6,7 @@ use bot_core::{
     widget::{Jmp, View},
 };
 use bot_viewer::day::fmt_dt;
-use eyre::{bail, Result};
+use eyre::{Result, bail};
 use ident::training::TrainingId;
 use mongodb::bson::oid::ObjectId;
 use rights::Rule;
@@ -53,8 +53,16 @@ impl ChangeCouch {
             .await?;
 
         ctx.send_notification("Тренер успешно изменен").await;
-        let old_couch = ctx.services.get_user(&mut ctx.session, old_couch).await?;
-        let new_couch = ctx.services.get_user(&mut ctx.session, new_couch).await?;
+        let old_couch = ctx
+            .services
+            .users
+            .get_user(&mut ctx.session, old_couch)
+            .await?;
+        let new_couch = ctx
+            .services
+            .users
+            .get_user(&mut ctx.session, new_couch)
+            .await?;
         let msg = format!(
             "Произошла замена инструктора *{}* ➡️ *{}* на тренировке: *{}* в *{}*",
             escape(&old_couch.name.first_name),
@@ -65,7 +73,11 @@ impl ChangeCouch {
         ctx.notify(ChatId(old_couch.tg_id), &msg, true).await;
         ctx.notify(ChatId(new_couch.tg_id), &msg, true).await;
         for client in training.clients.iter() {
-            let client = ctx.services.get_user(&mut ctx.session, *client).await?;
+            let client = ctx
+                .services
+                .users
+                .get_user(&mut ctx.session, *client)
+                .await?;
             ctx.notify(ChatId(client.tg_id), &msg, true).await;
         }
 

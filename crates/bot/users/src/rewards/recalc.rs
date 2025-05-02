@@ -3,8 +3,8 @@ use bot_core::callback_data::Calldata as _;
 use bot_core::calldata;
 use bot_core::widget::Jmp;
 use bot_core::{context::Context, widget::View};
-use eyre::Result;
 use decimal::Decimal;
+use eyre::Result;
 use mongodb::bson::oid::ObjectId;
 use rights::Rule;
 use serde::{Deserialize, Serialize};
@@ -33,7 +33,11 @@ impl View for AddRecalcReward {
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::RecalculateRewards)?;
-        let user = ctx.services.get_user(&mut ctx.session, self.user_id).await?;
+        let user = ctx
+            .services
+            .users
+            .get_user(&mut ctx.session, self.user_id)
+            .await?;
 
         let msg = format!(
             "Пересчет награды для пользователя *{}*\n\nВведите сумму коррекции:",
@@ -123,7 +127,11 @@ impl View for AddRecalcConfirm {
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::RecalculateRewards)?;
-        let user = ctx.services.get_user(&mut ctx.session, self.user_id).await?;
+        let user = ctx
+            .services
+            .users
+            .get_user(&mut ctx.session, self.user_id)
+            .await?;
         let msg = format!(
             "Подтверждение коррекции награды для пользователя *{}*\n\nСумма: *{}*\nКомментарий: *{}*",
             escape(&user.name.first_name),
@@ -146,6 +154,7 @@ impl View for AddRecalcConfirm {
         match calldata!(data) {
             Callback::Yes => {
                 ctx.services
+                    .employee
                     .add_recalculation_reward(
                         &mut ctx.session,
                         self.user_id,

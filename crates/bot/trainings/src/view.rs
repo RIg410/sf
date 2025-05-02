@@ -40,6 +40,7 @@ impl TrainingView {
             .ok_or_else(|| eyre::eyre!("Training not found"))?;
         let user = ctx
             .services
+            .users
             .get_user(&mut ctx.session, training.instructor)
             .await?;
         if let Some(couch) = user.employee {
@@ -281,7 +282,7 @@ impl ConfirmCancelTraining {
             fmt_dt(&training.get_slot().start_at())
         );
         for client in to_notify {
-            if let Ok(user) = ctx.services.get_user(&mut ctx.session, client).await {
+            if let Ok(user) = ctx.services.users.get_user(&mut ctx.session, client).await {
                 ctx.bot.notify(ChatId(user.tg_id), &msg, true).await;
             }
         }
@@ -361,7 +362,11 @@ pub async fn sign_up(ctx: &mut Context, id: TrainingId, user_id: ObjectId) -> Re
         return Ok(Jmp::Stay);
     }
 
-    let mut user = ctx.services.get_user(&mut ctx.session, user_id).await?;
+    let mut user = ctx
+        .services
+        .users
+        .get_user(&mut ctx.session, user_id)
+        .await?;
 
     if training.tp.is_not_free() {
         let mut payer = user.payer_mut()?;
@@ -413,6 +418,7 @@ pub async fn sign_out(ctx: &mut Context, id: TrainingId, user_id: ObjectId) -> R
     } else {
         let instructor = ctx
             .services
+            .users
             .get_user(&mut ctx.session, training.instructor)
             .await?;
         ctx.bot

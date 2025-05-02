@@ -11,7 +11,7 @@ use bot_core::{
 };
 use eyre::Error;
 use teloxide::utils::markdown::escape;
-use users::model::{rate::EmployeeRole, User};
+use users::model::{User, rate::EmployeeRole};
 
 pub fn make_make_couch_view() -> Widget {
     ScriptView::new("make_couch", State::default(), Stage::list(UserList)).into()
@@ -54,7 +54,7 @@ impl StageYesNo<State> for Confirm {
             };
 
         ctx.services
-            .users
+            .employee
             .make_user_employee(
                 &mut ctx.session,
                 user.id,
@@ -145,7 +145,7 @@ impl StageList<State> for UserList {
         id: ListId,
     ) -> Result<Dispatch<State>, Error> {
         let id = id.as_object_id().ok_or_else(|| eyre::eyre!("Invalid id"))?;
-        let user = ctx.services.get_user(&mut ctx.session, id).await?;
+        let user = ctx.services.users.get_user(&mut ctx.session, id).await?;
         if user.employee.is_some() {
             ctx.send_notification("Пользователь уже инструктор").await;
             Ok(Dispatch::None)

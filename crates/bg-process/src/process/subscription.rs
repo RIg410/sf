@@ -2,11 +2,11 @@ use std::sync::Arc;
 
 use crate::{SfServices, Task};
 use async_trait::async_trait;
-use bot_core::{bot::TgBot, CommonLocation};
+use bot_core::{CommonLocation, bot::TgBot};
 use bot_viewer::{fmt_phone, user::tg_link};
 use chrono::Utc;
 use eyre::{Error, Result};
-use model::rights::Rule;
+use rights::Rule;
 use teloxide::{
     types::{ChatId, InlineKeyboardMarkup},
     utils::markdown::escape,

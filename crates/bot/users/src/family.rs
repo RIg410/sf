@@ -41,7 +41,11 @@ impl View for FamilyView {
         let mut keymap = InlineKeyboardMarkup::default();
         let mut msg = "👨‍👩‍👧‍👦 Cемья\n".to_string();
 
-        let user = ctx.services.get_user(&mut ctx.session, self.id).await?;
+        let user = ctx
+            .services
+            .users
+            .get_user(&mut ctx.session, self.id)
+            .await?;
         let family = &user.family;
 
         if let Some(payer) = family.payer.as_ref() {
@@ -140,7 +144,11 @@ impl View for ConfirmRemoveChild {
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         ctx.ensure(Rule::EditFamily)?;
-        let child = ctx.services.get_user(&mut ctx.session, self.child_id).await?;
+        let child = ctx
+            .services
+            .users
+            .get_user(&mut ctx.session, self.child_id)
+            .await?;
         let msg = format!(
             "Вы уверены, что хотите удалить члена семьи {}?",
             escape(&child.name.first_name)

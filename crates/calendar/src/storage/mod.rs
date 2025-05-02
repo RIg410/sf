@@ -14,7 +14,6 @@ use trainings::model::{Filter, Training, notification::Notified, statistics::Sta
 
 use crate::model::Day;
 
-
 const COLLECTION: &str = "days";
 
 pub struct CalendarStore {

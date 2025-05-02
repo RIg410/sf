@@ -62,7 +62,7 @@ impl ClientView {
             .sign_up(&mut ctx.session, training.id(), self.id, true)
             .await?;
 
-        let user = ctx.services.get_user(&mut ctx.session, self.id).await?;
+        let user = ctx.services.users.get_user(&mut ctx.session, self.id).await?;
 
         ctx.send_notification(&format!(
             "{} добавлен в тренировку",

@@ -2,25 +2,24 @@ use std::sync::Arc;
 
 use crate::{SfServices, Task};
 use async_trait::async_trait;
+use booking::payer::{AvailableBalance as _, FindFor, SubscriptionResolver as _};
 use bot_core::{CommonLocation, bot::TgBot};
 use bot_viewer::{fmt_phone, user::link_to_user};
+use employee::reward::EmployeeReward as _;
 use eyre::{Error, Result, bail, eyre};
-use model::{
-    rights::Rule,
-    subscription::UserSubscription,
-    training::Training,
-    user::{User, family::FindFor},
-};
 use program::model::TrainingType;
 use rewards::model::user::UserRewardContribution;
+use rights::Rule;
 use store::session::Session;
+use subscription::model::UserSubscription;
 use teloxide::{
     types::{ChatId, InlineKeyboardMarkup},
     utils::markdown::escape,
 };
 use tracing::{error, info};
-use trainings::model::{statistics::Statistics, status::TrainingStatus};
+use trainings::model::{Training, statistics::Statistics, status::TrainingStatus};
 use tx_macro::tx;
+use users::model::User;
 
 #[derive(Clone)]
 pub struct TriningBg {
@@ -125,6 +124,7 @@ impl TriningBg {
         training: Training,
     ) -> Result<Vec<Notification>> {
         info!("Finalize training:{:?}", training);
+        let slot = training.get_slot();
 
         let mut notifications = vec![];
 
@@ -133,10 +133,10 @@ impl TriningBg {
         let mut users_info = Vec::with_capacity(training.clients.len());
         if training.tp.is_not_free() {
             for client in &training.clients {
-                let mut user = self.ledger.get_user(session, *client).await?;
+                let mut user = self.ledger.users.get_user(session, *client).await?;
                 let mut payer = user.payer_mut()?;
                 let sub = if let Some(sub) = payer.find_subscription(FindFor::Charge, &training) {
-                    if !sub.change_locked_balance(&training) {
+                    if !sub.change_locked_balance(&slot) {
                         return Err(eyre!("Not enough balance:{}", user.id));
                     }
                     statistic.earned += sub.item_price();
@@ -162,7 +162,11 @@ impl TriningBg {
                     }
                 }
             }
-            let mut couch = self.ledger.get_user(session, training.instructor).await?;
+            let mut couch = self
+                .ledger
+                .users
+                .get_user(session, training.instructor)
+                .await?;
             if let Some(couch_info) = couch.employee.as_mut() {
                 if let Some(reward) = couch_info.collect_training_rewards(&training, users_info)? {
                     statistic.couch_rewards += reward.reward;

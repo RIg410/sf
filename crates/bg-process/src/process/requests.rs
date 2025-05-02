@@ -1,13 +1,13 @@
 use crate::Task;
 use async_trait::async_trait;
-use bot_core::{bot::TgBot, CommonLocation};
+use bot_core::{CommonLocation, bot::TgBot};
 use bot_viewer::request::fmt_request;
 use chrono::Local;
 use eyre::Error;
-use model::request::Request;
+use requests::model::Request;
 use services::SfServices;
-use store::session::Session;
 use std::sync::Arc;
+use store::session::Session;
 use teloxide::types::{ChatId, InlineKeyboardMarkup};
 use tx_macro::tx;
 
@@ -32,6 +32,7 @@ impl Task for RequestNotifier {
                 }
                 let user = self
                     .ledger
+                    .users
                     .get_user(&mut session, remind_later.user_id)
                     .await?;
                 self.notify(&self.ledger, &mut session, user.tg_id, req)

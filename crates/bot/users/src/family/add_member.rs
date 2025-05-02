@@ -130,7 +130,11 @@ impl View for AddMemberConfirm {
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::EditFamily)?;
 
-        let child = ctx.services.get_user(&mut ctx.session, self.child_id).await?;
+        let child = ctx
+            .services
+            .users
+            .get_user(&mut ctx.session, self.child_id)
+            .await?;
         let msg = format!(
             "Вы уверены, что хотите добавить члена семьи {} {}?",
             escape(&child.name.first_name),

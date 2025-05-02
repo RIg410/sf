@@ -4,7 +4,7 @@ use bot_core::bot::TgBot;
 use bot_viewer::day::fmt_time;
 use chrono::{DateTime, Local};
 use eyre::Error;
-use model::ids::DayId;
+use ident::day::DayId;
 use mongodb::bson::oid::ObjectId;
 use services::SfServices;
 use trainings::model::notification::Notified;
@@ -44,7 +44,7 @@ impl TrainingNotifier {
         msg: &str,
         by_day: bool,
     ) -> Result<bool, Error> {
-        if let Ok(user) = self.ledger.get_user(session, id).await {
+        if let Ok(user) = self.ledger.users.get_user(session, id).await {
             let receiver = if user.phone.is_some() {
                 &user
             } else if let Some(user) = user.family.payer.as_ref() {

@@ -7,10 +7,11 @@ use bot_core::{
     widget::{Jmp, View},
 };
 use eyre::Result;
-use model::{rights::Rule, user::User};
 use mongodb::bson::oid::ObjectId;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::types::{InlineKeyboardButton, InlineKeyboardMarkup};
+use users::model::User;
 
 pub struct EmployeeList {}
 

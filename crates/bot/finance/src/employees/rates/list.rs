@@ -6,12 +6,12 @@ use bot_core::{
     widget::{Jmp, View},
 };
 use bot_viewer::user::render_rate;
-use error::SfError;
 use eyre::Result;
-use model::{rights::Rule, user::rate::Rate};
 use mongodb::bson::oid::ObjectId;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::types::InlineKeyboardMarkup;
+use users::{error::UserError, model::rate::Rate};
 
 use super::{fix::FixRateAmount, group::GroupRateMin, new::CreateRate, personal::PersonalRate};
 
@@ -39,10 +39,14 @@ impl View for RatesList {
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         ctx.ensure(Rule::EditEmployeeRates)?;
-        let user = ctx.services.get_user(&mut ctx.session, self.id).await?;
+        let user = ctx
+            .services
+            .users
+            .get_user(&mut ctx.session, self.id)
+            .await?;
         let employee_info = user
             .employee
-            .ok_or_else(|| SfError::UserNotEmployee { user_id: self.id })?;
+            .ok_or_else(|| UserError::UserNotEmployee { user_id: self.id })?;
         let mut msg = "Тарифы:".to_string();
 
         if self.index >= employee_info.rates.len() {
@@ -90,13 +94,17 @@ impl View for RatesList {
                 Ok(Jmp::Stay)
             }
             ListCalldata::Edit => {
-                let user = ctx.services.get_user(&mut ctx.session, self.id).await?;
+                let user = ctx
+                    .services
+                    .users
+                    .get_user(&mut ctx.session, self.id)
+                    .await?;
                 let rate = *user
                     .employee
-                    .ok_or_else(|| SfError::UserNotEmployee { user_id: self.id })?
+                    .ok_or_else(|| UserError::UserNotEmployee { user_id: self.id })?
                     .rates
                     .get(self.index)
-                    .ok_or_else(|| SfError::NoRatesFound { user_id: self.id })?;
+                    .ok_or_else(|| UserError::NoRatesFound { user_id: self.id })?;
 
                 match rate {
                     Rate::Fix { .. } => {
@@ -166,10 +174,14 @@ impl View for DeleteRateConfirm {
         match calldata!(data) {
             DeleteRateCalldata::Yes => {
                 ctx.ensure(Rule::EditEmployeeRates)?;
-                let user = ctx.services.get_user(&mut ctx.session, self.id).await?;
+                let user = ctx
+                    .services
+                    .users
+                    .get_user(&mut ctx.session, self.id)
+                    .await?;
                 let employee_info = user
                     .employee
-                    .ok_or_else(|| SfError::UserNotEmployee { user_id: self.id })?;
+                    .ok_or_else(|| UserError::UserNotEmployee { user_id: self.id })?;
                 let same_rate = employee_info
                     .rates
                     .get(self.idx)
@@ -178,7 +190,7 @@ impl View for DeleteRateConfirm {
 
                 if same_rate {
                     ctx.services
-                        .users
+                        .employee
                         .remove_rate(&mut ctx.session, self.id, self.rate)
                         .await?;
                     Ok(Jmp::Back)

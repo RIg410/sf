@@ -6,9 +6,9 @@ use bot_core::{
 use chrono::{Local, TimeZone as _, Utc};
 use decimal::Decimal;
 use eyre::{Error, Result};
-use model::user::rate::{Interval, Rate};
 use mongodb::bson::oid::ObjectId;
 use teloxide::types::{InlineKeyboardMarkup, Message};
+use users::model::rate::{Interval, Rate};
 
 use super::new::ConfirmCreationRate;
 

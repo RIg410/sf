@@ -33,7 +33,11 @@ impl View for SetItemPrice {
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), Error> {
         ctx.ensure(Rule::EditSubscription)?;
-        let user = ctx.services.get_user(&mut ctx.session, self.user_id).await?;
+        let user = ctx
+            .services
+            .users
+            .get_user(&mut ctx.session, self.user_id)
+            .await?;
         let user = user.payer()?;
         let subs = user.subscriptions();
         let sub = subs

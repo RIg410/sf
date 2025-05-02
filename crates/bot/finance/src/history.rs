@@ -4,16 +4,17 @@ use async_trait::async_trait;
 use bot_core::{
     context::Context,
     script::{
-        list::{ListId, ListItem, StageList},
         Dispatch, ScriptView, Stage,
+        list::{ListId, ListItem, StageList},
     },
     widget::{View, Widget},
 };
 use bot_viewer::day::fmt_dt;
 use chrono::Local;
-use eyre::{eyre, Error, Result};
-use model::{rights::Rule, treasury::TreasuryEvent};
+use eyre::{Error, Result, eyre};
+use rights::Rule;
 use teloxide::utils::markdown::escape;
+use treasury::model::{Event, TreasuryEvent};
 
 use crate::operation::FinanceOperation;
 
@@ -75,19 +76,19 @@ impl StageList<State> for FinanceView {
 
 pub fn make_list_item(idx: usize, event: &TreasuryEvent) -> ListItem {
     let symbol = match &event.event {
-        model::treasury::Event::SellSubscription(_) => format!("{} 📈 продажа абонемента", idx),
-        model::treasury::Event::Reward(_) => format!("{} 📉 выплата зп", idx),
-        model::treasury::Event::Outcome(out) => format!("{} 📉{}", idx, escape(&out.description)),
-        model::treasury::Event::Income(income) => {
+        Event::SellSubscription(_) => format!("{} 📈 продажа абонемента", idx),
+        Event::Reward(_) => format!("{} 📉 выплата зп", idx),
+        Event::Outcome(out) => format!("{} 📉{}", idx, escape(&out.description)),
+        Event::Income(income) => {
             format!("{} 📈{}", idx, escape(&income.description))
         }
-        model::treasury::Event::SubRent => {
+        Event::SubRent => {
             format!("📈{} Суб аренда", idx)
         }
-        model::treasury::Event::Rent => {
+        Event::Rent => {
             format!("📉{} Аренда", idx)
         }
-        model::treasury::Event::Marketing(come_from) => {
+        Event::Marketing(come_from) => {
             format!("📊{} Маркетинг \\({}\\)", idx, come_from.name())
         }
     };

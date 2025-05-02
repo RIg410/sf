@@ -10,10 +10,11 @@ use bot_core::{
 };
 use bot_viewer::user::render_rate;
 use eyre::Result;
-use model::{rights::Rule, user::rate::Rate};
 use mongodb::bson::oid::ObjectId;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::types::InlineKeyboardMarkup;
+use users::model::rate::Rate;
 
 pub struct CreateRate {
     pub employee_id: ObjectId,
@@ -114,12 +115,12 @@ impl View for ConfirmCreationRate {
             ConfirmCallback::Yes => {
                 if let Some(old) = &self.old_data {
                     ctx.services
-                        .users
+                        .employee
                         .update_rate(&mut ctx.session, self.employee_id, *old, self.new_data)
                         .await?;
                 } else {
                     ctx.services
-                        .users
+                        .employee
                         .add_rate(&mut ctx.session, self.employee_id, self.new_data)
                         .await?;
                 };

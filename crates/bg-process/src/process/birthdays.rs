@@ -4,9 +4,10 @@ use bot_core::{bot::TgBot, CommonLocation};
 use bot_viewer::fmt_phone;
 use chrono::{Datelike as _, Local};
 use eyre::Error;
+use rights::Rule;
 use services::SfServices;
 use tracing::info;
-use model::{rights::Rule, user::User};
+use users::model::User;
 use std::sync::Arc;
 use teloxide::{
     types::{ChatId, InlineKeyboardMarkup},

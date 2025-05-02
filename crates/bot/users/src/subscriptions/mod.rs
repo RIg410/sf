@@ -35,7 +35,7 @@ impl View for SubscriptionsList {
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::EditUserSubscription)?;
 
-        let user = ctx.services.get_user(&mut ctx.session, self.id).await?;
+        let user = ctx.services.users.get_user(&mut ctx.session, self.id).await?;
         let payer = user.payer()?;
         let subs = payer.subscriptions();
         let mut txt = String::new();
@@ -86,7 +86,11 @@ impl View for SubscriptionsList {
 
     async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {
         ctx.ensure(Rule::EditUserSubscription)?;
-        let user = ctx.services.get_user(&mut ctx.session, self.id).await?;
+        let user = ctx
+            .services
+            .users
+            .get_user(&mut ctx.session, self.id)
+            .await?;
         let payer = user.payer()?;
 
         match calldata!(data) {

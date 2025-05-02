@@ -10,7 +10,7 @@ use bot_core::{
 use chrono::{DateTime, Local, NaiveDateTime, TimeZone};
 use decimal::Decimal;
 use eyre::Result;
-use model::rights::Rule;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::{
     types::{InlineKeyboardButton, InlineKeyboardMarkup, Message},

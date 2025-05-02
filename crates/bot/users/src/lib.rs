@@ -1,3 +1,4 @@
+use ::rights::Rule;
 use async_trait::async_trait;
 use bot_core::{
     callback_data::Calldata as _,
@@ -7,15 +8,14 @@ use bot_core::{
 };
 use bot_viewer::user::fmt_user_type;
 use eyre::Error;
-use mongodb::{bson::oid::ObjectId, SessionCursor};
+use mongodb::{SessionCursor, bson::oid::ObjectId};
 use profile::UserProfile;
-use ::rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::{
     types::{InlineKeyboardButton, InlineKeyboardMarkup, Message},
     utils::markdown::escape,
 };
-use users::model::{sanitize_phone, User};
+use users::model::{User, sanitize_phone};
 
 pub mod come_from;
 pub mod comments;
@@ -188,7 +188,11 @@ async fn render_message(
         users_count += 1;
 
         for child in user.family.children_ids.iter() {
-            let child = ctx.services.get_user(&mut ctx.session, *child).await?;
+            let child = ctx
+                .services
+                .users
+                .get_user(&mut ctx.session, *child)
+                .await?;
             if child.phone.is_none() {
                 if ids.contains(&child.id) {
                     continue;

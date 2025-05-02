@@ -17,7 +17,7 @@ use employees::list::EmployeeList;
 use eyre::Result;
 use history::history_view;
 use in_out::{Op, TreasuryOp};
-use model::rights::Rule;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use stat::Stat;
 use teloxide::types::InlineKeyboardMarkup;

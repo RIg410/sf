@@ -13,7 +13,7 @@ use bot_subscription::SubscriptionView;
 use bot_trainings::program::list::ProgramList;
 use bot_users::{profile::UserProfile, Query, UsersView};
 use eyre::{bail, Ok, Result};
-use model::rights::Rule;
+use rights::Rule;
 use strum::EnumIter;
 use teloxide::{
     types::{BotCommand, InlineKeyboardButton, InlineKeyboardMarkup, Message, WebAppInfo},

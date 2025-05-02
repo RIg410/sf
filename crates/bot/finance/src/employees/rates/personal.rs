@@ -5,9 +5,9 @@ use bot_core::{
 };
 use eyre::Result;
 use decimal::Decimal;
-use model::user::rate::Rate;
 use mongodb::bson::oid::ObjectId;
 use teloxide::types::{InlineKeyboardMarkup, Message};
+use users::model::rate::Rate;
 
 use super::new::ConfirmCreationRate;
 
