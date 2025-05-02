@@ -6,7 +6,7 @@ use bot_core::{
 use bot_main::BotApp;
 use bson::oid::ObjectId;
 use env::Env;
-use services::Services;
+use services::SfServices;
 use tracing::warn;
 use std::sync::Arc;
 use teloxide::types::{ChatId, MessageId};
@@ -15,13 +15,13 @@ use tonic::Status;
 
 #[derive(Clone)]
 pub struct ContextBuilder {
-    pub ledger: Arc<Services>,
+    pub ledger: Arc<SfServices>,
     bot: BotApp,
     jwt: Arc<Jwt>,
 }
 
 impl ContextBuilder {
-    pub fn new(ledger: Arc<Services>, bot: BotApp) -> Self {
+    pub fn new(ledger: Arc<SfServices>, bot: BotApp) -> Self {
         let jwt = Arc::new(Jwt::new(bot.env.jwt_secret()));
         ContextBuilder { ledger, bot, jwt }
     }

@@ -7,17 +7,14 @@ publish.workspace = true
 version.workspace = true
 
 [dependencies]
-bot-main.workspace = true
-ledger.workspace = true
-mini-app-main.workspace = true
-storage.workspace = true
 bg-process.workspace = true
-env.workspace = true
-services.workspace = true
-
+bot-main.workspace = true
 color-eyre.workspace = true
 dotenv.workspace = true
+env.workspace = true
 eyre.workspace = true
-tracing.workspace = true
-tracing-subscriber = {workspace = true, features = ["fmt", "env-filter"]}
+mini-app-main.workspace = true
+services.workspace = true
 tokio.workspace = true
+tracing-subscriber = {workspace = true, features = ["fmt", "env-filter"]}
+tracing.workspace = true

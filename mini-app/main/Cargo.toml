@@ -9,7 +9,6 @@ version.workspace = true
 [dependencies]
 bot-core.workspace = true
 bot-main.workspace = true
-model.workspace = true
 bot-viewer.workspace = true
 
 bson.workspace = true
@@ -20,7 +19,6 @@ eyre.workspace = true
 hex.workspace = true
 hmac.workspace = true
 jsonwebtoken.workspace = true
-ledger.workspace = true
 mongodb.workspace = true
 prost.workspace = true
 rand.workspace = true

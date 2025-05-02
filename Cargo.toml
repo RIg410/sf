@@ -10,12 +10,9 @@ exclude = []
 members = [
   "crates/bg-process",
   "crates/bot/*",
-  "crates/ledger",
-  "crates/model",
-  "crates/storage",
   "bins",
   "crates/payment/yookassa",
-  "crates/error",
+  "crates/core/error",
   "mini-app/main",
   "crates/stat",
   "crates/services",
@@ -24,6 +21,12 @@ members = [
   "crates/trainings",
   "crates/core/*",
   "crates/program",
+  "crates/treasury",
+  "crates/subscription",
+  "crates/history",
+  "crates/users",
+  "crates/requests",
+  "crates/calendar",
 ]
 
 resolver = "2"
@@ -43,24 +46,27 @@ bot-subscription = {path = "crates/bot/subscription"}
 bot-trainings = {path = "crates/bot/trainings"}
 bot-users = {path = "crates/bot/users"}
 bot-viewer = {path = "crates/bot/viewer"}
+calendar = {path = "crates/calendar"}
 decimal = {path = "crates/core/decimal"}
-error = {path = "crates/error"}
+env = {path = "crates/core/env"}
+error = {path = "crates/core/error"}
 graph = {path = "crates/core/graph"}
+history = {path = "crates/history"}
+ident = {path = "crates/core/ident"}
+mini-app-main = {path = "mini-app/main"}
 program = {path = "crates/program"}
+requests = {path = "crates/requests"}
 rewards = {path = "crates/rewards"}
+rights = {path = "crates/core/rights"}
 services = {path = "crates/services"}
 stat = {path = "crates/stat"}
 store = {path = "crates/core/store"}
+subscription = {path = "crates/subscription"}
 time = {path = "crates/core/time"}
 trainings = {path = "crates/trainings"}
-
-mini-app-main = {path = "mini-app/main"}
-
-env = {path = "crates/core/env"}
-ledger = {path = "crates/ledger"}
-model = {path = "crates/model"}
-storage = {path = "crates/storage"}
+treasury = {path = "crates/treasury"}
 tx_macro = {path = "crates/core/tx_macro"}
+users = {path = "crates/users"}
 yookassa = {path = "crates/payment/yookassa"}
 
 #libs 

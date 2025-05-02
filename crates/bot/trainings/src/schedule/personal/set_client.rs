@@ -8,10 +8,10 @@ use bot_core::{
 };
 use bot_viewer::fmt_phone_escape_less;
 use eyre::Result;
-use model::user::User;
 use mongodb::bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
 use teloxide::types::{InlineKeyboardButton, InlineKeyboardMarkup};
+use users::model::User;
 
 #[derive(Default)]
 pub struct SetClient {

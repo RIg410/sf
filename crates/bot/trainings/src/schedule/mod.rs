@@ -1,6 +1,6 @@
 use bot_viewer::day::fmt_dt;
-use model::training::Training;
 use teloxide::utils::markdown::escape;
+use trainings::model::Training;
 
 pub mod group;
 pub mod personal;

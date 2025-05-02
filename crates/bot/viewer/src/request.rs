@@ -1,5 +1,5 @@
 use chrono::Local;
-use model::request::Request;
+use requests::model::Request;
 use teloxide::utils::markdown::escape;
 
 use crate::{

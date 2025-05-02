@@ -1,4 +1,4 @@
-use model::rooms::Room;
+use ident::rooms::Room;
 
 pub fn fmt_room(room: Room) -> &'static str {
     match room {

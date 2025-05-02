@@ -11,13 +11,13 @@ use crate::{
 };
 use env::Env;
 use eyre::Error;
-use model::user::User;
-use services::Services;
-use teloxide::{prelude::Requester as _, types::ChatId, Bot};
+use services::SfServices;
+use teloxide::{Bot, prelude::Requester as _, types::ChatId};
+use users::model::User;
 
 async fn build_context(
     bot: Bot,
-    ledger: Arc<Services>,
+    ledger: Arc<SfServices>,
     tg_id: ChatId,
     state_holder: &StateHolder,
     env: Env,

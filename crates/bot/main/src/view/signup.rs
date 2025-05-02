@@ -7,7 +7,7 @@ use bot_core::{
 use eyre::{Context as _, Ok};
 use model::user::UserName;
 use mongodb::bson::oid::ObjectId;
-use services::Services;
+use services::SfServices;
 use store::session::Session;
 use teloxide::types::{
     ButtonRequest, Contact, KeyboardButton, KeyboardMarkup, KeyboardRemove, Message, ReplyMarkup,
@@ -82,7 +82,7 @@ impl View for SignUpView {
 }
 
 pub async fn create_user(
-    ledger: &Services,
+    ledger: &SfServices,
     chat_id: i64,
     contact: &Contact,
     from: &teloxide::types::User,

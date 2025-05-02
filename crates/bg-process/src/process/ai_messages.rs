@@ -3,18 +3,18 @@ use async_trait::async_trait;
 use bot_core::bot::TgBot;
 use eyre::Error;
 use model::rights::Rule;
-use services::Services;
+use services::SfServices;
 use std::sync::Arc;
 use teloxide::{types::ChatId, utils::markdown::escape};
 
 #[derive(Clone)]
 pub struct MotivationNotifier {
-    pub ledger: Arc<Services>,
+    pub ledger: Arc<SfServices>,
     pub bot: Arc<TgBot>,
 }
 
 impl MotivationNotifier {
-    pub fn new(ledger: Arc<Services>, bot: Arc<TgBot>) -> MotivationNotifier {
+    pub fn new(ledger: Arc<SfServices>, bot: Arc<TgBot>) -> MotivationNotifier {
         MotivationNotifier { ledger, bot }
     }
 }

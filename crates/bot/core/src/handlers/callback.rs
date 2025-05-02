@@ -9,7 +9,7 @@ use crate::{
     BACK_NAME, ERROR,
 };
 use env::Env;
-use services::Services;
+use services::SfServices;
 use tracing::error;
 use teloxide::{
     prelude::{Requester as _, ResponseResult},
@@ -22,7 +22,7 @@ pub async fn callback_handler(
     bot: Bot,
     env: Env,
     q: CallbackQuery,
-    ledger: Arc<Services>,
+    ledger: Arc<SfServices>,
     state_holder: StateHolder,
     system_handler: impl Fn() -> Widget,
 ) -> ResponseResult<()> {

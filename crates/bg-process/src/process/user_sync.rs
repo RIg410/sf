@@ -1,4 +1,4 @@
-use crate::{Services, Task};
+use crate::{SfServices, Task};
 use async_trait::async_trait;
 use bot_core::bot::TgBot;
 use eyre::Error;
@@ -8,12 +8,12 @@ use teloxide::{prelude::Requester as _, types::ChatId};
 
 #[derive(Clone)]
 pub struct UserNameSync {
-    ledger: Arc<Services>,
+    ledger: Arc<SfServices>,
     bot: Arc<TgBot>,
 }
 
 impl UserNameSync {
-    pub fn new(ledger: Arc<Services>, bot: Arc<TgBot>) -> UserNameSync {
+    pub fn new(ledger: Arc<SfServices>, bot: Arc<TgBot>) -> UserNameSync {
         UserNameSync { ledger, bot }
     }
 }

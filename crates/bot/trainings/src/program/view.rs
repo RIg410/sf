@@ -10,9 +10,9 @@ use bot_core::{
 };
 use bot_viewer::training::fmt_training_type;
 use eyre::Result;
-use model::rights::Rule;
 use mongodb::bson::oid::ObjectId;
 use program::model::Program;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::{types::InlineKeyboardMarkup, utils::markdown::escape};
 

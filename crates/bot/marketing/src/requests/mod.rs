@@ -9,10 +9,11 @@ use bot_viewer::{fmt_phone, request::fmt_request};
 use create::SetComeFrom;
 use edit::{add_comment::AddComment, change_source::ChangeComeFrom, notification::AddNotification};
 use history::RequestHistory;
-use model::{rights::Rule, user::sanitize_phone};
 use mongodb::bson::oid::ObjectId;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::types::{InlineKeyboardMarkup, Message};
+use users::model::sanitize_phone;
 
 mod create;
 mod edit;

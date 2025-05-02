@@ -1,17 +1,18 @@
 use bot_core::context::Context;
 use chrono::{Local, Utc};
+use decimal::Decimal;
 use eyre::Error;
 use eyre::Result;
-use decimal::Decimal;
-use model::user::employee::Employee;
-use model::user::rate::Rate;
-use model::{
-    rights::Rule,
-    subscription::{SubscriptionStatus, UserSubscription},
-    user::{extension::UserExtension, User},
-};
 use mongodb::bson::oid::ObjectId;
+use rights::Rule;
+use subscription::model::SubscriptionStatus;
+use subscription::model::UserSubscription;
 use teloxide::utils::markdown::escape;
+use trainings::model::Filter;
+use users::model::User;
+use users::model::employee::Employee;
+use users::model::extension::UserExtension;
+use users::model::rate::Rate;
 
 use crate::{day::fmt_date, fmt_phone};
 
@@ -77,7 +78,11 @@ pub async fn render_profile_msg(
     id: ObjectId,
 ) -> Result<(String, User, UserExtension), Error> {
     let user = ctx.services.get_user(&mut ctx.session, id).await?;
-    let extension = ctx.services.users.get_extension(&mut ctx.session, id).await?;
+    let extension = ctx
+        .services
+        .users
+        .get_extension(&mut ctx.session, id)
+        .await?;
 
     let mut msg = user_base_info(&user, &extension);
     if ctx.has_right(Rule::ViewMarketingInfo) {
@@ -97,12 +102,7 @@ async fn render_trainings(ctx: &mut Context, msg: &mut String, user: &User) -> R
     let trainings = ctx
         .services
         .calendar
-        .find_trainings(
-            &mut ctx.session,
-            model::training::Filter::Client(user.id),
-            20,
-            0,
-        )
+        .find_trainings(&mut ctx.session, Filter::Client(user.id), 20, 0)
         .await?;
     if !trainings.is_empty() {
         msg.push_str("\nЗаписи:\n");

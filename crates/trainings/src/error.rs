@@ -1,7 +1,8 @@
 use bson::oid::ObjectId;
+use ident::training::TrainingId;
 use thiserror::Error;
 
-use crate::model::{id::TrainingId, status::TrainingStatus};
+use crate::model::status::TrainingStatus;
 
 #[derive(Error, Debug)]
 pub enum TrainingError {

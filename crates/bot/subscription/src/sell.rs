@@ -2,14 +2,16 @@ use std::str::FromStr as _;
 
 use crate::SubscriptionView;
 
-use super::{confirm::ConfirmSell, View};
+use super::{View, confirm::ConfirmSell};
 use async_trait::async_trait;
 use bot_core::{callback_data::Calldata as _, calldata, context::Context, widget::Jmp};
 use bot_viewer::fmt_phone;
 use decimal::Decimal;
 use eyre::Result;
-use model::{request::Request, rights::Rule, statistics::source::Source, user::sanitize_phone};
+use ident::source::Source;
 use mongodb::bson::oid::ObjectId;
+use requests::model::Request;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::{
     types::{InlineKeyboardMarkup, Message},

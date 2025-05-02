@@ -9,7 +9,7 @@ use bot_core::{
 };
 use env::Env;
 use eyre::Result;
-use services::Services;
+use services::SfServices;
 use tracing::info;
 use teloxide::{
     dispatching::UpdateFilterExt as _,
@@ -36,7 +36,7 @@ impl BotApp {
         }
     }
 
-    pub async fn start(self, ledger: Arc<Services>) -> Result<()> {
+    pub async fn start(self, ledger: Arc<SfServices>) -> Result<()> {
         let state = self.state;
         let bot = self.bot;
         bot.set_my_commands(vec![
@@ -101,7 +101,7 @@ impl BotApp {
 async fn inline_query_handler(
     _: Bot,
     _: InlineQuery,
-    _: Arc<Services>,
+    _: Arc<SfServices>,
     _: StateHolder,
 ) -> ResponseResult<()> {
     info!("inline");

@@ -1,6 +1,7 @@
 use eyre::Error;
+use ident::training::TrainingId;
 use teloxide::utils::markdown::escape;
-use trainings::{error::TrainingError, model::id::TrainingId};
+use trainings::error::TrainingError;
 
 use crate::{context::Context, err::user_name};
 

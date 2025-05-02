@@ -1,7 +1,6 @@
-use std::collections::HashMap;
-
-use model::statistics::source::Source;
+use ident::source::Source;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 #[derive(Default)]
 pub struct AdvertisingConversionStat {

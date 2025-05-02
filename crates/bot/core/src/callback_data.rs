@@ -1,13 +1,14 @@
 use chrono::{DateTime, Datelike as _, Local, TimeZone as _, Timelike as _, Utc};
-use tracing::error;
-use model::ids::{DayId, WeekId};
+use ident::day::DayId;
+use ident::training::TrainingId;
+use ident::week::WeekId;
 use mongodb::bson::oid::ObjectId;
 use serde::de::DeserializeOwned;
 use serde::{Deserialize, Serialize};
-use trainings::model::id::TrainingId;
 use std::collections::hash_map::DefaultHasher;
 use std::hash::{Hash, Hasher};
 use teloxide::types::InlineKeyboardButton;
+use tracing::error;
 
 pub fn encode_data<T>(data: &T, type_id: u16) -> String
 where

@@ -7,7 +7,7 @@ use bot_core::{
 };
 use bot_viewer::request::fmt_request;
 use eyre::Result;
-use model::rights::Rule;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::types::InlineKeyboardMarkup;
 

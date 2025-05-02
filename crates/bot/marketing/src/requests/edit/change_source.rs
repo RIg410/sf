@@ -7,7 +7,7 @@ use bot_core::{
     context::Context,
     widget::{Jmp, View},
 };
-use model::statistics::source::Source;
+use ident::source::Source;
 use mongodb::bson::oid::ObjectId;
 use teloxide::types::InlineKeyboardMarkup;
 

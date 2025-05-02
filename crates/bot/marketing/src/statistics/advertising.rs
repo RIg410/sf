@@ -3,7 +3,7 @@ use std::fmt::Write as _;
 use ai::AiModel;
 use bot_core::context::Context;
 use eyre::Error;
-use model::rights::Rule;
+use rights::Rule;
 use teloxide::utils::markdown::escape;
 use time::range::Range;
 

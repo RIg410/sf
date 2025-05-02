@@ -10,7 +10,7 @@ use bot_viewer::day::fmt_date;
 use chrono::Local;
 use eyre::Error;
 use eyre::Result;
-use model::rights::Rule;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::types::InlineKeyboardMarkup;
 use time::range::Range;

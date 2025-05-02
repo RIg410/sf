@@ -8,7 +8,7 @@ use bot_core::{context::Context, widget::Widget};
 use bot_viewer::rooms::fmt_room;
 use chrono::{DateTime, Local};
 use eyre::Result;
-use model::rooms::Room;
+use ident::rooms::Room;
 use mongodb::bson::oid::ObjectId;
 use set_date_time::SetDateTime;
 use set_instructor::SetInstructor;

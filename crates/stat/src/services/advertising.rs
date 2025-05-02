@@ -2,21 +2,23 @@ use crate::models::advertising::{AdvertisingConversionStat, SourceStat};
 use ai::{Ai, AiContext, AiModel};
 use error::SfError;
 use eyre::{Context, Result};
-use ledger::service::{history::History, requests::Requests, users::Users};
-use model::{history::ActionType, statistics::source::Source};
-use store::session::Session;
+use history::{model::{Action, ActionType}, service::History};
+use ident::source::Source;
+use requests::service::Requests;
 use std::collections::HashMap;
+use store::session::Session;
 use time::range::Range;
+use users::{log::UserLog, service::Users};
 
-pub struct AdvertisingStatService {
-    requests: Requests,
-    users: Users,
+pub struct AdvertisingStatService<L> {
+    requests: Requests<L>,
+    users: Users<L>,
     history: History,
     ai: Ai,
 }
 
-impl AdvertisingStatService {
-    pub fn new(requests: Requests, users: Users, history: History, ai: Ai) -> Self {
+impl<L: UserLog> AdvertisingStatService<L> {
+    pub fn new(requests: Requests<L>, users: Users<L>, history: History, ai: Ai) -> Self {
         Self {
             requests,
             users,
@@ -80,7 +82,7 @@ impl AdvertisingStatService {
                 let row = row?;
 
                 match row.action {
-                    model::history::Action::SellSub { .. } => {
+                    Action::SellSub { .. } => {
                         count += 1;
                     }
                     _ => {

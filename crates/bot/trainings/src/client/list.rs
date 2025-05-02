@@ -8,11 +8,11 @@ use bot_core::{
 use bot_viewer::day::fmt_dt;
 use chrono::Local;
 use eyre::{bail, Result};
-use model::rights::Rule;
+use ident::training::TrainingId;
 use mongodb::bson::oid::ObjectId;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::{types::InlineKeyboardMarkup, utils::markdown::escape};
-use trainings::model::id::TrainingId;
 
 use crate::client::{ClientView, Reason};
 

@@ -5,7 +5,7 @@ use bot_viewer::request::fmt_request;
 use chrono::Local;
 use eyre::Error;
 use model::request::Request;
-use services::Services;
+use services::SfServices;
 use store::session::Session;
 use std::sync::Arc;
 use teloxide::types::{ChatId, InlineKeyboardMarkup};
@@ -13,7 +13,7 @@ use tx_macro::tx;
 
 #[derive(Clone)]
 pub struct RequestNotifier {
-    pub ledger: Arc<Services>,
+    pub ledger: Arc<SfServices>,
     pub bot: Arc<TgBot>,
 }
 
@@ -43,14 +43,14 @@ impl Task for RequestNotifier {
 }
 
 impl RequestNotifier {
-    pub fn new(ledger: Arc<Services>, bot: Arc<TgBot>) -> RequestNotifier {
+    pub fn new(ledger: Arc<SfServices>, bot: Arc<TgBot>) -> RequestNotifier {
         RequestNotifier { ledger, bot }
     }
 
     #[tx]
     async fn notify(
         &self,
-        ledger: &Services,
+        ledger: &SfServices,
         session: &mut Session,
         user: i64,
         request: &mut Request,

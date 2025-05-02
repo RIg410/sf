@@ -8,14 +8,15 @@ use bot_core::{
 use bot_viewer::day::fmt_dt;
 use chrono::Local;
 use eyre::Result;
-use model::{training::Training, user::User};
+use ident::training::TrainingId;
 use mongodb::bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
 use teloxide::{
     types::{InlineKeyboardButton, InlineKeyboardMarkup},
     utils::markdown::escape,
 };
-use trainings::model::{id::TrainingId, status::TrainingStatus};
+use trainings::model::{Training, status::TrainingStatus};
+use users::model::User;
 
 use crate::view::{sign_out, sign_up};
 

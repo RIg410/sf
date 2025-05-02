@@ -1,0 +1,23 @@
+[package]
+name = "calendar"
+
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+version.workspace = true
+
+[dependencies]
+bson.workspace = true
+chrono.workspace = true
+decimal.workspace = true
+eyre.workspace = true
+ident.workspace = true
+mongodb.workspace = true
+program.workspace = true
+serde.workspace = true
+store.workspace = true
+thiserror.workspace = true
+tracing.workspace = true
+trainings.workspace = true
+tx_macro.workspace = true
+users.workspace = true

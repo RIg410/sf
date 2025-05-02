@@ -6,8 +6,8 @@ use bot_core::{
     widget::{Jmp, View},
 };
 use chrono::{Local, NaiveDateTime, TimeZone as _};
-use model::request::RemindLater;
 use mongodb::bson::oid::ObjectId;
+use requests::model::RemindLater;
 use serde::{Deserialize, Serialize};
 use teloxide::types::{InlineKeyboardMarkup, Message};
 
@@ -60,8 +60,7 @@ impl View for SetRemindLater {
     }
 
     async fn show(&mut self, ctx: &mut bot_core::context::Context) -> Result<(), eyre::Error> {
-        let text =
-            "Напомнить через:\nВыберите вариант или ввидите дату в формате *дд\\.мм\\.гггг чч\\:мм*";
+        let text = "Напомнить через:\nВыберите вариант или ввидите дату в формате *дд\\.мм\\.гггг чч\\:мм*";
         let markup = InlineKeyboardMarkup::default();
         let mut markup = markup
             .append_row(RememberLaterCalldata::new(chrono::Duration::hours(1)).btn_row("час"));

@@ -9,7 +9,7 @@ use crate::{
     widget::Widget,
 };
 use env::Env;
-use services::Services;
+use services::SfServices;
 use teloxide::{
     Bot,
     prelude::{Requester as _, ResponseResult},
@@ -22,7 +22,7 @@ pub async fn message_handler(
     bot: Bot,
     env: Env,
     msg: Message,
-    ledger: Arc<Services>,
+    ledger: Arc<SfServices>,
     state_holder: StateHolder,
     system_handler: impl Fn() -> Widget,
 ) -> ResponseResult<()> {

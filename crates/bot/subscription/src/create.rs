@@ -5,13 +5,10 @@ use async_trait::async_trait;
 use bot_core::{callback_data::Calldata, calldata, context::Context, widget::Jmp};
 use bot_viewer::subscription::fmt_subscription_type;
 use eyre::Result;
-use ledger::service::subscriptions::CreateSubscriptionError;
-use model::{
-    rights::Rule,
-    subscription::{Subscription, SubscriptionType},
-};
 use mongodb::bson::oid::ObjectId;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
+use subscription::{model::{Subscription, SubscriptionType}, service::CreateSubscriptionError};
 use teloxide::{
     types::{InlineKeyboardMarkup, Message},
     utils::markdown::escape,

@@ -8,10 +8,10 @@ use bot_core::{
 use bot_viewer::{day::fmt_weekday, training::fmt_training_status};
 use chrono::{Datelike as _, Local};
 use eyre::Result;
-use model::training::Filter;
 use mongodb::bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
 use teloxide::types::InlineKeyboardMarkup;
+use trainings::model::Filter;
 
 use crate::view::TrainingView;
 

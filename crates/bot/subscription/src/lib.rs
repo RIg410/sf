@@ -14,8 +14,8 @@ use bot_core::{
 };
 use create::CreateSubscription;
 use eyre::Result;
-use model::rights::Rule;
 use mongodb::bson::oid::ObjectId;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::{
     types::{InlineKeyboardButton, InlineKeyboardMarkup},

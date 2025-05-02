@@ -4,7 +4,7 @@ use eyre::Result;
 use pb::{
     auth::auth_service_server::AuthServiceServer, users::users_service_server::UsersServiceServer,
 };
-use services::Services;
+use services::SfServices;
 use std::sync::Arc;
 use tonic::transport::Server;
 use tonic_web::GrpcWebLayer;
@@ -17,7 +17,7 @@ pub(crate) mod ctx;
 pub(crate) mod pb;
 pub(crate) mod user;
 
-pub fn spawn(ledger: Arc<Services>, bot: BotApp) -> Result<()> {
+pub fn spawn(ledger: Arc<SfServices>, bot: BotApp) -> Result<()> {
     let ctx_builder = ctx::ContextBuilder::new(ledger.clone(), bot.clone());
 
     tokio::spawn(async move {

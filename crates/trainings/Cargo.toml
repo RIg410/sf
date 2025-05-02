@@ -7,10 +7,12 @@ publish.workspace = true
 version.workspace = true
 
 [dependencies]
-serde.workspace = true
 bson.workspace = true
-eyre.workspace = true
 chrono.workspace = true
-thiserror.workspace = true
-mongodb.workspace = true
 decimal.workspace = true
+eyre.workspace = true
+ident.workspace = true
+mongodb.workspace = true
+program.workspace = true
+serde.workspace = true
+thiserror.workspace = true

@@ -6,7 +6,7 @@ use chrono::{DateTime, Local};
 use eyre::Error;
 use model::ids::DayId;
 use mongodb::bson::oid::ObjectId;
-use services::Services;
+use services::SfServices;
 use trainings::model::notification::Notified;
 use std::sync::Arc;
 use store::session::Session;
@@ -14,7 +14,7 @@ use teloxide::{types::ChatId, utils::markdown::escape};
 
 #[derive(Clone)]
 pub struct TrainingNotifier {
-    pub ledger: Arc<Services>,
+    pub ledger: Arc<SfServices>,
     pub bot: Arc<TgBot>,
 }
 
@@ -32,7 +32,7 @@ impl Task for TrainingNotifier {
 }
 
 impl TrainingNotifier {
-    pub fn new(ledger: Arc<Services>, bot: Arc<TgBot>) -> TrainingNotifier {
+    pub fn new(ledger: Arc<SfServices>, bot: Arc<TgBot>) -> TrainingNotifier {
         TrainingNotifier { ledger, bot }
     }
 

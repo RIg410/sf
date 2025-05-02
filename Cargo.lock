@@ -111,12 +111,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "arc-swap"
-version = "1.7.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "69f7f8c3906b62b754cd5326047894316021dcfe5a194c8ea52bdd94934a3457"
-
-[[package]]
 name = "async-trait"
 version = "0.1.82"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -253,13 +247,10 @@ dependencies = [
  "chrono",
  "eyre",
  "futures-util",
- "ledger",
- "model",
  "mongodb",
  "program",
  "rewards",
  "services",
- "storage",
  "store",
  "teloxide",
  "tokio",
@@ -324,11 +315,8 @@ dependencies = [
  "eyre",
  "hex",
  "itertools 0.2.9",
- "ledger",
- "model",
  "mongodb",
  "serde",
- "storage",
  "strum",
  "teloxide",
  "tracing",
@@ -347,20 +335,20 @@ dependencies = [
  "eyre",
  "futures-util",
  "hex",
+ "ident",
  "itertools 0.2.9",
- "ledger",
- "model",
  "mongodb",
  "parking_lot",
+ "rights",
  "serde",
  "serde_json",
  "services",
- "storage",
  "store",
  "strum",
  "teloxide",
  "tracing",
  "trainings",
+ "users",
 ]
 
 [[package]]
@@ -377,11 +365,8 @@ dependencies = [
  "futures-util",
  "hex",
  "itertools 0.2.9",
- "ledger",
- "model",
  "mongodb",
  "serde",
- "storage",
  "strum",
  "teloxide",
  "tracing",
@@ -403,11 +388,8 @@ dependencies = [
  "eyre",
  "hex",
  "itertools 0.2.9",
- "ledger",
- "model",
  "mongodb",
  "serde",
- "storage",
  "strum",
  "teloxide",
  "time 0.1.0",
@@ -434,12 +416,9 @@ dependencies = [
  "eyre",
  "hex",
  "itertools 0.2.9",
- "ledger",
- "model",
  "mongodb",
  "serde",
  "services",
- "storage",
  "store",
  "strum",
  "teloxide",
@@ -461,16 +440,17 @@ dependencies = [
  "eyre",
  "graph",
  "hex",
+ "ident",
  "itertools 0.2.9",
- "ledger",
- "model",
  "mongodb",
+ "requests",
+ "rights",
  "serde",
- "storage",
  "strum",
  "teloxide",
  "time 0.1.0",
  "tracing",
+ "users",
 ]
 
 [[package]]
@@ -485,13 +465,14 @@ dependencies = [
  "decimal",
  "eyre",
  "hex",
+ "ident",
  "itertools 0.2.9",
- "ledger",
- "model",
  "mongodb",
+ "requests",
+ "rights",
  "serde",
- "storage",
  "strum",
+ "subscription",
  "teloxide",
  "tracing",
 ]
@@ -508,17 +489,17 @@ dependencies = [
  "decimal",
  "eyre",
  "hex",
+ "ident",
  "itertools 0.2.9",
- "ledger",
- "model",
  "mongodb",
  "program",
+ "rights",
  "serde",
- "storage",
  "strum",
  "teloxide",
  "tracing",
  "trainings",
+ "users",
 ]
 
 [[package]]
@@ -536,12 +517,9 @@ dependencies = [
  "eyre",
  "hex",
  "itertools 0.2.9",
- "ledger",
- "model",
  "mongodb",
  "rewards",
  "serde",
- "storage",
  "strum",
  "teloxide",
  "tracing",
@@ -554,21 +532,24 @@ dependencies = [
  "async-trait",
  "bincode",
  "bot-core",
+ "calendar",
  "chrono",
  "decimal",
  "eyre",
  "hex",
+ "ident",
  "itertools 0.2.9",
- "ledger",
- "model",
  "mongodb",
  "program",
+ "requests",
+ "rights",
  "serde",
- "storage",
  "strum",
+ "subscription",
  "teloxide",
  "tracing",
  "trainings",
+ "users",
 ]
 
 [[package]]
@@ -639,6 +620,26 @@ dependencies = [
  "cc",
  "libc",
  "pkg-config",
+]
+
+[[package]]
+name = "calendar"
+version = "0.1.0"
+dependencies = [
+ "bson",
+ "chrono",
+ "decimal",
+ "eyre",
+ "ident",
+ "mongodb",
+ "program",
+ "serde",
+ "store",
+ "thiserror 1.0.63",
+ "tracing",
+ "trainings",
+ "tx_macro",
+ "users",
 ]
 
 [[package]]
@@ -794,27 +795,6 @@ checksum = "1bfb12502f3fc46cca1bb51ac28df9d618d813cdc3d2f25b9fe775a34af26bb3"
 dependencies = [
  "generic-array",
  "typenum",
-]
-
-[[package]]
-name = "csv"
-version = "1.3.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "acdc4883a9c96732e4733212c01447ebd805833b7275a73ca3ee080fd77afdaf"
-dependencies = [
- "csv-core",
- "itoa",
- "ryu",
- "serde",
-]
-
-[[package]]
-name = "csv-core"
-version = "0.1.11"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5efa2b3d7902f4b634a20cae3c9c4e6209dc4779feb6863329607560143efa70"
-dependencies = [
- "memchr",
 ]
 
 [[package]]
@@ -1123,12 +1103,15 @@ name = "error"
 version = "0.1.0"
 dependencies = [
  "bson",
+ "calendar",
  "chrono",
  "eyre",
- "model",
+ "ident",
  "mongodb",
+ "requests",
  "thiserror 1.0.63",
  "trainings",
+ "users",
 ]
 
 [[package]]
@@ -1447,6 +1430,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "history"
+version = "0.1.0"
+dependencies = [
+ "bson",
+ "chrono",
+ "decimal",
+ "eyre",
+ "ident",
+ "mongodb",
+ "serde",
+ "store",
+ "subscription",
+ "trainings",
+ "treasury",
+ "users",
+]
+
+[[package]]
 name = "hmac"
 version = "0.12.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1690,6 +1691,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "ident"
+version = "0.1.0"
+dependencies = [
+ "bson",
+ "chrono",
+ "serde",
+ "time 0.1.0",
+]
+
+[[package]]
 name = "ident_case"
 version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1850,37 +1861,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bbd2bcb4c963f2ddae06a2efc7e9f3591312473c50c6685e1f298068316e66fe"
 
 [[package]]
-name = "ledger"
-version = "0.1.0"
-dependencies = [
- "ai",
- "arc-swap",
- "async-trait",
- "bson",
- "chrono",
- "csv",
- "decimal",
- "env",
- "error",
- "eyre",
- "futures-util",
- "model",
- "mongodb",
- "program",
- "serde",
- "serde_json",
- "storage",
- "store",
- "thiserror 1.0.63",
- "tokio",
- "tracing",
- "trainings",
- "tx_macro",
- "yookassa",
- "zip",
-]
-
-[[package]]
 name = "ledger-cli"
 version = "0.1.0"
 dependencies = [
@@ -1890,10 +1870,8 @@ dependencies = [
  "dotenv",
  "env",
  "eyre",
- "ledger",
  "mini-app-main",
  "services",
- "storage",
  "tokio",
  "tracing",
  "tracing-subscriber",
@@ -2052,8 +2030,6 @@ dependencies = [
  "hex",
  "hmac",
  "jsonwebtoken",
- "ledger",
- "model",
  "mongodb",
  "prost",
  "rand",
@@ -2107,27 +2083,6 @@ dependencies = [
  "libc",
  "wasi",
  "windows-sys 0.52.0",
-]
-
-[[package]]
-name = "model"
-version = "0.1.0"
-dependencies = [
- "bincode",
- "bson",
- "chrono",
- "decimal",
- "eyre",
- "hex",
- "program",
- "rand",
- "rewards",
- "serde",
- "strum",
- "thiserror 1.0.63",
- "time 0.1.0",
- "tracing",
- "trainings",
 ]
 
 [[package]]
@@ -2810,6 +2765,22 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7a66a03ae7c801facd77a29370b4faec201768915ac14a721ba36f20bc9c209b"
 
 [[package]]
+name = "requests"
+version = "0.1.0"
+dependencies = [
+ "bson",
+ "chrono",
+ "eyre",
+ "ident",
+ "mongodb",
+ "serde",
+ "store",
+ "thiserror 1.0.63",
+ "tx_macro",
+ "users",
+]
+
+[[package]]
 name = "reqwest"
 version = "0.11.27"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2914,10 +2885,20 @@ dependencies = [
  "chrono",
  "decimal",
  "eyre",
+ "ident",
  "mongodb",
  "serde",
  "store",
  "trainings",
+]
+
+[[package]]
+name = "rights"
+version = "0.1.0"
+dependencies = [
+ "eyre",
+ "serde",
+ "strum",
 ]
 
 [[package]]
@@ -3293,23 +3274,27 @@ dependencies = [
  "ai",
  "backup",
  "bson",
+ "calendar",
  "chrono",
  "decimal",
  "env",
  "error",
  "eyre",
  "futures-util",
- "ledger",
- "model",
+ "history",
+ "ident",
  "mongodb",
  "program",
+ "requests",
  "rewards",
  "stat",
- "storage",
  "store",
+ "subscription",
  "thiserror 1.0.63",
  "trainings",
+ "treasury",
  "tx_macro",
+ "users",
  "yookassa",
 ]
 
@@ -3424,40 +3409,19 @@ name = "stat"
 version = "0.1.0"
 dependencies = [
  "ai",
+ "bson",
  "chrono",
  "decimal",
  "error",
  "eyre",
- "ledger",
- "model",
+ "history",
+ "ident",
+ "requests",
  "serde",
  "serde_json",
- "storage",
  "store",
  "time 0.1.0",
-]
-
-[[package]]
-name = "storage"
-version = "0.1.0"
-dependencies = [
- "async-trait",
- "bson",
- "chrono",
- "dashmap",
- "decimal",
- "eyre",
- "futures-util",
- "model",
- "mongodb",
- "program",
- "serde",
- "serde_json",
- "serde_with 3.9.0",
- "store",
- "strum",
- "tracing",
- "trainings",
+ "users",
 ]
 
 [[package]]
@@ -3513,6 +3477,24 @@ dependencies = [
  "quote",
  "rustversion",
  "syn 2.0.100",
+]
+
+[[package]]
+name = "subscription"
+version = "0.1.0"
+dependencies = [
+ "bson",
+ "chrono",
+ "decimal",
+ "eyre",
+ "ident",
+ "mongodb",
+ "program",
+ "serde",
+ "store",
+ "thiserror 1.0.63",
+ "tracing",
+ "tx_macro",
 ]
 
 [[package]]
@@ -4090,9 +4072,27 @@ dependencies = [
  "chrono",
  "decimal",
  "eyre",
+ "ident",
  "mongodb",
+ "program",
  "serde",
  "thiserror 1.0.63",
+]
+
+[[package]]
+name = "treasury"
+version = "0.1.0"
+dependencies = [
+ "bson",
+ "chrono",
+ "decimal",
+ "eyre",
+ "ident",
+ "mongodb",
+ "serde",
+ "store",
+ "subscription",
+ "tx_macro",
 ]
 
 [[package]]
@@ -4185,6 +4185,28 @@ dependencies = [
  "idna 0.5.0",
  "percent-encoding",
  "serde",
+]
+
+[[package]]
+name = "users"
+version = "0.1.0"
+dependencies = [
+ "ai",
+ "bson",
+ "chrono",
+ "dashmap",
+ "decimal",
+ "eyre",
+ "futures-util",
+ "ident",
+ "mongodb",
+ "rights",
+ "serde",
+ "store",
+ "subscription",
+ "thiserror 1.0.63",
+ "tracing",
+ "tx_macro",
 ]
 
 [[package]]
@@ -4568,11 +4590,9 @@ dependencies = [
  "decimal",
  "env",
  "eyre",
- "model",
  "reqwest 0.12.12",
  "serde",
  "serde_json",
- "storage",
  "uuid",
 ]
 

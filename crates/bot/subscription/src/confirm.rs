@@ -8,8 +8,8 @@ use bot_core::{callback_data::Calldata as _, calldata, context::Context, widget:
 use bot_viewer::fmt_phone;
 use decimal::Decimal;
 use eyre::{eyre, Error, Result};
-use model::rights::Rule;
 use mongodb::bson::oid::ObjectId;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::{types::InlineKeyboardMarkup, utils::markdown::escape};
 

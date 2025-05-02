@@ -1,8 +1,8 @@
 use bson::oid::ObjectId;
 use chrono::{DateTime, Utc};
 use decimal::Decimal;
+use ident::training::TrainingId;
 use serde::{Deserialize, Serialize};
-use trainings::model::id::TrainingId;
 use user::UserRewardContribution;
 
 pub mod user;

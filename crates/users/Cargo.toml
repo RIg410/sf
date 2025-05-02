@@ -1,0 +1,25 @@
+[package]
+name = "users"
+
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+version.workspace = true
+
+[dependencies]
+serde.workspace = true
+bson.workspace = true
+decimal.workspace = true
+eyre.workspace = true
+chrono.workspace = true
+ident.workspace = true
+subscription.workspace = true
+rights.workspace = true
+tracing.workspace = true
+mongodb.workspace = true
+store.workspace = true
+dashmap.workspace = true
+futures-util.workspace = true
+tx_macro.workspace = true
+thiserror.workspace = true
+ai.workspace = true

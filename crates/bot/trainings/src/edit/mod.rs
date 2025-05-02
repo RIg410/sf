@@ -7,11 +7,11 @@ use bot_core::{
 };
 use bot_viewer::day::fmt_dt;
 use couch::ChangeCouch;
-use eyre::{bail, Result};
-use model::rights::Rule;
+use eyre::{Result, bail};
+use ident::training::TrainingId;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::{types::InlineKeyboardMarkup, utils::markdown::escape};
-use trainings::model::id::TrainingId;
 
 pub mod couch;
 pub mod name;
@@ -140,40 +140,40 @@ impl View for EditTraining {
 
         if ctx.has_right(Rule::ChangeTrainingSlot) {
             keymap = keymap.append_row(vec![
-                Callback::ChangeStartAt(false).button("🕒 Изменить время")
+                Callback::ChangeStartAt(false).button("🕒 Изменить время"),
             ]);
             keymap = keymap.append_row(vec![
-                Callback::ChangeStartAt(true).button("🕒 Изменить время для всех")
+                Callback::ChangeStartAt(true).button("🕒 Изменить время для всех"),
             ]);
         }
 
         if ctx.has_right(Rule::SetKeepOpen) {
             if training.keep_open {
                 keymap = keymap.append_row(vec![
-                    Callback::KeepOpen(false).button("🔒 Закрыть для записи")
+                    Callback::KeepOpen(false).button("🔒 Закрыть для записи"),
                 ]);
             } else {
                 keymap = keymap.append_row(vec![
-                    Callback::KeepOpen(true).button("🔓 Открыть для записи")
+                    Callback::KeepOpen(true).button("🔓 Открыть для записи"),
                 ]);
             }
         }
         if ctx.has_right(Rule::RemoveTraining) {
             keymap = keymap.append_row(vec![
-                Callback::Delete(false).button("🗑️ Удалить эту тренировку")
+                Callback::Delete(false).button("🗑️ Удалить эту тренировку"),
             ]);
             if !training.is_one_time {
                 keymap = keymap.append_row(vec![
-                    Callback::Delete(true).button("🗑️ Удалить все последующие")
+                    Callback::Delete(true).button("🗑️ Удалить все последующие"),
                 ]);
             }
         }
         if ctx.has_right(Rule::EditTrainingCouch) {
             keymap = keymap.append_row(vec![
-                Callback::ChangeCouch(false).button("🔄 Заменить инструктора")
+                Callback::ChangeCouch(false).button("🔄 Заменить инструктора"),
             ]);
             keymap = keymap.append_row(vec![
-                Callback::ChangeCouch(true).button("🔄 Заменить инструктора на все")
+                Callback::ChangeCouch(true).button("🔄 Заменить инструктора на все"),
             ]);
         }
 

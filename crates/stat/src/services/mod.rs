@@ -1,15 +1,16 @@
 use advertising::AdvertisingStatService;
 use ai::Ai;
-use ledger::service::{history::History, requests::Requests, users::Users};
-
+use history::service::History;
+use requests::service::Requests;
+use users::{log::UserLog, service::Users};
 pub mod advertising;
 
-pub struct Statistics {
-    pub advertising: AdvertisingStatService,
+pub struct Statistics<L> {
+    pub advertising: AdvertisingStatService<L>,
 }
 
-impl Statistics {
-    pub fn new(history: History, users: Users, requests: Requests, ai: Ai) -> Self {
+impl<L: UserLog>  Statistics<L> {
+    pub fn new(history: History, users: Users<L>, requests: Requests<L>, ai: Ai) -> Self {
         Self {
             advertising: AdvertisingStatService::new(requests, users, history, ai),
         }

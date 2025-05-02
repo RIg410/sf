@@ -8,7 +8,7 @@ use bot_core::{
 };
 use bot_viewer::rooms::fmt_room;
 use eyre::Result;
-use model::rooms::Room;
+use ident::rooms::Room;
 use serde::{Deserialize, Serialize};
 use teloxide::types::InlineKeyboardMarkup;
 

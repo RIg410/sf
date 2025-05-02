@@ -8,11 +8,11 @@ use bot_core::{
 };
 use chrono::{Local, Timelike, Utc};
 use eyre::Result;
-use model::{rights::Rule, slot::Slot};
+use ident::{slot::Slot, training::TrainingId};
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::types::{InlineKeyboardMarkup, Message};
 use tracing::warn;
-use trainings::model::id::TrainingId;
 
 pub struct ChangeTime {
     id: TrainingId,

@@ -8,14 +8,15 @@ use bot_core::{
 };
 use bot_viewer::user::fmt_user_type;
 use eyre::{Error, Result};
-use model::{rights::Rule, user::User};
+use ident::training::TrainingId;
 use mongodb::bson::oid::ObjectId;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::{
     types::{InlineKeyboardButton, InlineKeyboardMarkup, Message},
     utils::markdown::escape,
 };
-use trainings::model::id::TrainingId;
+use users::model::User;
 
 pub const LIMIT: u64 = 7;
 

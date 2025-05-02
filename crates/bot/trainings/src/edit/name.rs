@@ -4,9 +4,9 @@ use bot_core::{
     widget::{Jmp, View},
 };
 use eyre::{Ok, Result};
-use model::rights::Rule;
+use ident::training::TrainingId;
+use rights::Rule;
 use teloxide::types::{InlineKeyboardMarkup, Message};
-use trainings::model::id::TrainingId;
 
 pub struct ChangeName {
     id: TrainingId,

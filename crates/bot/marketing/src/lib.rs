@@ -5,6 +5,7 @@ use bot_core::{
     context::Context,
     widget::{Jmp, View},
 };
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::types::InlineKeyboardMarkup;
 
@@ -21,14 +22,14 @@ impl View for Marketing {
     }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
-        ctx.ensure(model::rights::Rule::ViewMarketingInfo)?;
+        ctx.ensure(Rule::ViewMarketingInfo)?;
         let text = "Маркетинг🚀";
         let mut keymap = InlineKeyboardMarkup::default();
 
-        if ctx.has_right(model::rights::Rule::ViewMarketingInfo) {
+        if ctx.has_right(Rule::ViewMarketingInfo) {
             keymap = keymap.append_row(Calldata::Request.btn_row("Заявки 🈸"));
         }
-        if ctx.has_right(model::rights::Rule::ViewStatistics) {
+        if ctx.has_right(Rule::ViewStatistics) {
             keymap = keymap.append_row(Calldata::Statistics.btn_row("Статистика 📊"));
         }
 
@@ -39,11 +40,11 @@ impl View for Marketing {
     async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {
         match calldata!(data) {
             Calldata::Request => {
-                ctx.ensure(model::rights::Rule::ViewMarketingInfo)?;
+                ctx.ensure(Rule::ViewMarketingInfo)?;
                 Ok(requests::Requests::default().into())
             }
             Calldata::Statistics => {
-                ctx.ensure(model::rights::Rule::ViewStatistics)?;
+                ctx.ensure(Rule::ViewStatistics)?;
                 Ok(statistics::StatisticsView::default().into())
             }
         }

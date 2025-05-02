@@ -6,9 +6,10 @@ use bot_core::{
     widget::{Jmp, View},
 };
 use eyre::{bail, Error};
-use model::{rights::Rule, subscription::SubscriptionType};
 use mongodb::bson::oid::ObjectId;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
+use subscription::model::SubscriptionType;
 use teloxide::{types::InlineKeyboardMarkup, utils::markdown::escape};
 
 pub struct EditPrograms {

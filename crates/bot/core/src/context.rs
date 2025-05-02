@@ -1,17 +1,18 @@
 use crate::bot::TgBot;
-use model::{rights::Rule, user::User};
 use mongodb::bson::oid::ObjectId;
-use services::Services;
-use store::session::Session;
+use rights::Rule;
+use services::SfServices;
 use std::{
     ops::{Deref, DerefMut},
     sync::Arc,
 };
+use store::session::Session;
+use users::model::User;
 
 pub struct Context {
     pub bot: TgBot,
     pub me: User,
-    pub services: Arc<Services>,
+    pub services: Arc<SfServices>,
     pub session: Session,
     pub is_real_user: bool,
 }
@@ -20,7 +21,7 @@ impl Context {
     pub fn new(
         bot: TgBot,
         me: User,
-        ledger: Arc<Services>,
+        ledger: Arc<SfServices>,
         session: Session,
         is_real_user: bool,
     ) -> Context {

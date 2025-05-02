@@ -6,7 +6,6 @@ license.workspace = true
 publish.workspace = true
 version.workspace = true
 
-
 [dependencies]
 async-trait.workspace = true
 bincode.workspace = true
@@ -25,14 +24,10 @@ chrono.workspace = true
 eyre.workspace = true
 hex.workspace = true
 itertools.workspace = true
-ledger.workspace = true
-model.workspace = true
 mongodb.workspace = true
 serde.workspace = true
-storage.workspace = true
+services.workspace = true
 store.workspace = true
 strum.workspace = true
 teloxide.workspace = true
 tracing.workspace = true
-services.workspace = true
-

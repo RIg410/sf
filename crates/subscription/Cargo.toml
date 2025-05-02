@@ -1,0 +1,21 @@
+[package]
+name = "subscription"
+
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+version.workspace = true
+
+[dependencies]
+chrono.workspace = true
+serde.workspace = true
+bson.workspace = true
+decimal.workspace = true
+ident.workspace = true
+eyre.workspace = true
+tx_macro.workspace = true
+mongodb.workspace = true
+thiserror.workspace = true
+program.workspace = true
+store.workspace = true
+tracing.workspace = true

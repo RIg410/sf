@@ -1,21 +1,23 @@
 [package]
+name = "stat"
+
 edition.workspace = true
 license.workspace = true
-name = "stat"
 publish.workspace = true
 version.workspace = true
 
 [dependencies]
 ai.workspace = true
-decimal.workspace = true
-ledger.workspace = true
-model.workspace = true
-storage.workspace = true
-store.workspace = true
-time.workspace = true
-
+bson.workspace = true
 chrono.workspace = true
+decimal.workspace = true
 error.workspace = true
 eyre.workspace = true
+history.workspace = true
+ident.workspace = true
+requests.workspace = true
 serde.workspace = true
 serde_json.workspace = true
+store.workspace = true
+time.workspace = true
+users.workspace = true

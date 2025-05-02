@@ -7,7 +7,7 @@ use bot_core::{
     widget::{Jmp, View},
 };
 use eyre::Result;
-use model::rights::Rule;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::types::InlineKeyboardMarkup;
 

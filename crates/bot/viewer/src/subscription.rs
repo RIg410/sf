@@ -1,8 +1,8 @@
 use bot_core::context::Context;
 use eyre::Error;
-use tracing::warn;
-use model::subscription::SubscriptionType;
+use subscription::model::SubscriptionType;
 use teloxide::utils::markdown::escape;
+use tracing::warn;
 
 pub async fn fmt_subscription_type(
     ctx: &mut Context,

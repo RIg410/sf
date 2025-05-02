@@ -10,13 +10,16 @@ use bot_core::{
 use bot_viewer::{day::fmt_dt, fmt_phone};
 use chrono::{Local, NaiveDateTime, TimeZone as _};
 use decimal::Decimal;
-use model::{request::RemindLater, rights::Rule, statistics::source::Source, user::sanitize_phone};
+use ident::source::Source;
 use mongodb::bson::oid::ObjectId;
+use requests::model::RemindLater;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::{
     types::{InlineKeyboardMarkup, Message},
     utils::markdown::escape,
 };
+use users::model::sanitize_phone;
 
 pub struct SetPhone;
 

@@ -1,4 +1,4 @@
-use model::day::StatisticsSummary;
+use calendar::model::StatisticsSummary;
 use program::model::TrainingType;
 use trainings::model::status::TrainingStatus;
 

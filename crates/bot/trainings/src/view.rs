@@ -8,17 +8,18 @@ use bot_core::{
 };
 use bot_viewer::{day::fmt_dt, fmt_phone, training::fmt_training_type};
 use chrono::Local;
-use eyre::{bail, Result};
-use model::{rights::Rule, training::Training, user::family::FindFor};
+use eyre::{Result, bail};
+use ident::training::TrainingId;
 use mongodb::bson::oid::ObjectId;
 use program::model::TrainingType;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
-use trainings::model::{id::TrainingId, status::TrainingStatus};
 use std::vec;
 use teloxide::{
     types::{ChatId, InlineKeyboardMarkup},
     utils::markdown::escape,
 };
+use trainings::model::{status::TrainingStatus, Training};
 
 pub struct TrainingView {
     id: TrainingId,

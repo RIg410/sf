@@ -6,8 +6,8 @@ use bot_core::{
     widget::{Jmp, View},
 };
 use eyre::Result;
-use model::rights::Rule;
 use mongodb::bson::oid::ObjectId;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use std::num::NonZero;
 use teloxide::{

@@ -8,8 +8,6 @@ version.workspace = true
 
 [dependencies]
 async-trait.workspace = true
-model.workspace = true
-storage.workspace = true
 eyre.workspace = true
 reqwest.workspace = true
 env.workspace = true

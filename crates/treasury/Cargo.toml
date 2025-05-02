@@ -1,0 +1,19 @@
+[package]
+name = "treasury"
+
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+version.workspace = true
+
+[dependencies]
+serde.workspace = true
+bson.workspace = true
+decimal.workspace = true
+chrono.workspace = true
+ident.workspace = true
+subscription.workspace = true
+eyre.workspace = true
+mongodb.workspace = true
+store.workspace = true
+tx_macro.workspace = true

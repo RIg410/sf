@@ -2,7 +2,7 @@ use std::sync::Arc;
 
 use env::Env;
 use eyre::Context;
-use services::Services;
+use services::SfServices;
 use tracing::info;
 use tracing_subscriber::EnvFilter;
 
@@ -24,7 +24,7 @@ async fn main() -> eyre::Result<()> {
         .await
         .context("Failed to create storage")?;
     info!("creating ledger");
-    let ledger = Arc::new(Services::new(storage, env.clone()).await?);
+    let ledger = Arc::new(SfServices::new(storage, env.clone()).await?);
     info!("Starting bot...");
     let bot: bot_main::BotApp = bot_main::BotApp::new(env);
     info!("Starting mini app...");

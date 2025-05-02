@@ -15,3 +15,4 @@ serde.workspace = true
 trainings.workspace = true
 mongodb.workspace = true
 store.workspace = true
+ident.workspace = true
