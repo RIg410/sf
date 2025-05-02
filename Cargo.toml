@@ -27,6 +27,9 @@ members = [
   "crates/users",
   "crates/requests",
   "crates/calendar",
+  "crates/booking",
+  "crates/sales",
+  "crates/training_adjuster",
 ]
 
 resolver = "2"
@@ -35,6 +38,7 @@ resolver = "2"
 ai = {path = "crates/core/ai"}
 backup = {path = "crates/backup"}
 bg-process = {path = "crates/bg-process"}
+booking = {path = "crates/booking"}
 bot-calendar = {path = "crates/bot/calendar"}
 bot-core = {path = "crates/bot/core"}
 bot-couch = {path = "crates/bot/couch"}
@@ -58,11 +62,13 @@ program = {path = "crates/program"}
 requests = {path = "crates/requests"}
 rewards = {path = "crates/rewards"}
 rights = {path = "crates/core/rights"}
+sales = {path = "crates/sales"}
 services = {path = "crates/services"}
 stat = {path = "crates/stat"}
 store = {path = "crates/core/store"}
 subscription = {path = "crates/subscription"}
 time = {path = "crates/core/time"}
+training_adjuster = {path = "crates/training_adjuster"}
 trainings = {path = "crates/trainings"}
 treasury = {path = "crates/treasury"}
 tx_macro = {path = "crates/core/tx_macro"}

@@ -1,4 +1,3 @@
-
 use crate::Marketing;
 use async_trait::async_trait;
 use bot_core::{
@@ -591,6 +590,7 @@ impl View for ConfirmSellSubscription {
         match calldata!(data) {
             ConfirmSellSubscriptionCallback::Yes => {
                 ctx.services
+                    .sales
                     .presell_subscription(
                         &mut ctx.session,
                         self.subscription_id,

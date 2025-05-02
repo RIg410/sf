@@ -93,6 +93,9 @@ impl UserStore {
         }
 
         let mut user = self.get_row(session, id).await?;
+        if let Some(ref mut user) = user {
+            self.resolve_family(session, user).await?;
+        }
         self.cache_user(session, &mut user).await?;
 
         Ok(user)

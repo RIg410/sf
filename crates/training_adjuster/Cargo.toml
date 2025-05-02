@@ -1,0 +1,16 @@
+[package]
+name = "training_adjuster"
+
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+version.workspace = true
+
+[dependencies]
+bson.workspace = true
+calendar.workspace = true
+eyre.workspace = true
+program.workspace = true
+store.workspace = true
+tx_macro.workspace = true
+users.workspace = true

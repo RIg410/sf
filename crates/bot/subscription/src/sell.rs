@@ -17,6 +17,7 @@ use teloxide::{
     types::{InlineKeyboardMarkup, Message},
     utils::markdown::escape,
 };
+use users::model::sanitize_phone;
 
 pub const LIMIT: u64 = 7;
 
@@ -357,6 +358,7 @@ impl View for CreateUserAndSell {
                 ctx.ensure(Rule::SellSubscription)?;
                 let result = ctx
                     .services
+                    .sales
                     .presell_subscription(
                         &mut ctx.session,
                         self.sub_id,

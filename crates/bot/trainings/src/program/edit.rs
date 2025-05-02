@@ -33,6 +33,7 @@ impl EditProgram {
     pub async fn edit_capacity(&self, ctx: &mut Context, value: u32) -> Result<Jmp> {
         ctx.ensure(Rule::EditTraining)?;
         ctx.services
+            .training_adjuster
             .edit_program_capacity(&mut ctx.session, self.id, value)
             .await?;
         Ok(Jmp::Stay)
@@ -41,6 +42,7 @@ impl EditProgram {
     pub async fn edit_duration(&self, ctx: &mut Context, value: u32) -> Result<Jmp> {
         ctx.ensure(Rule::EditTraining)?;
         ctx.services
+            .training_adjuster
             .edit_program_duration(&mut ctx.session, self.id, value)
             .await?;
         Ok(Jmp::Stay)
@@ -49,6 +51,7 @@ impl EditProgram {
     pub async fn edit_name(&self, ctx: &mut Context, value: String) -> Result<Jmp> {
         ctx.ensure(Rule::EditTraining)?;
         ctx.services
+            .training_adjuster
             .edit_program_name(&mut ctx.session, self.id, value)
             .await?;
         Ok(Jmp::Stay)
@@ -57,6 +60,7 @@ impl EditProgram {
     pub async fn edit_description(&self, ctx: &mut Context, value: String) -> Result<Jmp> {
         ctx.ensure(Rule::EditTraining)?;
         ctx.services
+            .training_adjuster
             .edit_program_description(&mut ctx.session, self.id, value)
             .await?;
         Ok(Jmp::Stay)

@@ -1,4 +1,4 @@
-use super::{render_msg, PersonalTrainingPreset, DURATION};
+use super::{DURATION, PersonalTrainingPreset, render_msg};
 use async_trait::async_trait;
 use bot_core::{
     callback_data::Calldata as _,
@@ -56,6 +56,7 @@ impl View for Finish {
                 let room = preset.room.ok_or_else(|| eyre::eyre!("Room is missing"))?;
 
                 ctx.services
+                    .booking
                     .schedule_personal_training(
                         &mut ctx.session,
                         client,

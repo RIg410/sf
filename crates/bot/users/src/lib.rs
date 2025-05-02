@@ -7,15 +7,15 @@ use bot_core::{
 };
 use bot_viewer::user::fmt_user_type;
 use eyre::Error;
-use model::user::User;
-use model::{rights::Rule, user::sanitize_phone};
 use mongodb::{bson::oid::ObjectId, SessionCursor};
 use profile::UserProfile;
+use ::rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::{
     types::{InlineKeyboardButton, InlineKeyboardMarkup, Message},
     utils::markdown::escape,
 };
+use users::model::{sanitize_phone, User};
 
 pub mod come_from;
 pub mod comments;

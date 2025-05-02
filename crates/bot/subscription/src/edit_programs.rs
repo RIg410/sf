@@ -5,7 +5,7 @@ use bot_core::{
     context::Context,
     widget::{Jmp, View},
 };
-use eyre::{bail, Error};
+use eyre::{Error, bail};
 use mongodb::bson::oid::ObjectId;
 use rights::Rule;
 use serde::{Deserialize, Serialize};
@@ -40,7 +40,11 @@ impl View for EditPrograms {
             .await?
             .ok_or_else(|| eyre::eyre!("Subscription not found"))?;
 
-        let programs = ctx.services.programs.get_all(&mut ctx.session, false).await?;
+        let programs = ctx
+            .services
+            .programs
+            .get_all(&mut ctx.session, false)
+            .await?;
 
         if let SubscriptionType::Group { program_filter } = subscription.subscription_type {
             for program in programs {
@@ -70,14 +74,14 @@ impl View for EditPrograms {
             Callback::Select(program_id) => {
                 let program_id = ObjectId::from_bytes(program_id);
                 ctx.services
-                    .subscriptions
+                    .sales
                     .edit_program_list(&mut ctx.session, self.id, program_id, true)
                     .await?;
             }
             Callback::Unselect(program_id) => {
                 let program_id = ObjectId::from_bytes(program_id);
                 ctx.services
-                    .subscriptions
+                    .sales
                     .edit_program_list(&mut ctx.session, self.id, program_id, false)
                     .await?;
             }

@@ -5,10 +5,10 @@ use bot_core::{
     context::Context,
     widget::{Jmp, View},
 };
-use model::user::extension::UserExtension;
 use mongodb::bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
 use teloxide::types::{InlineKeyboardButton, InlineKeyboardMarkup};
+use users::model::extension::UserExtension;
 
 pub struct NotificationView {
     pub id: ObjectId,

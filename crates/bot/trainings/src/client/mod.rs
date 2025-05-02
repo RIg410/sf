@@ -1,9 +1,10 @@
 use async_trait::async_trait;
+use booking::payer::AvailableBalance as _;
 use bot_core::{
+    CommonLocation,
     callback_data::Calldata as _,
     context::Context,
     widget::{Jmp, View},
-    CommonLocation,
 };
 use bot_viewer::{
     fmt_phone,
@@ -57,6 +58,7 @@ impl ClientView {
             return Ok(());
         }
         ctx.services
+            .booking
             .sign_up(&mut ctx.session, training.id(), self.id, true)
             .await?;
 
@@ -110,6 +112,7 @@ impl ClientView {
             return Ok(());
         }
         ctx.services
+            .booking
             .sign_out(&mut ctx.session, training.id(), self.id, true)
             .await?;
 

@@ -2,10 +2,11 @@ use super::View;
 use async_trait::async_trait;
 use bot_core::{callback_data::Calldata, calldata, context::Context, widget::Jmp};
 use bot_viewer::user::fmt_user_type;
-use model::{rights::Rule, user::User};
 use mongodb::bson::oid::ObjectId;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::types::InlineKeyboardMarkup;
+use users::model::User;
 
 #[derive(Default)]
 pub struct UserRightsView {

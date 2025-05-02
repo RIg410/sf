@@ -46,7 +46,7 @@ impl View for ConfirmSell {
             Callback::Sell => {
                 ctx.ensure(Rule::SellSubscription)?;
                 let result = ctx
-                    .services
+                    .services.sales
                     .sell_subscription(
                         &mut ctx.session,
                         self.sub,

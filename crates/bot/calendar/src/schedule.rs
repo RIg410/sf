@@ -12,7 +12,7 @@ use bot_trainings::{
 use bot_viewer::day::fmt_date;
 use chrono::{DateTime, Local};
 use eyre::Error;
-use model::rights::Rule;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::types::InlineKeyboardMarkup;
 

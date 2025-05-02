@@ -17,12 +17,10 @@ use bot_core::{
 use bot_trainings::list::TrainingList;
 use bot_viewer::user::render_profile_msg;
 use eyre::Error;
-use model::{
-    rights::Rule,
-    statistics::user::{SubscriptionStat, TrainingsStat},
-};
 use mongodb::bson::oid::ObjectId;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
+use stat::models::user::{SubscriptionStat, TrainingsStat};
 use teloxide::{types::InlineKeyboardMarkup, utils::markdown::escape};
 
 pub struct UserProfile {
@@ -47,6 +45,7 @@ impl UserProfile {
             .await?
             .ok_or_else(|| eyre::eyre!("User not found"))?;
         ctx.services
+            .users
             .block_user(&mut ctx.session, self.id, !user.is_active)
             .await?;
         ctx.reload_user().await?;
@@ -135,7 +134,8 @@ impl UserProfile {
 
         let user_stat = ctx
             .services
-            .users
+            .statistics
+            .user
             .collect_statistics(&mut ctx.session, &self.id)
             .await?;
         let mut message = "Статистика пользователя: \n".to_string();

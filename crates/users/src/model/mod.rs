@@ -1,19 +1,20 @@
 use bson::oid::ObjectId;
 use chrono::{DateTime, TimeZone as _, Utc};
-use ident::source::Source;
-use rights::Rights;
-use subscription::model::UserSubscription;
 use core::fmt;
-use eyre::Result;
 use eyre::eyre;
-use family::{Family, Payer};
+use family::Family;
+use ident::source::Source;
+use payer::Payer;
+use rights::Rights;
 use serde::{Deserialize, Serialize};
 use std::fmt::{Display, Formatter};
+use subscription::model::UserSubscription;
 
 pub mod comments;
 pub mod employee;
 pub mod extension;
 pub mod family;
+pub mod payer;
 pub mod rate;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -116,7 +117,7 @@ impl User {
         }
     }
 
-    pub fn payer_mut(&mut self) -> Result<Payer<&mut User>> {
+    pub fn payer_mut(&mut self) -> Result<Payer<&mut User>, eyre::Error> {
         if self.family.is_individual {
             return Ok(Payer::new(self, true));
         }
@@ -136,7 +137,7 @@ impl User {
         }
     }
 
-    pub fn payer(&self) -> Result<Payer<&User>> {
+    pub fn payer(&self) -> Result<Payer<&User>, eyre::Error> {
         if self.family.is_individual {
             return Ok(Payer::new(self, true));
         }
@@ -166,6 +167,30 @@ impl User {
 
     pub fn has_family(&self) -> bool {
         self.family.payer_id.is_some() || !self.family.children_ids.is_empty()
+    }
+}
+
+pub fn test_user() -> User {
+    User {
+        id: ObjectId::new(),
+        tg_id: 0,
+        name: UserName {
+            tg_user_name: None,
+            first_name: "Test".to_owned(),
+            last_name: None,
+        },
+        rights: Rights::customer(),
+        phone: None,
+        is_active: true,
+        version: 0,
+        subscriptions: vec![],
+        freeze_days: 0,
+        freeze: None,
+        created_at: Utc::now(),
+        settings: UserSettings::default(),
+        come_from: Source::default(),
+        family: Family::default(),
+        employee: Default::default(),
     }
 }
 

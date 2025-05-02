@@ -1,14 +1,3 @@
-use ::ai::Ai;
-use chrono::{DateTime, Local};
-use eyre::{Result, bail, eyre, Error};
-use ident::source::Source;
-use mongodb::{SessionCursor, bson::oid::ObjectId};
-use rights::{Rights, Rule};
-use std::{ops::Deref, sync::Arc};
-use store::session::{Db, Session};
-use thiserror::Error;
-use tracing::info;
-use tx_macro::tx;
 use crate::{
     log::UserLog,
     model::{
@@ -18,6 +7,17 @@ use crate::{
     },
     storage::UserStore,
 };
+use ::ai::Ai;
+use chrono::{DateTime, Local};
+use eyre::{Error, Result, bail, eyre};
+use ident::source::Source;
+use mongodb::{SessionCursor, bson::oid::ObjectId};
+use rights::{Rights, Rule};
+use std::{ops::Deref, sync::Arc};
+use store::session::{Db, Session};
+use thiserror::Error;
+use tracing::info;
+use tx_macro::tx;
 
 pub mod comments;
 pub mod employee;
@@ -276,6 +276,18 @@ impl<L: UserLog> Users<L> {
 
         self.logs.freeze(session, user.id, days).await?;
         self.store.freeze(session, id, days, force).await?;
+        Ok(())
+    }
+
+    #[tx]
+    pub async fn block_user(
+        &self,
+        session: &mut Session,
+        id: ObjectId,
+        is_active: bool,
+    ) -> Result<()> {
+        self.logs.block_user(session, id, is_active).await?;
+        self.store.block_user(session, id, is_active).await?;
         Ok(())
     }
 }

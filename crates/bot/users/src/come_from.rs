@@ -5,9 +5,11 @@ use bot_core::{
     context::Context,
     widget::{Jmp, View},
 };
-use model::{rights::Rule, statistics::source::Source, user::sanitize_phone};
+use ident::source::Source;
 use mongodb::bson::oid::ObjectId;
+use rights::Rule;
 use teloxide::types::InlineKeyboardMarkup;
+use users::model::sanitize_phone;
 
 pub struct MarketingInfoView {
     id: ObjectId,

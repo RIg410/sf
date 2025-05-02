@@ -5,10 +5,11 @@ use bot_core::{
     context::Context,
     widget::{Jmp, View},
 };
-use eyre::{bail, Error};
-use model::{rights::Rule, subscription::SubscriptionType};
+use eyre::{Error, bail};
 use mongodb::bson::oid::ObjectId;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
+use subscription::model::SubscriptionType;
 use teloxide::{types::InlineKeyboardMarkup, utils::markdown::escape};
 
 pub struct EditPrograms {
@@ -33,7 +34,10 @@ impl View for EditPrograms {
         let mut keymap = InlineKeyboardMarkup::default();
         let msg = "*Выберите программы*";
 
-        let user = ctx.services.get_user(&mut ctx.session, self.user_id).await?;
+        let user = ctx
+            .services
+            .get_user(&mut ctx.session, self.user_id)
+            .await?;
         let payer = user.payer()?;
         let subscription = payer
             .subscriptions()
@@ -41,7 +45,11 @@ impl View for EditPrograms {
             .find(|s| s.id == self.id)
             .ok_or_else(|| eyre::eyre!("Subscription not found"))?;
 
-        let programs = ctx.services.programs.get_all(&mut ctx.session, false).await?;
+        let programs = ctx
+            .services
+            .programs
+            .get_all(&mut ctx.session, false)
+            .await?;
 
         if let SubscriptionType::Group { program_filter } = &subscription.tp {
             for program in programs {

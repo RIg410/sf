@@ -2,16 +2,16 @@ use async_trait::async_trait;
 use bot_core::{
     context::Context,
     script::{
+        Dispatch, ScriptView, Stage,
         list::{ListId, ListItem, StageList},
         text::StageText,
         yes_no::StageYesNo,
-        Dispatch, ScriptView, Stage,
     },
     widget::Widget,
 };
 use eyre::Error;
-use model::user::{rate::EmployeeRole, User};
 use teloxide::utils::markdown::escape;
+use users::model::{rate::EmployeeRole, User};
 
 pub fn make_make_couch_view() -> Widget {
     ScriptView::new("make_couch", State::default(), Stage::list(UserList)).into()

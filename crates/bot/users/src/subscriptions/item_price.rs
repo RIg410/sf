@@ -7,8 +7,8 @@ use bot_core::{
 };
 use decimal::Decimal;
 use eyre::Error;
-use model::rights::Rule;
 use mongodb::bson::oid::ObjectId;
+use rights::Rule;
 use teloxide::{
     types::{InlineKeyboardMarkup, Message},
     utils::markdown::escape,

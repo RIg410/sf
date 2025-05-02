@@ -8,14 +8,9 @@ use ident::{day::DayId, slot::Slot, training::TrainingId};
 use mongodb::bson::oid::ObjectId;
 use program::service::Programs;
 use store::session::{Db, Session};
-use trainings::{
-    error::TrainingError,
-    model::{Training, status::TrainingStatus},
-};
+use trainings::{error::TrainingError, model::Training};
 use tx_macro::tx;
 use users::{log::UserLog, service::Users};
-
-pub mod training;
 
 #[derive(Clone)]
 pub struct Calendar<L> {
@@ -40,45 +35,6 @@ impl<L: UserLog> Calendar<L> {
     ) -> Result<Option<Training>, Error> {
         let day = self.get_day(session, DayId::from(id.start_at)).await?;
         Ok(day.training.iter().find(|slot| slot.id() == id).cloned())
-    }
-
-    pub async fn cancel_training(
-        &self,
-        session: &mut Session,
-        training: &Training,
-    ) -> Result<Training> {
-        let day = self.get_day(session, training.day_id()).await?;
-        let training = day.training.into_iter().find(|slot| slot.id == training.id);
-
-        if let Some(training) = training {
-            self.calendar
-                .set_cancel_flag(session, training.id(), true)
-                .await?;
-            Ok(training)
-        } else {
-            Err(eyre::eyre!("Training not found"))
-        }
-    }
-
-    #[tx]
-    pub async fn restore_training(&self, session: &mut Session, training: &Training) -> Result<()> {
-        let mut day = self.get_day(session, training.day_id()).await?;
-        let training = day
-            .training
-            .iter_mut()
-            .find(|slot| slot.id() == training.id());
-
-        if let Some(training) = training {
-            if training.status(Local::now()) != TrainingStatus::Cancelled {
-                return Err(eyre::eyre!("Training is not cancelled"));
-            }
-            self.calendar
-                .set_cancel_flag(session, training.id(), false)
-                .await?;
-            Ok(())
-        } else {
-            return Err(eyre::eyre!("Training not found"));
-        }
     }
 
     #[tx]
@@ -410,6 +366,7 @@ impl<L: UserLog> Calendar<L> {
 
         Ok(())
     }
+
 }
 
 impl<L> Deref for Calendar<L> {

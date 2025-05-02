@@ -1,5 +1,6 @@
 use crate::{client::list::ClientsList, edit::EditTraining, family::FamilySignIn};
 use async_trait::async_trait;
+use booking::payer::{FindFor, SubscriptionResolver as _};
 use bot_core::{
     callback_data::Calldata as _,
     calldata,
@@ -19,7 +20,7 @@ use teloxide::{
     types::{ChatId, InlineKeyboardMarkup},
     utils::markdown::escape,
 };
-use trainings::model::{status::TrainingStatus, Training};
+use trainings::model::{Training, status::TrainingStatus};
 
 pub struct TrainingView {
     id: TrainingId,
@@ -60,7 +61,7 @@ impl TrainingView {
         }
 
         ctx.services
-            .calendar
+            .booking
             .restore_training(&mut ctx.session, &training)
             .await?;
         Ok(Jmp::Stay)
@@ -271,6 +272,7 @@ impl ConfirmCancelTraining {
             .ok_or_else(|| eyre::eyre!("Training not found"))?;
         let to_notify = ctx
             .services
+            .booking
             .cancel_training(&mut ctx.session, &training)
             .await?;
         let msg = format!(
@@ -384,6 +386,7 @@ pub async fn sign_up(ctx: &mut Context, id: TrainingId, user_id: ObjectId) -> Re
     }
 
     ctx.services
+        .booking
         .sign_up(&mut ctx.session, id, user.id, false)
         .await?;
     Ok(Jmp::Stay)
@@ -401,6 +404,7 @@ pub async fn sign_out(ctx: &mut Context, id: TrainingId, user_id: ObjectId) -> R
         return Ok(Jmp::Stay);
     }
     ctx.services
+        .booking
         .sign_out(&mut ctx.session, training.id(), user_id, false)
         .await?;
 

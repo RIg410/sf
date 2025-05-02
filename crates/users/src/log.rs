@@ -67,4 +67,11 @@ pub trait UserLog {
         main_id: ObjectId,
         member_id: ObjectId,
     ) -> impl Future<Output = Result<()>> + Send;
+
+    fn block_user(
+        &self,
+        session: &mut Session,
+        user: ObjectId,
+        is_active: bool,
+    ) -> impl Future<Output = Result<()>> + Send;
 }

@@ -7,13 +7,14 @@ use bot_core::{
 };
 use bot_viewer::day::fmt_dt;
 use chrono::Local;
-use model::{rights::Rule, user::comments::Comment};
 use mongodb::bson::oid::ObjectId;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::{
     types::{InlineKeyboardMarkup, Message},
     utils::markdown::escape,
 };
+use users::model::comments::Comment;
 
 pub struct Comments {
     user_id: ObjectId,

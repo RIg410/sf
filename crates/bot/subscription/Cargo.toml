@@ -25,3 +25,4 @@ strum.workspace = true
 subscription.workspace = true
 teloxide.workspace = true
 tracing.workspace = true
+users.workspace = true

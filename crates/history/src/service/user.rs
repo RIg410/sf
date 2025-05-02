@@ -82,4 +82,13 @@ impl UserLog for History {
     ) -> impl Future<Output = eyre::Result<()>> + Send {
         self.add_family_member(session, main_id, member_id)
     }
+
+    fn block_user(
+        &self,
+        session: &mut store::session::Session,
+        user: bson::oid::ObjectId,
+        is_active: bool,
+    ) -> impl Future<Output = eyre::Result<()>> + Send {
+        self.block_user(session, user, is_active)
+    }
 }

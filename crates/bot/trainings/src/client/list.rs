@@ -7,7 +7,7 @@ use bot_core::{
 };
 use bot_viewer::day::fmt_dt;
 use chrono::Local;
-use eyre::{bail, Result};
+use eyre::{Result, bail};
 use ident::training::TrainingId;
 use mongodb::bson::oid::ObjectId;
 use rights::Rule;
@@ -51,6 +51,7 @@ impl ClientsList {
             return Ok(Jmp::Stay);
         }
         ctx.services
+            .booking
             .sign_out(&mut ctx.session, training.id(), id, true)
             .await?;
         ctx.send_notification("Клиент удален из тренировки").await;

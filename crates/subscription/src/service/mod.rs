@@ -1,37 +1,20 @@
-use crate::{
-    model::{Subscription, SubscriptionType},
-    storage::SubscriptionsStore,
-};
-
-//use super::{history::History,  users::Users};
+use crate::{model::Subscription, storage::SubscriptionsStore};
 use decimal::Decimal;
-use eyre::{Error, eyre};
-use mongodb::bson::oid::ObjectId;
-use program::service::Programs;
+use eyre::Error;
 use std::{ops::Deref, sync::Arc};
 use store::session::{Db, Session};
 use thiserror::Error;
 use tx_macro::tx;
 
+#[derive(Clone)]
 pub struct Subscriptions {
     pub store: Arc<SubscriptionsStore>,
-    // pub logs: History,
-    // pub program: Programs,
-    // pub users: Users,
 }
 
 impl Subscriptions {
-    pub fn new(
-        store: &Db,
-        // logs: History,
-        // program: Programs,
-        // users: Users,
-    ) -> Self {
+    pub fn new(store: &Db) -> Self {
         Subscriptions {
             store: Arc::new(SubscriptionsStore::new(store)),
-            // logs,
-            // program,
-            // users,
         }
     }
 
@@ -63,55 +46,6 @@ impl Subscriptions {
         self.store.insert(session, sub).await?;
         Ok(())
     }
-
-    // #[tx]
-    // pub async fn edit_program_list(
-    //     &self,
-    //     session: &mut Session,
-    //     sub: ObjectId,
-    //     program_id: ObjectId,
-    //     add: bool,
-    // ) -> Result<(), Error> {
-    //     let mut subscription = self
-    //         .get(session, sub)
-    //         .await?
-    //         .ok_or_else(|| eyre!("Subscription not found"))?;
-    //     let _ = self
-    //         .program
-    //         .get_by_id(session, program_id)
-    //         .await?
-    //         .ok_or_else(|| eyre!("Program not found"))?;
-    //     if let SubscriptionType::Group { program_filter } =
-    //         &mut subscription.subscription_type
-    //     {
-    //         if add {
-    //             if program_filter.contains(&program_id) {
-    //                 return Ok(());
-    //             } else {
-    //                 program_filter.push(program_id);
-    //             }
-    //         } else if program_filter.contains(&program_id) {
-    //             program_filter.retain(|&x| x != program_id);
-    //         } else {
-    //             return Ok(());
-    //         }
-    //         self.store.update(session, &subscription).await?;
-    //     } else {
-    //         return Err(eyre!("Only group subscriptions can have programs"));
-    //     }
-
-    //     let users_with_subscription = self.users.find_with_subscription(session, sub).await?;
-    //     for mut user in users_with_subscription {
-    //         let subs = user.subscriptions_mut();
-    //         for user_sub in subs.iter_mut() {
-    //             if user_sub.subscription_id == sub {
-    //                 user_sub.tp = subscription.subscription_type.clone();
-    //             }
-    //         }
-    //         self.users.store.update(session, &mut user).await?;
-    //     }
-    //     Ok(())
-    // }
 }
 
 impl Deref for Subscriptions {

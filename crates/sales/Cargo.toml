@@ -1,5 +1,5 @@
 [package]
-name = "services"
+name = "sales"
 
 edition.workspace = true
 license.workspace = true
@@ -7,31 +7,16 @@ publish.workspace = true
 version.workspace = true
 
 [dependencies]
-ai.workspace = true
-backup.workspace = true
-booking.workspace = true
 bson.workspace = true
-calendar.workspace = true
-chrono.workspace = true
 decimal.workspace = true
-env.workspace = true
-error.workspace = true
 eyre.workspace = true
-futures-util.workspace = true
 history.workspace = true
 ident.workspace = true
 mongodb.workspace = true
 program.workspace = true
-requests.workspace = true
-rewards.workspace = true
-sales.workspace = true
-stat.workspace = true
 store.workspace = true
 subscription.workspace = true
 thiserror.workspace = true
-training_adjuster.workspace = true
-trainings.workspace = true
 treasury.workspace = true
 tx_macro.workspace = true
 users.workspace = true
-yookassa.workspace = true

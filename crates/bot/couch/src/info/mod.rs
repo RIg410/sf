@@ -2,8 +2,8 @@ use async_trait::async_trait;
 use bot_core::{
     context::Context,
     script::{
-        list::{ListId, ListItem, StageList},
         Dispatch, ScriptView, Stage,
+        list::{ListId, ListItem, StageList},
     },
     widget::Widget,
 };
@@ -11,9 +11,10 @@ use bot_trainings::view::TrainingView;
 use bot_viewer::{day::fmt_weekday, training::fmt_training_status};
 use chrono::{DateTime, Datelike, Local};
 use eyre::{Error, Result};
-use model::{rights::Rule, training::Training};
 use mongodb::bson::oid::ObjectId;
+use rights::Rule;
 use teloxide::utils::markdown::escape;
+use trainings::model::{Filter, Training};
 
 mod edit_description;
 
@@ -79,7 +80,7 @@ impl StageList<State> for CouchInfo {
             .calendar
             .find_trainings(
                 &mut ctx.session,
-                model::training::Filter::Instructor(user.id),
+                Filter::Instructor(user.id),
                 limit,
                 offset,
             )

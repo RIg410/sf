@@ -8,15 +8,14 @@ use bot_core::{
 use bot_viewer::{day::fmt_dt, fmt_phone, user::link_to_user};
 use chrono::Local;
 use eyre::Result;
-use model::{
-    history::HistoryRow,
-    rights::{Rights, Rule},
-    statistics::source::Source,
-    user::{User, UserName},
-};
+
+use history::model::{Action, HistoryRow};
+use ident::source::Source;
 use mongodb::bson::oid::ObjectId;
+use rights::{Rights, Rule};
 use serde::{Deserialize, Serialize};
 use teloxide::{types::InlineKeyboardMarkup, utils::markdown::escape};
+use users::model::{User, UserName};
 
 pub const LIMIT: u64 = 7;
 
@@ -46,7 +45,7 @@ impl View for HistoryList {
                 self.id,
                 Some(LIMIT as usize),
                 self.offset as usize,
-                vec![]
+                vec![],
             )
             .await?;
         let mut msg = "*История:*".to_string();
@@ -108,7 +107,7 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
         )
     };
     let message = match &log.action {
-        model::history::Action::BlockUser { is_active } => {
+        Action::BlockUser { is_active } => {
             if is_actor {
                 if *is_active {
                     format!(
@@ -133,7 +132,7 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
                 )
             }
         }
-        model::history::Action::SignUp {
+        Action::SignUp {
             start_at,
             name,
             room_id: _,
@@ -153,7 +152,7 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
                 )
             }
         }
-        model::history::Action::SignOut {
+        Action::SignOut {
             start_at,
             name,
             room_id: _,
@@ -171,12 +170,12 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
                 };
 
                 format!(
-                        "Пользователь \\(@{}\\) отменил запись на тренировку *{}* на {} пользователю {}",
-                        escape(&actor.name.tg_user_name.unwrap_or_default()),
-                        escape(name),
-                        fmt_dt(start_at),
-                        sub,
-                    )
+                    "Пользователь \\(@{}\\) отменил запись на тренировку *{}* на {} пользователю {}",
+                    escape(&actor.name.tg_user_name.unwrap_or_default()),
+                    escape(name),
+                    fmt_dt(start_at),
+                    sub,
+                )
             } else if is_actor {
                 format!(
                     "Вы отменили запись на тренировку *{}* на {}",
@@ -192,7 +191,7 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
                 )
             }
         }
-        model::history::Action::SellSub {
+        Action::SellSub {
             subscription,
             discount: _,
         } => {
@@ -207,9 +206,12 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
                     "-".to_string()
                 };
                 format!(
-                        "Вы продали абонемент *{}*\nКоличество занятий:_{}_\nCумма:_{}_\nПользователю {}",
-                        escape(&subscription.name), subscription.items, escape(&subscription.price.to_string()), escape(&sub)
-                    )
+                    "Вы продали абонемент *{}*\nКоличество занятий:_{}_\nCумма:_{}_\nПользователю {}",
+                    escape(&subscription.name),
+                    subscription.items,
+                    escape(&subscription.price.to_string()),
+                    escape(&sub)
+                )
             } else {
                 format!(
                     "Вы купили абонемент *{}*\nКоличество занятий:_{}_\nСумма:_{}_",
@@ -219,15 +221,18 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
                 )
             }
         }
-        model::history::Action::PreSellSub {
+        Action::PreSellSub {
             subscription,
             phone,
         } => {
             if is_actor {
                 format!(
-                        "Вы продали абонемент *{}*\nКоличество занятий:_{}_\nСумма:_{}_\nПользователю {}",
-                        escape(&subscription.name), subscription.items, escape(&subscription.price.to_string()), escape(phone)
-                    )
+                    "Вы продали абонемент *{}*\nКоличество занятий:_{}_\nСумма:_{}_\nПользователю {}",
+                    escape(&subscription.name),
+                    subscription.items,
+                    escape(&subscription.price.to_string()),
+                    escape(phone)
+                )
             } else {
                 format!(
                     "Вы купили абонемент *{}*\nКоличество занятий:_{}_\nСумма:_{}_",
@@ -237,7 +242,7 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
                 )
             }
         }
-        model::history::Action::FinalizedCanceledTraining {
+        Action::FinalizedCanceledTraining {
             name,
             start_at,
             room_id: _,
@@ -248,7 +253,7 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
                 fmt_dt(&start_at.with_timezone(&Local))
             )
         }
-        model::history::Action::FinalizedTraining {
+        Action::FinalizedTraining {
             name,
             start_at,
             room_id: _,
@@ -267,7 +272,7 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
                 )
             }
         }
-        model::history::Action::Payment {
+        Action::Payment {
             amount,
             description,
             date_time,
@@ -279,7 +284,7 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
                 escape(description)
             )
         }
-        model::history::Action::Deposit {
+        Action::Deposit {
             amount,
             description,
             date_time,
@@ -291,14 +296,14 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
                 escape(description)
             )
         }
-        model::history::Action::CreateUser { name, phone } => {
+        Action::CreateUser { name, phone } => {
             format!(
                 "Регистрация *{}*\nТелефон: _{}_",
                 escape(&name.to_string()),
                 escape(phone)
             )
         }
-        model::history::Action::Freeze { days } => {
+        Action::Freeze { days } => {
             let sub = if let Some(subject) = log.sub_actors.first() {
                 ctx.services
                     .get_user(&mut ctx.session, *subject)
@@ -318,7 +323,7 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
                 format!("Ваш абонемент заморозили на _{}_ дней", days)
             }
         }
-        model::history::Action::Unfreeze {} => {
+        Action::Unfreeze {} => {
             let sub: String = if let Some(subject) = log.sub_actors.first() {
                 ctx.services
                     .get_user(&mut ctx.session, *subject)
@@ -334,7 +339,7 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
                 "Ваш абонемент разморозили".to_string()
             }
         }
-        model::history::Action::ChangeBalance { amount } => {
+        Action::ChangeBalance { amount } => {
             let sub = if let Some(subject) = log.sub_actors.first() {
                 ctx.services
                     .get_user(&mut ctx.session, *subject)
@@ -357,7 +362,7 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
                 )
             }
         }
-        model::history::Action::ChangeReservedBalance { amount } => {
+        Action::ChangeReservedBalance { amount } => {
             let sub = if let Some(subject) = log.sub_actors.first() {
                 ctx.services
                     .get_user(&mut ctx.session, *subject)
@@ -380,7 +385,7 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
                 )
             }
         }
-        model::history::Action::PayReward { amount } => {
+        Action::PayReward { amount } => {
             let sub = if let Some(subject) = log.sub_actors.first() {
                 ctx.services
                     .get_user(&mut ctx.session, *subject)
@@ -403,7 +408,7 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
                 )
             }
         }
-        model::history::Action::ExpireSubscription { subscription } => {
+        Action::ExpireSubscription { subscription } => {
             format!(
                 "Абонемент *{}* пользователя {} истек\\. Сгорело занятий: _{}_",
                 escape(&subscription.name),
@@ -411,7 +416,7 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
                 subscription.balance
             )
         }
-        model::history::Action::RemoveFamilyMember {} => {
+        Action::RemoveFamilyMember {} => {
             let main_id = log.sub_actors.first();
             let member_id = log.sub_actors.get(1);
             let main = if let Some(id) = main_id {
@@ -441,7 +446,7 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
                 escape(&main),
             )
         }
-        model::history::Action::AddFamilyMember {} => {
+        Action::AddFamilyMember {} => {
             let main_id = log.sub_actors.first();
             let member_id = log.sub_actors.get(1);
             let main = if let Some(id) = main_id {
@@ -471,7 +476,7 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
                 escape(&main),
             )
         }
-        model::history::Action::ChangeSubscriptionDays { delta } => {
+        Action::ChangeSubscriptionDays { delta } => {
             let sub = if let Some(subject) = log.sub_actors.first() {
                 ctx.services
                     .get_user(&mut ctx.session, *subject)

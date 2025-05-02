@@ -10,8 +10,8 @@ use bot_core::{
 };
 use bot_viewer::user::render_sub;
 use item_price::SetItemPrice;
-use model::rights::Rule;
 use mongodb::bson::oid::ObjectId;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::types::InlineKeyboardMarkup;
 

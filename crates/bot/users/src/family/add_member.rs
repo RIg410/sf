@@ -7,13 +7,14 @@ use bot_core::{
     widget::{Jmp, View},
 };
 use bot_viewer::fmt_phone;
-use model::{rights::Rule, user::sanitize_phone};
 use mongodb::bson::oid::ObjectId;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::{
     types::{InlineKeyboardMarkup, Message},
     utils::markdown::escape,
 };
+use users::model::sanitize_phone;
 
 pub struct AddMember {
     id: ObjectId,
@@ -277,6 +278,7 @@ impl View for CreateMemberConfirm {
                         Ok(Jmp::Back)
                     }
                     Err(err) => {
+                        let err = err.into();
                         if let Some(msg) = bassness_error(ctx, &err).await? {
                             ctx.send_notification(&msg).await;
                             Ok(Jmp::Back)

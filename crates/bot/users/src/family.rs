@@ -8,8 +8,8 @@ use bot_core::{
     widget::{Jmp, View},
 };
 use eyre::Result;
-use model::rights::Rule;
 use mongodb::bson::oid::ObjectId;
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::{types::InlineKeyboardMarkup, utils::markdown::escape};
 
@@ -170,6 +170,7 @@ impl View for ConfirmRemoveChild {
                         Ok(Jmp::Back)
                     }
                     Err(err) => {
+                        let err = err.into();
                         if let Some(msg) = bassness_error(ctx, &err).await? {
                             ctx.send_notification(&msg).await;
                             Ok(Jmp::Back)

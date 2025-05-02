@@ -303,6 +303,26 @@ dependencies = [
 ]
 
 [[package]]
+name = "booking"
+version = "0.1.0"
+dependencies = [
+ "bson",
+ "calendar",
+ "chrono",
+ "decimal",
+ "eyre",
+ "history",
+ "ident",
+ "program",
+ "store",
+ "subscription",
+ "thiserror 1.0.63",
+ "trainings",
+ "tx_macro",
+ "users",
+]
+
+[[package]]
 name = "bot-calendar"
 version = "0.1.0"
 dependencies = [
@@ -314,8 +334,10 @@ dependencies = [
  "chrono",
  "eyre",
  "hex",
+ "ident",
  "itertools 0.2.9",
  "mongodb",
+ "rights",
  "serde",
  "strum",
  "teloxide",
@@ -366,10 +388,13 @@ dependencies = [
  "hex",
  "itertools 0.2.9",
  "mongodb",
+ "rights",
  "serde",
  "strum",
  "teloxide",
  "tracing",
+ "trainings",
+ "users",
 ]
 
 [[package]]
@@ -475,6 +500,7 @@ dependencies = [
  "subscription",
  "teloxide",
  "tracing",
+ "users",
 ]
 
 [[package]]
@@ -483,6 +509,7 @@ version = "0.1.0"
 dependencies = [
  "async-trait",
  "bincode",
+ "booking",
  "bot-core",
  "bot-viewer",
  "chrono",
@@ -516,13 +543,19 @@ dependencies = [
  "decimal",
  "eyre",
  "hex",
+ "history",
+ "ident",
  "itertools 0.2.9",
  "mongodb",
  "rewards",
+ "rights",
  "serde",
+ "stat",
  "strum",
+ "subscription",
  "teloxide",
  "tracing",
+ "users",
 ]
 
 [[package]]
@@ -3086,6 +3119,25 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f3cb5ba0dc43242ce17de99c180e96db90b235b8a9fdc9543c96d2209116bd9f"
 
 [[package]]
+name = "sales"
+version = "0.1.0"
+dependencies = [
+ "bson",
+ "decimal",
+ "eyre",
+ "history",
+ "ident",
+ "mongodb",
+ "program",
+ "store",
+ "subscription",
+ "thiserror 1.0.63",
+ "treasury",
+ "tx_macro",
+ "users",
+]
+
+[[package]]
 name = "schannel"
 version = "0.1.24"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3273,6 +3325,7 @@ version = "0.1.0"
 dependencies = [
  "ai",
  "backup",
+ "booking",
  "bson",
  "calendar",
  "chrono",
@@ -3287,10 +3340,12 @@ dependencies = [
  "program",
  "requests",
  "rewards",
+ "sales",
  "stat",
  "store",
  "subscription",
  "thiserror 1.0.63",
+ "training_adjuster",
  "trainings",
  "treasury",
  "tx_macro",
@@ -3421,6 +3476,7 @@ dependencies = [
  "serde_json",
  "store",
  "time 0.1.0",
+ "trainings",
  "users",
 ]
 
@@ -4062,6 +4118,19 @@ dependencies = [
  "tracing",
  "tracing-core",
  "tracing-log",
+]
+
+[[package]]
+name = "training_adjuster"
+version = "0.1.0"
+dependencies = [
+ "bson",
+ "calendar",
+ "eyre",
+ "program",
+ "store",
+ "tx_macro",
+ "users",
 ]
 
 [[package]]
