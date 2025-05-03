@@ -3,7 +3,7 @@ use chrono::{DateTime, TimeZone as _, Utc};
 use core::fmt;
 use eyre::eyre;
 use family::Family;
-use ident::source::Source;
+use ident::{source::Source, user::UserIdWithName};
 use payer::Payer;
 use rights::Rights;
 use serde::{Deserialize, Serialize};
@@ -167,6 +167,13 @@ impl User {
 
     pub fn has_family(&self) -> bool {
         self.family.payer_id.is_some() || !self.family.children_ids.is_empty()
+    }
+
+    pub fn id_with_name(&self) -> UserIdWithName {
+        UserIdWithName {
+            id: self.id,
+            name: self.name.first_name.clone(),
+        }
     }
 }
 

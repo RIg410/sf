@@ -2,7 +2,7 @@ use super::{render_msg, RentPreset};
 use async_trait::async_trait;
 use bot_core::{
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use chrono::Duration;
 use eyre::Result;
@@ -33,7 +33,7 @@ impl View for SetDuration {
         Ok(())
     }
 
-    async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> Result<Jmp> {
+    async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> ViewResult {
         ctx.delete_msg(message.id).await?;
         let msg = if let Some(msg) = message.text() {
             msg

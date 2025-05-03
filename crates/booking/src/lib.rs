@@ -72,20 +72,24 @@ impl<L: UserLog> Booking<L> {
                 TrainingError::TrainingNotOpenToSignUp(training.full_name(), status).into(),
             );
         }
+        let mut user = self
+            .users
+            .get(session, client)
+            .await?
+            .ok_or_else(|| CalendarError::ClientNotFound(client))?;
 
         if training.clients.contains(&client) {
-            return Err(TrainingError::ClientAlreadySignedUp(client, training.full_name()).into());
+            return Err(TrainingError::ClientAlreadySignedUp(
+                user.id_with_name(),
+                training.full_name(),
+            )
+            .into());
         }
 
         if training.clients.len() as u32 >= training.capacity {
             return Err(TrainingError::TrainingIsFull(training.full_name()).into());
         }
 
-        let mut user = self
-            .users
-            .get(session, client)
-            .await?
-            .ok_or_else(|| CalendarError::ClientNotFound(client))?;
         let user_id = user.id;
 
         self.users.resolve_family(session, &mut user).await?;
@@ -94,10 +98,10 @@ impl<L: UserLog> Booking<L> {
         if training.tp.is_not_free() {
             let subscription = payer
                 .find_subscription(FindFor::Lock, &training)
-                .ok_or_else(|| TrainingError::NotEnoughBalance(user_id))?;
+                .ok_or_else(|| TrainingError::NotEnoughBalance)?;
 
             if !subscription.lock_balance() {
-                return Err(TrainingError::NotEnoughBalance(user_id).into());
+                return Err(TrainingError::NotEnoughBalance.into());
             }
             self.users.update(session, &mut payer).await?;
         }
@@ -154,23 +158,31 @@ impl<L: UserLog> Booking<L> {
         if training.is_processed {
             return Err(TrainingError::TrainingNotOpenToSignOut(training.full_name()).into());
         }
-        if !training.clients.contains(&client) {
-            return Err(TrainingError::ClientNotSignedUp(client, training.full_name()).into());
-        }
+
         let mut user = self
             .users
             .get(session, client)
             .await?
             .ok_or_else(|| CalendarError::ClientNotFound(client))?;
+
+        if !training.clients.contains(&client) {
+            return Err(TrainingError::ClientNotSignedUp(
+                user.id_with_name(),
+                training.full_name(),
+            )
+            .into());
+        }
+
         self.users.resolve_family(session, &mut user).await?;
         let user_id = user.id;
         let mut payer = user.payer_mut()?;
+
         if training.tp.is_not_free() {
             let sub = payer
                 .find_subscription(FindFor::Unlock, training)
-                .ok_or_else(|| TrainingError::NotEnoughReservedBalance(client))?;
+                .ok_or_else(|| TrainingError::NotEnoughReservedBalance)?;
             if !sub.unlock_balance() {
-                return Err(TrainingError::NotEnoughReservedBalance(client).into());
+                return Err(TrainingError::NotEnoughReservedBalance.into());
             }
             self.users.update(session, &mut payer).await?;
         }

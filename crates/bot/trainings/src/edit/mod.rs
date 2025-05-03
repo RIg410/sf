@@ -3,11 +3,11 @@ use bot_core::{
     callback_data::Calldata,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use bot_viewer::day::fmt_dt;
 use couch::ChangeCouch;
-use eyre::{Result, bail};
+use eyre::Result;
 use ident::training::TrainingId;
 use rights::Rule;
 use serde::{Deserialize, Serialize};
@@ -36,12 +36,12 @@ impl EditTraining {
         Ok(!show)
     }
 
-    async fn change_couch(&mut self, ctx: &mut Context, all: bool) -> Result<Jmp> {
+    async fn change_couch(&mut self, ctx: &mut Context, all: bool) -> ViewResult {
         ctx.ensure(Rule::EditTrainingCouch)?;
         Ok(ChangeCouch::new(self.id, all).into())
     }
 
-    async fn delete_training(&mut self, ctx: &mut Context, all: bool) -> Result<Jmp> {
+    async fn delete_training(&mut self, ctx: &mut Context, all: bool) -> ViewResult {
         ctx.ensure(Rule::RemoveTraining)?;
 
         let training = ctx
@@ -51,7 +51,7 @@ impl EditTraining {
             .await?
             .ok_or_else(|| eyre::eyre!("Training not found"))?;
         if !training.is_group() {
-            bail!("Can't delete personal training");
+            Err(eyre::eyre!("Can't delete personal training"))?;
         }
 
         ctx.services
@@ -61,7 +61,7 @@ impl EditTraining {
         Ok(Jmp::BackSteps(2))
     }
 
-    async fn keep_open(&mut self, ctx: &mut Context, keep_open: bool) -> Result<Jmp> {
+    async fn keep_open(&mut self, ctx: &mut Context, keep_open: bool) -> ViewResult {
         ctx.ensure(Rule::SetKeepOpen)?;
         let training = ctx
             .services
@@ -70,7 +70,7 @@ impl EditTraining {
             .await?
             .ok_or_else(|| eyre::eyre!("Training not found"))?;
         if !training.is_group() {
-            bail!("Can't delete personal training");
+            Err(eyre::eyre!("Can't delete personal training"))?;
         }
         ctx.services
             .calendar
@@ -79,7 +79,7 @@ impl EditTraining {
         Ok(Jmp::Stay)
     }
 
-    async fn set_free(&mut self, ctx: &mut Context, free: bool) -> Result<Jmp> {
+    async fn set_free(&mut self, ctx: &mut Context, free: bool) -> ViewResult {
         ctx.ensure(Rule::SetFree)?;
 
         let training = ctx
@@ -89,7 +89,7 @@ impl EditTraining {
             .await?
             .ok_or_else(|| eyre::eyre!("Training not found"))?;
         if !training.is_group() {
-            bail!("Can't delete personal training");
+            Err(eyre::eyre!("Can't delete personal training"))?;
         }
         if !training.clients.is_empty() {
             ctx.send_msg("Нельзя изменить статус тренировки, на которую записаны клиенты")
@@ -191,7 +191,7 @@ impl View for EditTraining {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             Callback::ChangeCouch(all) => self.change_couch(ctx, all).await,
             Callback::Delete(all) => self.delete_training(ctx, all).await,

@@ -1,10 +1,7 @@
 use async_trait::async_trait;
 use booking::payer::AvailableBalance as _;
 use bot_core::{
-    CommonLocation,
-    callback_data::Calldata as _,
-    context::Context,
-    widget::{Jmp, View},
+    callback_data::Calldata as _, context::Context, widget::{Jmp, View, ViewResult}, CommonLocation
 };
 use bot_viewer::{
     fmt_phone,
@@ -62,7 +59,11 @@ impl ClientView {
             .sign_up(&mut ctx.session, training.id(), self.id, true)
             .await?;
 
-        let user = ctx.services.users.get_user(&mut ctx.session, self.id).await?;
+        let user = ctx
+            .services
+            .users
+            .get_user(&mut ctx.session, self.id)
+            .await?;
 
         ctx.send_notification(&format!(
             "{} добавлен в тренировку",
@@ -146,7 +147,7 @@ impl View for ClientView {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         let cb = if let Some(cb) = Callback::from_data(data) {
             cb
         } else {

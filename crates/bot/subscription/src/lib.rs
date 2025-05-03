@@ -10,7 +10,7 @@ use bot_core::{
     callback_data::Calldata,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{View, ViewResult},
 };
 use create::CreateSubscription;
 use eyre::Result;
@@ -38,7 +38,7 @@ impl View for SubscriptionView {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, msg: &str) -> Result<Jmp, eyre::Error> {
+    async fn handle_callback(&mut self, ctx: &mut Context, msg: &str) -> ViewResult {
         match calldata!(msg) {
             Callback::Select(id) => Ok(SubscriptionOption::new(ObjectId::from_bytes(id)).into()),
             Callback::CreateSubscription => {

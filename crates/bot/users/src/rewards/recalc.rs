@@ -1,7 +1,7 @@
 use async_trait::async_trait;
 use bot_core::callback_data::Calldata as _;
 use bot_core::calldata;
-use bot_core::widget::Jmp;
+use bot_core::widget::{Jmp, ViewResult};
 use bot_core::{context::Context, widget::View};
 use decimal::Decimal;
 use eyre::Result;
@@ -48,7 +48,7 @@ impl View for AddRecalcReward {
         Ok(())
     }
 
-    async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> Result<Jmp> {
+    async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> ViewResult {
         ctx.bot.delete_msg(message.id).await?;
         let text = message
             .text()
@@ -88,7 +88,7 @@ impl View for AddRecalcComment {
         Ok(())
     }
 
-    async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> Result<Jmp> {
+    async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> ViewResult {
         ctx.bot.delete_msg(message.id).await?;
         let text = message
             .text()
@@ -148,7 +148,7 @@ impl View for AddRecalcConfirm {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         ctx.ensure(Rule::RecalculateRewards)?;
 
         match calldata!(data) {

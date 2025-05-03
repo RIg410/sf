@@ -3,7 +3,7 @@ use bot_core::{
     callback_data::Calldata,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use mongodb::bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
@@ -86,7 +86,7 @@ impl View for NotificationView {
         &mut self,
         _ctx: &mut Context,
         data: &str,
-    ) -> Result<Jmp, eyre::Error> {
+    ) -> ViewResult {
         match calldata!(data) {
             Callback::SetTime(_hour) => {}
             Callback::ResetTime(_hour) => {}

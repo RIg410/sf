@@ -1,9 +1,9 @@
 use async_trait::async_trait;
 use bot_core::{
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
-use eyre::{Ok, Result};
+use eyre::Result;
 use ident::training::TrainingId;
 use rights::Rule;
 use teloxide::types::{InlineKeyboardMarkup, Message};
@@ -33,7 +33,7 @@ impl View for ChangeName {
         Ok(())
     }
 
-    async fn handle_message(&mut self, ctx: &mut Context, msg: &Message) -> Result<Jmp> {
+    async fn handle_message(&mut self, ctx: &mut Context, msg: &Message) -> ViewResult {
         ctx.delete_msg(msg.id).await?;
         let name = msg.text().unwrap_or_default();
         if name.is_empty() {

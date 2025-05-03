@@ -12,7 +12,7 @@ use bot_core::{
     callback_data::Calldata as _,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use bot_trainings::list::TrainingList;
 use bot_viewer::user::render_profile_msg;
@@ -36,7 +36,7 @@ impl UserProfile {
         }
     }
 
-    async fn block_user(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
+    async fn block_user(&mut self, ctx: &mut Context) -> ViewResult {
         ctx.ensure(Rule::BlockUser)?;
         let user = ctx
             .services
@@ -52,19 +52,19 @@ impl UserProfile {
         Ok(Jmp::Stay)
     }
 
-    async fn freeze_user(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
+    async fn freeze_user(&mut self, ctx: &mut Context) -> ViewResult {
         if !ctx.has_right(Rule::FreezeUsers) && ctx.me.id != self.id {
-            return Err(eyre::eyre!("User has no rights to perform this action"));
+            return Err(eyre::eyre!("User has no rights to perform this action").into());
         }
         Ok(FreezeProfile::new(self.id).into())
     }
 
-    async fn edit_rights(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
+    async fn edit_rights(&mut self, ctx: &mut Context) -> ViewResult {
         ctx.ensure(Rule::EditUserRights)?;
         Ok(UserRightsView::new(self.id).into())
     }
 
-    async fn set_birthday(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
+    async fn set_birthday(&mut self, ctx: &mut Context) -> ViewResult {
         if ctx.has_right(Rule::EditUserInfo) || ctx.me.id == self.id {
             Ok(SetBirthday::new(self.id).into())
         } else {
@@ -72,7 +72,7 @@ impl UserProfile {
         }
     }
 
-    async fn training_list(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
+    async fn training_list(&mut self, ctx: &mut Context) -> ViewResult {
         let user = ctx
             .services
             .users
@@ -85,7 +85,7 @@ impl UserProfile {
         }
     }
 
-    async fn history_list(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
+    async fn history_list(&mut self, ctx: &mut Context) -> ViewResult {
         let user = ctx
             .services
             .users
@@ -94,7 +94,7 @@ impl UserProfile {
         Ok(HistoryList::new(user.id).into())
     }
 
-    async fn rewards_list(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
+    async fn rewards_list(&mut self, ctx: &mut Context) -> ViewResult {
         let user = ctx
             .services
             .users
@@ -107,7 +107,7 @@ impl UserProfile {
         }
     }
 
-    async fn set_fio(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
+    async fn set_fio(&mut self, ctx: &mut Context) -> ViewResult {
         if ctx.has_right(Rule::EditUserInfo) {
             Ok(SetFio::new(self.id).into())
         } else {
@@ -115,7 +115,7 @@ impl UserProfile {
         }
     }
 
-    async fn set_phone(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
+    async fn set_phone(&mut self, ctx: &mut Context) -> ViewResult {
         if ctx.has_right(Rule::EditUserInfo) {
             Ok(SetPhone::new(self.id).into())
         } else {
@@ -123,7 +123,7 @@ impl UserProfile {
         }
     }
 
-    async fn family_view(&mut self, ctx: &mut Context, id: ObjectId) -> Result<Jmp, eyre::Error> {
+    async fn family_view(&mut self, ctx: &mut Context, id: ObjectId) -> ViewResult {
         if ctx.has_right(Rule::ViewFamily) || (ctx.me.id == id && ctx.me.has_family()) {
             Ok(FamilyView::new(self.id).into())
         } else {
@@ -131,7 +131,7 @@ impl UserProfile {
         }
     }
 
-    async fn unfreeze_user(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
+    async fn unfreeze_user(&mut self, ctx: &mut Context) -> ViewResult {
         ctx.ensure(Rule::FreezeUsers)?;
         ctx.services
             .users
@@ -141,7 +141,7 @@ impl UserProfile {
         Ok(Jmp::Stay)
     }
 
-    async fn show_statistics(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
+    async fn show_statistics(&mut self, ctx: &mut Context) -> ViewResult {
         ctx.ensure(Rule::ViewStatistics)?;
 
         let user_stat = ctx
@@ -236,7 +236,7 @@ impl View for UserProfile {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             Callback::BlockUnblock => self.block_user(ctx).await,
             Callback::EditFio => self.set_fio(ctx).await,

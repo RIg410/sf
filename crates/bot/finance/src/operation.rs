@@ -3,7 +3,7 @@ use bot_core::{
     callback_data::Calldata as _,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use bot_viewer::day::fmt_dt;
 use chrono::Local;
@@ -49,7 +49,7 @@ impl View for FinanceOperation {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         ctx.ensure(Rule::MakePayment)?;
 
         match calldata!(data) {

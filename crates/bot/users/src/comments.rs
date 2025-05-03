@@ -3,7 +3,7 @@ use bot_core::{
     callback_data::Calldata as _,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use bot_viewer::day::fmt_dt;
 use chrono::Local;
@@ -86,7 +86,7 @@ impl View for Comments {
         &mut self,
         ctx: &mut Context,
         message: &Message,
-    ) -> Result<Jmp, eyre::Error> {
+    ) -> ViewResult {
         ctx.delete_msg(message.id).await?;
         ctx.ensure(Rule::EditUserComments)?;
 
@@ -100,7 +100,7 @@ impl View for Comments {
         Ok(Jmp::Stay)
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         let cb: Calldata = calldata!(data);
         match cb {
             Calldata::Next => {

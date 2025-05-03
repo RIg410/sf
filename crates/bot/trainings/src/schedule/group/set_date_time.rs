@@ -4,7 +4,7 @@ use super::{render_msg, ScheduleTrainingPreset};
 use async_trait::async_trait;
 use bot_core::{
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use chrono::{DateTime, Datelike as _, Local, TimeZone, Timelike, Utc};
 use eyre::{Error, Result};
@@ -50,7 +50,7 @@ impl View for SetDateTime {
         Ok(())
     }
 
-    async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> Result<Jmp> {
+    async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> ViewResult {
         ctx.bot.delete_msg(message.id).await?;
 
         let msg = if let Some(msg) = message.text() {

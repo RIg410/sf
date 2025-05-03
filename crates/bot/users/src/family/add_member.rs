@@ -3,8 +3,7 @@ use bot_core::{
     callback_data::Calldata as _,
     calldata,
     context::Context,
-    err::bassness_error,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use bot_viewer::fmt_phone;
 use mongodb::bson::oid::ObjectId;
@@ -69,11 +68,7 @@ impl View for AddMember {
         Ok(())
     }
 
-    async fn handle_message(
-        &mut self,
-        ctx: &mut Context,
-        msg: &Message,
-    ) -> Result<Jmp, eyre::Error> {
+    async fn handle_message(&mut self, ctx: &mut Context, msg: &Message) -> ViewResult {
         ctx.delete_msg(msg.id).await?;
         let text = msg.text().map(|s| s.to_string());
         if let Some(text) = text {
@@ -89,7 +84,7 @@ impl View for AddMember {
         Ok(Jmp::Stay)
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         ctx.ensure(Rule::EditFamily)?;
 
         match calldata!(data) {
@@ -149,7 +144,7 @@ impl View for AddMemberConfirm {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         ctx.ensure(Rule::EditFamily)?;
 
         match calldata!(data) {
@@ -197,11 +192,7 @@ impl View for CreateUser {
         Ok(())
     }
 
-    async fn handle_message(
-        &mut self,
-        ctx: &mut Context,
-        msg: &Message,
-    ) -> Result<Jmp, eyre::Error> {
+    async fn handle_message(&mut self, ctx: &mut Context, msg: &Message) -> ViewResult {
         ctx.ensure(Rule::EditFamily)?;
         ctx.delete_msg(msg.id).await?;
         let text = msg.text();
@@ -261,13 +252,12 @@ impl View for CreateMemberConfirm {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         ctx.ensure(Rule::EditFamily)?;
 
         match calldata!(data) {
             ConfirmCalldata::AddMember => {
-                let result = ctx
-                    .services
+                ctx.services
                     .users
                     .create_family_member(
                         &mut ctx.session,
@@ -275,22 +265,10 @@ impl View for CreateMemberConfirm {
                         &self.name,
                         &self.surname,
                     )
-                    .await;
-                match result {
-                    Ok(_) => {
-                        ctx.send_notification("Член семьи добавлен").await;
-                        Ok(Jmp::Back)
-                    }
-                    Err(err) => {
-                        let err = err.into();
-                        if let Some(msg) = bassness_error(ctx, &err).await? {
-                            ctx.send_notification(&msg).await;
-                            Ok(Jmp::Back)
-                        } else {
-                            Err(err.into())
-                        }
-                    }
-                }
+                    .await?;
+
+                ctx.send_notification("Член семьи добавлен").await;
+                Ok(Jmp::Back)
             }
             ConfirmCalldata::Cancel => Ok(Jmp::Back),
         }

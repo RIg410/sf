@@ -6,7 +6,7 @@ use bot_core::{
     callback_data::Calldata as _,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use bot_viewer::user::render_sub;
 use item_price::SetItemPrice;
@@ -84,7 +84,7 @@ impl View for SubscriptionsList {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         ctx.ensure(Rule::EditUserSubscription)?;
         let user = ctx
             .services

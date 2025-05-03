@@ -2,9 +2,9 @@ use super::menu::MainMenuView;
 use async_trait::async_trait;
 use bot_core::{
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
-use eyre::{Context as _, Ok};
+use eyre::Context as _;
 use mongodb::bson::oid::ObjectId;
 use services::SfServices;
 use store::session::Session;
@@ -30,11 +30,7 @@ impl View for SignUpView {
         Ok(())
     }
 
-    async fn handle_message(
-        &mut self,
-        ctx: &mut Context,
-        msg: &Message,
-    ) -> Result<Jmp, eyre::Error> {
+    async fn handle_message(&mut self, ctx: &mut Context, msg: &Message) -> ViewResult {
         let from = if let Some(from) = &msg.from {
             from
         } else {
@@ -70,10 +66,6 @@ impl View for SignUpView {
         } else {
             Ok(Jmp::Stay)
         }
-    }
-
-    async fn handle_callback(&mut self, _: &mut Context, _: &str) -> Result<Jmp, eyre::Error> {
-        Ok(Jmp::Stay)
     }
 
     fn allow_unsigned_user(&self) -> bool {

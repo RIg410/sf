@@ -6,7 +6,10 @@ use std::{
 use crate::context::Context;
 use async_trait::async_trait;
 use eyre::Result;
+use services::error::SfError;
 use teloxide::types::Message;
+
+pub type ViewResult = Result<Jmp, SfError>;
 
 #[async_trait]
 pub trait View {
@@ -26,16 +29,12 @@ pub trait View {
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error>;
 
-    async fn handle_message(
-        &mut self,
-        ctx: &mut Context,
-        msg: &Message,
-    ) -> Result<Jmp, eyre::Error> {
+    async fn handle_message(&mut self, ctx: &mut Context, msg: &Message) -> ViewResult {
         ctx.delete_msg(msg.id).await?;
         Ok(Jmp::Stay)
     }
 
-    async fn handle_callback(&mut self, _: &mut Context, _: &str) -> Result<Jmp, eyre::Error> {
+    async fn handle_callback(&mut self, _: &mut Context, _: &str) -> ViewResult {
         Ok(Jmp::Stay)
     }
 

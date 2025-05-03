@@ -4,7 +4,7 @@ use crate::SubscriptionView;
 
 use super::View;
 use async_trait::async_trait;
-use bot_core::{callback_data::Calldata as _, calldata, context::Context, widget::Jmp};
+use bot_core::{callback_data::Calldata as _, calldata, context::Context, widget::{Jmp, ViewResult}};
 use bot_viewer::fmt_phone;
 use decimal::Decimal;
 use eyre::{eyre, Error, Result};
@@ -41,7 +41,7 @@ impl View for ConfirmSell {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             Callback::Sell => {
                 ctx.ensure(Rule::SellSubscription)?;

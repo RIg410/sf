@@ -3,7 +3,7 @@ use bot_core::{
     callback_data::Calldata as _,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use eyre::Error;
 use rights::Rule;
@@ -35,7 +35,7 @@ impl View for SystemView {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, Error> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         ctx.ensure(Rule::System)?;
         match calldata!(data) {
             Calldata::Dump => {
@@ -75,7 +75,7 @@ impl View for ApplyDump {
         Ok(())
     }
 
-    async fn handle_message(&mut self, ctx: &mut Context, msg: &Message) -> Result<Jmp, Error> {
+    async fn handle_message(&mut self, ctx: &mut Context, msg: &Message) -> ViewResult {
         ctx.ensure(Rule::System)?;
         info!("Apply dump");
         if let Some(document) = msg.document() {

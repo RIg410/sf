@@ -4,7 +4,7 @@ use bot_core::{
     callback_data::Calldata as _,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use bot_viewer::user::fmt_user_type;
 use eyre::Error;
@@ -78,7 +78,7 @@ impl View for UsersView {
         &mut self,
         ctx: &mut Context,
         msg: &Message,
-    ) -> Result<Jmp, eyre::Error> {
+    ) -> ViewResult {
         ctx.delete_msg(msg.id).await?;
         ctx.ensure(Rule::ViewUsers)?;
 
@@ -102,7 +102,7 @@ impl View for UsersView {
         Ok(Jmp::Stay)
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         ctx.ensure(Rule::ViewUsers)?;
 
         match calldata!(data) {

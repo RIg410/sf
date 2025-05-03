@@ -1,3 +1,4 @@
+use crate::widget::ViewResult;
 use crate::Calldata;
 use crate::{
     context::Context,
@@ -10,7 +11,7 @@ use teloxide::types::InlineKeyboardMarkup;
 
 #[async_trait]
 trait OnConfirm {
-    async fn call(&self, ctx: &mut Context) -> Result<Jmp>;
+    async fn call(&self, ctx: &mut Context) -> ViewResult;
 }
 
 pub struct Confirm {
@@ -35,7 +36,7 @@ impl View for Confirm {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         let cb: ConfirmCallback = if let Some(cb) = Calldata::from_data(data) {
             cb
         } else {

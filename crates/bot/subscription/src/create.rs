@@ -2,7 +2,7 @@ use std::mem;
 
 use super::View;
 use async_trait::async_trait;
-use bot_core::{callback_data::Calldata, calldata, context::Context, widget::Jmp};
+use bot_core::{callback_data::Calldata, calldata, context::Context, widget::{Jmp, ViewResult}};
 use bot_viewer::subscription::fmt_subscription_type;
 use eyre::Result;
 use mongodb::bson::oid::ObjectId;
@@ -232,7 +232,7 @@ impl View for CreateSubscription {
         Ok(())
     }
 
-    async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> Result<Jmp> {
+    async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> ViewResult {
         let text = if let Some(text) = message.text() {
             text
         } else {
@@ -316,7 +316,7 @@ impl View for CreateSubscription {
         Ok(Jmp::Stay)
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             Callback::Create => {
                 ctx.ensure(Rule::CreateSubscription)?;
@@ -347,7 +347,7 @@ impl View for CreateSubscription {
                             .await?;
                         Ok(Jmp::Stay)
                     }
-                    Err(CreateSubscriptionError::Common(err)) => Err(err),
+                    Err(CreateSubscriptionError::Common(err)) => Err(err.into()),
                 }
             }
             Callback::Cancel => Ok(Jmp::Back),

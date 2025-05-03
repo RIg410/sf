@@ -1,7 +1,7 @@
 use crate::{
     callback_data::Calldata as _,
     context::Context,
-    widget::{self, Jmp, View, Widget},
+    widget::{self, Jmp, View, ViewResult, Widget},
 };
 use async_trait::async_trait;
 use eyre::Result;
@@ -107,7 +107,7 @@ where
         Ok(())
     }
 
-    async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> Result<Jmp> {
+    async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> ViewResult {
         let (action, text) =
             if let (Some(action), Some(text)) = (self.action.as_mut(), message.text()) {
                 (action, text)
@@ -142,7 +142,7 @@ where
         Ok(Jmp::Stay)
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         let (action, cb) =
             if let (Some(action), Some(cb)) = (self.action.as_mut(), Callback::from_data(data)) {
                 (action, cb)

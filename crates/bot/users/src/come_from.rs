@@ -3,7 +3,7 @@ use bot_core::{
     callback_data::Calldata as _,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use ident::source::Source;
 use mongodb::bson::oid::ObjectId;
@@ -43,7 +43,7 @@ impl View for MarketingInfoView {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         ctx.ensure(Rule::EditMarketingInfo)?;
         let come_from = calldata!(data);
 

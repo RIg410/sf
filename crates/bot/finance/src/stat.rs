@@ -3,7 +3,7 @@ use bot_core::{
     callback_data::Calldata as _,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use chrono::Local;
 use eyre::Result;
@@ -112,7 +112,7 @@ impl View for Stat {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, _: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, _: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             Calldata::NextMonth => {
                 self.range = self.range.map(|r| r.next()).transpose()?;

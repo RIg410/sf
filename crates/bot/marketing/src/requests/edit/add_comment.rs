@@ -1,7 +1,7 @@
 use async_trait::async_trait;
 use bot_core::{
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use mongodb::bson::oid::ObjectId;
 use teloxide::types::Message;
@@ -22,11 +22,7 @@ impl View for AddComment {
         Ok(())
     }
 
-    async fn handle_message(
-        &mut self,
-        ctx: &mut Context,
-        msg: &Message,
-    ) -> Result<Jmp, eyre::Error> {
+    async fn handle_message(&mut self, ctx: &mut Context, msg: &Message) -> ViewResult {
         ctx.bot.delete_msg(msg.id).await?;
         let comment = msg.text().unwrap_or_default().to_string();
 

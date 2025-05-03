@@ -1,7 +1,7 @@
 use async_trait::async_trait;
 use bot_core::{
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use chrono::{Local, TimeZone as _, Utc};
 use decimal::Decimal;
@@ -36,11 +36,7 @@ impl View for FixRateAmount {
         Ok(())
     }
 
-    async fn handle_message(
-        &mut self,
-        ctx: &mut Context,
-        msg: &Message,
-    ) -> Result<Jmp, eyre::Error> {
+    async fn handle_message(&mut self, ctx: &mut Context, msg: &Message) -> ViewResult {
         ctx.delete_msg(msg.id).await?;
         if let Some(text) = msg.text() {
             if let Ok(amount) = text.parse::<Decimal>() {
@@ -86,11 +82,7 @@ impl View for FixRateDate {
         Ok(())
     }
 
-    async fn handle_message(
-        &mut self,
-        ctx: &mut Context,
-        msg: &Message,
-    ) -> Result<Jmp, eyre::Error> {
+    async fn handle_message(&mut self, ctx: &mut Context, msg: &Message) -> ViewResult {
         ctx.delete_msg(msg.id).await?;
 
         let text = msg.text().unwrap_or_default();

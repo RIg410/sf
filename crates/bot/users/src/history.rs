@@ -3,7 +3,7 @@ use bot_core::{
     callback_data::Calldata as _,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use bot_viewer::{day::fmt_dt, fmt_phone, user::link_to_user};
 use chrono::Local;
@@ -70,7 +70,7 @@ impl View for HistoryList {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, _: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, _: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             Calldata::Offset(offset) => {
                 self.offset = offset;

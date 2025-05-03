@@ -3,7 +3,7 @@ use bot_core::{
     callback_data::Calldata as _,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use bot_trainings::list::TrainingList;
 use bot_users::{
@@ -29,7 +29,7 @@ impl EmployeeProfile {
         EmployeeProfile { id }
     }
 
-    async fn block_user(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
+    async fn block_user(&mut self, ctx: &mut Context) -> ViewResult {
         ctx.ensure(Rule::BlockUser)?;
         let user = ctx
             .services
@@ -45,12 +45,12 @@ impl EmployeeProfile {
         Ok(Jmp::Stay)
     }
 
-    async fn edit_rights(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
+    async fn edit_rights(&mut self, ctx: &mut Context) -> ViewResult {
         ctx.ensure(Rule::EditUserRights)?;
         Ok(UserRightsView::new(self.id).into())
     }
 
-    async fn set_birthday(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
+    async fn set_birthday(&mut self, ctx: &mut Context) -> ViewResult {
         if ctx.has_right(Rule::EditUserInfo) || ctx.me.id == self.id {
             Ok(SetBirthday::new(self.id).into())
         } else {
@@ -58,7 +58,7 @@ impl EmployeeProfile {
         }
     }
 
-    async fn training_list(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
+    async fn training_list(&mut self, ctx: &mut Context) -> ViewResult {
         let user = ctx
             .services
             .users
@@ -71,7 +71,7 @@ impl EmployeeProfile {
         }
     }
 
-    async fn history_list(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
+    async fn history_list(&mut self, ctx: &mut Context) -> ViewResult {
         let user = ctx
             .services
             .users
@@ -80,7 +80,7 @@ impl EmployeeProfile {
         Ok(HistoryList::new(user.id).into())
     }
 
-    async fn rewards_list(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
+    async fn rewards_list(&mut self, ctx: &mut Context) -> ViewResult {
         let user = ctx
             .services
             .users
@@ -93,22 +93,22 @@ impl EmployeeProfile {
         }
     }
 
-    async fn rates_list(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
+    async fn rates_list(&mut self, ctx: &mut Context) -> ViewResult {
         ctx.ensure(Rule::EditEmployeeRates)?;
         Ok(Jmp::Next(RatesList::new(self.id).into()))
     }
 
-    async fn pay_reward(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
+    async fn pay_reward(&mut self, ctx: &mut Context) -> ViewResult {
         ctx.ensure(Rule::MakePayment)?;
         Ok(Jmp::Next(PayReward::new(self.id).into()))
     }
 
-    async fn delete_employee(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
+    async fn delete_employee(&mut self, ctx: &mut Context) -> ViewResult {
         ctx.ensure(Rule::EditEmployee)?;
         Ok(Jmp::Next(DeleteEmployeeConfirm::new(self.id).into()))
     }
 
-    async fn set_fio(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
+    async fn set_fio(&mut self, ctx: &mut Context) -> ViewResult {
         if ctx.has_right(Rule::EditUserInfo) {
             Ok(SetFio::new(self.id).into())
         } else {
@@ -116,7 +116,7 @@ impl EmployeeProfile {
         }
     }
 
-    async fn set_phone(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
+    async fn set_phone(&mut self, ctx: &mut Context) -> ViewResult {
         if ctx.has_right(Rule::EditUserInfo) {
             Ok(SetPhone::new(self.id).into())
         } else {
@@ -124,7 +124,7 @@ impl EmployeeProfile {
         }
     }
 
-    async fn edit_ai_prompt(&mut self, ctx: &mut Context) -> Result<Jmp, eyre::Error> {
+    async fn edit_ai_prompt(&mut self, ctx: &mut Context) -> ViewResult {
         ctx.ensure(Rule::EditAiPrompt)?;
         Ok(SetAiPrompt::new(self.id).into())
     }
@@ -142,16 +142,12 @@ impl View for EmployeeProfile {
         Ok(())
     }
 
-    async fn handle_message(
-        &mut self,
-        ctx: &mut Context,
-        message: &Message,
-    ) -> Result<Jmp, eyre::Error> {
+    async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> ViewResult {
         ctx.delete_msg(message.id).await?;
         Ok(Jmp::Stay)
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             Callback::BlockUnblock => self.block_user(ctx).await,
             Callback::EditFio => self.set_fio(ctx).await,

@@ -4,7 +4,7 @@ use bot_core::{
     callback_data::Calldata,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{View, ViewResult},
 };
 use bot_viewer::rooms::fmt_room;
 use eyre::Result;
@@ -40,7 +40,7 @@ impl View for SetRoom {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, _: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, _: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             Callback::SelectRoom(room) => {
                 self.preset.room = Some(room.id());

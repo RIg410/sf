@@ -4,7 +4,7 @@ use bot_core::{
     callback_data::Calldata,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{View, ViewResult},
 };
 use bot_viewer::fmt_phone_escape_less;
 use eyre::Result;
@@ -37,7 +37,7 @@ impl View for SetClient {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             Callback::SelectClient(client) => {
                 let client = ctx
@@ -83,7 +83,11 @@ fn make_client_button(client: &User) -> InlineKeyboardButton {
     let name = format!(
         "{} {}",
         client.name.first_name,
-        client.phone.as_deref().map(fmt_phone_escape_less).unwrap_or_else(|| "_".to_owned())
+        client
+            .phone
+            .as_deref()
+            .map(fmt_phone_escape_less)
+            .unwrap_or_else(|| "_".to_owned())
     );
     Callback::SelectClient(client.id.bytes()).button(name)
 }

@@ -6,7 +6,7 @@ use bot_core::{
     callback_data::Calldata,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use bot_viewer::user::render_rate;
 use eyre::Result;
@@ -45,7 +45,7 @@ impl View for CreateRate {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         ctx.ensure(Rule::EditEmployeeRates)?;
 
         match calldata!(data) {
@@ -108,7 +108,7 @@ impl View for ConfirmCreationRate {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         ctx.ensure(Rule::EditEmployeeRates)?;
 
         match calldata!(data) {

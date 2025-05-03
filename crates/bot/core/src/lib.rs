@@ -8,7 +8,6 @@ pub mod bot;
 pub mod callback_data;
 pub mod confirm;
 pub mod context;
-pub mod err;
 pub mod handlers;
 pub mod script;
 pub mod state;

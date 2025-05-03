@@ -8,8 +8,6 @@ pub enum SellSubscriptionError {
     SubscriptionAlreadySold,
     #[error("User not found")]
     UserNotFound,
-    #[error("invalid params")]
-    InvalidParams,
     #[error("{0:?}")]
     Common(#[from] eyre::Error),
 }

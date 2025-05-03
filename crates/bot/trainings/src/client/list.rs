@@ -3,7 +3,7 @@ use bot_core::{
     callback_data::Calldata as _,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use bot_viewer::day::fmt_dt;
 use chrono::Local;
@@ -27,16 +27,16 @@ impl ClientsList {
         Self { id }
     }
 
-    pub async fn view_user_profile(&mut self, id: ObjectId) -> Result<Jmp> {
+    pub async fn view_user_profile(&mut self, id: ObjectId) -> ViewResult {
         Ok(ClientView::new(id, self.id, Reason::RemoveClient).into())
     }
 
-    pub async fn add_client(&mut self, ctx: &mut Context) -> Result<Jmp> {
+    pub async fn add_client(&mut self, ctx: &mut Context) -> ViewResult {
         ctx.ensure(Rule::EditTrainingClientsList)?;
         Ok(AddClientView::new(self.id).into())
     }
 
-    pub async fn delete_client(&mut self, ctx: &mut Context, id: ObjectId) -> Result<Jmp> {
+    pub async fn delete_client(&mut self, ctx: &mut Context, id: ObjectId) -> ViewResult {
         ctx.ensure(Rule::EditTrainingClientsList)?;
 
         let training = ctx
@@ -119,7 +119,7 @@ impl View for ClientsList {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             Callback::SelectClient(id) => self.view_user_profile(ObjectId::from_bytes(id)).await,
             Callback::AddClient => self.add_client(ctx).await,

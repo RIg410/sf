@@ -76,7 +76,7 @@ impl<L: UserLog> Calendar<L> {
         self.calendar.delete_training(session, id).await?;
         let collision = self.check_time_slot(session, new_slot, true).await?;
         if let Some(collision) = collision {
-            return Err(CalendarError::TimeSlotCollision(collision));
+            return Err(CalendarError::TimeSlotCollision(collision.full_name()));
         }
         self.calendar.add_training(session, &training).await?;
 
@@ -99,7 +99,7 @@ impl<L: UserLog> Calendar<L> {
 
                     let collision = self.check_time_slot(session, new_slot, true).await?;
                     if let Some(collision) = dbg!(collision) {
-                        return Err(CalendarError::TimeSlotCollision(collision));
+                        return Err(CalendarError::TimeSlotCollision(collision.full_name()));
                     }
                     self.calendar.add_training(session, training).await?;
                 }
@@ -162,7 +162,9 @@ impl<L: UserLog> Calendar<L> {
                     let training = day.training.iter().find(|slot| slot.id == training.id);
                     if let Some(training) = training {
                         if !training.clients.is_empty() {
-                            return Err(TrainingError::TrainingHasClients(training.full_name()).into());
+                            return Err(
+                                TrainingError::TrainingHasClients(training.full_name()).into()
+                            );
                         }
                         self.calendar
                             .delete_training(session, training.id())
@@ -190,7 +192,7 @@ impl<L: UserLog> Calendar<L> {
         let slot = Slot::new(start_at.with_timezone(&Utc), duration_min, room);
         let collision = self.check_time_slot(session, slot, true).await?;
         if let Some(collision) = collision {
-            return Err(CalendarError::TimeSlotCollision(collision));
+            return Err(CalendarError::TimeSlotCollision(collision.full_name()));
         }
 
         let name = format!("аренда:{}-{}", renter, duration_min);
@@ -230,7 +232,7 @@ impl<L: UserLog> Calendar<L> {
         let slot = Slot::new(start_at.with_timezone(&Utc), duration_min, room);
         let collision = self.check_time_slot(session, slot, true).await?;
         if let Some(collision) = collision {
-            return Err(CalendarError::TimeSlotCollision(collision));
+            return Err(CalendarError::TimeSlotCollision(collision.full_name()));
         }
 
         let name = format!(
@@ -283,13 +285,10 @@ impl<L: UserLog> Calendar<L> {
         let slot = Slot::new(start_at.with_timezone(&Utc), program.duration_min, room);
         let collision = self.check_time_slot(session, slot, is_one_time).await?;
         if let Some(collision) = collision {
-            return Err(CalendarError::TimeSlotCollision(collision));
+            return Err(CalendarError::TimeSlotCollision(collision.full_name()));
         }
 
         let mut training = Training::new_group(program, start_at, instructor.id, is_one_time, room);
-        if !training.status(Local::now()).can_sign_in() {
-            return Err(CalendarError::TooCloseToStart { start_at });
-        }
 
         self.calendar.add_training(session, &training).await?;
 

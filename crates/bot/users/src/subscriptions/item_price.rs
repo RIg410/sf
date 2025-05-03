@@ -3,7 +3,7 @@ use std::str::FromStr as _;
 use async_trait::async_trait;
 use bot_core::{
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use decimal::Decimal;
 use eyre::Error;
@@ -59,7 +59,7 @@ impl View for SetItemPrice {
         &mut self,
         ctx: &mut Context,
         msg: &Message,
-    ) -> Result<Jmp, eyre::Error> {
+    ) -> ViewResult {
         ctx.delete_msg(msg.id).await?;
         if let Some(price) = msg.text() {
             let price = Decimal::from_str(price)?;

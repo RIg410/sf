@@ -1,5 +1,7 @@
-use bson::oid::ObjectId;
-use ident::{training::{TrainingFullName, TrainingId}, user::UserIdWithName};
+use ident::{
+    training::{TrainingFullName, TrainingId},
+    user::UserIdWithName,
+};
 use thiserror::Error;
 
 use crate::model::status::TrainingStatus;
@@ -23,8 +25,8 @@ pub enum TrainingError {
     ClientAlreadySignedUp(UserIdWithName, TrainingFullName),
     #[error("Training is full:{0:?}")]
     TrainingIsFull(TrainingFullName),
-    #[error("Not enough balance:{0:?}")]
-    NotEnoughBalance(UserIdWithName),
+    #[error("Not enough balance")]
+    NotEnoughBalance,
     //signout
     #[error("Training not found:{0:?}")]
     TrainingNotFound(TrainingId),
@@ -32,6 +34,6 @@ pub enum TrainingError {
     TrainingNotOpenToSignOut(TrainingFullName),
     #[error("Client not signed up:{0:?} {1:?}")]
     ClientNotSignedUp(UserIdWithName, TrainingFullName),
-    #[error("Not enough reserved balance:{0:?}")]
-    NotEnoughReservedBalance(UserIdWithName),
+    #[error("Not enough reserved balance")]
+    NotEnoughReservedBalance,
 }

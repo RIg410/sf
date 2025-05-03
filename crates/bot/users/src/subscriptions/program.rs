@@ -3,7 +3,7 @@ use bot_core::{
     callback_data::Calldata as _,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use eyre::{Error, bail};
 use mongodb::bson::oid::ObjectId;
@@ -74,7 +74,7 @@ impl View for EditPrograms {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, Error> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         ctx.ensure(Rule::EditSubscription)?;
         match calldata!(data) {
             Callback::Select(program_id) => {

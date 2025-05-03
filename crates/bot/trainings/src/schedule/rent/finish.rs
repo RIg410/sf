@@ -4,7 +4,7 @@ use bot_core::{
     callback_data::Calldata as _,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use eyre::Result;
 use rights::Rule;
@@ -39,7 +39,7 @@ impl View for Finish {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             Callback::Yes => {
                 ctx.ensure(Rule::SchedulePersonalTraining)?;

@@ -4,7 +4,7 @@ use bot_core::{
     callback_data::Calldata as _,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use bot_viewer::{day::fmt_dt, fmt_phone};
 use chrono::{Local, NaiveDateTime, TimeZone as _};
@@ -34,11 +34,7 @@ impl View for SetPhone {
         Ok(())
     }
 
-    async fn handle_message(
-        &mut self,
-        ctx: &mut Context,
-        msg: &Message,
-    ) -> Result<Jmp, eyre::Error> {
+    async fn handle_message(&mut self, ctx: &mut Context, msg: &Message) -> ViewResult {
         ctx.bot.delete_msg(msg.id).await?;
         let mut phone = msg.text().unwrap_or_default().to_string();
         if phone.is_empty() {
@@ -77,7 +73,7 @@ impl View for SetComeFrom {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         let come_from: Source = calldata!(data);
 
         let request = ctx
@@ -126,11 +122,7 @@ impl View for SetDescription {
         Ok(())
     }
 
-    async fn handle_message(
-        &mut self,
-        ctx: &mut Context,
-        msg: &Message,
-    ) -> Result<Jmp, eyre::Error> {
+    async fn handle_message(&mut self, ctx: &mut Context, msg: &Message) -> ViewResult {
         ctx.bot.delete_msg(msg.id).await?;
         let comment = msg.text().unwrap_or_default().to_string();
 
@@ -164,11 +156,7 @@ impl View for SetName {
         Ok(())
     }
 
-    async fn handle_message(
-        &mut self,
-        ctx: &mut Context,
-        msg: &Message,
-    ) -> Result<Jmp, eyre::Error> {
+    async fn handle_message(&mut self, ctx: &mut Context, msg: &Message) -> ViewResult {
         ctx.bot.delete_msg(msg.id).await?;
         let name = msg.text().unwrap_or_default();
         let parts: Vec<_> = name.split(' ').collect();
@@ -211,7 +199,7 @@ impl View for RemindLaterView {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, _: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {
+    async fn handle_callback(&mut self, _: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             CalldataYesNo::Yes => Ok(Jmp::Next(
                 SetRemindLater {
@@ -278,11 +266,7 @@ impl View for SetRemindLater {
         Ok(())
     }
 
-    async fn handle_message(
-        &mut self,
-        ctx: &mut Context,
-        message: &Message,
-    ) -> Result<Jmp, eyre::Error> {
+    async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> ViewResult {
         ctx.bot.delete_msg(message.id).await?;
 
         let text = if let Some(text) = message.text() {
@@ -317,7 +301,7 @@ impl View for SetRemindLater {
         }
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         let remind_later: RememberLaterCalldata = calldata!(data);
         let now = chrono::Local::now();
         let remind_later = now + chrono::Duration::seconds(remind_later.remind_later as i64);
@@ -396,7 +380,7 @@ impl View for Confirm {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             CalldataYesNo::Yes => {
                 ctx.ensure(Rule::CreateRequest)?;
@@ -463,7 +447,7 @@ impl View for SellSubscription {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, _: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {
+    async fn handle_callback(&mut self, _: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             CalldataYesNo::Yes => Ok(Jmp::Next(
                 SelectSubscriptionsView {
@@ -507,7 +491,7 @@ impl View for SelectSubscriptionsView {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         ctx.ensure(Rule::SellSubscription)?;
         let subscription_id: SelectSubscriptionsCallback = calldata!(data);
         let sub_id = ObjectId::from_bytes(subscription_id.0);
@@ -585,7 +569,7 @@ impl View for ConfirmSellSubscription {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         ctx.ensure(Rule::SellSubscription)?;
         match calldata!(data) {
             ConfirmSellSubscriptionCallback::Yes => {

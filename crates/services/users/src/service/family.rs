@@ -1,12 +1,16 @@
 use super::Users;
-use crate::{error::UserError, log::UserLog, model::{User, UserName}};
+use crate::{
+    error::UserError,
+    log::UserLog,
+    model::{User, UserName},
+};
 use eyre::Result;
 use mongodb::bson::oid::ObjectId;
 use rights::Rights;
 use store::session::Session;
 use tx_macro::tx;
 
-impl<L:UserLog> Users<L> {
+impl<L: UserLog> Users<L> {
     #[tx]
     pub async fn set_individual_family_member(
         &self,
@@ -127,26 +131,26 @@ impl<L:UserLog> Users<L> {
                 .ok_or_else(|| UserError::UserNotFound(payer_id))?;
         }
 
-        if parent.family.children_ids.contains(&member_id) {
-            return Err(UserError::UserAlreadyInFamily {
-                user_id: parent.id,
-                member_id,
-            });
-        }
-
-        parent.family.children_ids.push(member_id);
-        self.store.update(session, &mut parent).await?;
-
         let mut member = self
             .store
             .get(session, member_id)
             .await?
             .ok_or_else(|| UserError::UserNotFound(member_id))?;
 
+        if parent.family.children_ids.contains(&member_id) {
+            return Err(UserError::UserAlreadyInFamily {
+                user_id: parent.id,
+                member: member.id_with_name(),
+            });
+        }
+
+        parent.family.children_ids.push(member_id);
+        self.store.update(session, &mut parent).await?;
+
         if member.family.exists() {
             return Err(UserError::UserAlreadyInFamily {
                 user_id: parent.id,
-                member_id,
+                member: member.id_with_name(),
             });
         }
 

@@ -1,12 +1,12 @@
 use crate::edit_programs::EditPrograms;
 
 use super::{
+    View,
     edit::{EditSubscription, EditType},
     sell::SellView,
-    View,
 };
 use async_trait::async_trait;
-use bot_core::{callback_data::Calldata as _, calldata, context::Context, widget::Jmp};
+use bot_core::{callback_data::Calldata as _, calldata, context::Context, widget::{Jmp, ViewResult}};
 use bot_viewer::subscription::fmt_subscription_type;
 use eyre::{Context as _, Error, Result};
 use mongodb::bson::oid::ObjectId;
@@ -23,16 +23,16 @@ impl SubscriptionOption {
         SubscriptionOption { id }
     }
 
-    async fn edit(&mut self, tp: EditType) -> Result<Jmp> {
+    async fn edit(&mut self, tp: EditType) -> ViewResult {
         Ok(EditSubscription::new(self.id, tp).into())
     }
 
-    async fn edit_requirement(&mut self, ctx: &mut Context) -> Result<Jmp> {
+    async fn edit_requirement(&mut self, ctx: &mut Context) -> ViewResult {
         ctx.ensure(Rule::EditSubscription)?;
         Ok(EditPrograms::new(self.id).into())
     }
 
-    async fn buy(&mut self, ctx: &mut Context) -> Result<Jmp> {
+    async fn buy(&mut self, ctx: &mut Context) -> ViewResult {
         let sub = ctx
             .services
             .subscriptions
@@ -60,7 +60,7 @@ impl View for SubscriptionOption {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             Callback::Delete => {
                 ctx.ensure(Rule::EditSubscription)?;
@@ -137,14 +137,19 @@ async fn render_sub(
         )
     } else {
         format!(
-        "📌 Тариф: _{}_\nКоличество занятий:_{}_\nЦена:_{}_\nДни заморозки:_{}_\nДействует дней:_{}_\n{}\n",
-        escape(&sub.name),
-        sub.items,
-        sub.price.to_string().replace(".", ","),
-        sub.freeze_days,
-        sub.expiration_days,
-        fmt_subscription_type(ctx, &sub.subscription_type, !ctx.has_right(Rule::EditSubscription)).await?,
-    )
+            "📌 Тариф: _{}_\nКоличество занятий:_{}_\nЦена:_{}_\nДни заморозки:_{}_\nДействует дней:_{}_\n{}\n",
+            escape(&sub.name),
+            sub.items,
+            sub.price.to_string().replace(".", ","),
+            sub.freeze_days,
+            sub.expiration_days,
+            fmt_subscription_type(
+                ctx,
+                &sub.subscription_type,
+                !ctx.has_right(Rule::EditSubscription)
+            )
+            .await?,
+        )
     };
 
     let mut keymap = InlineKeyboardMarkup::default();

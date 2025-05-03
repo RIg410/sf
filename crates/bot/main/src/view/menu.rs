@@ -1,18 +1,18 @@
 use async_trait::async_trait;
 use bot_calendar::CalendarView;
 use bot_core::{
+    CommonLocation,
     callback_data::Calldata,
     context::Context,
-    widget::{Jmp, View},
-    CommonLocation,
+    widget::{Jmp, View, ViewResult},
 };
 use bot_couch::list::CouchingList;
 use bot_finance::FinanceView;
 use bot_marketing::Marketing;
 use bot_subscription::SubscriptionView;
 use bot_trainings::program::list::ProgramList;
-use bot_users::{profile::UserProfile, Query, UsersView};
-use eyre::{bail, Ok, Result};
+use bot_users::{Query, UsersView, profile::UserProfile};
+use eyre::{Result, bail};
 use rights::Rule;
 use strum::EnumIter;
 use teloxide::{
@@ -132,11 +132,7 @@ impl View for MainMenuView {
         Ok(())
     }
 
-    async fn handle_message(
-        &mut self,
-        ctx: &mut Context,
-        msg: &Message,
-    ) -> Result<Jmp, eyre::Error> {
+    async fn handle_message(&mut self, ctx: &mut Context, msg: &Message) -> ViewResult {
         if !ctx.is_real_user {
             return Ok(SignUpView::default().into());
         }
@@ -168,7 +164,7 @@ impl View for MainMenuView {
         })
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, msg: &str) -> Result<Jmp, eyre::Error> {
+    async fn handle_callback(&mut self, ctx: &mut Context, msg: &str) -> ViewResult {
         if !ctx.is_real_user {
             return Ok(SignUpView::default().into());
         }

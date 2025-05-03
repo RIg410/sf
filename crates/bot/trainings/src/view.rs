@@ -5,11 +5,11 @@ use bot_core::{
     callback_data::Calldata as _,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use bot_viewer::{day::fmt_dt, fmt_phone, training::fmt_training_type};
 use chrono::Local;
-use eyre::{Result, bail};
+use eyre::{Result, eyre};
 use ident::training::TrainingId;
 use mongodb::bson::oid::ObjectId;
 use program::model::TrainingType;
@@ -31,7 +31,7 @@ impl TrainingView {
         Self { id }
     }
 
-    async fn couch_info(&mut self, ctx: &mut Context) -> Result<Jmp> {
+    async fn couch_info(&mut self, ctx: &mut Context) -> ViewResult {
         let training = ctx
             .services
             .calendar
@@ -49,7 +49,7 @@ impl TrainingView {
         Ok(Jmp::Stay)
     }
 
-    async fn restore_training(&mut self, ctx: &mut Context) -> Result<Jmp> {
+    async fn restore_training(&mut self, ctx: &mut Context) -> ViewResult {
         ctx.ensure(Rule::CancelTraining)?;
         let training = ctx
             .services
@@ -58,7 +58,7 @@ impl TrainingView {
             .await?
             .ok_or_else(|| eyre::eyre!("Training not found"))?;
         if !training.is_group() {
-            bail!("Can't delete personal training");
+            return Err(eyre!("Can't delete personal training").into());
         }
 
         ctx.services
@@ -68,9 +68,9 @@ impl TrainingView {
         Ok(Jmp::Stay)
     }
 
-    async fn client_list(&mut self, ctx: &mut Context) -> Result<Jmp> {
+    async fn client_list(&mut self, ctx: &mut Context) -> ViewResult {
         if !ctx.is_employee() && !ctx.has_right(Rule::EditTrainingClientsList) {
-            bail!("Only couch can see client list");
+            return Err(eyre!("Only couch can see client list").into());
         }
         Ok(ClientsList::new(self.id).into())
     }
@@ -94,7 +94,7 @@ impl View for TrainingView {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             Callback::CouchInfo => self.couch_info(ctx).await,
             Callback::Cancel => return Ok(Jmp::Next(ConfirmCancelTraining::new(self.id).into())),
@@ -329,7 +329,7 @@ impl View for ConfirmCancelTraining {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         Ok(match calldata!(data) {
             CancelCallback::Cancel => self.cancel_training(ctx).await?,
             CancelCallback::Stay => Jmp::Back,
@@ -343,7 +343,7 @@ enum CancelCallback {
     Stay,
 }
 
-pub async fn sign_up(ctx: &mut Context, id: TrainingId, user_id: ObjectId) -> Result<Jmp> {
+pub async fn sign_up(ctx: &mut Context, id: TrainingId, user_id: ObjectId) -> ViewResult {
     let training = ctx
         .services
         .calendar
@@ -355,7 +355,7 @@ pub async fn sign_up(ctx: &mut Context, id: TrainingId, user_id: ObjectId) -> Re
         return Ok(Jmp::Stay);
     }
     if !training.is_group() {
-        bail!("Can't delete personal training");
+        return Err(eyre!("Can't delete personal training").into());
     }
     if training.is_full() {
         ctx.send_msg("Мест нет🥺").await?;
@@ -397,7 +397,7 @@ pub async fn sign_up(ctx: &mut Context, id: TrainingId, user_id: ObjectId) -> Re
     Ok(Jmp::Stay)
 }
 
-pub async fn sign_out(ctx: &mut Context, id: TrainingId, user_id: ObjectId) -> Result<Jmp> {
+pub async fn sign_out(ctx: &mut Context, id: TrainingId, user_id: ObjectId) -> ViewResult {
     let training = ctx
         .services
         .calendar

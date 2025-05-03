@@ -1,7 +1,7 @@
 use async_trait::async_trait;
 use bot_core::{
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use eyre::Result;
 use mongodb::bson::oid::ObjectId;
@@ -29,7 +29,7 @@ impl View for SetPhone {
         Ok(())
     }
 
-    async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> Result<Jmp> {
+    async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> ViewResult {
         let text = message.text().unwrap_or_default();
         if text.is_empty() {
             ctx.send_notification("Введите телефон").await;

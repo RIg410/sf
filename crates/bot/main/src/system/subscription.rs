@@ -3,7 +3,7 @@ use bot_core::{
     callback_data::Calldata as _,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use eyre::eyre;
 use rights::Rule;
@@ -25,11 +25,7 @@ impl View for ExtendSubscriptions {
         Ok(())
     }
 
-    async fn handle_message(
-        &mut self,
-        ctx: &mut Context,
-        msg: &Message,
-    ) -> Result<Jmp, eyre::Error> {
+    async fn handle_message(&mut self, ctx: &mut Context, msg: &Message) -> ViewResult {
         ctx.ensure(Rule::System)?;
         let days = msg.text().ok_or_else(|| eyre!("Invalid message"))?;
         let days = days.parse::<u32>()?;
@@ -59,7 +55,7 @@ impl View for Confirm {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         ctx.ensure(Rule::System)?;
         match calldata!(data) {
             Calldata::Yes => {

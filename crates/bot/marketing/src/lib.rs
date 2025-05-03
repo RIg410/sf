@@ -3,7 +3,7 @@ use bot_core::{
     callback_data::Calldata as _,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{View, ViewResult},
 };
 use rights::Rule;
 use serde::{Deserialize, Serialize};
@@ -37,7 +37,7 @@ impl View for Marketing {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             Calldata::Request => {
                 ctx.ensure(Rule::ViewMarketingInfo)?;

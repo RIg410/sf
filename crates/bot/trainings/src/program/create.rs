@@ -1,7 +1,7 @@
 use async_trait::async_trait;
 use bot_core::{
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use eyre::Result;
 use program::model::Program;
@@ -43,7 +43,7 @@ impl View for CreateProgram {
         Ok(())
     }
 
-    async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> Result<Jmp> {
+    async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> ViewResult {
         ctx.ensure(Rule::CreateTraining)?;
         let msg = if let Some(msg) = message.text() {
             msg

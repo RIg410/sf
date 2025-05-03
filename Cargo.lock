@@ -647,6 +647,7 @@ dependencies = [
  "ident",
  "mongodb",
  "requests",
+ "sales",
  "services",
  "store",
  "teloxide",

@@ -3,7 +3,7 @@ use bot_core::{
     callback_data::{Calldata as _, TrainingIdCallback},
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use bot_viewer::{day::fmt_weekday, training::fmt_training_status};
 use chrono::{Datelike as _, Local};
@@ -57,7 +57,7 @@ impl View for TrainingList {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, _: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, _: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             Callback::SelectTraining(date) => Ok(TrainingView::new(date.into()).into()),
             Callback::Offset(offset) => {

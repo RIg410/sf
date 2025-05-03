@@ -3,7 +3,7 @@ use bot_core::{
     callback_data::Calldata as _,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use eyre::Result;
 use mongodb::bson::oid::ObjectId;
@@ -53,7 +53,7 @@ impl View for CouchingList {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, _: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, _: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             Callback::SelectCouch(id) => {
                 let id: ObjectId = ObjectId::from_bytes(id);

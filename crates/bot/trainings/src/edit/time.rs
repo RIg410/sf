@@ -4,7 +4,7 @@ use bot_core::{
     callback_data::Calldata as _,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use chrono::{Local, Timelike, Utc};
 use eyre::Result;
@@ -40,7 +40,7 @@ impl View for ChangeTime {
         Ok(())
     }
 
-    async fn handle_message(&mut self, ctx: &mut Context, msg: &Message) -> Result<Jmp> {
+    async fn handle_message(&mut self, ctx: &mut Context, msg: &Message) -> ViewResult {
         ctx.delete_msg(msg.id).await?;
         let msg = if let Some(msg) = msg.text() {
             msg
@@ -131,7 +131,7 @@ impl View for ConfirmChangeTime {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             ConfirmCallback::Confirm => {
                 ctx.ensure(Rule::ChangeTrainingSlot)?;

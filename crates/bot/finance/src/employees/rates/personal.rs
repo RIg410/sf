@@ -1,7 +1,7 @@
 use async_trait::async_trait;
 use bot_core::{
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use eyre::Result;
 use decimal::Decimal;
@@ -39,7 +39,7 @@ impl View for PersonalRate {
         &mut self,
         ctx: &mut Context,
         msg: &Message,
-    ) -> Result<Jmp, eyre::Error> {
+    ) -> ViewResult {
         ctx.delete_msg(msg.id).await?;
         if let Some(text) = msg.text() {
             if let Ok(percent) = text.parse::<Decimal>() {

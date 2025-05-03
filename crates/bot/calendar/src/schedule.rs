@@ -3,7 +3,7 @@ use bot_core::{
     callback_data::Calldata as _,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use bot_trainings::{
     program::list::ProgramList,
@@ -48,7 +48,7 @@ impl View for ScheduleView {
         ctx.edit_origin(&txt, keymap).await?;
         Ok(())
     }
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             Callback::Group => {
                 ctx.ensure(Rule::ScheduleGroupTraining)?;

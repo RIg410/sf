@@ -1,10 +1,9 @@
-use bot_core::{CommonLocation, context::Context, widget::Jmp};
+use bot_core::{context::Context, widget::{Jmp, ViewResult}, CommonLocation};
 use bot_marketing::requests::Requests;
 use bot_users::profile::UserProfile;
-use eyre::Result;
 use rights::Rule;
 
-pub async fn handle_common_location(ctx: &mut Context, location: CommonLocation) -> Result<Jmp> {
+pub async fn handle_common_location(ctx: &mut Context, location: CommonLocation) -> ViewResult {
     Ok(match location {
         CommonLocation::Profile(object_id) => {
             if ctx.has_right(Rule::ViewUsers) {

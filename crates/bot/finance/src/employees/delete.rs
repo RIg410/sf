@@ -3,7 +3,7 @@ use bot_core::{
     callback_data::Calldata as _,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use mongodb::bson::oid::ObjectId;
 use rights::Rule;
@@ -41,7 +41,7 @@ impl View for DeleteEmployeeConfirm {
         &mut self,
         ctx: &mut Context,
         callback: &str,
-    ) -> Result<Jmp, eyre::Error> {
+    ) -> ViewResult {
         ctx.ensure(Rule::EditEmployee)?;
         match calldata!(callback) {
             CallbackQuery::Yes => {

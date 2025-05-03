@@ -1,14 +1,19 @@
+use crate::{BusinessError, Format};
 use requests::error::RequestError;
-use services::SfServices;
-
-use crate::BusinessError;
 
 impl BusinessError for RequestError {
-    fn message(&self) -> String {
-        todo!()
+    fn message(&self, _: Format) -> String {
+        match self {
+            RequestError::Eyre(_) | RequestError::MongoError(_) => "Системная ошибка".to_string(),
+            RequestError::RequestNotFound { .. } => "Заявка не найдена".to_string(),
+        }
     }
 
     fn is_fatal(&self) -> bool {
-        todo!()
+        match self {
+            RequestError::Eyre(_)
+            | RequestError::MongoError(_)
+            | RequestError::RequestNotFound { .. } => true,
+        }
     }
 }

@@ -1,7 +1,12 @@
 use super::View;
 use async_trait::async_trait;
-use bot_core::{callback_data::Calldata as _, calldata, context::Context, widget::Jmp};
-use eyre::{eyre, Context as _, Result};
+use bot_core::{
+    callback_data::Calldata as _,
+    calldata,
+    context::Context,
+    widget::{Jmp, ViewResult},
+};
+use eyre::{Context as _, Result, eyre};
 use mongodb::bson::oid::ObjectId;
 use rights::Rule;
 use serde::{Deserialize, Serialize};
@@ -66,7 +71,7 @@ impl View for FreezeProfile {
         Ok(())
     }
 
-    async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> Result<Jmp> {
+    async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> ViewResult {
         match self.state {
             State::SetDays => {
                 let days = message.text().unwrap_or_default();
@@ -87,7 +92,7 @@ impl View for FreezeProfile {
         Ok(Jmp::Stay)
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         let cb = calldata!(data);
 
         match cb {

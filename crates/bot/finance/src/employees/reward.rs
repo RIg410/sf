@@ -3,7 +3,7 @@ use bot_core::{
     callback_data::Calldata as _,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use decimal::Decimal;
 use eyre::Result;
@@ -52,7 +52,7 @@ impl View for PayReward {
         &mut self,
         ctx: &mut Context,
         msg: &Message,
-    ) -> Result<Jmp, eyre::Error> {
+    ) -> ViewResult {
         ctx.delete_msg(msg.id).await?;
         let txt = if let Some(txt) = msg.text() {
             txt
@@ -119,7 +119,7 @@ impl View for ConfirmSum {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             ConfirmCallback::Confirm => {
                 ctx.ensure(Rule::MakePayment)?;

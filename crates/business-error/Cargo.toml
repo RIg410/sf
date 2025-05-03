@@ -20,3 +20,4 @@ teloxide.workspace = true
 thiserror.workspace = true
 trainings.workspace = true
 users.workspace = true
+sales.workspace = true

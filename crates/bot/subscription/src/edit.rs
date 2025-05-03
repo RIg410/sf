@@ -1,6 +1,6 @@
 use super::View;
 use async_trait::async_trait;
-use bot_core::{callback_data::Calldata as _, calldata, context::Context, widget::Jmp};
+use bot_core::{callback_data::Calldata as _, calldata, context::Context, widget::{Jmp, ViewResult}};
 use decimal::Decimal;
 use eyre::Result;
 use mongodb::bson::oid::ObjectId;
@@ -126,7 +126,7 @@ impl View for EditSubscription {
         Ok(())
     }
 
-    async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> Result<Jmp> {
+    async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> ViewResult {
         match self.state {
             State::Init => {
                 let text = message.text().unwrap_or_default().to_string();
@@ -185,7 +185,7 @@ impl View for EditSubscription {
         Ok(Jmp::Stay)
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             Callback::Yes => {
                 let value = if let State::Confirm(value) = self.state.clone() {

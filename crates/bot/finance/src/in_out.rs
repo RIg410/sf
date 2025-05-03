@@ -5,7 +5,7 @@ use bot_core::{
     callback_data::Calldata as _,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use chrono::{DateTime, Local, NaiveDateTime, TimeZone};
 use decimal::Decimal;
@@ -63,7 +63,7 @@ impl View for TreasuryOp {
         Ok(())
     }
 
-    async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> Result<Jmp> {
+    async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> ViewResult {
         let text = if let Some(msg) = message.text() {
             msg
         } else {
@@ -109,7 +109,7 @@ impl View for TreasuryOp {
         Ok(Jmp::Stay)
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             Callback::Save => match &self.state {
                 State::Finish(description, amount, date) => match self.io {

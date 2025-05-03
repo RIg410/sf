@@ -2,6 +2,7 @@ use services::error::SfError;
 
 mod calendar;
 mod request;
+mod sell_subscription;
 mod trainings;
 mod user;
 
@@ -18,6 +19,10 @@ impl BusinessError for SfError {
             SfError::TrainingsError(err) => err.message(format),
             SfError::UserError(err) => err.message(format),
             SfError::RequestError(err) => err.message(format),
+            SfError::SellSubscriptionError(err) => err.message(format),
+            SfError::ParseIntError(_) | SfError::ParseDecimalError(_) => {
+                "Неверный формат числа".to_string()
+            }
         }
     }
 
@@ -28,6 +33,8 @@ impl BusinessError for SfError {
             SfError::TrainingsError(err) => err.is_fatal(),
             SfError::UserError(err) => err.is_fatal(),
             SfError::RequestError(err) => err.is_fatal(),
+            SfError::SellSubscriptionError(err) => err.is_fatal(),
+            SfError::ParseIntError(_) | SfError::ParseDecimalError(_) => false,
         }
     }
 }

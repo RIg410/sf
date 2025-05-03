@@ -4,8 +4,7 @@ use bot_core::{
     callback_data::Calldata as _,
     calldata,
     context::Context,
-    err::bassness_error,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use eyre::Result;
 use mongodb::bson::oid::ObjectId;
@@ -96,7 +95,7 @@ impl View for FamilyView {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         ctx.ensure(Rule::EditFamily)?;
         match calldata!(data) {
             Calldata::GoToProfile(id) => {
@@ -163,30 +162,17 @@ impl View for ConfirmRemoveChild {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         ctx.ensure(Rule::EditFamily)?;
         match calldata!(data) {
             ConfirmRemoveChildCallback::Confirm => {
-                let result = ctx
-                    .services
+                ctx.services
                     .users
                     .remove_family_member(&mut ctx.session, self.parent_id, self.child_id)
-                    .await;
-                match result {
-                    Ok(_) => {
-                        ctx.send_notification("Член семьи удален").await;
-                        Ok(Jmp::Back)
-                    }
-                    Err(err) => {
-                        let err = err.into();
-                        if let Some(msg) = bassness_error(ctx, &err).await? {
-                            ctx.send_notification(&msg).await;
-                            Ok(Jmp::Back)
-                        } else {
-                            Err(err.into())
-                        }
-                    }
-                }
+                    .await?;
+
+                ctx.send_notification("Член семьи удален").await;
+                Ok(Jmp::Back)
             }
             ConfirmRemoveChildCallback::Cancel => Ok(Jmp::Back),
         }

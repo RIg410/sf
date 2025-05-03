@@ -1,7 +1,7 @@
 use async_trait::async_trait;
 use bot_core::{
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use chrono::{Local, TimeZone as _};
 use eyre::{Error, Result};
@@ -33,7 +33,7 @@ impl View for SetBirthday {
         Ok(())
     }
 
-    async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> Result<Jmp> {
+    async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> ViewResult {
         let text = message.text().unwrap_or_default();
         let date = chrono::NaiveDate::parse_from_str(text, "%d.%m.%Y")
             .map_err(Error::new)

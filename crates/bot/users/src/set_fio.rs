@@ -1,6 +1,6 @@
 use super::View;
 use async_trait::async_trait;
-use bot_core::{context::Context, widget::Jmp};
+use bot_core::{context::Context, widget::{Jmp, ViewResult}};
 use eyre::Result;
 use mongodb::bson::oid::ObjectId;
 use teloxide::types::{InlineKeyboardMarkup, Message};
@@ -27,7 +27,7 @@ impl View for SetFio {
         Ok(())
     }
 
-    async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> Result<Jmp> {
+    async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> ViewResult {
         let parts = message
             .text()
             .unwrap_or_default()

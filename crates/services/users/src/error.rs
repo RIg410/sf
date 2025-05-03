@@ -1,6 +1,7 @@
-use bson::oid::ObjectId;
-use thiserror::Error;
 use crate::model::rate::Rate;
+use bson::oid::ObjectId;
+use ident::user::UserIdWithName;
+use thiserror::Error;
 
 #[derive(Error, Debug)]
 pub enum UserError {
@@ -24,7 +25,7 @@ pub enum UserError {
     #[error("User already in family")]
     UserAlreadyInFamily {
         user_id: ObjectId,
-        member_id: ObjectId,
+        member: UserIdWithName,
     },
     #[error("User already employee")]
     UserAlreadyEmployee { user_id: ObjectId },

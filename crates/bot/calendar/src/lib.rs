@@ -2,7 +2,7 @@ use async_trait::async_trait;
 use bot_core::callback_data::{CallbackDateTime, Calldata, TrainingIdCallback};
 use bot_core::calldata;
 use bot_core::context::Context;
-use bot_core::widget::{Jmp, View};
+use bot_core::widget::{Jmp, View, ViewResult};
 use bot_trainings::list::TrainingList;
 use bot_trainings::view::TrainingView;
 use bot_viewer::day::{fmt_dm, fmt_month, fmt_weekday};
@@ -67,7 +67,7 @@ impl View for CalendarView {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             Callback::GoToWeek(week) => {
                 self.week_id = WeekId::from(week);

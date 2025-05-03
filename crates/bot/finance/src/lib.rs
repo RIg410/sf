@@ -10,7 +10,7 @@ use bot_core::{
     callback_data::Calldata as _,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use chrono::{Datelike as _, Local};
 use employees::list::EmployeeList;
@@ -56,7 +56,7 @@ impl View for FinanceView {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             Callback::Payment => {
                 ctx.ensure(Rule::MakePayment)?;

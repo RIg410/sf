@@ -1,10 +1,10 @@
-use super::{render_msg, ScheduleTrainingPreset};
+use super::{ScheduleTrainingPreset, render_msg};
 use async_trait::async_trait;
 use bot_core::{
     callback_data::Calldata,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{View, ViewResult},
 };
 use eyre::Result;
 use serde::{Deserialize, Serialize};
@@ -50,7 +50,7 @@ impl View for SetOneTime {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, _: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, _: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             Callback::OneTime => {
                 self.preset.is_one_time = Some(true);

@@ -3,7 +3,7 @@ use bot_core::{
     callback_data::Calldata as _,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use chrono::{Local, NaiveDateTime, TimeZone as _};
 use mongodb::bson::oid::ObjectId;
@@ -34,7 +34,7 @@ impl View for AddNotification {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             CalldataYesNo::Yes => Ok(Jmp::Next(SetRemindLater { id: self.id }.into())),
             CalldataYesNo::No => {
@@ -85,11 +85,7 @@ impl View for SetRemindLater {
         Ok(())
     }
 
-    async fn handle_message(
-        &mut self,
-        ctx: &mut Context,
-        message: &Message,
-    ) -> Result<Jmp, eyre::Error> {
+    async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> ViewResult {
         ctx.bot.delete_msg(message.id).await?;
 
         let text = if let Some(text) = message.text() {
@@ -123,7 +119,7 @@ impl View for SetRemindLater {
         }
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         let remind_later: RememberLaterCalldata = calldata!(data);
         let now = chrono::Local::now();
         let remind_later = now + chrono::Duration::seconds(remind_later.remind_later as i64);

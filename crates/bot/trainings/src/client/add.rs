@@ -4,7 +4,7 @@ use bot_core::{
     callback_data::Calldata as _,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use bot_viewer::user::fmt_user_type;
 use eyre::{Error, Result};
@@ -48,7 +48,7 @@ impl View for AddClientView {
         Ok(())
     }
 
-    async fn handle_message(&mut self, ctx: &mut Context, msg: &Message) -> Result<Jmp> {
+    async fn handle_message(&mut self, ctx: &mut Context, msg: &Message) -> ViewResult {
         ctx.delete_msg(msg.id).await?;
 
         let mut query = msg.text().to_owned().unwrap_or_default().to_string();
@@ -64,7 +64,7 @@ impl View for AddClientView {
         Ok(Jmp::Stay)
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         ctx.ensure(Rule::EditTrainingClientsList)?;
 
         match calldata!(data) {

@@ -3,7 +3,7 @@ use bot_core::{
     callback_data::Calldata as _,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use bot_viewer::{fmt_phone, request::fmt_request};
 use create::SetComeFrom;
@@ -90,7 +90,7 @@ impl View for Requests {
         &mut self,
         ctx: &mut Context,
         msg: &Message,
-    ) -> Result<Jmp, eyre::Error> {
+    ) -> ViewResult {
         ctx.delete_msg(msg.id).await?;
         if let Some(phone) = &msg.text() {
             if phone.len() > 5 {
@@ -103,7 +103,7 @@ impl View for Requests {
         Ok(Jmp::Stay)
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp, eyre::Error> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             Calldata::Create => {
                 ctx.ensure(Rule::CreateRequest)?;

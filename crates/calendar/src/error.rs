@@ -1,8 +1,6 @@
 use bson::oid::ObjectId;
-use chrono::Local;
-use ident::day::DayId;
+use ident::{day::DayId, training::TrainingFullName};
 use thiserror::Error;
-use trainings::model::Training;
 
 #[derive(Debug, Error)]
 pub enum CalendarError {
@@ -20,10 +18,8 @@ pub enum CalendarError {
     ClientNotFound(ObjectId),
     #[error("Instructor has no rights:{0}")]
     InstructorHasNoRights(ObjectId),
-    #[error("Too close to start")]
-    TooCloseToStart { start_at: chrono::DateTime<Local> },
     #[error("Time slot collision:{0:?}")]
-    TimeSlotCollision(Training),
+    TimeSlotCollision(TrainingFullName),
     #[error("Day id mismatch")]
     DayIdMismatch { old: DayId, new: DayId },
     #[error("Training error:{0:?}")]

@@ -1,5 +1,6 @@
 pub mod callback;
 pub mod message;
+pub mod error;
 
 use std::sync::Arc;
 

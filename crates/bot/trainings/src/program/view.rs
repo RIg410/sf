@@ -6,7 +6,7 @@ use bot_core::{
     callback_data::Calldata as _,
     calldata,
     context::Context,
-    widget::{Jmp, View},
+    widget::{Jmp, View, ViewResult},
 };
 use bot_viewer::training::fmt_training_type;
 use eyre::Result;
@@ -26,11 +26,11 @@ impl ProgramView {
         Self { id, preset }
     }
 
-    async fn find_training(&mut self) -> Result<Jmp> {
+    async fn find_training(&mut self) -> ViewResult {
         Ok(TrainingList::programs(self.id).into())
     }
 
-    async fn schedule(&mut self, ctx: &mut Context) -> Result<Jmp> {
+    async fn schedule(&mut self, ctx: &mut Context) -> ViewResult {
         ctx.ensure(Rule::ScheduleGroupTraining)?;
         let mut preset = self.preset;
         preset.program_id = Some(self.id);
@@ -38,27 +38,27 @@ impl ProgramView {
         Ok(view.into())
     }
 
-    async fn edit_capacity(&mut self, ctx: &mut Context) -> Result<Jmp> {
+    async fn edit_capacity(&mut self, ctx: &mut Context) -> ViewResult {
         ctx.ensure(Rule::EditTraining)?;
         Ok(EditProgram::new(self.id, super::edit::EditType::Capacity).into())
     }
 
-    async fn edit_duration(&mut self, ctx: &mut Context) -> Result<Jmp> {
+    async fn edit_duration(&mut self, ctx: &mut Context) -> ViewResult {
         ctx.ensure(Rule::EditTraining)?;
         Ok(EditProgram::new(self.id, super::edit::EditType::Duration).into())
     }
 
-    async fn edit_name(&mut self, ctx: &mut Context) -> Result<Jmp> {
+    async fn edit_name(&mut self, ctx: &mut Context) -> ViewResult {
         ctx.ensure(Rule::EditTraining)?;
         Ok(EditProgram::new(self.id, super::edit::EditType::Name).into())
     }
 
-    async fn edit_description(&mut self, ctx: &mut Context) -> Result<Jmp> {
+    async fn edit_description(&mut self, ctx: &mut Context) -> ViewResult {
         ctx.ensure(Rule::EditTraining)?;
         Ok(EditProgram::new(self.id, super::edit::EditType::Description).into())
     }
 
-    async fn hide(&mut self, ctx: &mut Context, hide: bool) -> Result<Jmp> {
+    async fn hide(&mut self, ctx: &mut Context, hide: bool) -> ViewResult {
         ctx.ensure(Rule::EditTraining)?;
 
         ctx.services
@@ -88,7 +88,7 @@ impl View for ProgramView {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             Callback::Schedule => self.schedule(ctx).await,
             Callback::FindTraining => self.find_training().await,

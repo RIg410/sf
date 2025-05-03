@@ -4,7 +4,12 @@ use crate::SubscriptionView;
 
 use super::{View, confirm::ConfirmSell};
 use async_trait::async_trait;
-use bot_core::{callback_data::Calldata as _, calldata, context::Context, widget::Jmp};
+use bot_core::{
+    callback_data::Calldata as _,
+    calldata,
+    context::Context,
+    widget::{Jmp, ViewResult},
+};
 use bot_viewer::fmt_phone;
 use decimal::Decimal;
 use eyre::Result;
@@ -77,7 +82,7 @@ impl View for SellView {
         Ok(())
     }
 
-    async fn handle_message(&mut self, ctx: &mut Context, msg: &Message) -> Result<Jmp> {
+    async fn handle_message(&mut self, ctx: &mut Context, msg: &Message) -> ViewResult {
         ctx.delete_msg(msg.id).await?;
         let query = msg.text().unwrap_or_default();
 
@@ -127,7 +132,7 @@ impl View for SellView {
         Ok(Jmp::Stay)
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         ctx.ensure(Rule::SellSubscription)?;
         match calldata!(data) {
             SellViewCallback::CreateNewUser => {
@@ -182,7 +187,7 @@ impl View for SetName {
         Ok(())
     }
 
-    async fn handle_message(&mut self, ctx: &mut Context, msg: &Message) -> Result<Jmp> {
+    async fn handle_message(&mut self, ctx: &mut Context, msg: &Message) -> ViewResult {
         ctx.delete_msg(msg.id).await?;
         let name = msg.text().unwrap_or_default();
         if name.is_empty() {
@@ -239,7 +244,7 @@ impl View for SelectComeFrom {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         ctx.ensure(Rule::SellSubscription)?;
         let come_from = calldata!(data);
         Ok(Jmp::Next(
@@ -352,7 +357,7 @@ impl View for CreateUserAndSell {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> Result<Jmp> {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             Callback::Sell => {
                 ctx.ensure(Rule::SellSubscription)?;
@@ -393,7 +398,7 @@ impl View for CreateUserAndSell {
                 }
 
                 if let Err(err) = result {
-                    Err(err)
+                    Err(err.into())
                 } else {
                     ctx.send_msg("🤑 Продано").await?;
                     ctx.reset_origin();

@@ -1,9 +1,8 @@
 use std::sync::Arc;
 
-use super::build_context;
+use super::{build_context, error::handle_result};
 use crate::{
     context::Context,
-    err::handle_result,
     state::{State, StateHolder},
     widget::Widget,
     BACK_NAME, ERROR,
