@@ -6,7 +6,12 @@ pub mod status;
 use bson::oid::ObjectId;
 use chrono::{DateTime, Datelike, Local, Timelike as _, Utc};
 use decimal::Decimal;
-use ident::{day::DayId, rooms::Room, slot::Slot, training::TrainingId};
+use ident::{
+    day::DayId,
+    rooms::Room,
+    slot::Slot,
+    training::{TrainingFullName, TrainingId},
+};
 use notification::Notified;
 use program::model::{Program, TrainingType};
 use serde::{Deserialize, Serialize};
@@ -277,6 +282,13 @@ impl Training {
 
     pub fn is_personal(&self) -> bool {
         self.tp.is_personal()
+    }
+
+    pub fn full_name(&self) -> TrainingFullName {
+        TrainingFullName {
+            name: self.name.clone(),
+            id: self.id(),
+        }
     }
 }
 

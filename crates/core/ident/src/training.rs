@@ -14,3 +14,8 @@ impl TrainingId {
     }
 }
 
+#[derive(Debug)]
+pub struct TrainingFullName {
+    pub name: String,
+    pub id: TrainingId,
+}

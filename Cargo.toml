@@ -12,7 +12,7 @@ members = [
   "crates/bot/*",
   "bins",
   "crates/payment/yookassa",
-  "crates/core/error",
+  "crates/business-error",
   "mini-app/main",
   "crates/stat",
   "crates/services",
@@ -24,7 +24,7 @@ members = [
   "crates/treasury",
   "crates/subscription",
   "crates/history",
-  "crates/users",
+  "crates/services/users",
   "crates/requests",
   "crates/calendar",
   "crates/booking",
@@ -39,7 +39,7 @@ resolver = "2"
 ai = {path = "crates/core/ai"}
 backup = {path = "crates/backup"}
 bg-process = {path = "crates/bg-process"}
-booking = {path = "crates/booking"}
+
 bot-calendar = {path = "crates/bot/calendar"}
 bot-core = {path = "crates/bot/core"}
 bot-couch = {path = "crates/bot/couch"}
@@ -51,11 +51,13 @@ bot-subscription = {path = "crates/bot/subscription"}
 bot-trainings = {path = "crates/bot/trainings"}
 bot-users = {path = "crates/bot/users"}
 bot-viewer = {path = "crates/bot/viewer"}
+
+booking = {path = "crates/booking"}
+business-error = {path = "crates/business-error"}
 calendar = {path = "crates/calendar"}
 decimal = {path = "crates/core/decimal"}
 employee = {path = "crates/employee"}
 env = {path = "crates/core/env"}
-error = {path = "crates/core/error"}
 graph = {path = "crates/core/graph"}
 history = {path = "crates/history"}
 ident = {path = "crates/core/ident"}
@@ -74,7 +76,7 @@ training_adjuster = {path = "crates/training_adjuster"}
 trainings = {path = "crates/trainings"}
 treasury = {path = "crates/treasury"}
 tx_macro = {path = "crates/core/tx_macro"}
-users = {path = "crates/users"}
+users = {path = "crates/services/users"}
 yookassa = {path = "crates/payment/yookassa"}
 
 #libs 

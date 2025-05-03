@@ -358,9 +358,9 @@ dependencies = [
  "async-trait",
  "bincode",
  "bs58",
+ "business-error",
  "chrono",
  "env",
- "error",
  "eyre",
  "futures-util",
  "hex",
@@ -414,10 +414,10 @@ dependencies = [
  "bot-trainings",
  "bot-users",
  "bot-viewer",
+ "business-error",
  "chrono",
  "decimal",
  "employee",
- "error",
  "eyre",
  "hex",
  "ident",
@@ -473,9 +473,9 @@ dependencies = [
  "bincode",
  "bot-core",
  "bot-viewer",
+ "business-error",
  "chrono",
  "decimal",
- "error",
  "eyre",
  "graph",
  "hex",
@@ -635,6 +635,25 @@ name = "bumpalo"
 version = "3.16.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "79296716171880943b8470b5f8d03aa55eb2e645a4874bdbb28adb49162e012c"
+
+[[package]]
+name = "business-error"
+version = "0.1.0"
+dependencies = [
+ "bson",
+ "calendar",
+ "chrono",
+ "eyre",
+ "ident",
+ "mongodb",
+ "requests",
+ "services",
+ "store",
+ "teloxide",
+ "thiserror 1.0.63",
+ "trainings",
+ "users",
+]
 
 [[package]]
 name = "byteorder"
@@ -1163,22 +1182,6 @@ checksum = "534c5cf6194dfab3db3242765c03bbe257cf92f22b38f6bc0c58d59108a820ba"
 dependencies = [
  "libc",
  "windows-sys 0.52.0",
-]
-
-[[package]]
-name = "error"
-version = "0.1.0"
-dependencies = [
- "bson",
- "calendar",
- "chrono",
- "eyre",
- "ident",
- "mongodb",
- "requests",
- "thiserror 1.0.63",
- "trainings",
- "users",
 ]
 
 [[package]]
@@ -3371,7 +3374,6 @@ dependencies = [
  "decimal",
  "employee",
  "env",
- "error",
  "eyre",
  "futures-util",
  "history",
@@ -3507,7 +3509,6 @@ dependencies = [
  "bson",
  "chrono",
  "decimal",
- "error",
  "eyre",
  "history",
  "ident",

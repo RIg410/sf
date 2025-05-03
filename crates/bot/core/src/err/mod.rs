@@ -1,12 +1,12 @@
-mod training;
 mod calendar;
-mod users;
 mod request;
+mod training;
+mod users;
 
 use crate::{context::Context, widget::Jmp};
-use error::SfError;
 use eyre::{Error, Result};
 use mongodb::bson::oid::ObjectId;
+use services::error::SfError;
 use teloxide::utils::markdown::escape;
 use training::training_error;
 

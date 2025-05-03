@@ -16,7 +16,6 @@ chrono.workspace = true
 decimal.workspace = true
 employee.workspace = true
 env.workspace = true
-error.workspace = true
 eyre.workspace = true
 futures-util.workspace = true
 history.workspace = true

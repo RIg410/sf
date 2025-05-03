@@ -11,7 +11,6 @@ ai.workspace = true
 bson.workspace = true
 chrono.workspace = true
 decimal.workspace = true
-error.workspace = true
 eyre.workspace = true
 history.workspace = true
 ident.workspace = true

@@ -7,7 +7,7 @@ use eyre::{Error, Result};
 use ident::{day::DayId, slot::Slot, training::TrainingId};
 use mongodb::bson::oid::ObjectId;
 use program::service::Programs;
-use store::{session::Session, Db};
+use store::{Db, session::Session};
 use trainings::{error::TrainingError, model::Training};
 use tx_macro::tx;
 use users::{log::UserLog, service::Users};
@@ -69,7 +69,7 @@ impl<L: UserLog> Calendar<L> {
             .ok_or(TrainingError::TrainingNotFound(id))?;
 
         if training.is_processed {
-            return Err(TrainingError::TrainingIsProcessed(training.id()).into());
+            return Err(TrainingError::TrainingIsProcessed(training.full_name()).into());
         }
 
         training.set_slot(new_slot);
@@ -88,7 +88,7 @@ impl<L: UserLog> Calendar<L> {
                 let training = day.training.iter_mut().find(|slot| slot.id == training.id);
                 if let Some(training) = training {
                     if training.is_processed {
-                        return Err(TrainingError::TrainingIsProcessed(training.id()).into());
+                        return Err(TrainingError::TrainingIsProcessed(training.full_name()).into());
                     }
                     self.calendar
                         .delete_training(session, training.id())
@@ -149,7 +149,7 @@ impl<L: UserLog> Calendar<L> {
     ) -> Result<(), CalendarError> {
         if let Some(training) = self.get_training_by_id(session, id).await? {
             if !training.clients.is_empty() {
-                return Err(TrainingError::TrainingHasClients(id).into());
+                return Err(TrainingError::TrainingHasClients(training.full_name()).into());
             }
 
             self.calendar.delete_training(session, id).await?;
@@ -162,7 +162,7 @@ impl<L: UserLog> Calendar<L> {
                     let training = day.training.iter().find(|slot| slot.id == training.id);
                     if let Some(training) = training {
                         if !training.clients.is_empty() {
-                            return Err(TrainingError::TrainingHasClients(id).into());
+                            return Err(TrainingError::TrainingHasClients(training.full_name()).into());
                         }
                         self.calendar
                             .delete_training(session, training.id())

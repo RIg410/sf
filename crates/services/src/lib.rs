@@ -17,6 +17,8 @@ use training_adjuster::TrainingAdjuster;
 use treasury::service::Treasury;
 use users::service::Users;
 
+pub mod error;
+
 pub struct SfServices {
     pub db: Arc<Db>,
     pub users: Users<History>,

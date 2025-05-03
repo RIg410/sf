@@ -1,5 +1,5 @@
 [package]
-name = "error"
+name = "business-error"
 
 edition.workspace = true
 license.workspace = true
@@ -14,6 +14,9 @@ eyre.workspace = true
 ident.workspace = true
 mongodb.workspace = true
 requests.workspace = true
+services.workspace = true
+store.workspace = true
+teloxide.workspace = true
 thiserror.workspace = true
 trainings.workspace = true
 users.workspace = true

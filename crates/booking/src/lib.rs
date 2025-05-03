@@ -62,19 +62,23 @@ impl<L: UserLog> Booking<L> {
             .ok_or_else(|| TrainingError::TrainingNotFound(id))?;
         let status = training.status(Local::now());
         if !forced && !status.can_sign_in() {
-            return Err(TrainingError::TrainingNotOpenToSignUp(id, status).into());
+            return Err(
+                TrainingError::TrainingNotOpenToSignUp(training.full_name(), status).into(),
+            );
         }
 
         if training.is_processed {
-            return Err(TrainingError::TrainingNotOpenToSignUp(id, status).into());
+            return Err(
+                TrainingError::TrainingNotOpenToSignUp(training.full_name(), status).into(),
+            );
         }
 
         if training.clients.contains(&client) {
-            return Err(TrainingError::ClientAlreadySignedUp(client, id).into());
+            return Err(TrainingError::ClientAlreadySignedUp(client, training.full_name()).into());
         }
 
         if training.clients.len() as u32 >= training.capacity {
-            return Err(TrainingError::TrainingIsFull(id).into());
+            return Err(TrainingError::TrainingIsFull(training.full_name()).into());
         }
 
         let mut user = self
@@ -145,13 +149,13 @@ impl<L: UserLog> Booking<L> {
     ) -> Result<(), CalendarError> {
         let status = training.status(Local::now());
         if !forced && !status.can_sign_out() {
-            return Err(TrainingError::TrainingNotOpenToSignOut(training.id()).into());
+            return Err(TrainingError::TrainingNotOpenToSignOut(training.full_name()).into());
         }
         if training.is_processed {
-            return Err(TrainingError::TrainingNotOpenToSignOut(training.id()).into());
+            return Err(TrainingError::TrainingNotOpenToSignOut(training.full_name()).into());
         }
         if !training.clients.contains(&client) {
-            return Err(TrainingError::ClientNotSignedUp(client, training.id()).into());
+            return Err(TrainingError::ClientNotSignedUp(client, training.full_name()).into());
         }
         let mut user = self
             .users
@@ -196,7 +200,7 @@ impl<L: UserLog> Booking<L> {
             .get_training_by_id(session, training.id())
             .await?
             .ok_or_else(|| TrainingError::TrainingNotFound(training.id()))?;
-        
+
         for client in &training.clients {
             self.sign_out_tx_less(session, &training, *client, true)
                 .await?;

@@ -1,7 +1,6 @@
 use crate::models::advertising::{AdvertisingConversionStat, SourceStat};
 use ai::{Ai, AiContext, AiModel};
-use error::SfError;
-use eyre::{Context, Result};
+use eyre::{Context, Error, Result};
 use history::{model::{Action, ActionType}, service::History};
 use ident::source::Source;
 use requests::service::Requests;
@@ -32,7 +31,7 @@ impl<L: UserLog> AdvertisingStatService<L> {
         session: &mut Session,
         range: Range,
         ai: Option<AiModel>,
-    ) -> Result<AdvertisingConversionStat, SfError> {
+    ) -> Result<AdvertisingConversionStat, Error> {
         let (from, to) = range.range()?;
 
         let mut requests = self
@@ -68,7 +67,7 @@ impl<L: UserLog> AdvertisingStatService<L> {
         session: &mut Session,
         stat: &mut SourceStat,
         phone: String,
-    ) -> Result<(), SfError> {
+    ) -> Result<(), Error> {
         let user = self.users.find_by_phone(session, &phone).await?;
 
         if let Some(user) = user {
@@ -105,7 +104,7 @@ impl<L: UserLog> AdvertisingStatService<L> {
         &self,
         sources: &mut HashMap<Source, SourceStat>,
         model: AiModel,
-    ) -> Result<String, SfError> {
+    ) -> Result<String, Error> {
         let prompt = "Вот агригация конверсии клиентов по источникам в формате json. 
         Расскажи мне, что ты думаешь об этом. Ответ должен быть на русском языке, без форматирование, только переносы строк.
         Пришли только результат без размышлений.

@@ -4,3 +4,4 @@ pub mod slot;
 pub mod training;
 pub mod week;
 pub mod source;
+pub mod user;

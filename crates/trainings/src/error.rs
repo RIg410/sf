@@ -1,13 +1,11 @@
 use bson::oid::ObjectId;
-use ident::training::TrainingId;
+use ident::{training::{TrainingFullName, TrainingId}, user::UserIdWithName};
 use thiserror::Error;
 
 use crate::model::status::TrainingStatus;
 
 #[derive(Error, Debug)]
 pub enum TrainingError {
-    #[error("Wrong numbers of users")]
-    WrongTrainingClients { training_id: TrainingId },
     // common
     #[error("Common error: {0}")]
     Eyre(#[from] eyre::Error),
@@ -15,25 +13,25 @@ pub enum TrainingError {
     MongoError(#[from] mongodb::error::Error),
     // delete training
     #[error("Training has clients")]
-    TrainingHasClients(TrainingId),
+    TrainingHasClients(TrainingFullName),
     #[error("Training is processed")]
-    TrainingIsProcessed(TrainingId),
+    TrainingIsProcessed(TrainingFullName),
     //signin
     #[error("Training not open to sign up")]
-    TrainingNotOpenToSignUp(TrainingId, TrainingStatus),
+    TrainingNotOpenToSignUp(TrainingFullName, TrainingStatus),
     #[error("Client already signed up:{0:?} {1:?}")]
-    ClientAlreadySignedUp(ObjectId, TrainingId),
+    ClientAlreadySignedUp(UserIdWithName, TrainingFullName),
     #[error("Training is full:{0:?}")]
-    TrainingIsFull(TrainingId),
+    TrainingIsFull(TrainingFullName),
     #[error("Not enough balance:{0:?}")]
-    NotEnoughBalance(ObjectId),
+    NotEnoughBalance(UserIdWithName),
     //signout
     #[error("Training not found:{0:?}")]
     TrainingNotFound(TrainingId),
     #[error("Training is not open to sign out:{0:?}")]
-    TrainingNotOpenToSignOut(TrainingId),
+    TrainingNotOpenToSignOut(TrainingFullName),
     #[error("Client not signed up:{0:?} {1:?}")]
-    ClientNotSignedUp(ObjectId, TrainingId),
+    ClientNotSignedUp(UserIdWithName, TrainingFullName),
     #[error("Not enough reserved balance:{0:?}")]
-    NotEnoughReservedBalance(ObjectId),
+    NotEnoughReservedBalance(UserIdWithName),
 }
