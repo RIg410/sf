@@ -65,6 +65,12 @@ impl View for Stat {
         )?;
         writeln!(
             &mut text,
+            "Субаренда: _{}_ на сумму _{}_",
+            stat.income.sub_rent.count,
+            escape(&stat.income.sub_rent.sum.to_string())
+        )?;
+        writeln!(
+            &mut text,
             "Другие поступления:_{}_",
             escape(&stat.income.other.sum.to_string())
         )?;
@@ -74,6 +80,11 @@ impl View for Stat {
             &mut text,
             "Выплачено вознаграждений: _{}_",
             escape(&stat.outcome.rewards.sum.to_string())
+        )?;
+        writeln!(
+            &mut text,
+            "Оплачено аренды: _{}_",
+            escape(&stat.outcome.rent.sum.to_string())
         )?;
         writeln!(
             &mut text,
