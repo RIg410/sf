@@ -11,26 +11,26 @@ members = [
   "crates/bg-process",
   "crates/bot/*",
   "bins",
-  "crates/payment/yookassa",
-  "crates/business-error",
+  "crates/services/payment/yookassa",
+  "crates/bot/business-error",
   "mini-app/main",
-  "crates/stat",
+  "crates/services/stat",
   "crates/services",
   "crates/backup",
-  "crates/rewards",
-  "crates/trainings",
+  "crates/services/rewards",
+  "crates/services/trainings",
   "crates/core/*",
-  "crates/program",
-  "crates/treasury",
-  "crates/subscription",
-  "crates/history",
+  "crates/services/program",
+    "crates/services/treasury",
+  "crates/services/subscription",
+  "crates/services/history",
   "crates/services/users",
-  "crates/requests",
-  "crates/calendar",
-  "crates/booking",
-  "crates/sales",
-  "crates/training_adjuster",
-  "crates/employee",
+  "crates/services/requests",
+  "crates/services/calendar",
+  "crates/services/booking",
+  "crates/services/sales",
+  "crates/services/training_adjuster",
+  "crates/services/employee",
 ]
 
 resolver = "2"
@@ -52,32 +52,32 @@ bot-trainings = {path = "crates/bot/trainings"}
 bot-users = {path = "crates/bot/users"}
 bot-viewer = {path = "crates/bot/viewer"}
 
-booking = {path = "crates/booking"}
-business-error = {path = "crates/business-error"}
-calendar = {path = "crates/calendar"}
+booking = {path = "crates/services/booking" }
+business-error = {path = "crates/bot/business-error" }
+calendar = {path = "crates/services/calendar" }
 decimal = {path = "crates/core/decimal"}
-employee = {path = "crates/employee"}
+employee = {path = "crates/services/employee" }
 env = {path = "crates/core/env"}
 graph = {path = "crates/core/graph"}
-history = {path = "crates/history"}
+history = {path = "crates/services/history" }
 ident = {path = "crates/core/ident"}
 mini-app-main = {path = "mini-app/main"}
-program = {path = "crates/program"}
-requests = {path = "crates/requests"}
-rewards = {path = "crates/rewards"}
+program = {path = "crates/services/program" }
+requests = {path = "crates/services/requests" }
+rewards = {path = "crates/services/rewards" }
 rights = {path = "crates/core/rights"}
-sales = {path = "crates/sales"}
+sales = {path = "crates/services/sales" }
 services = {path = "crates/services"}
-stat = {path = "crates/stat"}
+stat = {path = "crates/services/stat" }
 store = {path = "crates/core/store"}
-subscription = {path = "crates/subscription"}
+subscription = {path = "crates/services/subscription" }
 time = {path = "crates/core/time"}
-training_adjuster = {path = "crates/training_adjuster"}
-trainings = {path = "crates/trainings"}
-treasury = {path = "crates/treasury"}
+training_adjuster = {path = "crates/services/training_adjuster" }
+trainings = {path = "crates/services/trainings" }
+treasury = {path = "crates/services/treasury" }
 tx_macro = {path = "crates/core/tx_macro"}
 users = {path = "crates/services/users"}
-yookassa = {path = "crates/payment/yookassa"}
+yookassa = {path = "crates/services/payment/yookassa" }
 
 #libs 
 arc-swap = "1.7.1"
