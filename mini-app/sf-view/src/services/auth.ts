@@ -1,40 +1,22 @@
 import { is_telegram_context, initData } from "./tg";
 import { SendVerificationCodeResponse, TgAuthError } from "@/generated/auth";
 import { getGRPC, initGRPC } from "./grpc";
+import { getToken, setToken } from "./token";
 
 export class Auth {
-    private token: string | null;
     private auth_type: AuthType;
 
     constructor() {
-        this.token = get_auth_token();
         this.auth_type = auth_type();
     }
 
-    getToken(): string | null {
-        return this.token;
-    }
 
     getAuthType(): AuthType {
         return this.auth_type;
     }
 
     isAuthenticated(): boolean {
-        return this.token !== null;
-    }
-
-    checkAuthStatus() {
-        this.token = get_auth_token();
-    }
-
-    setToken(token: string | null) {
-        this.token = token;
-        if (token) {
-            localStorage.setItem('token', token);
-        } else {
-            localStorage.removeItem('token');
-        }
-        initGRPC();
+        return getToken() !== null;
     }
 
     async authThroughTelegram(): Promise<string | null> {
@@ -64,7 +46,8 @@ export class Auth {
                 }
             } else {
                 if (result.token) {
-                    this.setToken(result.token);
+                    setToken(result.token);
+                    initGRPC();
                     return null;
                 } else {
                     console.error("Telegram authentication error: No token received.");
@@ -106,7 +89,8 @@ export class Auth {
             return "Неверный код подтверждения.";
         } else {
             if (result.token) {
-                this.setToken(result.token);
+                setToken(result.token);
+                initGRPC();
                 return null;
             } else {
                 console.error("Telegram authentication error: No token received.");

@@ -95,7 +95,6 @@ export default defineComponent({
     const route = useRoute();
     const auth = getAuthService();
 
-
     const isAuthenticated = ref(false);
 
     watch(
@@ -110,7 +109,6 @@ export default defineComponent({
     );
 
     onMounted(async () => {
-      auth.checkAuthStatus();
       console.log('Auth status checked');
       isAuthenticated.value = auth.isAuthenticated();
       if (!isAuthenticated.value && route.path !== '/auth') {

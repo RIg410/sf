@@ -2,13 +2,13 @@ use crate::{state::Tokens, sys_button};
 use env::Env;
 use eyre::{Context as _, Error};
 use futures_util::stream::StreamExt;
-use tracing::{info, error};
 use std::{
     fmt::Debug,
     ops::Deref,
-    sync::{atomic::AtomicBool, Arc},
+    sync::{Arc, atomic::AtomicBool},
 };
 use teloxide::{
+    ApiError, Bot, RequestError,
     net::Download,
     payloads::{EditMessageTextSetters as _, SendMessageSetters as _},
     prelude::Requester,
@@ -16,8 +16,8 @@ use teloxide::{
         ChatId, FileMeta, InlineKeyboardMarkup, InputFile, MessageId, ParseMode, ReplyMarkup, True,
     },
     utils::markdown::escape,
-    ApiError, Bot, RequestError,
 };
+use tracing::{error, info};
 
 pub struct TgBot {
     bot: Bot,
