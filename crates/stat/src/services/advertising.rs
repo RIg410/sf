@@ -1,12 +1,15 @@
 use crate::models::advertising::{AdvertisingConversionStat, SourceStat};
 use ai::{Ai, AiContext, AiModel};
 use eyre::{Context, Error, Result};
-use history::{model::{Action, ActionType}, service::History};
+use history::{
+    model::{Action, ActionType},
+    service::History,
+};
 use ident::source::Source;
 use requests::service::Requests;
 use std::collections::HashMap;
 use store::session::Session;
-use time::range::Range;
+use time::range::MonthRange;
 use users::{log::UserLog, service::Users};
 
 pub struct AdvertisingStatService<L> {
@@ -29,7 +32,7 @@ impl<L: UserLog> AdvertisingStatService<L> {
     pub async fn conversion(
         &self,
         session: &mut Session,
-        range: Range,
+        range: MonthRange,
         ai: Option<AiModel>,
     ) -> Result<AdvertisingConversionStat, Error> {
         let (from, to) = range.range()?;

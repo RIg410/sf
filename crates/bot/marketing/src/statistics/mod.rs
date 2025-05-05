@@ -7,25 +7,24 @@ use bot_core::{
     widget::{Jmp, View, ViewResult},
 };
 use bot_viewer::day::fmt_date;
-use chrono::Local;
 use eyre::Error;
 use eyre::Result;
 use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::types::InlineKeyboardMarkup;
-use time::range::Range;
+use time::range::MonthRange;
 
 mod advertising;
 
 pub struct StatisticsView {
-    range: Range,
+    range: MonthRange,
     ai: Option<AiModel>,
 }
 
 impl Default for StatisticsView {
     fn default() -> Self {
         Self {
-            range: Range::Day(Local::now()),
+            range: MonthRange::default(),
             ai: None,
         }
     }
@@ -118,7 +117,7 @@ impl StatisticType {
     pub async fn send_statistic(
         &self,
         ctx: &mut Context,
-        range: Range,
+        range: MonthRange,
         ai: Option<AiModel>,
     ) -> Result<(), Error> {
         match self {

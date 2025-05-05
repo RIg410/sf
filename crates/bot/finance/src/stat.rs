@@ -11,14 +11,14 @@ use rights::Rule;
 use serde::{Deserialize, Serialize};
 use std::fmt::Write;
 use teloxide::{types::InlineKeyboardMarkup, utils::markdown::escape};
-use time::range::Range;
+use time::range::MonthRange;
 
 pub struct Stat {
-    range: Option<Range>,
+    range: Option<MonthRange>,
 }
 
 impl Stat {
-    pub fn new(range: Option<Range>) -> Self {
+    pub fn new(range: Option<MonthRange>) -> Self {
         Self { range }
     }
 }

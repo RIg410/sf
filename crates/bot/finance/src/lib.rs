@@ -21,7 +21,7 @@ use rights::Rule;
 use serde::{Deserialize, Serialize};
 use stat::Stat;
 use teloxide::types::InlineKeyboardMarkup;
-use time::range::Range;
+use time::range::MonthRange;
 
 #[derive(Default)]
 pub struct FinanceView;
@@ -76,7 +76,7 @@ impl View for FinanceView {
             }
             Callback::StatByMonth => {
                 ctx.ensure(Rule::ViewFinance)?;
-                Ok(Stat::new(Some(Range::Month(Local::now().with_day(1).unwrap_or_default()))).into())
+                Ok(Stat::new(Some(MonthRange::new(Local::now().with_day(1).unwrap_or_default()))).into())
             }
             Callback::PayMarketing => {
                 ctx.ensure(Rule::MakePayment)?;

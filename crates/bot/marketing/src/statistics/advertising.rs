@@ -5,9 +5,13 @@ use bot_core::context::Context;
 use eyre::Error;
 use rights::Rule;
 use teloxide::utils::markdown::escape;
-use time::range::Range;
+use time::range::MonthRange;
 
-pub async fn send_conversion(ctx: &mut Context, range: Range, ai: Option<AiModel>) -> Result<(), Error> {
+pub async fn send_conversion(
+    ctx: &mut Context,
+    range: MonthRange,
+    ai: Option<AiModel>,
+) -> Result<(), Error> {
     let ai = if ctx.has_right(Rule::AIStatistic) {
         ai
     } else {
