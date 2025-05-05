@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <HelloWorld msg="Welcome to app" />
+    <HelloWorld msg="Работаем над разделом" />
   </div>
 </template>
 

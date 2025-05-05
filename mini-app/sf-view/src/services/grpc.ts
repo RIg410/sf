@@ -3,7 +3,7 @@ import { UsersService, UsersServiceClientImpl } from "@/generated/users";
 import { getToken } from "./token";
 import { grpc } from "@improbable-eng/grpc-web";
 
-export const GRPC_URL = "http://localhost:3000";
+export const GRPC_URL = "/api";
 
 export class gRPC {
     authService: AuthService;

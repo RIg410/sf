@@ -1,5 +1,7 @@
 <template>
-  <header id="header"></header>
+  <header id="header">
+
+  </header>
   <router-view />
   <footer class="navbar" v-if="isAuthenticated">
     <div class="nav-btn">
