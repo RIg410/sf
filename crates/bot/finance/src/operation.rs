@@ -59,7 +59,7 @@ impl View for FinanceOperation {
                     .treasury
                     .remove(&mut ctx.session, self.id)
                     .await?;
-                Ok(Jmp::Back)
+                Ok(Jmp::Back(1))
             }
         }
     }

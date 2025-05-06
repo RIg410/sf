@@ -52,7 +52,7 @@ impl View for Confirm {
 
         match cb {
             ConfirmCallback::Confirm => self.on_confirm.call(ctx).await,
-            ConfirmCallback::Cancel => Ok(Jmp::BackSteps(self.cancel_back_steps)),
+            ConfirmCallback::Cancel => Ok(Jmp::Back(self.cancel_back_steps)),
         }
     }
 }

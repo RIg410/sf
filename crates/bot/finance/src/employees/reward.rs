@@ -128,9 +128,9 @@ impl View for ConfirmSum {
                     .pay_reward(&mut ctx.session, self.id, self.sum)
                     .await?;
                 ctx.send_msg("Операция выполнена").await?;
-                Ok(Jmp::BackSteps(2))
+                Ok(Jmp::Back(2))
             }
-            ConfirmCallback::Cancel => Ok(Jmp::Back),
+            ConfirmCallback::Cancel => Ok(Jmp::Back(1)),
         }
     }
 }

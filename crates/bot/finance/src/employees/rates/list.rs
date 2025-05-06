@@ -193,13 +193,13 @@ impl View for DeleteRateConfirm {
                         .employee
                         .remove_rate(&mut ctx.session, self.id, self.rate)
                         .await?;
-                    Ok(Jmp::Back)
+                    Ok(Jmp::Back(1))
                 } else {
                     ctx.send_notification("Тариф был изменен").await;
-                    Ok(Jmp::Back)
+                    Ok(Jmp::Back(1))
                 }
             }
-            DeleteRateCalldata::No => Ok(Jmp::Back),
+            DeleteRateCalldata::No => Ok(Jmp::Back(1)),
         }
     }
 }

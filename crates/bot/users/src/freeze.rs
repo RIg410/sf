@@ -113,11 +113,11 @@ impl View for FreezeProfile {
 
                 if user.freeze.is_some() {
                     ctx.send_msg("абонемент уже заморожен").await?;
-                    return Ok(Jmp::Back);
+                    return Ok(Jmp::Back(1));
                 }
                 if !can_freeze && ctx.me.id != self.id {
                     ctx.send_msg("Нет прав").await?;
-                    return Ok(Jmp::Back);
+                    return Ok(Jmp::Back(1));
                 }
 
                 ctx.services
@@ -128,7 +128,7 @@ impl View for FreezeProfile {
             }
             Callback::No => {}
         }
-        return Ok(Jmp::Back);
+        return Ok(Jmp::Back(1));
     }
 }
 

@@ -61,7 +61,7 @@ impl View for SetBirthday {
                         .await;
                 }
                 ctx.delete_msg(message.id).await?;
-                Ok(Jmp::Back)
+                Ok(Jmp::Back(1))
             }
             Err(_) => {
                 ctx.send_notification("Введите дату в формате ДД\\.ММ\\.ГГГГ")

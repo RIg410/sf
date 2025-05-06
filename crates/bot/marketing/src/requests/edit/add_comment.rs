@@ -27,7 +27,7 @@ impl View for AddComment {
         let comment = msg.text().unwrap_or_default().to_string();
 
         if comment == "-" {
-            return Ok(Jmp::Back);
+            return Ok(Jmp::Back(1));
         }
 
         ctx.services
@@ -35,6 +35,6 @@ impl View for AddComment {
             .add_comment(&mut ctx.session, self.id, comment)
             .await?;
         ctx.bot.send_notification("Комментарий добавлен").await;
-        Ok(Jmp::Back)
+        Ok(Jmp::Back(1))
     }
 }

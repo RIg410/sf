@@ -73,7 +73,7 @@ async fn build_context(
 pub(crate) async fn handle_result(
     ctx: &mut Context,
     result: ViewResult,
-    mut current: Widget,
+    current: Widget,
     system_handler: impl Fn() -> Widget,
 ) -> Result<Widget, Error> {
     Ok(match handle_err(ctx, result).await? {
@@ -82,10 +82,9 @@ pub(crate) async fn handle_result(
             new_widget
         }
         crate::widget::Jmp::Stay => current,
-        crate::widget::Jmp::Back => current.take_back().unwrap_or_else(&system_handler),
         crate::widget::Jmp::Home => system_handler(),
         crate::widget::Jmp::Goto(widget) => widget,
-        crate::widget::Jmp::BackSteps(steps) => {
+        crate::widget::Jmp::Back(steps) => {
             let mut back = current;
             for _ in 0..steps {
                 back = back.take_back().unwrap_or_else(&system_handler)

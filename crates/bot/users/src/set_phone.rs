@@ -41,6 +41,6 @@ impl View for SetPhone {
             .set_phone(&mut ctx.session, self.id, text)
             .await?;
         ctx.delete_msg(message.id).await?;
-        Ok(Jmp::Back)
+        Ok(Jmp::Back(1))
     }
 }

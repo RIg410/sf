@@ -127,7 +127,7 @@ where
                         return Ok(Jmp::Next(view));
                     }
                     Dispatch::WidgetBack => {
-                        return Ok(Jmp::Back);
+                        return Ok(Jmp::Back(1));
                     }
                 }
             }
@@ -156,7 +156,7 @@ where
                     self.action = Some(back);
                 }
                 None => {
-                    return Ok(Jmp::Back);
+                    return Ok(Jmp::Back(1));
                 }
             },
             Callback::Select(idx) => match action {
@@ -175,12 +175,12 @@ where
                             return Ok(Jmp::Next(widget));
                         }
                         Dispatch::WidgetBack => {
-                            return Ok(Jmp::Back);
+                            return Ok(Jmp::Back(1));
                         }
                     },
                     ListId::No => {
                         ctx.send_notification("❌ Отменено").await;
-                        return Ok(Jmp::Back);
+                        return Ok(Jmp::Back(1));
                     }
                     _ => return Ok(Jmp::Stay),
                 },
@@ -200,7 +200,7 @@ where
                             return Ok(Jmp::Next(widget));
                         }
                         Dispatch::WidgetBack => {
-                            return Ok(Jmp::Back);
+                            return Ok(Jmp::Back(1));
                         }
                     }
                 }

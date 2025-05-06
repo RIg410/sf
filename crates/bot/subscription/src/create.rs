@@ -330,7 +330,7 @@ impl View for CreateSubscription {
                     Ok(_) => {
                         ctx.send_msg("✅Абонемент создан").await?;
                         ctx.reset_origin();
-                        Ok(Jmp::Back)
+                        Ok(Jmp::Back(1))
                     }
                     Err(CreateSubscriptionError::NameAlreadyExists) => {
                         ctx.send_msg("Не удалось создать абонемент: Имя уже занято")
@@ -350,7 +350,7 @@ impl View for CreateSubscription {
                     Err(CreateSubscriptionError::Common(err)) => Err(err.into()),
                 }
             }
-            Callback::Cancel => Ok(Jmp::Back),
+            Callback::Cancel => Ok(Jmp::Back(1)),
             Callback::CanUserBuy(can_by) => {
                 if self.state == State::SetCanBuyWithUser {
                     self.subscription.user_can_buy = can_by;

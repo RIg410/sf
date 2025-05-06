@@ -141,9 +141,9 @@ impl View for ConfirmChangeTime {
                     .change_slot(&mut ctx.session, self.id, self.slot, self.all)
                     .await?;
                 ctx.send_notification("Время тренировки изменено").await;
-                Ok(Jmp::BackSteps(4))
+                Ok(Jmp::Back(4))
             }
-            ConfirmCallback::Cancel => Ok(Jmp::BackSteps(2)),
+            ConfirmCallback::Cancel => Ok(Jmp::Back(2)),
         }
     }
 }

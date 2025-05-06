@@ -154,9 +154,9 @@ impl View for AddMemberConfirm {
                     .add_family_member(&mut ctx.session, self.parent_id, self.child_id)
                     .await?;
                 ctx.send_notification("Член семьи добавлен").await;
-                Ok(Jmp::Back)
+                Ok(Jmp::Back(1))
             }
-            ConfirmCalldata::Cancel => Ok(Jmp::Back),
+            ConfirmCalldata::Cancel => Ok(Jmp::Back(1)),
         }
     }
 }
@@ -268,9 +268,9 @@ impl View for CreateMemberConfirm {
                     .await?;
 
                 ctx.send_notification("Член семьи добавлен").await;
-                Ok(Jmp::Back)
+                Ok(Jmp::Back(1))
             }
-            ConfirmCalldata::Cancel => Ok(Jmp::Back),
+            ConfirmCalldata::Cancel => Ok(Jmp::Back(1)),
         }
     }
 }

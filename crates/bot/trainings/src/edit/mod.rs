@@ -59,7 +59,7 @@ impl EditTraining {
             .calendar
             .delete_training(&mut ctx.session, training.id(), all)
             .await?;
-        Ok(Jmp::BackSteps(2))
+        Ok(Jmp::Back(2))
     }
 
     async fn keep_open(&mut self, ctx: &mut Context, keep_open: bool) -> ViewResult {

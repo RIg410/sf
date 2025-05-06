@@ -106,7 +106,7 @@ impl View for CreateProgram {
                         )
                         .await?;
                     ctx.send_msg("✅ Программа создана").await?;
-                    return Ok(Jmp::Back);
+                    return Ok(Jmp::Back(1));
                 } else {
                     ctx.send_msg("Количество мест должно быть числом").await?;
                     State::SetCapacity(program)

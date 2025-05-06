@@ -155,11 +155,11 @@ impl View for EditProgram {
                 };
                 ctx.send_msg("Изменения сохранены ✅").await?;
                 ctx.reset_origin();
-                Ok(Jmp::Back)
+                Ok(Jmp::Back(1))
             }
             Callback::No => {
                 ctx.reset_origin();
-                Ok(Jmp::Back)
+                Ok(Jmp::Back(1))
             }
         }
     }

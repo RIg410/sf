@@ -112,9 +112,8 @@ pub enum Jmp {
     Next(Widget),
     Goto(Widget),
     Stay,
-    Back,
+    Back(usize),
     Home,
-    BackSteps(usize),
 }
 
 impl<T: View + Send + Sync + 'static> From<T> for Jmp {

@@ -45,6 +45,6 @@ impl View for SetFio {
             .set_name(&mut ctx.session, self.id, name, last_name)
             .await?;
         ctx.delete_msg(message.id).await?;
-        Ok(Jmp::Back)
+        Ok(Jmp::Back(1))
     }
 }

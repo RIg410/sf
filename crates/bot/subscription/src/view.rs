@@ -41,10 +41,10 @@ impl SubscriptionOption {
             .ok_or_else(|| eyre::eyre!("Subscription not found"))?;
         if !sub.user_can_buy {
             ctx.send_msg("Покупка абонемента недоступна").await?;
-            return Ok(Jmp::Back);
+            return Ok(Jmp::Back(1));
         }
 
-        Ok(Jmp::Back)
+        Ok(Jmp::Back(1))
     }
 }
 
@@ -68,7 +68,7 @@ impl View for SubscriptionOption {
                     .subscriptions
                     .delete(&mut ctx.session, self.id)
                     .await?;
-                Ok(Jmp::Back)
+                Ok(Jmp::Back(1))
             }
             Callback::Buy => {
                 ctx.ensure(Rule::BuySubscription)?;

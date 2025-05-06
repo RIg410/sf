@@ -37,11 +37,7 @@ impl View for DeleteEmployeeConfirm {
         Ok(())
     }
 
-    async fn handle_callback(
-        &mut self,
-        ctx: &mut Context,
-        callback: &str,
-    ) -> ViewResult {
+    async fn handle_callback(&mut self, ctx: &mut Context, callback: &str) -> ViewResult {
         ctx.ensure(Rule::EditEmployee)?;
         match calldata!(callback) {
             CallbackQuery::Yes => {
@@ -50,9 +46,9 @@ impl View for DeleteEmployeeConfirm {
                     .delete_employee(&mut ctx.session, self.user_id)
                     .await?;
                 ctx.send_notification("Сотрудник удален").await;
-                Ok(Jmp::Back)
+                Ok(Jmp::Back(1))
             }
-            CallbackQuery::No => Ok(Jmp::Back),
+            CallbackQuery::No => Ok(Jmp::Back(1)),
         }
     }
 }

@@ -172,9 +172,9 @@ impl View for ConfirmRemoveChild {
                     .await?;
 
                 ctx.send_notification("Член семьи удален").await;
-                Ok(Jmp::Back)
+                Ok(Jmp::Back(1))
             }
-            ConfirmRemoveChildCallback::Cancel => Ok(Jmp::Back),
+            ConfirmRemoveChildCallback::Cancel => Ok(Jmp::Back(1)),
         }
     }
 }

@@ -43,7 +43,7 @@ impl View for AddNotification {
                     .add_notification(&mut ctx.session, self.id, None)
                     .await?;
                 ctx.bot.send_notification("Уведомление удалено").await;
-                Ok(Jmp::Back)
+                Ok(Jmp::Back(1))
             }
         }
     }
@@ -110,7 +110,7 @@ impl View for SetRemindLater {
                 )
                 .await?;
             ctx.bot.send_notification("Уведомление установлено").await;
-            Ok(Jmp::BackSteps(2))
+            Ok(Jmp::Back(2))
         } else {
             ctx.bot
                 .send_notification("Введите корректную дату *дд\\.мм\\.гггг чч\\:мм*")
@@ -136,7 +136,7 @@ impl View for SetRemindLater {
             )
             .await?;
         ctx.bot.send_notification("Уведомление установлено").await;
-        Ok(Jmp::BackSteps(2))
+        Ok(Jmp::Back(2))
     }
 }
 

@@ -119,7 +119,7 @@ impl View for TreasuryOp {
                             .deposit(&mut ctx.session, *amount, description.to_string(), date)
                             .await?;
                         ctx.send_msg("✅ Платеж сохранен").await?;
-                        Ok(Jmp::Back)
+                        Ok(Jmp::Back(1))
                     }
                     Op::Payment => {
                         ctx.services
@@ -127,7 +127,7 @@ impl View for TreasuryOp {
                             .payment(&mut ctx.session, *amount, description.to_string(), date)
                             .await?;
                         ctx.send_msg("✅ Платеж сохранен").await?;
-                        Ok(Jmp::Back)
+                        Ok(Jmp::Back(1))
                     }
                 },
                 _ => {
@@ -136,7 +136,7 @@ impl View for TreasuryOp {
                     Ok(Jmp::Stay)
                 }
             },
-            Callback::Back => Ok(Jmp::Back),
+            Callback::Back => Ok(Jmp::Back(1)),
         }
     }
 }

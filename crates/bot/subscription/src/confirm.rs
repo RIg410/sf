@@ -71,7 +71,7 @@ impl View for ConfirmSell {
                 self.discount = None;
                 Ok(Jmp::Stay)
             }
-            Callback::Cancel => Ok(Jmp::Back),
+            Callback::Cancel => Ok(Jmp::Back(1)),
         }
     }
 }

@@ -69,7 +69,7 @@ impl View for Finish {
                 //no-op
             }
         }
-        Ok(Jmp::BackSteps(7))
+        Ok(Jmp::Back(7))
     }
 }
 

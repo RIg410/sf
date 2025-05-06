@@ -46,6 +46,6 @@ impl View for ChangeName {
             .update_training_name(&mut ctx.session, self.id, name)
             .await?;
         ctx.send_notification("Название тренировки изменено").await;
-        Ok(Jmp::BackSteps(3))
+        Ok(Jmp::Back(3))
     }
 }

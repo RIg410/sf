@@ -40,7 +40,7 @@ impl View for ChangeComeFrom {
             request.come_from
         } else {
             ctx.bot.send_notification("Заявка не найдена").await;
-            return Ok(Jmp::Back);
+            return Ok(Jmp::Back(1));
         };
 
         let comment = format!(
@@ -54,6 +54,6 @@ impl View for ChangeComeFrom {
             .update_come_from(&mut ctx.session, self.id, come_from, comment)
             .await?;
         ctx.bot.send_notification("Источник изменен").await;
-        Ok(Jmp::Back)
+        Ok(Jmp::Back(1))
     }
 }

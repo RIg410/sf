@@ -109,7 +109,7 @@ impl View for ChangeCouch {
             Callback::SelectCouch(id) => {
                 let id: ObjectId = ObjectId::from_bytes(id);
                 self.change_couch(ctx, id).await?;
-                return Ok(Jmp::Back);
+                return Ok(Jmp::Back(1));
             }
         }
     }

@@ -161,7 +161,7 @@ impl View for ClientView {
             Callback::AddClient => {
                 if let Reason::AddClient = self.reason {
                     self.add_client(ctx).await?;
-                    return Ok(Jmp::BackSteps(2));
+                    return Ok(Jmp::Back(2));
                 } else {
                     return Ok(Jmp::Stay);
                 }
@@ -174,7 +174,7 @@ impl View for ClientView {
                 }
             }
         };
-        Ok(Jmp::Back)
+        Ok(Jmp::Back(1))
     }
 }
 

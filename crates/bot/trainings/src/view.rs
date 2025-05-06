@@ -287,9 +287,9 @@ impl ConfirmCancelTraining {
             }
         }
         if training.is_group() {
-            Ok(Jmp::Back)
+            Ok(Jmp::Back(1))
         } else {
-            Ok(Jmp::BackSteps(2))
+            Ok(Jmp::Back(2))
         }
     }
 }
@@ -332,7 +332,7 @@ impl View for ConfirmCancelTraining {
     async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         Ok(match calldata!(data) {
             CancelCallback::Cancel => self.cancel_training(ctx).await?,
-            CancelCallback::Stay => Jmp::Back,
+            CancelCallback::Stay => Jmp::Back(1),
         })
     }
 }
@@ -433,6 +433,6 @@ pub async fn sign_out(ctx: &mut Context, id: TrainingId, user_id: ObjectId) -> V
                 true,
             )
             .await;
-        Ok(Jmp::Back)
+        Ok(Jmp::Back(1))
     }
 }

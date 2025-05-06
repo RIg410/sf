@@ -74,9 +74,9 @@ impl View for Finish {
         }
 
         if ctx.is_couch() && !ctx.has_right(Rule::SelectPersonalInstructor) {
-            Ok(Jmp::BackSteps(7))
+            Ok(Jmp::Back(7))
         } else {
-            Ok(Jmp::BackSteps(6))
+            Ok(Jmp::Back(6))
         }
     }
 }

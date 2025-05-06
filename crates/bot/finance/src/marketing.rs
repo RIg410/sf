@@ -128,7 +128,7 @@ impl View for Confirm {
                 ctx.send_msg("Операция выполнена").await?;
                 Ok(Jmp::Goto(FinanceView.into()))
             }
-            Callback::Cancel => Ok(Jmp::Back),
+            Callback::Cancel => Ok(Jmp::Back(1)),
         }
     }
 }
