@@ -1,6 +1,6 @@
 use std::sync::Arc;
 
-use super::{build_context, error::handle_result};
+use super::{build_context, handle_result};
 use crate::{
     BACK_NAME, ERROR,
     context::Context,
@@ -111,23 +111,7 @@ async fn inner_message_handler(
     };
 
     let result = widget.handle_message(ctx, &msg).await;
-    let mut new_widget = match handle_result(ctx, result).await? {
-        crate::widget::Jmp::Next(mut new_widget) => {
-            new_widget.set_back(widget);
-            new_widget
-        }
-        crate::widget::Jmp::Stay => widget,
-        crate::widget::Jmp::Back => widget.take_back().unwrap_or_else(&system_handler),
-        crate::widget::Jmp::Home => system_handler(),
-        crate::widget::Jmp::Goto(new_widget) => new_widget,
-        crate::widget::Jmp::BackSteps(steps) => {
-            let mut back = widget;
-            for _ in 0..steps {
-                back = back.take_back().unwrap_or_else(&system_handler)
-            }
-            back
-        }
-    };
+    let mut new_widget = handle_result(ctx, result, widget, system_handler).await?;
     ctx.set_system_go_back(!new_widget.is_back_main_view());
 
     new_widget.show(ctx).await?;

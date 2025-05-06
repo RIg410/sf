@@ -9,6 +9,7 @@ use eyre::Result;
 use serde::{Deserialize, Serialize};
 use teloxide::types::InlineKeyboardMarkup;
 
+
 #[async_trait]
 trait OnConfirm {
     async fn call(&self, ctx: &mut Context) -> ViewResult;
@@ -18,6 +19,12 @@ pub struct Confirm {
     msg: String,
     on_confirm: Box<dyn OnConfirm + Send + Sync + 'static>,
     cancel_back_steps: usize,
+}
+
+impl Confirm {
+    pub fn new(msg: String, cancel_back_steps: usize,) -> Self {
+        todo!()
+    }
 }
 
 #[async_trait]

@@ -1,6 +1,6 @@
 pub mod callback;
-pub mod message;
 pub mod error;
+pub mod message;
 
 use std::sync::Arc;
 
@@ -8,9 +8,10 @@ use crate::{
     bot::{Origin, TgBot},
     context::Context,
     state::StateHolder,
-    widget::Widget,
+    widget::{ViewResult, Widget},
 };
 use env::Env;
+use error::handle_err;
 use eyre::Error;
 use services::SfServices;
 use teloxide::{Bot, prelude::Requester as _, types::ChatId};
@@ -67,4 +68,38 @@ async fn build_context(
         Context::new(tg_bot, user, ledger, session, real),
         state.view,
     ))
+}
+
+pub(crate) async fn handle_result(
+    ctx: &mut Context,
+    result: ViewResult,
+    mut current: Widget,
+    system_handler: impl Fn() -> Widget,
+) -> Result<Widget, Error> {
+    Ok(match handle_err(ctx, result).await? {
+        crate::widget::Jmp::Next(mut new_widget) => {
+            new_widget.set_back(current);
+            new_widget
+        }
+        crate::widget::Jmp::Stay => current,
+        crate::widget::Jmp::Back => current.take_back().unwrap_or_else(&system_handler),
+        crate::widget::Jmp::Home => system_handler(),
+        crate::widget::Jmp::Goto(widget) => widget,
+        crate::widget::Jmp::BackSteps(steps) => {
+            let mut back = current;
+            for _ in 0..steps {
+                back = back.take_back().unwrap_or_else(&system_handler)
+            }
+            back
+        }
+        crate::widget::Jmp::ToSafePoint => {
+            let mut back = current;
+            loop {
+                back = back.take_back().unwrap_or_else(&system_handler);
+                if back.is_safe_point() {
+                    break back;
+                }
+            }
+        }
+    })
 }

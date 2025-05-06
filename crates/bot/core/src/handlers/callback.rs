@@ -1,21 +1,21 @@
 use std::sync::Arc;
 
-use super::{build_context, error::handle_result};
+use super::{build_context, handle_result};
 use crate::{
+    BACK_NAME, ERROR,
     context::Context,
     state::{State, StateHolder},
     widget::Widget,
-    BACK_NAME, ERROR,
 };
 use env::Env;
 use services::SfServices;
-use tracing::error;
 use teloxide::{
+    Bot,
     prelude::{Requester as _, ResponseResult},
     types::CallbackQuery,
     utils::markdown::escape,
-    Bot,
 };
+use tracing::error;
 
 pub async fn callback_handler(
     bot: Bot,
@@ -114,23 +114,7 @@ async fn inner_callback_handler(
     };
 
     let result = widget.handle_callback(ctx, data.as_str()).await;
-    let mut new_widget = match handle_result(ctx, result).await? {
-        crate::widget::Jmp::Next(mut new_widget) => {
-            new_widget.set_back(widget);
-            new_widget
-        }
-        crate::widget::Jmp::Stay => widget,
-        crate::widget::Jmp::Back => widget.take_back().unwrap_or_else(&system_handler),
-        crate::widget::Jmp::Home => system_handler(),
-        crate::widget::Jmp::Goto(widget) => widget,
-        crate::widget::Jmp::BackSteps(steps) => {
-            let mut back = widget;
-            for _ in 0..steps {
-                back = back.take_back().unwrap_or_else(&system_handler)
-            }
-            back
-        }
-    };
+    let mut new_widget = handle_result(ctx, result, widget, system_handler).await?;
     ctx.set_system_go_back(!new_widget.is_back_main_view());
 
     new_widget.show(ctx).await?;

@@ -15,16 +15,17 @@ pub type ViewResult = Result<Jmp, SfError>;
 pub trait View {
     fn name(&self) -> &'static str;
 
+    // if view is safe point, Jmp::ToSafePoint will unroll the stack to this point
+    fn safe_point(&self) -> bool {
+        false
+    }
+
     fn main_view(&self) -> bool {
         false
     }
 
     fn allow_unsigned_user(&self) -> bool {
         false
-    }
-
-    fn can_go_back(&self) -> bool {
-        true
     }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error>;
@@ -66,6 +67,10 @@ impl Widget {
     pub(crate) fn is_back_main_view(&self) -> bool {
         self.back.as_ref().is_some_and(|b| b.view.main_view())
     }
+
+    pub fn is_safe_point(&self) -> bool {
+        self.view.safe_point()
+    }
 }
 
 impl<T: View + Send + Sync + 'static> From<T> for Widget {
@@ -103,6 +108,7 @@ impl Debug for Widget {
 }
 
 pub enum Jmp {
+    ToSafePoint,
     Next(Widget),
     Goto(Widget),
     Stay,
