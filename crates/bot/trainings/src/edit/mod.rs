@@ -7,6 +7,7 @@ use bot_core::{
 };
 use bot_viewer::day::fmt_dt;
 use couch::ChangeCouch;
+use delete::ConfirmDeleteTraining;
 use eyre::Result;
 use ident::training::TrainingId;
 use rights::Rule;
@@ -14,6 +15,7 @@ use serde::{Deserialize, Serialize};
 use teloxide::{types::InlineKeyboardMarkup, utils::markdown::escape};
 
 pub mod couch;
+pub mod delete;
 pub mod name;
 pub mod program;
 pub mod slot;
@@ -43,22 +45,7 @@ impl EditTraining {
 
     async fn delete_training(&mut self, ctx: &mut Context, all: bool) -> ViewResult {
         ctx.ensure(Rule::RemoveTraining)?;
-
-        let training = ctx
-            .services
-            .calendar
-            .get_training_by_id(&mut ctx.session, self.id)
-            .await?
-            .ok_or_else(|| eyre::eyre!("Training not found"))?;
-        if !training.is_group() {
-            Err(eyre::eyre!("Can't delete personal training"))?;
-        }
-
-        ctx.services
-            .calendar
-            .delete_training(&mut ctx.session, training.id(), all)
-            .await?;
-        Ok(Jmp::Back(2))
+        Ok(ConfirmDeleteTraining::new(self.id, all).into())
     }
 
     async fn keep_open(&mut self, ctx: &mut Context, keep_open: bool) -> ViewResult {

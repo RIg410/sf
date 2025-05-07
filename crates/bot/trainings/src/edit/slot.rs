@@ -188,7 +188,7 @@ impl ConfirmView for ConfirmChangeSlot {
     }
 }
 
-fn room_name(room: Room) -> &'static str {
+pub fn room_name(room: Room) -> &'static str {
     match room {
         Room::Adult => "во взрослом зале",
         Room::Child => "в детском зале",
