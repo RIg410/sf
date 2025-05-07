@@ -287,9 +287,9 @@ impl ConfirmCancelTraining {
             }
         }
         if training.is_group() {
-            Ok(Jmp::Back(1))
+            Ok(Jmp::ToSafePoint)
         } else {
-            Ok(Jmp::Back(2))
+            Ok(Jmp::ToSafePoint)
         }
     }
 }
