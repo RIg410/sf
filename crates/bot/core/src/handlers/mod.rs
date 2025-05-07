@@ -70,13 +70,12 @@ async fn build_context(
     ))
 }
 
-pub(crate) async fn handle_result(
-    ctx: &mut Context,
+pub(crate) fn handle_result(
     result: ViewResult,
     current: Widget,
     system_handler: impl Fn() -> Widget,
 ) -> Result<Widget, Error> {
-    Ok(match handle_err(ctx, result).await? {
+    Ok(match handle_err(result)? {
         crate::widget::Jmp::Next(mut new_widget) => {
             new_widget.set_back(current);
             new_widget

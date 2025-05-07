@@ -115,7 +115,7 @@ async fn inner_callback_handler(
     };
 
     let result = widget.handle_callback(ctx, data.as_str()).await;
-    let mut new_widget = handle_result(ctx, result, widget, system_handler).await?;
+    let mut new_widget = handle_result(result, widget, system_handler)?;
     ctx.set_system_go_back(!new_widget.is_back_main_view());
     ctx.set_system_go_home(true);
 

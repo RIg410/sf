@@ -1,12 +1,11 @@
 use crate::{
-    context::Context,
     views::done::DoneView,
     widget::{Jmp, ViewResult},
 };
 use business_error::BusinessError;
 use eyre::{Error, Result};
 
-pub async fn handle_err(ctx: &mut Context, result: ViewResult) -> Result<Jmp, Error> {
+pub fn handle_err(result: ViewResult) -> Result<Jmp, Error> {
     match result {
         Ok(jmp) => Ok(jmp),
         Err(err) => {
