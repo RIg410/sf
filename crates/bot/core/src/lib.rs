@@ -21,12 +21,18 @@ const HOME_NAME: &str = "/start";
 const BACK_DESCRIPTION: &str = "🔙 Назад";
 const BACK_NAME: &str = "/back";
 
-pub(crate) fn sys_button(keymap: InlineKeyboardMarkup, can_back: bool) -> InlineKeyboardMarkup {
+pub(crate) fn sys_button(
+    keymap: InlineKeyboardMarkup,
+    can_back: bool,
+    go_home: bool,
+) -> InlineKeyboardMarkup {
     let mut row = vec![];
     if can_back {
         row.push(InlineKeyboardButton::callback(BACK_DESCRIPTION, BACK_NAME));
     }
-    row.push(InlineKeyboardButton::callback(HOME_DESCRIPTION, HOME_NAME));
+    if go_home {
+        row.push(InlineKeyboardButton::callback(HOME_DESCRIPTION, HOME_NAME));
+    }
     keymap.append_row(row)
 }
 

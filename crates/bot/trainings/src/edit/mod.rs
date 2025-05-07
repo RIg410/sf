@@ -16,8 +16,7 @@ use teloxide::{types::InlineKeyboardMarkup, utils::markdown::escape};
 pub mod couch;
 pub mod name;
 pub mod program;
-pub mod room;
-pub mod time;
+pub mod slot;
 
 pub struct EditTraining {
     id: TrainingId,
@@ -133,26 +132,47 @@ impl View for EditTraining {
 
         if ctx.has_right(Rule::EditTraining) {
             keymap = keymap.append_row(vec![Callback::ChangeName.button("🔄 Изменить название")]);
-            keymap = keymap.append_row(vec![
-                Callback::ChangeProgram(false).button("🔄 Изменить программу"),
-                Callback::ChangeProgram(true).button("🔄 Изменить программу для всех"),
-            ]);
+            let mut row = vec![Callback::ChangeProgram(false).button("🔄 Изменить программу")];
+
+            if !training.is_one_time {
+                row.push(Callback::ChangeProgram(true).button("для всех"));
+            }
+            keymap = keymap.append_row(row);
         }
 
         if ctx.has_right(Rule::ChangeTrainingSlot) {
-            keymap = keymap.append_row(vec![
-                Callback::ChangeStartAt(false).button("🕒 Изменить время"),
-            ]);
-            keymap = keymap.append_row(vec![
-                Callback::ChangeStartAt(true).button("🕒 Изменить время для всех"),
-            ]);
+            let mut row = vec![Callback::ChangeStartAt(false).button("🕒 Изменить время")];
+
+            if !training.is_one_time {
+                row.push(Callback::ChangeStartAt(true).button("для всех"));
+            }
+            keymap = keymap.append_row(row);
         }
 
         if ctx.has_right(Rule::ChangeTrainingSlot) {
-            keymap = keymap.append_row(vec![Callback::ChangeRoom(false).button("Изменить зал")]);
-            keymap = keymap.append_row(vec![
-                Callback::ChangeRoom(true).button("Изменить зал для всех"),
-            ])
+            let mut row = vec![Callback::ChangeRoom(false).button("🏢 Изменить зал")];
+
+            if !training.is_one_time {
+                row.push(Callback::ChangeRoom(true).button("для всех"));
+            }
+            keymap = keymap.append_row(row);
+        }
+
+        if ctx.has_right(Rule::RemoveTraining) {
+            let mut row = vec![Callback::Delete(false).button("🗑️ Удалить эту тренировку")];
+
+            if !training.is_one_time {
+                row.push(Callback::Delete(true).button("все"));
+                keymap = keymap.append_row(row);
+            }
+        }
+
+        if ctx.has_right(Rule::EditTrainingCouch) {
+            let mut row = vec![Callback::ChangeCouch(false).button("🔄 Изменить инструктора")];
+            if !training.is_one_time {
+                row.push(Callback::ChangeCouch(true).button("для всех"));
+            }
+            keymap = keymap.append_row(row);
         }
 
         if ctx.has_right(Rule::SetKeepOpen) {
@@ -165,24 +185,6 @@ impl View for EditTraining {
                     Callback::KeepOpen(true).button("🔓 Открыть для записи"),
                 ]);
             }
-        }
-        if ctx.has_right(Rule::RemoveTraining) {
-            keymap = keymap.append_row(vec![
-                Callback::Delete(false).button("🗑️ Удалить эту тренировку"),
-            ]);
-            if !training.is_one_time {
-                keymap = keymap.append_row(vec![
-                    Callback::Delete(true).button("🗑️ Удалить все последующие"),
-                ]);
-            }
-        }
-        if ctx.has_right(Rule::EditTrainingCouch) {
-            keymap = keymap.append_row(vec![
-                Callback::ChangeCouch(false).button("🔄 Заменить инструктора"),
-            ]);
-            keymap = keymap.append_row(vec![
-                Callback::ChangeCouch(true).button("🔄 Заменить инструктора на все"),
-            ]);
         }
 
         if ctx.has_right(Rule::SetFree) {
@@ -214,14 +216,14 @@ impl View for EditTraining {
             }
             Callback::ChangeStartAt(all) => {
                 if ctx.has_right(Rule::ChangeTrainingSlot) {
-                    Ok(time::ChangeTime::new(self.id, all).into())
+                    Ok(slot::ChangeTime::new(self.id, all).into())
                 } else {
                     Ok(Jmp::Stay)
                 }
             }
             Callback::ChangeRoom(all) => {
                 if ctx.has_right(Rule::ChangeTrainingSlot) {
-                    Ok(room::ChangeRoom::new(self.id, all).into())
+                    Ok(slot::ChangeRoom::new(self.id, all).into())
                 } else {
                     Ok(Jmp::Stay)
                 }

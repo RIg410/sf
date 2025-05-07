@@ -312,10 +312,8 @@ impl<L: UserLog> Calendar<L> {
     ) -> Result<Option<Training>> {
         let day_id = slot.day_id();
         let day = self.get_day(session, day_id).await?;
-        for training in day.training {
-            if training.get_slot().has_conflict(&slot) {
-                return Ok(Some(training));
-            }
+        if let Some(conflict) = day.has_conflict_with(slot) {
+            return Ok(Some(conflict));
         }
 
         if !is_one_time {
@@ -323,10 +321,8 @@ impl<L: UserLog> Calendar<L> {
             while let Some(day) = cursor.next(session).await {
                 let day = day?;
                 let slot = slot.with_day(day.day_id());
-                for training in day.training {
-                    if training.get_slot().has_conflict(&slot) {
-                        return Ok(Some(training));
-                    }
+                if let Some(conflict) = day.has_conflict_with(slot) {
+                    return Ok(Some(conflict));
                 }
             }
         }
@@ -353,13 +349,14 @@ impl<L: UserLog> Calendar<L> {
                     training.duration_min = duration;
                 }
             }
+            let id = day.id;
 
             if day.has_conflict() {
                 return Err(eyre::eyre!("Conflicts found"));
             }
 
             self.calendar
-                .update_duration_in_day(session, day.id, program_id, duration)
+                .update_duration_in_day(session, id, program_id, duration)
                 .await?;
         }
 

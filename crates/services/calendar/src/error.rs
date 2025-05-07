@@ -24,4 +24,6 @@ pub enum CalendarError {
     DayIdMismatch { old: DayId, new: DayId },
     #[error("Training error:{0:?}")]
     TrainingError(#[from] trainings::error::TrainingError),
+    #[error("Training is not cancelled")]
+    TrainingNotCancelled,
 }

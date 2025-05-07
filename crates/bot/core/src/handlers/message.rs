@@ -75,6 +75,7 @@ async fn inner_message_handler(
     }
 
     ctx.set_system_go_back(!widget.is_back_main_view() && !widget.main_view());
+    ctx.set_system_go_home(true);
 
     let widget = if let Some(msg) = msg.text() {
         if msg.starts_with("/") {
@@ -113,6 +114,7 @@ async fn inner_message_handler(
     let result = widget.handle_message(ctx, &msg).await;
     let mut new_widget = handle_result(ctx, result, widget, system_handler).await?;
     ctx.set_system_go_back(!new_widget.is_back_main_view());
+    ctx.set_system_go_home(true);
 
     new_widget.show(ctx).await?;
 

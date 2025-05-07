@@ -52,6 +52,10 @@ impl View for CalendarView {
         "CalendarView"
     }
 
+    fn safe_point(&self) -> bool {
+        true
+    }
+
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         let (text, keymap) = render_week(
             ctx,

@@ -24,6 +24,7 @@ pub struct TgBot {
     tokens: Tokens,
     origin: Origin,
     system_go_back: bool,
+    system_go_home: bool,
     env: Env,
 }
 
@@ -34,6 +35,7 @@ impl TgBot {
             tokens,
             origin,
             system_go_back: false,
+            system_go_home: false,
             env,
         }
     }
@@ -85,7 +87,7 @@ impl TgBot {
                 .bot
                 .edit_message_text(self.chat_id(), self.origin.message_id, text)
                 .parse_mode(teloxide::types::ParseMode::MarkdownV2)
-                .reply_markup(sys_button(markup, self.system_go_back))
+                .reply_markup(sys_button(markup, self.system_go_back, self.system_go_home))
                 .await;
             match result {
                 Ok(_) => Ok(()),
@@ -100,7 +102,7 @@ impl TgBot {
                 .bot
                 .send_message(self.chat_id(), text)
                 .parse_mode(teloxide::types::ParseMode::MarkdownV2)
-                .reply_markup(sys_button(markup, self.system_go_back))
+                .reply_markup(sys_button(markup, self.system_go_back, self.system_go_home))
                 .await;
             match result {
                 Ok(msg) => {
@@ -188,6 +190,10 @@ impl TgBot {
 
     pub fn set_system_go_back(&mut self, system_go_back: bool) {
         self.system_go_back = system_go_back;
+    }
+
+    pub fn set_system_go_home(&mut self, system_go_home: bool) {
+        self.system_go_home = system_go_home;
     }
 
     pub fn origin(&self) -> &Origin {

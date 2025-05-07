@@ -99,6 +99,11 @@ impl Slot {
             .unwrap();
         Slot::new(start_at.with_timezone(&Utc), self.duration_min, self.room)
     }
+
+    pub fn with_room(mut self, room: ObjectId) -> Slot {
+        self.room = room;
+        self
+    }
 }
 
 impl Debug for Slot {

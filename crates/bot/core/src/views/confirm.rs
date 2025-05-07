@@ -1,5 +1,5 @@
-use crate::widget::ViewResult;
 use crate::Calldata;
+use crate::widget::ViewResult;
 use crate::{
     context::Context,
     widget::{Jmp, View},
@@ -9,26 +9,18 @@ use eyre::Result;
 use serde::{Deserialize, Serialize};
 use teloxide::types::InlineKeyboardMarkup;
 
-
 #[async_trait]
-trait OnConfirm {
-    async fn call(&self, ctx: &mut Context) -> ViewResult;
-}
+pub trait ConfirmView {
+    async fn message(&self, ctx: &mut Context) -> Result<String>;
 
-pub struct Confirm {
-    msg: String,
-    on_confirm: Box<dyn OnConfirm + Send + Sync + 'static>,
-    cancel_back_steps: usize,
-}
-
-impl Confirm {
-    pub fn new(msg: String, cancel_back_steps: usize,) -> Self {
-        todo!()
-    }
+    async fn on_confirm(&self, ctx: &mut Context) -> ViewResult;
 }
 
 #[async_trait]
-impl View for Confirm {
+impl<V> View for V
+where
+    V: ConfirmView + Send + Sync + 'static,
+{
     fn name(&self) -> &'static str {
         "Confirm"
     }
@@ -36,10 +28,11 @@ impl View for Confirm {
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let mut keymap = InlineKeyboardMarkup::default();
         keymap = keymap.append_row(vec![
-            ConfirmCallback::Confirm.button("✅ Подтвердить"),
-            ConfirmCallback::Cancel.button("❌ Отмена"),
+            ConfirmCallback::Confirm.button("✅ Да"),
+            ConfirmCallback::Cancel.button("❌ Нет"),
         ]);
-        ctx.edit_origin(&self.msg, keymap).await?;
+        let msg = self.message(ctx).await?;
+        ctx.edit_origin(&msg, keymap).await?;
         Ok(())
     }
 
@@ -51,8 +44,8 @@ impl View for Confirm {
         };
 
         match cb {
-            ConfirmCallback::Confirm => self.on_confirm.call(ctx).await,
-            ConfirmCallback::Cancel => Ok(Jmp::Back(self.cancel_back_steps)),
+            ConfirmCallback::Confirm => self.on_confirm(ctx).await,
+            ConfirmCallback::Cancel => Ok(Jmp::ToSafePoint),
         }
     }
 }

@@ -124,6 +124,10 @@ impl View for MainMenuView {
         true
     }
 
+    fn safe_point(&self) -> bool {
+        true
+    }
+
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         if !ctx.origin().is_valid() {
             ctx.reset_origin();

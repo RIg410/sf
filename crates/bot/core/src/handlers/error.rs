@@ -1,5 +1,6 @@
 use crate::{
     context::Context,
+    views::done::DoneView,
     widget::{Jmp, ViewResult},
 };
 use business_error::BusinessError;
@@ -13,8 +14,7 @@ pub async fn handle_err(ctx: &mut Context, result: ViewResult) -> Result<Jmp, Er
                 Err(Error::new(err))
             } else {
                 let message = err.message(business_error::Format::Markdown);
-                ctx.send_notification(&message).await;
-                Ok(Jmp::Stay)
+                Ok(DoneView::err(message).into())
             }
         }
     }

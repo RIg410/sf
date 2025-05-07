@@ -88,6 +88,7 @@ async fn inner_callback_handler(
     }
 
     ctx.set_system_go_back(!widget.is_back_main_view() && !widget.main_view());
+    ctx.set_system_go_home(true);
 
     let widget = if data.starts_with("/") {
         match data.as_str() {
@@ -116,6 +117,7 @@ async fn inner_callback_handler(
     let result = widget.handle_callback(ctx, data.as_str()).await;
     let mut new_widget = handle_result(ctx, result, widget, system_handler).await?;
     ctx.set_system_go_back(!new_widget.is_back_main_view());
+    ctx.set_system_go_home(true);
 
     new_widget.show(ctx).await?;
 

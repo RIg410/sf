@@ -235,10 +235,16 @@ impl<L: UserLog> Booking<L> {
         &self,
         session: &mut Session,
         training: &Training,
-    ) -> Result<(), eyre::Error> {
+    ) -> Result<(), CalendarError> {
         if training.status(Local::now()) != TrainingStatus::Cancelled {
-            return Err(eyre::eyre!("Training is not cancelled"));
+            return Err(CalendarError::TrainingNotCancelled);
         }
+        let day = self.calendar.get_day(session, training.day_id()).await?;
+
+        if let Some(collision) = day.has_conflict_with(training.get_slot()) {
+            return Err(CalendarError::TimeSlotCollision(collision.full_name()));
+        }
+
         self.calendar
             .set_cancel_flag(session, training.id(), false)
             .await?;

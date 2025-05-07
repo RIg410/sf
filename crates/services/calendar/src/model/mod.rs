@@ -28,22 +28,8 @@ impl Day {
         }
     }
 
-    pub fn check_collision(&self, new: &Training) -> Option<Collision> {
-        let new_slot = new.get_slot();
-        for old in &self.training {
-            if old.is_canceled {
-                continue;
-            }
-
-            if old.get_slot().has_conflict(&new_slot) {
-                return Some(Collision {
-                    day_id: self.day_id(),
-                    training_id: old.id,
-                });
-            }
-        }
-
-        None
+    pub fn get_training(&self, slot: Slot) -> Option<&Training> {
+        self.training.iter().find(|t| t.get_slot() == slot)
     }
 
     pub fn copy_day(id: DayId, day: Day) -> Day {
@@ -69,6 +55,13 @@ impl Day {
 
     pub fn day_date(&self) -> DateTime<Local> {
         self.date_time.with_timezone(&Local)
+    }
+
+    pub fn has_conflict_with(self, slot: Slot) -> Option<Training> {
+        self.training
+            .into_iter()
+            .filter(|t| !t.is_canceled)
+            .find(|t| t.get_slot().has_conflict(&slot))
     }
 
     pub fn has_conflict(&self) -> bool {

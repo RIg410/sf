@@ -10,7 +10,6 @@ impl BusinessError for CalendarError {
             CalendarError::InstructorNotFound(_) => "Тренер не найден".to_string(),
             CalendarError::ClientNotFound(_) => "Клиент не найден".to_string(),
             CalendarError::InstructorHasNoRights(_) => "У тренера нет прав".to_string(),
-
             CalendarError::TimeSlotCollision(training) => match format {
                 Format::Text => format!(
                     "Тренировка пересекается с тренировкой {} в {}",
@@ -38,6 +37,7 @@ impl BusinessError for CalendarError {
                 }
             },
             CalendarError::TrainingError(err) => err.message(format),
+            CalendarError::TrainingNotCancelled => "Тренировка не отменена".to_string(),
         }
     }
 
@@ -52,6 +52,7 @@ impl BusinessError for CalendarError {
             CalendarError::TimeSlotCollision(_) => false,
             CalendarError::DayIdMismatch { .. } => false,
             CalendarError::TrainingError(err) => err.is_fatal(),
+            CalendarError::TrainingNotCancelled => false,
         }
     }
 }
