@@ -1,3 +1,5 @@
+use std::borrow::Cow;
+
 use crate::{
     callback_data::Calldata as _,
     context::Context,
@@ -9,17 +11,30 @@ use serde::{Deserialize, Serialize};
 use teloxide::types::InlineKeyboardMarkup;
 
 pub struct DoneView {
-    pub text: String,
+    pub text: Cow<'static, str>,
     pub err: bool,
+    pub back: bool,
 }
 
 impl DoneView {
-    pub fn ok(text: String) -> Self {
-        Self { text, err: false }
+    pub fn ok<T: Into<Cow<'static, str>>>(text: T) -> Self {
+        Self {
+            text: text.into(),
+            err: false,
+            back: false,
+        }
     }
 
-    pub fn err(text: String) -> Self {
-        Self { text, err: true }
+    pub fn err<T: Into<Cow<'static, str>>>(text: T) -> Self {
+        Self {
+            text: text.into(),
+            err: true,
+            back: false,
+        }
+    }
+
+    pub fn go_back(self) -> Self {
+        Self { back: true, ..self }
     }
 }
 
@@ -63,7 +78,13 @@ impl View for DoneView {
 
         ctx.reset_origin();
         match cb {
-            OkCallback::Ok => Ok(Jmp::ToSafePoint),
+            OkCallback::Ok => {
+                if self.back {
+                    Ok(Jmp::Back(1))
+                } else {
+                    Ok(Jmp::ToSafePoint)
+                }
+            }
         }
     }
 }

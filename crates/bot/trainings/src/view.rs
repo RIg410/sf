@@ -5,6 +5,7 @@ use bot_core::{
     callback_data::Calldata as _,
     calldata,
     context::Context,
+    views::done::DoneView,
     widget::{Jmp, View, ViewResult},
 };
 use bot_viewer::{day::fmt_dt, fmt_phone, training::fmt_training_type};
@@ -351,15 +352,25 @@ pub async fn sign_up(ctx: &mut Context, id: TrainingId, user_id: ObjectId) -> Vi
         .await?
         .ok_or_else(|| eyre::eyre!("Training not found"))?;
     if !training.status(Local::now()).can_sign_in() {
-        ctx.send_msg("Запись на тренировку закрыта💔").await?;
-        return Ok(Jmp::Stay);
+        return Ok(DoneView::err(format!(
+            "Запись на тренировку *{}* в {} *закрыта*💔",
+            escape(&training.name),
+            fmt_dt(&training.get_slot().start_at())
+        ))
+        .go_back()
+        .into());
     }
     if !training.is_group() {
         return Err(eyre!("Can't delete personal training").into());
     }
     if training.is_full() {
-        ctx.send_msg("Мест нет🥺").await?;
-        return Ok(Jmp::Stay);
+        return Ok(DoneView::err(format!(
+            "На тренировку *{}* в {} *нет мест*🥺",
+            escape(&training.name),
+            fmt_dt(&training.get_slot().start_at())
+        ))
+        .go_back()
+        .into());
     }
 
     let mut user = ctx
@@ -372,20 +383,19 @@ pub async fn sign_up(ctx: &mut Context, id: TrainingId, user_id: ObjectId) -> Vi
         let mut payer = user.payer_mut()?;
         if let Some(sub) = payer.find_subscription(FindFor::Lock, &training) {
             if sub.balance < 1 {
-                ctx.send_msg("В абонементе нет занятий🥺").await?;
-                return Ok(Jmp::Stay);
+                return Ok(DoneView::err("В абонементе нет занятий🥺").go_back().into());
             }
         } else {
-            ctx.send_msg("Нет подходящего абонемента🥺").await?;
-            return Ok(Jmp::Stay);
+            return Ok(DoneView::err("Нет подходящего абонемента🥺")
+                .go_back()
+                .into());
         };
     }
 
     if let Some(freeze) = ctx.me.freeze.as_ref() {
         let slot = training.get_slot();
         if freeze.freeze_start <= slot.start_at() && freeze.freeze_end >= slot.end_at() {
-            ctx.send_msg("Ваш абонемент заморожен🥶").await?;
-            return Ok(Jmp::Stay);
+            return Ok(DoneView::err("Ваш абонемент заморожен🥶").go_back().into());
         }
         return Ok(Jmp::Stay);
     }
@@ -394,7 +404,13 @@ pub async fn sign_up(ctx: &mut Context, id: TrainingId, user_id: ObjectId) -> Vi
         .booking
         .sign_up(&mut ctx.session, id, user.id, false)
         .await?;
-    Ok(Jmp::Stay)
+
+    let msg = format!(
+        "Вы записаны на тренировку *{}* в {}",
+        escape(&training.name),
+        fmt_dt(&training.get_slot().start_at())
+    );
+    Ok(DoneView::ok(msg).into())
 }
 
 pub async fn sign_out(ctx: &mut Context, id: TrainingId, user_id: ObjectId) -> ViewResult {
@@ -405,17 +421,20 @@ pub async fn sign_out(ctx: &mut Context, id: TrainingId, user_id: ObjectId) -> V
         .await?
         .ok_or_else(|| eyre::eyre!("Training not found"))?;
     if !training.status(Local::now()).can_sign_out() {
-        ctx.send_msg("Запись на тренировку закрыта").await?;
-        return Ok(Jmp::Stay);
+        return Ok(DoneView::err(format!(
+            "Запись на тренировку *{}* в {} *закрыта*",
+            escape(&training.name),
+            fmt_dt(&training.get_slot().start_at())
+        ))
+        .go_back()
+        .into());
     }
     ctx.services
         .booking
         .sign_out(&mut ctx.session, training.id(), user_id, false)
         .await?;
 
-    if training.is_group() {
-        Ok(Jmp::Stay)
-    } else {
+    if !training.is_group() {
         let instructor = ctx
             .services
             .users
@@ -433,6 +452,12 @@ pub async fn sign_out(ctx: &mut Context, id: TrainingId, user_id: ObjectId) -> V
                 true,
             )
             .await;
-        Ok(Jmp::Back(1))
     }
+
+    let msg = format!(
+        "Вы отменили запись на тренировку *{}* в {}",
+        escape(&training.name),
+        fmt_dt(&training.get_slot().start_at())
+    );
+    Ok(DoneView::ok(msg).into())
 }
