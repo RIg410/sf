@@ -105,9 +105,9 @@ impl Callback {
     fn btn(extension: &UserExtension, hour: u8, text: &str) -> InlineKeyboardButton {
         let is_enabled = extension.notification_mask.get_hour(hour as u32);
         let text = if is_enabled {
-            format!("✅ {}", text)
+            format!("✅ {text}")
         } else {
-            format!("❌ {}", text)
+            format!("❌ {text}")
         };
         if is_enabled {
             Callback::ResetTime(hour).button(text)

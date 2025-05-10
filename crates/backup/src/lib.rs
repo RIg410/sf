@@ -69,7 +69,7 @@ impl Backup {
 
         let backup = self.store.backup(session).await?;
         for (name, data) in backup {
-            zip.start_file(format!("{}.json", name), options)?;
+            zip.start_file(format!("{name}.json"), options)?;
             zip.write_all(&bson::to_vec(&data)?)?;
         }
 

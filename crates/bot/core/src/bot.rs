@@ -134,7 +134,7 @@ impl TgBot {
             .send_message(self.chat_id(), text)
             .parse_mode(teloxide::types::ParseMode::MarkdownV2)
             .await
-            .context(format!("Failed to send message: {}", text))?
+            .context(format!("Failed to send message: {text}"))?
             .id)
     }
 
@@ -146,7 +146,7 @@ impl TgBot {
             .send_message(self.chat_id(), text)
             .parse_mode(teloxide::types::ParseMode::Html)
             .await
-            .context(format!("Failed to send message: {}", text))?
+            .context(format!("Failed to send message: {text}"))?
             .id)
     }
 
@@ -163,7 +163,7 @@ impl TgBot {
             .parse_mode(teloxide::types::ParseMode::MarkdownV2)
             .reply_markup(markup)
             .await
-            .context(format!("Failed to send message: {}", text))?
+            .context(format!("Failed to send message: {text}"))?
             .id)
     }
 
@@ -180,7 +180,7 @@ impl TgBot {
             .parse_mode(teloxide::types::ParseMode::MarkdownV2)
             .reply_markup(markup)
             .await
-            .context(format!("Failed to send message: {}", text))?
+            .context(format!("Failed to send message: {text}"))?
             .id)
     }
 

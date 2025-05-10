@@ -133,32 +133,32 @@ impl View for EditSubscription {
                 let new_value = match self.edit_type {
                     EditType::Items => {
                         if let Err(err) = text.parse::<NonZero<u32>>() {
-                            ctx.send_msg(&format!("Неверный формат: {}", err)).await?;
+                            ctx.send_msg(&format!("Неверный формат: {err}")).await?;
                             return Ok(Jmp::Stay);
                         }
-                        format!("количество занятий на {}", text)
+                        format!("количество занятий на {text}")
                     }
                     EditType::Price => {
                         if let Err(err) = text.parse::<Decimal>() {
-                            ctx.send_msg(&format!("Неверный формат: {}", err)).await?;
+                            ctx.send_msg(&format!("Неверный формат: {err}")).await?;
                             return Ok(Jmp::Stay);
                         }
-                        format!("цену на {}", text)
+                        format!("цену на {text}")
                     }
-                    EditType::Name => format!("название на {}", text),
+                    EditType::Name => format!("название на {text}"),
                     EditType::FreezeDays => {
                         if text.parse::<u32>().is_err() {
                             ctx.send_msg("Неверный формат").await?;
                             return Ok(Jmp::Stay);
                         }
-                        format!("количество дней заморозки на {}", text)
+                        format!("количество дней заморозки на {text}")
                     }
                     EditType::ExpirationDays => {
                         if let Err(err) = text.parse::<NonZero<u32>>() {
-                            ctx.send_msg(&format!("Неверный формат: {}", err)).await?;
+                            ctx.send_msg(&format!("Неверный формат: {err}")).await?;
                             return Ok(Jmp::Stay);
                         }
-                        format!("количество дней действия на {}", text)
+                        format!("количество дней действия на {text}")
                     }
                     EditType::CanBuyByUser => {
                         ctx.delete_msg(message.id).await?;
@@ -172,7 +172,7 @@ impl View for EditSubscription {
                     Callback::No.button("❌ Нет"),
                 ]);
                 ctx.send_msg_with_markup(
-                    &escape(&format!("Вы уверены, что хотите изменить {}?", new_value)),
+                    &escape(&format!("Вы уверены, что хотите изменить {new_value}?")),
                     keymap,
                 )
                 .await?;

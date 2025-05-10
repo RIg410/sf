@@ -76,17 +76,17 @@ impl StageList<State> for FinanceView {
 
 pub fn make_list_item(idx: usize, event: &TreasuryEvent) -> ListItem {
     let symbol = match &event.event {
-        Event::SellSubscription(_) => format!("{} 📈 продажа абонемента", idx),
-        Event::Reward(_) => format!("{} 📉 выплата зп", idx),
+        Event::SellSubscription(_) => format!("{idx} 📈 продажа абонемента"),
+        Event::Reward(_) => format!("{idx} 📉 выплата зп"),
         Event::Outcome(out) => format!("{} 📉{}", idx, escape(&out.description)),
         Event::Income(income) => {
             format!("{} 📈{}", idx, escape(&income.description))
         }
         Event::SubRent => {
-            format!("📈{} Суб аренда", idx)
+            format!("📈{idx} Суб аренда")
         }
         Event::Rent => {
-            format!("📉{} Аренда", idx)
+            format!("📉{idx} Аренда")
         }
         Event::Marketing(come_from) => {
             format!("📊{} Маркетинг \\({}\\)", idx, come_from.name())

@@ -159,7 +159,7 @@ impl<L: TreasuryLog> Treasury<L> {
     ) -> Result<(), Error> {
         let dt = Local::now();
         self.logs
-            .payment(session, amount, format!("Субаренда:{}", description), &dt)
+            .payment(session, amount, format!("Субаренда:{description}"), &dt)
             .await?;
         let event = TreasuryEvent {
             id: ObjectId::new(),
@@ -169,7 +169,7 @@ impl<L: TreasuryLog> Treasury<L> {
             credit: Decimal::zero(),
             actor: session.actor(),
             description: Some(description),
-            amount: amount,
+            amount,
         };
 
         self.store.insert(session, event).await?;
@@ -195,7 +195,7 @@ impl<L: TreasuryLog> Treasury<L> {
             credit: Decimal::zero(),
             actor: session.actor(),
             description: None,
-            amount: amount,
+            amount,
         };
 
         self.store.insert(session, event).await?;

@@ -32,6 +32,6 @@ impl From<ObjectId> for Room {
 
 impl Display for Room {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
-        write!(f, "{:?}", self)
+        write!(f, "{self:?}")
     }
 }

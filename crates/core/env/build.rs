@@ -5,5 +5,5 @@ fn main() {
     let duration = start.duration_since(UNIX_EPOCH).unwrap();
     let timestamp = duration.as_secs();
 
-    println!("cargo:rustc-env=BUILD_TIME={}", timestamp);
+    println!("cargo:rustc-env=BUILD_TIME={timestamp}");
 }

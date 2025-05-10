@@ -13,7 +13,8 @@ impl DayId {
     }
 
     /// Create DayId from Utc DateTime
-    /// # Safety --
+    /// # Safety
+    /// `date_time` must be midnight in UTC timezone
     pub unsafe fn from_utc(date_time: DateTime<Utc>) -> Self {
         DayId(date_time)
     }

@@ -281,7 +281,7 @@ pub fn link_to_user(user: &User) -> String {
         user.name
             .tg_user_name
             .as_ref()
-            .map(|n| format!("@{}", n))
+            .map(|n| format!("@{n}"))
             .unwrap_or_else(|| "?".to_string())
     }
 }

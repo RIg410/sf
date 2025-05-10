@@ -100,7 +100,7 @@ impl ConfirmView for Confirm {
         let msg = format!(
             "Подтвердите оплату маркетинга на сумму {} *{}*",
             escape(&self.amount.to_string()),
-            escape(&self.come_from.name())
+            escape(self.come_from.name())
         );
         Ok(msg)
     }
@@ -114,7 +114,7 @@ impl ConfirmView for Confirm {
 
         Ok(DoneView::ok(format!(
             "Оплата за маркетинг _{}_ на сумму {} успешно добавлена",
-            escape(&self.come_from.name()),
+            escape(self.come_from.name()),
             escape(&self.amount.to_string()),
         ))
         .into())

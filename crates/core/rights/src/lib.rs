@@ -172,7 +172,7 @@ pub enum Rule {
 
 impl Rule {
     pub fn name(&self) -> String {
-        format!("{:?}", self)
+        format!("{self:?}")
     }
 
     pub fn list() -> Vec<Rule> {

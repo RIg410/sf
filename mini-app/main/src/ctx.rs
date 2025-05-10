@@ -60,17 +60,17 @@ impl ContextBuilder {
             .users
             .get(&mut session, id)
             .await
-            .map_err(|_| Status::internal(format!("Failed to get user by id: {}", id)))?;
+            .map_err(|_| Status::internal(format!("Failed to get user by id: {id}")))?;
         let mut user = if let Some(user) = user {
             user
         } else {
-            return Err(Status::not_found(format!("User not found: {}", id)));
+            return Err(Status::not_found(format!("User not found: {id}")));
         };
         self.ledger
             .users
             .resolve_family(&mut session, &mut user)
             .await
-            .map_err(|_| Status::internal(format!("Failed to resolve family for user: {}", id)))?;
+            .map_err(|_| Status::internal(format!("Failed to resolve family for user: {id}")))?;
 
         session.set_actor(user.id);
 

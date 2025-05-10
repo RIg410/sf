@@ -258,7 +258,7 @@ impl UserStore {
         if !keywords.is_empty() {
             let mut keyword_query = vec![];
             for keyword in keywords {
-                let regex = format!("^{}", keyword);
+                let regex = format!("^{keyword}");
                 let regex_query = doc! {
                     "$or": [
                         { "name.first_name": { "$regex": &regex, "$options": "i" } },

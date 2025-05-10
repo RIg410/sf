@@ -49,7 +49,7 @@ impl Debug for NotificationMask {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         for i in 0..24 {
             if self.get_hour(i) {
-                write!(f, "{:02}:00 ", i)?;
+                write!(f, "{i:02}:00 ")?;
             }
         }
         Ok(())

@@ -99,7 +99,7 @@ impl View for ClientsList {
                 user.name.tg_user_name.unwrap_or_default()
             );
             let mut row = Vec::with_capacity(2);
-            row.push(Callback::SelectClient(user.id.bytes()).button(format!("👤 {}", user_name)));
+            row.push(Callback::SelectClient(user.id.bytes()).button(format!("👤 {user_name}")));
             if ctx.has_right(Rule::EditTrainingClientsList)
                 && !training.is_processed
                 && training.is_group()

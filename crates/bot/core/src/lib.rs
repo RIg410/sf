@@ -62,7 +62,7 @@ impl Calldata for CommonLocation {
             CommonLocation::Profile(id) => ("usr", id.to_hex()),
             CommonLocation::Request(id) => ("req", id.to_hex()),
         };
-        format!("/cl/{}/{}", tp, id)
+        format!("/cl/{tp}/{id}")
     }
 
     fn from_data(data: &str) -> Option<Self>

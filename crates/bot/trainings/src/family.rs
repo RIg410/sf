@@ -110,7 +110,7 @@ fn make_row(
     };
 
     let name_btn = if signed {
-        Callback::None.button(format!("✅{}", name))
+        Callback::None.button(format!("✅{name}"))
     } else {
         Callback::None.button(name.to_string())
     };

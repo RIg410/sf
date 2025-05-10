@@ -103,20 +103,20 @@ impl View for EditProgram {
                 let new_value = match self.edit_type {
                     EditType::Capacity => {
                         if let Err(err) = text.parse::<NonZero<u32>>() {
-                            ctx.send_msg(&format!("Неверный формат: {}", err)).await?;
+                            ctx.send_msg(&format!("Неверный формат: {err}")).await?;
                             return Ok(Jmp::Stay);
                         }
-                        format!("вместимость на {}", text)
+                        format!("вместимость на {text}")
                     }
                     EditType::Duration => {
                         if let Err(err) = text.parse::<NonZero<u32>>() {
-                            ctx.send_msg(&format!("Неверный формат: {}", err)).await?;
+                            ctx.send_msg(&format!("Неверный формат: {err}")).await?;
                             return Ok(Jmp::Stay);
                         }
-                        format!("длительность на {}", text)
+                        format!("длительность на {text}")
                     }
-                    EditType::Name => format!("название на {}", text),
-                    EditType::Description => format!("описание на {}", text),
+                    EditType::Name => format!("название на {text}"),
+                    EditType::Description => format!("описание на {text}"),
                 };
                 self.state = State::Confirm(text);
                 let mut keymap = InlineKeyboardMarkup::default();
@@ -126,7 +126,7 @@ impl View for EditProgram {
                 ]);
 
                 ctx.send_msg_with_markup(
-                    &escape(&format!("Вы уверены, что хотите изменить {}?", new_value)),
+                    &escape(&format!("Вы уверены, что хотите изменить {new_value}?")),
                     keymap,
                 )
                 .await?;

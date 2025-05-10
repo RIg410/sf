@@ -195,10 +195,9 @@ impl<L: UserLog> Calendar<L> {
             return Err(CalendarError::TimeSlotCollision(collision.full_name()));
         }
 
-        let name = format!("аренда:{}-{}", renter, duration_min);
+        let name = format!("аренда:{renter}-{duration_min}");
         let description = format!(
-            "арендатор: {}; продолжительность: {};",
-            renter, duration_min
+            "арендатор: {renter}; продолжительность: {duration_min};"
         );
         let training = Training::new_rent(start_at, room, duration_min, name, description, price);
 

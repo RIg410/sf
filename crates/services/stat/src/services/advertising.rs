@@ -120,7 +120,7 @@ impl<L: UserLog> AdvertisingStatService<L> {
             .collect();
 
         let sources = serde_json::to_string(&sources).context("Failed to serialize sources")?;
-        let prompt = format!("{}\n{}", prompt, sources);
+        let prompt = format!("{prompt}\n{sources}");
         let result = self
             .ai
             .ask(model, prompt, &mut AiContext::default())

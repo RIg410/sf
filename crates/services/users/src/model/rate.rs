@@ -37,7 +37,7 @@ pub enum Interval {
 impl Display for Interval {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
-            Interval::Month { num } => write!(f, "{} (месяц)", num),
+            Interval::Month { num } => write!(f, "{num} (месяц)"),
         }
     }
 }

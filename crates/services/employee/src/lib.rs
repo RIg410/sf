@@ -67,14 +67,14 @@ impl<L: UserLog + TreasuryLog> EmployeeService<L> {
 
         if let Some(employee) = user.employee {
             if employee.reward != Decimal::zero() {
-                return Err(UserError::EmployeeHasReward { user_id: id }.into());
+                return Err(UserError::EmployeeHasReward { user_id: id });
             }
         } else {
-            return Err(UserError::UserNotEmployee { user_id: id }.into());
+            return Err(UserError::UserNotEmployee { user_id: id });
         }
 
         if has_trainings {
-            return Err(UserError::CouchHasTrainings(id).into());
+            return Err(UserError::CouchHasTrainings(id));
         } else {
             self.users.delete_employee(session, id).await?;
             Ok(())

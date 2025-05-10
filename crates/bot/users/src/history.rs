@@ -330,7 +330,7 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
                     days
                 )
             } else {
-                format!("Ваш абонемент заморозили на _{}_ дней", days)
+                format!("Ваш абонемент заморозили на _{days}_ дней")
             }
         }
         Action::Unfreeze {} => {

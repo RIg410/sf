@@ -80,18 +80,12 @@ pub async fn render_msg(_: &mut Context, preset: &RentPreset, request: &str) -> 
 
     let price = preset
         .price
-        .map(|p| format!("_{}_", p))
+        .map(|p| format!("_{p}_"))
         .unwrap_or_else(|| "❓".to_string());
 
     let renter = preset.renter.as_deref().unwrap_or("❓");
 
     Ok(format!(
-        "*Субаренда*\n*Дата*: _{}_\n*Зал*: _{}_\n*Длительность*: {}\n*Цена*: {}\n*Арендатор*: _{}_\n\n{}",
-        date_time,
-        room,
-        duration,
-        price,
-        renter,
-        request
+        "*Субаренда*\n*Дата*: _{date_time}_\n*Зал*: _{room}_\n*Длительность*: {duration}\n*Цена*: {price}\n*Арендатор*: _{renter}_\n\n{request}"
     ))
 }

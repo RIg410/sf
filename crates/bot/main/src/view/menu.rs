@@ -74,38 +74,34 @@ impl MainMenuView {
         } else {
             if group_balance.unlimited {
                 txt.push_str("👥 Групповые занятия: *безлимит*\n");
+            } else if group_balance.is_empty() {
+                txt.push_str("👥 Групповые занятия: 🅾️\n");
             } else {
-                if group_balance.is_empty() {
-                    txt.push_str("👥 Групповые занятия: 🅾️\n");
+                let lock = if group_balance.locked_balance == 0 {
+                    ""
                 } else {
-                    let lock = if group_balance.locked_balance == 0 {
-                        ""
-                    } else {
-                        &format!("\\(*{}* резерв\\)", group_balance.locked_balance)
-                    };
+                    &format!("\\(*{}* резерв\\)", group_balance.locked_balance)
+                };
 
-                    txt.push_str(&format!(
-                        "\n👥 Групповые занятия: *{}*{}\n",
-                        group_balance.balance, lock
-                    ));
-                }
+                txt.push_str(&format!(
+                    "\n👥 Групповые занятия: *{}*{}\n",
+                    group_balance.balance, lock
+                ));
             }
 
             if personal_balance.unlimited {
                 txt.push_str("🧑 Индивидуальные занятия: *безлимит*\n");
-            } else {
-                if !personal_balance.is_empty() {
-                    let lock: &str = if personal_balance.locked_balance == 0 {
-                        ""
-                    } else {
-                        &format!("\\(*{}* резерв\\)", personal_balance.locked_balance)
-                    };
+            } else if !personal_balance.is_empty() {
+                let lock: &str = if personal_balance.locked_balance == 0 {
+                    ""
+                } else {
+                    &format!("\\(*{}* резерв\\)", personal_balance.locked_balance)
+                };
 
-                    txt.push_str(&format!(
-                        "\n🧑 Индивидуальные занятия: *{}*{}",
-                        personal_balance.balance, lock
-                    ));
-                }
+                txt.push_str(&format!(
+                    "\n🧑 Индивидуальные занятия: *{}*{}",
+                    personal_balance.balance, lock
+                ));
             }
         }
 
@@ -138,7 +134,7 @@ impl View for MainMenuView {
 
     async fn handle_message(&mut self, ctx: &mut Context, msg: &Message) -> ViewResult {
         if !ctx.is_real_user {
-            return Ok(SignUpView::default().into());
+            return Ok(SignUpView.into());
         }
         let text = if let Some(text) = msg.text() {
             text
@@ -146,7 +142,7 @@ impl View for MainMenuView {
             return Ok(Jmp::Stay);
         };
 
-        let command = if let Some(command) = MainMenuItem::try_from(text).ok() {
+        let command = if let Ok(command) = MainMenuItem::try_from(text) {
             command
         } else {
             return Ok(Jmp::Stay);
@@ -158,7 +154,7 @@ impl View for MainMenuView {
             MainMenuItem::Profile => UserProfile::new(ctx.me.id).into(),
             MainMenuItem::Schedule => CalendarView::default().into(),
             MainMenuItem::Users => UsersView::new(Query::default()).into(),
-            MainMenuItem::Subscription => SubscriptionView::default().into(),
+            MainMenuItem::Subscription => SubscriptionView.into(),
             MainMenuItem::FinanceView => FinanceView.into(),
             MainMenuItem::Coach => CouchingList::new().into(),
             MainMenuItem::Home => MainMenuView.into(),
@@ -170,7 +166,7 @@ impl View for MainMenuView {
 
     async fn handle_callback(&mut self, ctx: &mut Context, msg: &str) -> ViewResult {
         if !ctx.is_real_user {
-            return Ok(SignUpView::default().into());
+            return Ok(SignUpView.into());
         }
 
         if CommonLocation::is_cmd(msg) {
@@ -179,7 +175,7 @@ impl View for MainMenuView {
             }
         }
 
-        let command = if let Some(command) = MainMenuItem::try_from(msg).ok() {
+        let command = if let Ok(command) = MainMenuItem::try_from(msg) {
             command
         } else {
             return Ok(Jmp::Stay);
@@ -189,7 +185,7 @@ impl View for MainMenuView {
             MainMenuItem::Profile => UserProfile::new(ctx.me.id).into(),
             MainMenuItem::Schedule => CalendarView::default().into(),
             MainMenuItem::Users => UsersView::new(Query::default()).into(),
-            MainMenuItem::Subscription => SubscriptionView::default().into(),
+            MainMenuItem::Subscription => SubscriptionView.into(),
             MainMenuItem::FinanceView => FinanceView.into(),
             MainMenuItem::Coach => CouchingList::new().into(),
             MainMenuItem::Home => MainMenuView.into(),

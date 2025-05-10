@@ -16,19 +16,12 @@ use time::range::MonthRange;
 
 mod advertising;
 
+#[derive(Default)]
 pub struct StatisticsView {
     range: MonthRange,
     ai: Option<AiModel>,
 }
 
-impl Default for StatisticsView {
-    fn default() -> Self {
-        Self {
-            range: MonthRange::default(),
-            ai: None,
-        }
-    }
-}
 
 impl StatisticsView {}
 
