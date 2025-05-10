@@ -69,7 +69,7 @@ impl ConfirmView for Confirm {
             .await?;
 
         Ok(DoneView::ok(format!(
-            "Оплата за аренду сумму {} успешно добавлена",
+            "Оплата за аренду на сумму {} успешно добавлена",
             escape(&self.amount.to_string()),
         ))
         .into())

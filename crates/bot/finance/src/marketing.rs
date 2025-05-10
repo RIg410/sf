@@ -96,7 +96,7 @@ struct Confirm {
 
 #[async_trait]
 impl ConfirmView for Confirm {
-    async fn message(&self, ctx: &mut Context) -> Result<String> {
+    async fn message(&self, _: &mut Context) -> Result<String> {
         let msg = format!(
             "Подтвердите оплату маркетинга на сумму {} *{}*",
             escape(&self.amount.to_string()),
