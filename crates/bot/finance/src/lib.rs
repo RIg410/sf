@@ -3,6 +3,7 @@ pub mod history;
 pub mod in_out;
 pub mod marketing;
 pub mod operation;
+pub mod rent;
 pub mod stat;
 
 use async_trait::async_trait;
@@ -38,6 +39,7 @@ impl View for FinanceView {
         if ctx.has_right(Rule::MakePayment) {
             keymap = keymap.append_row(Callback::Payment.btn_row("Оплатить 💳"));
             keymap = keymap.append_row(Callback::PayMarketing.btn_row("Оплата маркетинга 📈"));
+            keymap = keymap.append_row(Callback::PayRent.btn_row("Оплата аренды 🏢"));
         }
 
         if ctx.has_right(Rule::MakeDeposit) {
@@ -76,11 +78,18 @@ impl View for FinanceView {
             }
             Callback::StatByMonth => {
                 ctx.ensure(Rule::ViewFinance)?;
-                Ok(Stat::new(Some(MonthRange::new(Local::now().with_day(1).unwrap_or_default()))).into())
+                Ok(Stat::new(Some(MonthRange::new(
+                    Local::now().with_day(1).unwrap_or_default(),
+                )))
+                .into())
             }
             Callback::PayMarketing => {
                 ctx.ensure(Rule::MakePayment)?;
-                Ok(marketing::PayRent.into())
+                Ok(marketing::PayMarketing.into())
+            }
+            Callback::PayRent => {
+                ctx.ensure(Rule::MakePayment)?;
+                Ok(rent::PayRent.into())
             }
             Callback::EmployeeList => {
                 ctx.ensure(Rule::ViewEmployees)?;
@@ -94,6 +103,7 @@ impl View for FinanceView {
 enum Callback {
     PayMarketing,
     Payment,
+    PayRent,
 
     Deposit,
 

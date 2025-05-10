@@ -3,26 +3,24 @@ use bot_core::{
     callback_data::Calldata as _,
     calldata,
     context::Context,
+    views::{confirm::ConfirmView, done::DoneView},
     widget::{Jmp, View, ViewResult},
 };
 use decimal::Decimal;
 use eyre::Result;
 use ident::source::Source;
 use rights::Rule;
-use serde::{Deserialize, Serialize};
 use teloxide::{
     types::{InlineKeyboardMarkup, Message},
     utils::markdown::escape,
 };
 
-use crate::FinanceView;
-
-pub struct PayRent;
+pub struct PayMarketing;
 
 #[async_trait]
-impl View for PayRent {
+impl View for PayMarketing {
     fn name(&self) -> &'static str {
-        "PayRent"
+        "PayMarketing"
     }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
@@ -97,44 +95,28 @@ struct Confirm {
 }
 
 #[async_trait]
-impl View for Confirm {
-    fn name(&self) -> &'static str {
-        "Confirm"
-    }
-
-    async fn show(&mut self, ctx: &mut Context) -> Result<()> {
+impl ConfirmView for Confirm {
+    async fn message(&self, ctx: &mut Context) -> Result<String> {
         let msg = format!(
-            "Подтвердите оплату маркетинга на сумму {}",
-            escape(&self.amount.to_string())
+            "Подтвердите оплату маркетинга на сумму {} *{}*",
+            escape(&self.amount.to_string()),
+            escape(&self.come_from.name())
         );
-
-        let mut keymap = InlineKeyboardMarkup::default();
-        keymap = keymap.append_row(vec![
-            Callback::Confirm.button("✅ Подтвердить"),
-            Callback::Cancel.button("❌ Отмена"),
-        ]);
-        ctx.edit_origin(&msg, keymap).await?;
-        Ok(())
+        Ok(msg)
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
-        match calldata!(data) {
-            Callback::Confirm => {
-                ctx.ensure(Rule::MakePayment)?;
-                ctx.services
-                    .treasury
-                    .pay_for_marketing(&mut ctx.session, self.amount, self.come_from)
-                    .await?;
-                ctx.send_msg("Операция выполнена").await?;
-                Ok(Jmp::Goto(FinanceView.into()))
-            }
-            Callback::Cancel => Ok(Jmp::Back(1)),
-        }
-    }
-}
+    async fn on_confirm(&self, ctx: &mut Context) -> ViewResult {
+        ctx.ensure(Rule::MakePayment)?;
+        ctx.services
+            .treasury
+            .pay_for_marketing(&mut ctx.session, self.amount, self.come_from)
+            .await?;
 
-#[derive(Serialize, Deserialize)]
-enum Callback {
-    Confirm,
-    Cancel,
+        Ok(DoneView::ok(format!(
+            "Оплата за маркетинг _{}_ на сумму {} успешно добавлена",
+            escape(&self.come_from.name()),
+            escape(&self.amount.to_string()),
+        ))
+        .into())
+    }
 }
