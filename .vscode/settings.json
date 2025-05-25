@@ -4,5 +4,6 @@
         "teloxide",
         "Yookassa"
     ],
-    "makefile.configureOnOpen": false
+    "makefile.configureOnOpen": false,
+    "cSpell.language": "en,ru"
 }
