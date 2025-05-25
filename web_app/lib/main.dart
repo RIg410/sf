@@ -14,10 +14,10 @@ class MyApp extends StatelessWidget {
     return ChangeNotifierProvider(
       create: (context) => MyAppState(),
       child: MaterialApp(
-        title: 'Namer App',
+        title: 'SF',
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(
-            seedColor: const Color.fromARGB(255, 34, 214, 255),
+            seedColor: const Color.fromARGB(255, 249, 0, 0),
           ),
         ),
         home: MyHomePage(),
