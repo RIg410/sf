@@ -1,25 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:web_app/common.dart';
+import 'package:sf/common.dart';
+import 'package:sf/logo.dart';
 
 class MobilePage extends StatelessWidget {
   const MobilePage({super.key});
+
   @override
   Widget build(BuildContext context) {
+    int selectedIndex = 0;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('SoulFamily')),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            const DrawerHeader(child: Text('Меню')),
-            ListTile(title: const Text('Home'), onTap: () {}),
-            ListTile(title: const Text('Classes'), onTap: () {}),
-            ListTile(title: const Text('Instructors'), onTap: () {}),
-            ListTile(title: const Text('Contact'), onTap: () {}),
-          ],
-        ),
+      appBar: AppBar(title: const Logo()),
+      bottomNavigationBar: NavigationBar(
+        destinations: const [
+          NavigationDestination(icon: Icon(Icons.home), label: 'Дом'),
+          NavigationDestination(icon: Icon(Icons.person), label: 'Профиль'),
+          NavigationDestination(
+            icon: Icon(Icons.calendar_month),
+            label: 'Расписание',
+          ),
+          NavigationDestination(icon: Icon(Icons.more_horiz), label: 'Еще'),
+        ],
+        selectedIndex: selectedIndex,
+        onDestinationSelected: (value) {
+          selectedIndex = value;
+        },
       ),
-      body: SingleChildScrollView(
+      body: const SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

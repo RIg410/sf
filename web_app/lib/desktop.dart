@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:web_app/common.dart';
+import 'package:sf/common.dart';
+import 'package:sf/logo.dart';
 
 class DesktopPage extends StatelessWidget {
   const DesktopPage({super.key});
@@ -7,37 +8,21 @@ class DesktopPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('SoulFamily'),
+        title: const Logo(),
         centerTitle: false,
         actions: [
-          TextButton(
-            onPressed: () {},
-            child: const Text('Home', style: TextStyle(color: Colors.white)),
-          ),
-          TextButton(
-            onPressed: () {},
-            child: const Text('Classes', style: TextStyle(color: Colors.white)),
-          ),
-          TextButton(
-            onPressed: () {},
-            child: const Text(
-              'Instructors',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-          TextButton(
-            onPressed: () {},
-            child: const Text('Contact', style: TextStyle(color: Colors.white)),
-          ),
+          TextButton(onPressed: () {}, child: const Text('Домой')),
+          TextButton(onPressed: () {}, child: const Text('Расписание')),
+          TextButton(onPressed: () {}, child: const Text('Инструкторы')),
+          TextButton(onPressed: () {}, child: const Text('Программы')),
+          TextButton(onPressed: () {}, child: const Text('Цены')),
           const SizedBox(width: 16),
           IconButton(onPressed: () {}, icon: const Icon(Icons.account_circle)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.favorite_border)),
           const SizedBox(width: 24),
         ],
       ),
-      body: Row(
+      body: const Row(
         children: [
-          // Левый большой Banner
           Expanded(
             flex: 2,
             child: SingleChildScrollView(
@@ -54,7 +39,6 @@ class DesktopPage extends StatelessWidget {
               ),
             ),
           ),
-          // Правый sidebar с расписанием и программами
           Expanded(
             flex: 1,
             child: SingleChildScrollView(

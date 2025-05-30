@@ -22,13 +22,16 @@ class BannerSection extends StatelessWidget {
           const Padding(
             padding: EdgeInsets.all(16),
             child: Text(
-              'Welcome to Yoga Studio',
+              'Добро пожаловать в Soul Family',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
             ),
           ),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: ElevatedButton(onPressed: null, child: Text('Learn More')),
+            child: ElevatedButton(
+              onPressed: null,
+              child: Text('Узнать больше'),
+            ),
           ),
         ],
       ),
@@ -44,7 +47,7 @@ class NewsOffersSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'News & Offers',
+          'Новости и предложения',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 12),
@@ -54,13 +57,13 @@ class NewsOffersSection extends StatelessWidget {
           children: [
             _SimpleCard(
               color: Colors.teal.shade300,
-              title: 'New Workshop',
-              subtitle: 'Learn the basics',
+              title: 'Новый курс',
+              subtitle: 'Начало 1 августа',
             ),
             _SimpleCard(
               color: Colors.orange.shade300,
-              title: 'Special Offer',
-              subtitle: '30% off membership',
+              title: 'Скидка 30%',
+              subtitle: 'На первый месяц',
             ),
           ],
         ),
@@ -74,13 +77,13 @@ class ScheduleSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Пример простого расписания
-    final days = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+    final days = ['Пн', 'Вт', 'Чт', 'Ср', 'Пт'];
     final times = ['5:00 AM', '10:50 AM', '7:00 PM', '8:00 AM', '6:30 PM'];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'Schedule',
+          'Расписание',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 12),
@@ -130,7 +133,7 @@ class InstructorsSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'Our Instructors',
+          'Наши инструкторы',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 12),
@@ -166,7 +169,7 @@ class ProgramsSection extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const Text(
-          'Programs',
+          'Программы тренировок',
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 12),
@@ -176,12 +179,12 @@ class ProgramsSection extends StatelessWidget {
           children: [
             _IconCard(
               color: Colors.purple.shade300,
-              title: 'Beginner Yoga',
+              title: 'Йога для начинающих',
               icon: Icons.self_improvement,
             ),
             _IconCard(
               color: Colors.lightBlue.shade300,
-              title: 'Advanced Yoga',
+              title: 'Йога для продвинутых',
               icon: Icons.fitness_center,
             ),
           ],

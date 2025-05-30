@@ -19,9 +19,9 @@ test:
 
 build-front:
 	rm -rf bot-static/*
-	cd mini-app/sf-view; yarn lint
-	cd mini-app/sf-view; yarn build
-	cp -rf mini-app/sf-view/dist/* bot-static
+	cd web_app; flutter clean
+	cd web_app; flutter build web --release
+	cp -rf web_app/build/web/* bot-static
 
 deploy-front: build-front
 	sh ./scripts/sync.sh
