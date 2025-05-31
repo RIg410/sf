@@ -6,7 +6,7 @@
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
     "description": "SoulFamily.",
-    "orientation": "portrait-primary",
+    "orientation": "portrait",
     "prefer_related_applications": false,
     "icons": [
         {
