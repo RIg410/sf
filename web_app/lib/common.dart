@@ -12,10 +12,10 @@ class BannerSection extends StatelessWidget {
           // В реале можно подгружать любые изображения
           ClipRRect(
             borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
-            child: Image.network(
-              'https://images.pexels.com/photos/3822622/pexels-photo-3822622.jpeg',
+            child: Image.asset(
+              'fox1.png',
               fit: BoxFit.cover,
-              height: 200,
+              height: 600,
               width: double.infinity,
             ),
           ),

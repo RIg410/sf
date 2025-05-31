@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:sf/desktop.dart';
 import 'package:sf/mobile.dart';
 
@@ -26,6 +27,11 @@ class MainPage extends StatelessWidget {
   const MainPage({super.key});
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
     return LayoutBuilder(
       builder: (context, constraints) {
         if (constraints.maxWidth > 600) {
