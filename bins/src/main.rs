@@ -29,7 +29,7 @@ async fn main() -> eyre::Result<()> {
     info!("Starting bot...");
     let bot: bot_main::BotApp = bot_main::BotApp::new(env);
     info!("Starting mini app...");
-    mini_app_main::spawn(ledger.clone(), bot.clone())?;
+    api::spawn(ledger.clone(), bot.clone())?;
 
     info!("Starting background process...");
     bg_process::start(ledger.clone(), bot.clone()).await?;

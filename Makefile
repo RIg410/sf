@@ -19,6 +19,7 @@ test:
 
 build-front:
 	rm -rf bot-static/*
+	cd web_app; sh ./script/generate_protos.sh
 	cd web_app; flutter clean
 	cd web_app; flutter build web --release
 	cp -rf web_app/build/web/* bot-static

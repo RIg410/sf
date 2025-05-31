@@ -13,7 +13,7 @@ members = [
   "bins",
   "crates/services/payment/yookassa",
   "crates/bot/business-error",
-  "mini-app/main",
+  "api/main",
   "crates/services/stat",
   "crates/services",
   "crates/backup",
@@ -21,7 +21,7 @@ members = [
   "crates/services/trainings",
   "crates/core/*",
   "crates/services/program",
-    "crates/services/treasury",
+  "crates/services/treasury",
   "crates/services/subscription",
   "crates/services/history",
   "crates/services/users",
@@ -52,32 +52,32 @@ bot-trainings = {path = "crates/bot/trainings"}
 bot-users = {path = "crates/bot/users"}
 bot-viewer = {path = "crates/bot/viewer"}
 
-booking = {path = "crates/services/booking" }
-business-error = {path = "crates/bot/business-error" }
-calendar = {path = "crates/services/calendar" }
+booking = {path = "crates/services/booking"}
+business-error = {path = "crates/bot/business-error"}
+calendar = {path = "crates/services/calendar"}
 decimal = {path = "crates/core/decimal"}
-employee = {path = "crates/services/employee" }
+employee = {path = "crates/services/employee"}
 env = {path = "crates/core/env"}
 graph = {path = "crates/core/graph"}
-history = {path = "crates/services/history" }
+history = {path = "crates/services/history"}
 ident = {path = "crates/core/ident"}
-mini-app-main = {path = "mini-app/main"}
-program = {path = "crates/services/program" }
-requests = {path = "crates/services/requests" }
-rewards = {path = "crates/services/rewards" }
+api = {path = "api/main"}
+program = {path = "crates/services/program"}
+requests = {path = "crates/services/requests"}
+rewards = {path = "crates/services/rewards"}
 rights = {path = "crates/core/rights"}
-sales = {path = "crates/services/sales" }
+sales = {path = "crates/services/sales"}
 services = {path = "crates/services"}
-stat = {path = "crates/services/stat" }
+stat = {path = "crates/services/stat"}
 store = {path = "crates/core/store"}
-subscription = {path = "crates/services/subscription" }
+subscription = {path = "crates/services/subscription"}
 time = {path = "crates/core/time"}
-training_adjuster = {path = "crates/services/training_adjuster" }
-trainings = {path = "crates/services/trainings" }
-treasury = {path = "crates/services/treasury" }
+training_adjuster = {path = "crates/services/training_adjuster"}
+trainings = {path = "crates/services/trainings"}
+treasury = {path = "crates/services/treasury"}
 tx_macro = {path = "crates/core/tx_macro"}
 users = {path = "crates/services/users"}
-yookassa = {path = "crates/services/payment/yookassa" }
+yookassa = {path = "crates/services/payment/yookassa"}
 
 #libs 
 arc-swap = "1.7.1"
@@ -130,8 +130,7 @@ uuid = "1.11.0"
 zip = "2.2.0"
 
 [profile.release]
-opt-level = 3
-lto = true
 codegen-units = 1
+lto = true
+opt-level = 3
 strip = true
-

@@ -1,0 +1,44 @@
+[package]
+name = "api"
+
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+version.workspace = true
+
+[dependencies]
+bot-core.workspace = true
+bot-main.workspace = true
+bot-viewer.workspace = true
+
+bson.workspace = true
+chrono.workspace = true
+dashmap.workspace = true
+env.workspace = true
+eyre.workspace = true
+hex.workspace = true
+hmac.workspace = true
+ident.workspace = true
+jsonwebtoken.workspace = true
+mongodb.workspace = true
+prost.workspace = true
+rand.workspace = true
+rights.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+serde_qs.workspace = true
+services.workspace = true
+sha2.workspace = true
+subscription.workspace = true
+teloxide.workspace = true
+tokio.workspace = true
+tonic-web.workspace = true
+tonic.workspace = true
+tower-http = {workspace = true, features = ["cors"]}
+tower.workspace = true
+tracing.workspace = true
+url.workspace = true
+users.workspace = true
+
+[build-dependencies]
+tonic-build.workspace = true

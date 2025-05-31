@@ -88,6 +88,44 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "dcfed56ad506cb2c684a14971b8861fdc3baaaae314b9e5f9bb532cbe3ba7a4f"
 
 [[package]]
+name = "api"
+version = "0.1.0"
+dependencies = [
+ "bot-core",
+ "bot-main",
+ "bot-viewer",
+ "bson",
+ "chrono",
+ "dashmap",
+ "env",
+ "eyre",
+ "hex",
+ "hmac",
+ "ident",
+ "jsonwebtoken",
+ "mongodb",
+ "prost",
+ "rand",
+ "rights",
+ "serde",
+ "serde_json",
+ "serde_qs",
+ "services",
+ "sha2",
+ "subscription",
+ "teloxide",
+ "tokio",
+ "tonic",
+ "tonic-build",
+ "tonic-web",
+ "tower",
+ "tower-http",
+ "tracing",
+ "url",
+ "users",
+]
+
+[[package]]
 name = "aquamarine"
 version = "0.5.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1935,13 +1973,13 @@ checksum = "bbd2bcb4c963f2ddae06a2efc7e9f3591312473c50c6685e1f298068316e66fe"
 name = "ledger-cli"
 version = "0.1.0"
 dependencies = [
+ "api",
  "bg-process",
  "bot-main",
  "color-eyre",
  "dotenv",
  "env",
  "eyre",
- "mini-app-main",
  "services",
  "store",
  "tokio",
@@ -2085,44 +2123,6 @@ checksum = "f7c44f8e672c00fe5308fa235f821cb4198414e1c77935c1ab6948d3fd78550e"
 dependencies = [
  "mime",
  "unicase",
-]
-
-[[package]]
-name = "mini-app-main"
-version = "0.1.0"
-dependencies = [
- "bot-core",
- "bot-main",
- "bot-viewer",
- "bson",
- "chrono",
- "dashmap",
- "env",
- "eyre",
- "hex",
- "hmac",
- "ident",
- "jsonwebtoken",
- "mongodb",
- "prost",
- "rand",
- "rights",
- "serde",
- "serde_json",
- "serde_qs",
- "services",
- "sha2",
- "subscription",
- "teloxide",
- "tokio",
- "tonic",
- "tonic-build",
- "tonic-web",
- "tower",
- "tower-http",
- "tracing",
- "url",
- "users",
 ]
 
 [[package]]
