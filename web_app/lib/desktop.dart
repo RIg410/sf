@@ -26,10 +26,10 @@ class DesktopPage extends StatelessWidget {
           Expanded(
             flex: 2,
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(24),
+              padding: EdgeInsets.all(24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: const [
+                children: [
                   BannerSection(),
                   SizedBox(height: 32),
                   NewsOffersSection(),
@@ -42,9 +42,9 @@ class DesktopPage extends StatelessWidget {
           Expanded(
             flex: 1,
             child: SingleChildScrollView(
-              padding: const EdgeInsets.all(24),
+              padding: EdgeInsets.all(24),
               child: Column(
-                children: const [
+                children: [
                   ScheduleSection(),
                   SizedBox(height: 32),
                   ProgramsSection(),

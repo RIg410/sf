@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BannerSection extends StatelessWidget {
-  const BannerSection();
+  const BannerSection({super.key});
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -40,7 +40,7 @@ class BannerSection extends StatelessWidget {
 }
 
 class NewsOffersSection extends StatelessWidget {
-  const NewsOffersSection();
+  const NewsOffersSection({super.key});
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -73,7 +73,7 @@ class NewsOffersSection extends StatelessWidget {
 }
 
 class ScheduleSection extends StatelessWidget {
-  const ScheduleSection();
+  const ScheduleSection({super.key});
   @override
   Widget build(BuildContext context) {
     // Пример простого расписания
@@ -121,7 +121,7 @@ class ScheduleSection extends StatelessWidget {
 }
 
 class InstructorsSection extends StatelessWidget {
-  const InstructorsSection();
+  const InstructorsSection({super.key});
   @override
   Widget build(BuildContext context) {
     final instructors = [
@@ -162,7 +162,7 @@ class InstructorsSection extends StatelessWidget {
 }
 
 class ProgramsSection extends StatelessWidget {
-  const ProgramsSection();
+  const ProgramsSection({super.key});
   @override
   Widget build(BuildContext context) {
     return Column(
