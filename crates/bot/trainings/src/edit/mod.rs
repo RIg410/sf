@@ -150,8 +150,8 @@ impl View for EditTraining {
 
             if !training.is_one_time {
                 row.push(Callback::Delete(true).button("все"));
-                keymap = keymap.append_row(row);
             }
+            keymap = keymap.append_row(row);
         }
 
         if ctx.has_right(Rule::EditTrainingCouch) {

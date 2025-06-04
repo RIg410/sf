@@ -67,10 +67,6 @@ impl Day {
     pub fn has_conflict(&self) -> bool {
         let mut slots: Vec<Slot> = Vec::new();
         for training in &self.training {
-            if training.is_canceled {
-                continue;
-            }
-
             let slot = training.get_slot();
             if slots.iter().any(|s| s.has_conflict(&slot)) {
                 return true;
