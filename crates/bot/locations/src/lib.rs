@@ -7,7 +7,7 @@ use bot_core::{
 };
 use eyre::Error;
 use locations::model::Location;
-use mongodb::{SessionCursor, bson::oid::ObjectId};
+use mongodb::bson::oid::ObjectId;
 use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::{
@@ -48,11 +48,7 @@ impl View for LocationsView {
     }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), Error> {
-        let locations = ctx
-            .services
-            .locations
-            .get_all(&mut ctx.session)
-            .await?;
+        let locations = ctx.services.locations.get_all(&mut ctx.session).await?;
 
         let (txt, markup) = render_locations_list(ctx, &locations).await?;
         ctx.edit_origin(&txt, markup).await?;
@@ -75,18 +71,14 @@ impl View for LocationsView {
         ctx.ensure(Rule::System)?;
 
         match calldata!(data) {
-            Callback::Create => {
-                return Ok(create::CreateLocationView::new().into());
-            }
+            Callback::Create => Ok(create::CreateLocationView.into()),
             Callback::Select(location_id) => {
-                return Ok(view::LocationDetailView::new(ObjectId::from_bytes(location_id)).into());
+                Ok(view::LocationDetailView::new(ObjectId::from_bytes(location_id)).into())
             }
             Callback::Edit(location_id) => {
-                return Ok(edit::EditLocationView::new(ObjectId::from_bytes(location_id)).into());
+                Ok(edit::EditLocationView::new(ObjectId::from_bytes(location_id)).into())
             }
         }
-
-        Ok(Jmp::Stay)
     }
 }
 
@@ -95,12 +87,12 @@ async fn render_locations_list(
     locations: &Vec<Location>,
 ) -> Result<(String, InlineKeyboardMarkup), Error> {
     let mut msg = "🏢 *Управление локациями*\n\n".to_string();
-    
+
     if locations.is_empty() {
         msg.push_str("Локации не найдены\\.\n");
     } else {
         msg.push_str(&format!("Всего локаций: *{}*\n\n", locations.len()));
-        
+
         for location in locations.iter().take(10) {
             msg.push_str(&format!(
                 "📍 *{}*\n📮 _{}_\n🚪 Залов: *{}*\n\n",
@@ -112,24 +104,20 @@ async fn render_locations_list(
     }
 
     let mut keymap = InlineKeyboardMarkup::default();
-    
+
     // Add location buttons
     for location in locations.iter().take(10) {
-        keymap = keymap.append_row(vec![
-            InlineKeyboardButton::callback(
-                format!("📍 {}", location.name),
-                Callback::Select(location.id.bytes()).to_data(),
-            )
-        ]);
+        keymap = keymap.append_row(vec![InlineKeyboardButton::callback(
+            format!("📍 {}", location.name),
+            Callback::Select(location.id.bytes()).to_data(),
+        )]);
     }
 
     // Add create button
-    keymap = keymap.append_row(vec![
-        InlineKeyboardButton::callback(
-            "➕ Создать локацию",
-            Callback::Create.to_data(),
-        )
-    ]);
+    keymap = keymap.append_row(vec![InlineKeyboardButton::callback(
+        "➕ Создать локацию",
+        Callback::Create.to_data(),
+    )]);
 
     Ok((msg, keymap))
 }

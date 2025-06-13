@@ -54,6 +54,10 @@ make checks               # Run fmt, test, clippy
 make fmt                  # Format code
 make clippy               # Run linter
 make test                 # Run tests
+
+# After code generation, always run:
+cargo fmt                 # Format generated code
+cargo clippy --fix        # Fix clippy warnings automatically
 ```
 
 ### Development Workflow

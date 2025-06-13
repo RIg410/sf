@@ -29,22 +29,20 @@ impl View for CreateLocationView {
     async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> ViewResult {
         ctx.delete_msg(message.id).await?;
         ctx.ensure(Rule::System)?;
-        
+
         let name = if let Some(text) = message.text() {
             text.to_string()
         } else {
-            ctx.send_text("Введите текст").await?;
+            ctx.send_msg("Введите текст").await?;
             return Ok(Jmp::Stay);
         };
 
         if name.trim().is_empty() {
-            ctx.send_text("Название не может быть пустым").await?;
+            ctx.send_msg("Название не может быть пустым").await?;
             return Ok(Jmp::Stay);
         }
 
-        Ok(Jmp::Next(
-            CreateLocationAddress { name }.into(),
-        ))
+        Ok(Jmp::Next(CreateLocationAddress { name }.into()))
     }
 }
 
@@ -63,23 +61,24 @@ impl View for CreateLocationAddress {
             "📍 Создание локации\n\nНазвание: *{}*\n\nВведите адрес локации:",
             escape(&self.name)
         );
-        ctx.edit_origin(&msg, InlineKeyboardMarkup::default()).await?;
+        ctx.edit_origin(&msg, InlineKeyboardMarkup::default())
+            .await?;
         Ok(())
     }
 
     async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> ViewResult {
         ctx.delete_msg(message.id).await?;
         ctx.ensure(Rule::System)?;
-        
+
         let address = if let Some(text) = message.text() {
             text.to_string()
         } else {
-            ctx.send_text("Введите текст").await?;
+            ctx.send_msg("Введите текст").await?;
             return Ok(Jmp::Stay);
         };
 
         if address.trim().is_empty() {
-            ctx.send_text("Адрес не может быть пустым").await?;
+            ctx.send_msg("Адрес не может быть пустым").await?;
             return Ok(Jmp::Stay);
         }
 
@@ -111,9 +110,9 @@ impl ConfirmView for ConfirmCreateLocation {
 
     async fn on_confirm(&self, ctx: &mut Context) -> ViewResult {
         ctx.ensure(Rule::System)?;
-        
+
         let working_hours = WorkingHours::default();
-        
+
         match ctx
             .services
             .locations
@@ -125,20 +124,12 @@ impl ConfirmView for ConfirmCreateLocation {
             )
             .await
         {
-            Ok(_) => {
-                Ok(DoneView::ok(format!(
-                    "✅ Локация *{}* успешно создана!",
-                    escape(&self.name)
-                ))
-                .into())
-            }
-            Err(e) => {
-                Ok(DoneView::error(format!(
-                    "❌ Ошибка создания локации: {}",
-                    e
-                ))
-                .into())
-            }
+            Ok(_) => Ok(DoneView::ok(format!(
+                "✅ Локация *{}* успешно создана",
+                escape(&self.name)
+            ))
+            .into()),
+            Err(e) => Ok(DoneView::err(format!("❌ Ошибка создания локации: {e}")).into()),
         }
     }
 }

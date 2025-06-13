@@ -42,7 +42,7 @@ impl View for EditLocationView {
         {
             Some(location) => location,
             None => {
-                ctx.send_text("❌ Локация не найдена").await?;
+                ctx.send_msg("❌ Локация не найдена").await?;
                 return Ok(());
             }
         };
@@ -54,27 +54,21 @@ impl View for EditLocationView {
         );
 
         let mut keymap = InlineKeyboardMarkup::default();
-        
-        keymap = keymap.append_row(vec![
-            InlineKeyboardButton::callback(
-                "📝 Изменить название",
-                Callback::EditName.to_data(),
-            )
-        ]);
-        
-        keymap = keymap.append_row(vec![
-            InlineKeyboardButton::callback(
-                "📮 Изменить адрес",
-                Callback::EditAddress.to_data(),
-            )
-        ]);
 
-        keymap = keymap.append_row(vec![
-            InlineKeyboardButton::callback(
-                "⬅️ Назад",
-                Callback::Back.to_data(),
-            )
-        ]);
+        keymap = keymap.append_row(vec![InlineKeyboardButton::callback(
+            "📝 Изменить название",
+            Callback::EditName.to_data(),
+        )]);
+
+        keymap = keymap.append_row(vec![InlineKeyboardButton::callback(
+            "📮 Изменить адрес",
+            Callback::EditAddress.to_data(),
+        )]);
+
+        keymap = keymap.append_row(vec![InlineKeyboardButton::callback(
+            "⬅️ Назад",
+            Callback::Back.to_data(),
+        )]);
 
         ctx.edit_origin(&msg, keymap).await?;
         Ok(())
@@ -84,18 +78,10 @@ impl View for EditLocationView {
         ctx.ensure(Rule::System)?;
 
         match calldata!(data) {
-            Callback::EditName => {
-                return Ok(EditLocationName::new(self.location_id).into());
-            }
-            Callback::EditAddress => {
-                return Ok(EditLocationAddress::new(self.location_id).into());
-            }
-            Callback::Back => {
-                return Ok(LocationDetailView::new(self.location_id).into());
-            }
+            Callback::EditName => Ok(EditLocationName::new(self.location_id).into()),
+            Callback::EditAddress => Ok(EditLocationAddress::new(self.location_id).into()),
+            Callback::Back => Ok(LocationDetailView::new(self.location_id).into()),
         }
-
-        Ok(Jmp::Stay)
     }
 }
 
@@ -124,16 +110,16 @@ impl View for EditLocationName {
     async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> ViewResult {
         ctx.delete_msg(message.id).await?;
         ctx.ensure(Rule::System)?;
-        
+
         let new_name = if let Some(text) = message.text() {
             text.to_string()
         } else {
-            ctx.send_text("Введите текст").await?;
+            ctx.send_msg("Введите текст").await?;
             return Ok(Jmp::Stay);
         };
 
         if new_name.trim().is_empty() {
-            ctx.send_text("Название не может быть пустым").await?;
+            ctx.send_msg("Название не может быть пустым").await?;
             return Ok(Jmp::Stay);
         }
 
@@ -164,29 +150,19 @@ impl ConfirmView for ConfirmEditName {
 
     async fn on_confirm(&self, ctx: &mut Context) -> ViewResult {
         ctx.ensure(Rule::System)?;
-        
+
         match ctx
             .services
             .locations
             .update_location_name(&mut ctx.session, self.location_id, self.new_name.clone())
             .await
         {
-            Ok(_) => {
-                Ok(DoneView::ok(format!(
-                    "✅ Название локации изменено на *{}*!",
-                    escape(&self.new_name)
-                ))
-                .back_to(LocationDetailView::new(self.location_id))
-                .into())
-            }
-            Err(e) => {
-                Ok(DoneView::error(format!(
-                    "❌ Ошибка изменения названия: {}",
-                    e
-                ))
-                .back_to(EditLocationView::new(self.location_id))
-                .into())
-            }
+            Ok(_) => Ok(DoneView::ok(format!(
+                "✅ Название локации изменено на *{}*",
+                escape(&self.new_name)
+            ))
+            .into()),
+            Err(e) => Ok(DoneView::err(format!("❌ Ошибка изменения названия: {e}")).into()),
         }
     }
 }
@@ -216,16 +192,16 @@ impl View for EditLocationAddress {
     async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> ViewResult {
         ctx.delete_msg(message.id).await?;
         ctx.ensure(Rule::System)?;
-        
+
         let new_address = if let Some(text) = message.text() {
             text.to_string()
         } else {
-            ctx.send_text("Введите текст").await?;
+            ctx.send_msg("Введите текст").await?;
             return Ok(Jmp::Stay);
         };
 
         if new_address.trim().is_empty() {
-            ctx.send_text("Адрес не может быть пустым").await?;
+            ctx.send_msg("Адрес не может быть пустым").await?;
             return Ok(Jmp::Stay);
         }
 
@@ -256,29 +232,19 @@ impl ConfirmView for ConfirmEditAddress {
 
     async fn on_confirm(&self, ctx: &mut Context) -> ViewResult {
         ctx.ensure(Rule::System)?;
-        
+
         match ctx
             .services
             .locations
             .update_location_address(&mut ctx.session, self.location_id, self.new_address.clone())
             .await
         {
-            Ok(_) => {
-                Ok(DoneView::ok(format!(
-                    "✅ Адрес локации изменен на *{}*!",
-                    escape(&self.new_address)
-                ))
-                .back_to(LocationDetailView::new(self.location_id))
-                .into())
-            }
-            Err(e) => {
-                Ok(DoneView::error(format!(
-                    "❌ Ошибка изменения адреса: {}",
-                    e
-                ))
-                .back_to(EditLocationView::new(self.location_id))
-                .into())
-            }
+            Ok(_) => Ok(DoneView::ok(format!(
+                "✅ Адрес локации изменен на *{}*",
+                escape(&self.new_address)
+            ))
+            .into()),
+            Err(e) => Ok(DoneView::err(format!("❌ Ошибка изменения адреса: {e}")).into()),
         }
     }
 }
