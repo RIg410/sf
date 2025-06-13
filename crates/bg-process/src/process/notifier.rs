@@ -7,10 +7,10 @@ use eyre::Error;
 use ident::day::DayId;
 use mongodb::bson::oid::ObjectId;
 use services::SfServices;
-use trainings::model::notification::Notified;
 use std::sync::Arc;
 use store::session::Session;
 use teloxide::{types::ChatId, utils::markdown::escape};
+use trainings::model::notification::Notified;
 
 #[derive(Clone)]
 pub struct TrainingNotifier {

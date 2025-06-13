@@ -2,7 +2,7 @@ use std::{sync::Arc, time::Instant};
 
 use bson::oid::ObjectId;
 use rand::Rng as _;
-use users::model::{sanitize_phone, User};
+use users::model::{User, sanitize_phone};
 
 #[derive(Default, Clone)]
 pub struct Codes {

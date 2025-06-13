@@ -7,11 +7,11 @@ use bot_main::BotApp;
 use bson::oid::ObjectId;
 use env::Env;
 use services::SfServices;
-use tracing::warn;
 use std::sync::Arc;
 use teloxide::types::{ChatId, MessageId};
 use tokio::time::sleep;
 use tonic::Status;
+use tracing::warn;
 
 #[derive(Clone)]
 pub struct ContextBuilder {

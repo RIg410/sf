@@ -1,6 +1,6 @@
+use crate::model::User;
 use crate::model::employee::Employee;
 use crate::model::rate::Rate;
-use crate::model::User;
 
 use super::UserStore;
 use bson::oid::ObjectId;

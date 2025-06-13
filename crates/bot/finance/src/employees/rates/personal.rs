@@ -3,8 +3,8 @@ use bot_core::{
     context::Context,
     widget::{Jmp, View, ViewResult},
 };
-use eyre::Result;
 use decimal::Decimal;
+use eyre::Result;
 use mongodb::bson::oid::ObjectId;
 use teloxide::types::{InlineKeyboardMarkup, Message};
 use users::model::rate::Rate;
@@ -35,11 +35,7 @@ impl View for PersonalRate {
         Ok(())
     }
 
-    async fn handle_message(
-        &mut self,
-        ctx: &mut Context,
-        msg: &Message,
-    ) -> ViewResult {
+    async fn handle_message(&mut self, ctx: &mut Context, msg: &Message) -> ViewResult {
         ctx.delete_msg(msg.id).await?;
         if let Some(text) = msg.text() {
             if let Ok(percent) = text.parse::<Decimal>() {

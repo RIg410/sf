@@ -1,7 +1,10 @@
 use async_trait::async_trait;
 use booking::payer::AvailableBalance as _;
 use bot_core::{
-    callback_data::Calldata as _, context::Context, widget::{Jmp, View, ViewResult}, CommonLocation
+    CommonLocation,
+    callback_data::Calldata as _,
+    context::Context,
+    widget::{Jmp, View, ViewResult},
 };
 use bot_viewer::{
     fmt_phone,

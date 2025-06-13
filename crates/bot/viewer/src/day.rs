@@ -1,6 +1,6 @@
 use chrono::{
-    format::{DelayedFormat, StrftimeItems},
     DateTime, Datelike as _, Local, Weekday,
+    format::{DelayedFormat, StrftimeItems},
 };
 
 pub fn fmt_weekday(day: Weekday) -> &'static str {

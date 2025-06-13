@@ -1,4 +1,4 @@
-use super::{render_msg, RentPreset};
+use super::{RentPreset, render_msg};
 use async_trait::async_trait;
 use bot_core::{
     context::Context,

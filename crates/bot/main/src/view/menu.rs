@@ -195,6 +195,7 @@ impl View for MainMenuView {
             MainMenuItem::Programs => ProgramList::default().into(),
             MainMenuItem::Marketing => Marketing::default().into(),
             MainMenuItem::System => SystemView::default().into(),
+            MainMenuItem::Locations => LocationsView::new().into(),
         })
     }
 

@@ -1,10 +1,10 @@
 pub mod intent;
 pub mod prepare_payment;
 
+use decimal::Decimal;
 use env::Env;
 use eyre::Error;
 use intent::Intent;
-use decimal::Decimal;
 use prepare_payment::{Amount, Confirmation, PaymentRequest, PaymentResponse};
 use uuid::Uuid;
 

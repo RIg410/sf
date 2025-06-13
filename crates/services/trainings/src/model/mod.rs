@@ -312,4 +312,3 @@ impl Filter {
 fn default_room_id() -> ObjectId {
     Room::Adult.id()
 }
-

@@ -1,18 +1,18 @@
 use crate::Task;
 use async_trait::async_trait;
-use bot_core::{bot::TgBot, CommonLocation};
+use bot_core::{CommonLocation, bot::TgBot};
 use bot_viewer::fmt_phone;
 use chrono::{Datelike as _, Local};
 use eyre::Error;
 use rights::Rule;
 use services::SfServices;
-use tracing::info;
-use users::model::User;
 use std::sync::Arc;
 use teloxide::{
     types::{ChatId, InlineKeyboardMarkup},
     utils::markdown::escape,
 };
+use tracing::info;
+use users::model::User;
 
 #[derive(Clone)]
 pub struct BirthdaysNotifier {

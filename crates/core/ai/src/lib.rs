@@ -1,4 +1,4 @@
-use eyre::{bail, Error};
+use eyre::{Error, bail};
 use model::{Context, Model, RequestPayload, Response, ResponsePayload};
 use reqwest::Client;
 mod chat_gpt;
@@ -58,9 +58,11 @@ impl Ai {
                     used_words_count: resp_json.used_words_count.unwrap_or_default(),
                 })
             } else {
-                bail!(resp_json
-                    .error_message
-                    .unwrap_or_else(|| "Unknown error".to_string()))
+                bail!(
+                    resp_json
+                        .error_message
+                        .unwrap_or_else(|| "Unknown error".to_string())
+                )
             }
         } else {
             bail!("HTTP error: {}", response.status())

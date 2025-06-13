@@ -86,11 +86,7 @@ impl View for Requests {
         Ok(())
     }
 
-    async fn handle_message(
-        &mut self,
-        ctx: &mut Context,
-        msg: &Message,
-    ) -> ViewResult {
+    async fn handle_message(&mut self, ctx: &mut Context, msg: &Message) -> ViewResult {
         ctx.delete_msg(msg.id).await?;
         if let Some(phone) = &msg.text() {
             if phone.len() > 5 {

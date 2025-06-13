@@ -2,9 +2,9 @@ use crate::{SfServices, Task};
 use async_trait::async_trait;
 use bot_core::bot::TgBot;
 use eyre::Error;
-use tracing::info;
 use std::sync::Arc;
 use teloxide::{prelude::Requester as _, types::ChatId};
+use tracing::info;
 
 #[derive(Clone)]
 pub struct UserNameSync {

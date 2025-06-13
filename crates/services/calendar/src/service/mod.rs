@@ -196,9 +196,7 @@ impl<L: UserLog> Calendar<L> {
         }
 
         let name = format!("аренда:{renter}-{duration_min}");
-        let description = format!(
-            "арендатор: {renter}; продолжительность: {duration_min};"
-        );
+        let description = format!("арендатор: {renter}; продолжительность: {duration_min};");
         let training = Training::new_rent(start_at, room, duration_min, name, description, price);
 
         self.calendar.add_training(session, &training).await?;

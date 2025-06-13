@@ -10,14 +10,14 @@ use bot_core::{
 use env::Env;
 use eyre::Result;
 use services::SfServices;
-use tracing::info;
 use teloxide::{
+    Bot,
     dispatching::UpdateFilterExt as _,
     dptree,
     prelude::{Dispatcher, Requester as _, ResponseResult},
     types::{CallbackQuery, InlineQuery, Message, PreCheckoutQuery, Update},
-    Bot,
 };
+use tracing::info;
 use view::menu::{MainMenuItem, MainMenuView};
 
 #[derive(Clone)]

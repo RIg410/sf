@@ -1,5 +1,5 @@
 use crate::{
-    model::{Location, Hall, WorkingHours},
+    model::{Hall, Location, WorkingHours},
     storage::LocationStore,
 };
 use eyre::Error;
@@ -55,7 +55,7 @@ impl Locations {
     ) -> Result<ObjectId, Error> {
         let hall = Hall::new(hall_name);
         let hall_id = hall.id;
-        
+
         self.store.add_hall(session, &location_id, &hall).await?;
         Ok(hall_id)
     }
@@ -87,7 +87,9 @@ impl Locations {
         location_id: ObjectId,
         hall_id: ObjectId,
     ) -> Result<(), Error> {
-        self.store.remove_hall(session, &location_id, &hall_id).await
+        self.store
+            .remove_hall(session, &location_id, &hall_id)
+            .await
     }
 
     #[tx]
@@ -98,7 +100,9 @@ impl Locations {
         hall_id: ObjectId,
         name: String,
     ) -> Result<(), Error> {
-        self.store.update_hall_name(session, &location_id, &hall_id, &name).await
+        self.store
+            .update_hall_name(session, &location_id, &hall_id, &name)
+            .await
     }
 }
 

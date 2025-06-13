@@ -1,6 +1,11 @@
 use super::View;
 use async_trait::async_trait;
-use bot_core::{callback_data::Calldata, calldata, context::Context, widget::{Jmp, ViewResult}};
+use bot_core::{
+    callback_data::Calldata,
+    calldata,
+    context::Context,
+    widget::{Jmp, ViewResult},
+};
 use bot_viewer::user::fmt_user_type;
 use mongodb::bson::oid::ObjectId;
 use rights::Rule;

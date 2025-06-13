@@ -5,7 +5,7 @@ use std::{
     sync::Arc,
 };
 use storage::{BackupStorage, CollectionBackup};
-use store::{session::Session, Db};
+use store::{Db, session::Session};
 use tracing::info;
 use tx_macro::tx;
 use zip::write::SimpleFileOptions;

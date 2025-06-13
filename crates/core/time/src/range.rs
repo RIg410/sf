@@ -16,7 +16,6 @@ impl MonthRange {
         MonthRange(date)
     }
 
-
     pub fn next(&self) -> Result<Self, Error> {
         fn inner(range: MonthRange) -> Option<MonthRange> {
             let base_date = range.base_date();

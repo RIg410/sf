@@ -2,13 +2,21 @@ use std::mem;
 
 use super::View;
 use async_trait::async_trait;
-use bot_core::{callback_data::Calldata, calldata, context::Context, widget::{Jmp, ViewResult}};
+use bot_core::{
+    callback_data::Calldata,
+    calldata,
+    context::Context,
+    widget::{Jmp, ViewResult},
+};
 use bot_viewer::subscription::fmt_subscription_type;
 use eyre::Result;
 use mongodb::bson::oid::ObjectId;
 use rights::Rule;
 use serde::{Deserialize, Serialize};
-use subscription::{model::{Subscription, SubscriptionType}, service::CreateSubscriptionError};
+use subscription::{
+    model::{Subscription, SubscriptionType},
+    service::CreateSubscriptionError,
+};
 use teloxide::{
     types::{InlineKeyboardMarkup, Message},
     utils::markdown::escape,
@@ -133,32 +141,46 @@ impl CreateSubscription {
         let unlimited = unlimited.unwrap_or(false);
 
         if unlimited {
-            Ok(format!("📌 Тариф: *{}*\nЦена:*{}*\nСрок действия:*{}*\nЗаморозка:*{}*\nПользователь может купить:*{}*\n{}\n",
-                    escape(name.unwrap_or(&none)),
-                    price.map(|i|i.to_string().replace(".", ",")).unwrap_or_else(||none.clone()),
-                    days.map(|i|i.to_string()).unwrap_or_else(||none.clone()),
-                    freeze.map(|i|i.to_string()).unwrap_or_else(||none.clone()),
-                    can_buy_by_user.map(|i|if i {"Да"} else {"Нет"}.to_string()).unwrap_or_else(||none.clone()),
-                    if let Some(sub_type) = sub_type {
-                        fmt_subscription_type(ctx, &sub_type, false).await?
-                    } else {
-                        none.clone()
-                    }
-                ))
+            Ok(format!(
+                "📌 Тариф: *{}*\nЦена:*{}*\nСрок действия:*{}*\nЗаморозка:*{}*\nПользователь может купить:*{}*\n{}\n",
+                escape(name.unwrap_or(&none)),
+                price
+                    .map(|i| i.to_string().replace(".", ","))
+                    .unwrap_or_else(|| none.clone()),
+                days.map(|i| i.to_string()).unwrap_or_else(|| none.clone()),
+                freeze
+                    .map(|i| i.to_string())
+                    .unwrap_or_else(|| none.clone()),
+                can_buy_by_user
+                    .map(|i| if i { "Да" } else { "Нет" }.to_string())
+                    .unwrap_or_else(|| none.clone()),
+                if let Some(sub_type) = sub_type {
+                    fmt_subscription_type(ctx, &sub_type, false).await?
+                } else {
+                    none.clone()
+                }
+            ))
         } else {
-            Ok(format!("📌 Тариф: *{}*\nКоличество занятий:*{}*\nЦена:*{}*\nСрок действия:*{}*\nЗаморозка:*{}*\nПользователь может купить:*{}*\n{}\n",
-                    escape(name.unwrap_or(&none)),
-                    items.map(|i|i.to_string()).unwrap_or_else(||none.clone()),
-                    price.map(|i|i.to_string().replace(".", ",")).unwrap_or_else(||none.clone()),
-                    days.map(|i|i.to_string()).unwrap_or_else(||none.clone()),
-                    freeze.map(|i|i.to_string()).unwrap_or_else(||none.clone()),
-                    can_buy_by_user.map(|i|if i {"Да"} else {"Нет"}.to_string()).unwrap_or_else(||none.clone()),
-                    if let Some(sub_type) = sub_type {
-                        fmt_subscription_type(ctx, &sub_type, false).await?
-                    } else {
-                        none.clone()
-                    }
-                ))
+            Ok(format!(
+                "📌 Тариф: *{}*\nКоличество занятий:*{}*\nЦена:*{}*\nСрок действия:*{}*\nЗаморозка:*{}*\nПользователь может купить:*{}*\n{}\n",
+                escape(name.unwrap_or(&none)),
+                items.map(|i| i.to_string()).unwrap_or_else(|| none.clone()),
+                price
+                    .map(|i| i.to_string().replace(".", ","))
+                    .unwrap_or_else(|| none.clone()),
+                days.map(|i| i.to_string()).unwrap_or_else(|| none.clone()),
+                freeze
+                    .map(|i| i.to_string())
+                    .unwrap_or_else(|| none.clone()),
+                can_buy_by_user
+                    .map(|i| if i { "Да" } else { "Нет" }.to_string())
+                    .unwrap_or_else(|| none.clone()),
+                if let Some(sub_type) = sub_type {
+                    fmt_subscription_type(ctx, &sub_type, false).await?
+                } else {
+                    none.clone()
+                }
+            ))
         }
     }
 }
@@ -222,7 +244,7 @@ impl View for CreateSubscription {
                 let couch_list = ctx.services.users.instructors(&mut ctx.session).await?;
                 for couch in couch_list {
                     keymap = keymap.append_row(vec![
-                        Callback::Couch(couch.id.bytes()).button(&couch.name.first_name)
+                        Callback::Couch(couch.id.bytes()).button(&couch.name.first_name),
                     ]);
                 }
             }

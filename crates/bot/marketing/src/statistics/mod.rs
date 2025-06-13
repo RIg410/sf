@@ -22,7 +22,6 @@ pub struct StatisticsView {
     ai: Option<AiModel>,
 }
 
-
 impl StatisticsView {}
 
 #[async_trait]

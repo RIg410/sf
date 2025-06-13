@@ -1,9 +1,9 @@
+use crate::model::TreasuryEvent;
 use bson::doc;
 use chrono::{DateTime, Local, Utc};
 use eyre::Error;
-use mongodb::{options::IndexOptions, Collection, IndexModel, SessionCursor};
+use mongodb::{Collection, IndexModel, SessionCursor, options::IndexOptions};
 use store::session::Session;
-use crate::model::TreasuryEvent;
 
 const COLLECTION: &str = "treasury";
 

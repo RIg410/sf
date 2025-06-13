@@ -2,7 +2,7 @@ extern crate proc_macro;
 
 use proc_macro::TokenStream;
 use quote::quote;
-use syn::{parse_macro_input, FnArg, ItemFn, PatType, Receiver};
+use syn::{FnArg, ItemFn, PatType, Receiver, parse_macro_input};
 
 #[proc_macro_attribute]
 pub fn tx(_args: TokenStream, input: TokenStream) -> TokenStream {

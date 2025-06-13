@@ -1,4 +1,4 @@
-use super::{render_msg, ScheduleTrainingPreset};
+use super::{ScheduleTrainingPreset, render_msg};
 use async_trait::async_trait;
 use bot_core::{
     callback_data::Calldata as _,

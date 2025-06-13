@@ -4,10 +4,15 @@ use crate::SubscriptionView;
 
 use super::View;
 use async_trait::async_trait;
-use bot_core::{callback_data::Calldata as _, calldata, context::Context, widget::{Jmp, ViewResult}};
+use bot_core::{
+    callback_data::Calldata as _,
+    calldata,
+    context::Context,
+    widget::{Jmp, ViewResult},
+};
 use bot_viewer::fmt_phone;
 use decimal::Decimal;
-use eyre::{eyre, Error, Result};
+use eyre::{Error, Result, eyre};
 use mongodb::bson::oid::ObjectId;
 use rights::Rule;
 use serde::{Deserialize, Serialize};
@@ -46,7 +51,8 @@ impl View for ConfirmSell {
             Callback::Sell => {
                 ctx.ensure(Rule::SellSubscription)?;
                 let result = ctx
-                    .services.sales
+                    .services
+                    .sales
                     .sell_subscription(
                         &mut ctx.session,
                         self.sub,

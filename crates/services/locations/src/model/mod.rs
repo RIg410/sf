@@ -15,6 +15,7 @@ pub struct Location {
 }
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Default)]
 pub struct WorkingHours {
     pub monday: Option<DayHours>,
     pub tuesday: Option<DayHours>,
@@ -52,19 +53,6 @@ impl Default for Location {
     }
 }
 
-impl Default for WorkingHours {
-    fn default() -> Self {
-        WorkingHours {
-            monday: None,
-            tuesday: None,
-            wednesday: None,
-            thursday: None,
-            friday: None,
-            saturday: None,
-            sunday: None,
-        }
-    }
-}
 
 impl Hall {
     pub fn new(name: String) -> Self {

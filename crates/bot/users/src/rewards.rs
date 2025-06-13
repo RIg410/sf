@@ -113,7 +113,11 @@ async fn fmt_row(log: &Reward, ctx: &mut Context) -> Result<String> {
         } => {
             let mut from_users = String::new();
             for rew in user_originals {
-                let user = ctx.services.users.get_user(&mut ctx.session, rew.user).await?;
+                let user = ctx
+                    .services
+                    .users
+                    .get_user(&mut ctx.session, rew.user)
+                    .await?;
                 from_users.push_str(&escape(&format!(
                     "- {} цена занятий :{}. {}% = {}\n",
                     user.name.first_name,

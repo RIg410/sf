@@ -1,8 +1,8 @@
 use bson::oid::ObjectId;
 use chrono::{Duration, Utc};
-use eyre::{eyre, Error};
+use eyre::{Error, eyre};
 use jsonwebtoken::{DecodingKey, EncodingKey, Header, Validation};
-use serde::{de::DeserializeOwned, Deserialize, Serialize};
+use serde::{Deserialize, Serialize, de::DeserializeOwned};
 
 pub struct Jwt {
     jwt_decode: DecodingKey,

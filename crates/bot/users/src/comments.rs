@@ -82,11 +82,7 @@ impl View for Comments {
         Ok(())
     }
 
-    async fn handle_message(
-        &mut self,
-        ctx: &mut Context,
-        message: &Message,
-    ) -> ViewResult {
+    async fn handle_message(&mut self, ctx: &mut Context, message: &Message) -> ViewResult {
         ctx.delete_msg(message.id).await?;
         ctx.ensure(Rule::EditUserComments)?;
 

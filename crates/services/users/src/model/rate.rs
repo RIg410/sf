@@ -1,7 +1,7 @@
 use std::fmt::{self, Display, Formatter};
 
-use decimal::Decimal;
 use chrono::{DateTime, Months, Utc};
+use decimal::Decimal;
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]

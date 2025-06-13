@@ -1,6 +1,6 @@
 use crate::schedule::render_time_slot_collision;
 
-use super::{render_msg, PersonalTrainingPreset, DURATION};
+use super::{DURATION, PersonalTrainingPreset, render_msg};
 use async_trait::async_trait;
 use bot_core::{
     context::Context,
@@ -9,8 +9,8 @@ use bot_core::{
 use chrono::{DateTime, Datelike as _, Local, TimeZone, Timelike, Utc};
 use eyre::{Error, Result};
 use ident::slot::Slot;
-use tracing::warn;
 use teloxide::types::{InlineKeyboardMarkup, Message};
+use tracing::warn;
 
 #[derive(Default)]
 pub struct SetDateTime {

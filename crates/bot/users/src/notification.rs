@@ -82,11 +82,7 @@ impl View for NotificationView {
         Ok(())
     }
 
-    async fn handle_callback(
-        &mut self,
-        _ctx: &mut Context,
-        data: &str,
-    ) -> ViewResult {
+    async fn handle_callback(&mut self, _ctx: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             Callback::SetTime(_hour) => {}
             Callback::ResetTime(_hour) => {}

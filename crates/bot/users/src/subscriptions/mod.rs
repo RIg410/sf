@@ -35,7 +35,11 @@ impl View for SubscriptionsList {
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::EditUserSubscription)?;
 
-        let user = ctx.services.users.get_user(&mut ctx.session, self.id).await?;
+        let user = ctx
+            .services
+            .users
+            .get_user(&mut ctx.session, self.id)
+            .await?;
         let payer = user.payer()?;
         let subs = payer.subscriptions();
         let mut txt = String::new();

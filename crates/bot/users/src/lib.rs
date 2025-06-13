@@ -74,11 +74,7 @@ impl View for UsersView {
         Ok(())
     }
 
-    async fn handle_message(
-        &mut self,
-        ctx: &mut Context,
-        msg: &Message,
-    ) -> ViewResult {
+    async fn handle_message(&mut self, ctx: &mut Context, msg: &Message) -> ViewResult {
         ctx.delete_msg(msg.id).await?;
         ctx.ensure(Rule::ViewUsers)?;
 

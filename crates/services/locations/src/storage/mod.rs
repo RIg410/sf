@@ -2,13 +2,13 @@ use bson::to_document;
 use eyre::Error;
 use futures_util::TryStreamExt as _;
 use mongodb::{
+    Collection,
     bson::{doc, oid::ObjectId},
     options::UpdateOptions,
-    Collection,
 };
 use store::session::Session;
 
-use crate::model::{Location, Hall};
+use crate::model::{Hall, Location};
 
 const COLLECTION: &str = "locations";
 
@@ -129,7 +129,7 @@ impl LocationStore {
         self.store
             .update_one(
                 doc! { "_id": location_id },
-                doc! { 
+                doc! {
                     "$push": { "halls": to_document(hall)? },
                     "$inc" : { "version": 1 }
                 },
@@ -148,7 +148,7 @@ impl LocationStore {
         self.store
             .update_one(
                 doc! { "_id": location_id },
-                doc! { 
+                doc! {
                     "$pull": { "halls": { "id": hall_id } },
                     "$inc" : { "version": 1 }
                 },
@@ -168,7 +168,7 @@ impl LocationStore {
         self.store
             .update_one(
                 doc! { "_id": location_id, "halls.id": hall_id },
-                doc! { 
+                doc! {
                     "$set": { "halls.$.name": name },
                     "$inc" : { "version": 1 }
                 },

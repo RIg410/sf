@@ -6,7 +6,12 @@ use super::{
     sell::SellView,
 };
 use async_trait::async_trait;
-use bot_core::{callback_data::Calldata as _, calldata, context::Context, widget::{Jmp, ViewResult}};
+use bot_core::{
+    callback_data::Calldata as _,
+    calldata,
+    context::Context,
+    widget::{Jmp, ViewResult},
+};
 use bot_viewer::subscription::fmt_subscription_type;
 use eyre::{Context as _, Error, Result};
 use mongodb::bson::oid::ObjectId;

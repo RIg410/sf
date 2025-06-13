@@ -1,11 +1,11 @@
-use super::{render_msg, RentPreset};
+use super::{RentPreset, render_msg};
 use async_trait::async_trait;
 use bot_core::{
     context::Context,
     widget::{Jmp, View, ViewResult},
 };
-use eyre::Result;
 use decimal::Decimal;
+use eyre::Result;
 use teloxide::types::{InlineKeyboardMarkup, Message};
 
 #[derive(Default)]

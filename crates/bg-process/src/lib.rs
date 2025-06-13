@@ -3,16 +3,16 @@ use std::sync::Arc;
 use bot_core::bot::{Origin, TgBot, ValidToken};
 use bot_main::BotApp;
 use eyre::{Context, Error};
-use services::SfServices;
-use tracing::info;
 use process::{
     ai_messages::MotivationNotifier, birthdays::BirthdaysNotifier, freeze::FreezeBg,
     notifier::TrainingNotifier, requests::RequestNotifier, rewards::RewardsBg,
     subscription::SubscriptionBg, training::TriningBg, user_sync::UserNameSync,
 };
+use services::SfServices;
 use teloxide::types::{ChatId, MessageId};
 use tokio_cron_scheduler::{Job, JobScheduler};
 use tracing::error;
+use tracing::info;
 mod process;
 
 pub async fn start(ledger: Arc<SfServices>, bot: BotApp) -> Result<(), Error> {

@@ -3,7 +3,7 @@ use bot_core::{
     callback_data::Calldata,
     calldata,
     context::Context,
-    widget::{ View, ViewResult},
+    widget::{View, ViewResult},
 };
 use eyre::Result;
 use mongodb::bson::oid::ObjectId;
@@ -11,7 +11,7 @@ use serde::{Deserialize, Serialize};
 use teloxide::types::{InlineKeyboardButton, InlineKeyboardMarkup};
 use users::model::User;
 
-use super::{render_msg, PersonalTrainingPreset};
+use super::{PersonalTrainingPreset, render_msg};
 
 #[derive(Default)]
 pub struct SetInstructor {

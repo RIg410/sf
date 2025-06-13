@@ -5,10 +5,10 @@ use bot_core::{
 };
 use chrono::{Local, TimeZone as _};
 use eyre::{Error, Result};
-use rights::Rule;
-use tracing::warn;
 use mongodb::bson::oid::ObjectId;
+use rights::Rule;
 use teloxide::types::{InlineKeyboardMarkup, Message};
+use tracing::warn;
 
 pub struct SetBirthday {
     id: ObjectId,

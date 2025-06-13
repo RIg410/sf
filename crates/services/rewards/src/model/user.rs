@@ -9,4 +9,3 @@ pub struct UserRewardContribution {
     pub subscription_price: Decimal,
     pub lessons_count: u32,
 }
-

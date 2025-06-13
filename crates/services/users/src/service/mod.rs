@@ -15,7 +15,7 @@ use ident::source::Source;
 use mongodb::{SessionCursor, bson::oid::ObjectId};
 use rights::{Rights, Rule};
 use std::{ops::Deref, sync::Arc};
-use store::{session::Session, Db};
+use store::{Db, session::Session};
 use thiserror::Error;
 use tracing::info;
 use tx_macro::tx;

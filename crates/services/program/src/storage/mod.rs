@@ -2,9 +2,9 @@ use bson::to_document;
 use eyre::Error;
 use futures_util::TryStreamExt as _;
 use mongodb::{
+    Collection,
     bson::{doc, oid::ObjectId},
     options::UpdateOptions,
-    Collection,
 };
 use store::session::Session;
 

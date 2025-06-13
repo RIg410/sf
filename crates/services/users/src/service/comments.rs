@@ -6,7 +6,7 @@ use eyre::Error;
 use store::session::Session;
 use tx_macro::tx;
 
-impl<L:UserLog> Users<L> {
+impl<L: UserLog> Users<L> {
     #[tx]
     pub async fn add_comment(
         &self,

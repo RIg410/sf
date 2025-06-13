@@ -14,7 +14,12 @@ use bot_viewer::fmt_phone_escape_less;
 use ident::source::Source;
 use rights::{HasRule, Rights, Rule};
 use subscription::model::{SubscriptionStatus, SubscriptionType, UserSubscription};
-use users::model::{employee::Employee, family::Family, rate::{EmployeeRole, Interval, Rate}, Freeze, User, UserName};
+use users::model::{
+    Freeze, User, UserName,
+    employee::Employee,
+    family::Family,
+    rate::{EmployeeRole, Interval, Rate},
+};
 
 impl ToView<UserView> for User {
     fn to_view<R: HasRule>(self, rights: &R) -> UserView {

@@ -1,6 +1,9 @@
 use super::View;
 use async_trait::async_trait;
-use bot_core::{context::Context, widget::{Jmp, ViewResult}};
+use bot_core::{
+    context::Context,
+    widget::{Jmp, ViewResult},
+};
 use eyre::Result;
 use mongodb::bson::oid::ObjectId;
 use teloxide::types::{InlineKeyboardMarkup, Message};

@@ -10,7 +10,7 @@ use subscription::model::{SubscriptionStatus, SubscriptionType, UserSubscription
 use tracing::{info, warn};
 use tx_macro::tx;
 
-impl<L:UserLog> Users<L> {
+impl<L: UserLog> Users<L> {
     #[tx]
     pub async fn extend_subscriptions(&self, session: &mut Session, days: u32) -> Result<()> {
         info!("Extending subscriptions");
