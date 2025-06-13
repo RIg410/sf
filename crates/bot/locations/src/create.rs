@@ -125,11 +125,11 @@ impl ConfirmView for ConfirmCreateLocation {
             .await
         {
             Ok(_) => Ok(DoneView::ok(format!(
-                "✅ Локация *{}* успешно создана",
+                "Локация *{}* успешно создана",
                 escape(&self.name)
             ))
             .into()),
-            Err(e) => Ok(DoneView::err(format!("❌ Ошибка создания локации: {e}")).into()),
+            Err(e) => Ok(DoneView::err(format!("Ошибка создания локации: {e}")).into()),
         }
     }
 }

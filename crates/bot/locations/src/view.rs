@@ -15,7 +15,7 @@ use teloxide::{
     utils::markdown::escape,
 };
 
-use crate::{LocationsView, edit::EditLocationView};
+use crate::edit::EditLocationView;
 
 pub struct LocationDetailView {
     location_id: ObjectId,
@@ -64,19 +64,16 @@ impl View for LocationDetailView {
 
         let mut keymap = InlineKeyboardMarkup::default();
 
-        // Edit location button
         keymap = keymap.append_row(vec![InlineKeyboardButton::callback(
             "✏️ Редактировать",
             Callback::Edit.to_data(),
         )]);
 
-        // Add hall button
         keymap = keymap.append_row(vec![InlineKeyboardButton::callback(
             "➕ Добавить зал",
             Callback::AddHall.to_data(),
         )]);
 
-        // Hall management buttons
         for hall in &location.halls {
             keymap = keymap.append_row(vec![
                 InlineKeyboardButton::callback(
@@ -89,12 +86,6 @@ impl View for LocationDetailView {
                 ),
             ]);
         }
-
-        // Back button
-        keymap = keymap.append_row(vec![InlineKeyboardButton::callback(
-            "⬅️ Назад к списку",
-            Callback::Back.to_data(),
-        )]);
 
         ctx.edit_origin(&msg, keymap).await?;
         Ok(())
@@ -114,7 +105,6 @@ impl View for LocationDetailView {
                 hall_id: ObjectId::from_bytes(hall_id),
             }
             .into()),
-            Callback::Back => Ok(LocationsView::new().into()),
         }
     }
 }
@@ -163,10 +153,10 @@ impl View for AddHallView {
             .add_hall(&mut ctx.session, self.location_id, hall_name.clone())
             .await
         {
-            Ok(_) => Ok(
-                DoneView::ok(format!("✅ Зал *{}* успешно добавлен", escape(&hall_name))).into(),
-            ),
-            Err(e) => Ok(DoneView::err(format!("❌ Ошибка добавления зала: {e}")).into()),
+            Ok(_) => {
+                Ok(DoneView::ok(format!("Зал *{}* успешно добавлен", escape(&hall_name))).into())
+            }
+            Err(e) => Ok(DoneView::err(format!("Ошибка добавления зала: {e}")).into()),
         }
     }
 }
@@ -206,8 +196,8 @@ impl ConfirmView for ConfirmDeleteHall {
             .remove_hall(&mut ctx.session, self.location_id, self.hall_id)
             .await
         {
-            Ok(_) => Ok(DoneView::ok("✅ Зал успешно удален").into()),
-            Err(e) => Ok(DoneView::err(format!("❌ Ошибка удаления зала: {e}")).into()),
+            Ok(_) => Ok(DoneView::ok("Зал успешно удален").into()),
+            Err(e) => Ok(DoneView::err(format!("Ошибка удаления зала: {e}")).into()),
         }
     }
 }
@@ -230,6 +220,10 @@ impl EditHallView {
 impl View for EditHallView {
     fn name(&self) -> &'static str {
         "EditHallView"
+    }
+
+    fn safe_point(&self) -> bool {
+        true
     }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
@@ -321,11 +315,11 @@ impl ConfirmView for ConfirmEditHall {
             .await
         {
             Ok(_) => Ok(DoneView::ok(format!(
-                "✅ Название зала изменено на *{}*",
+                "Название зала изменено на *{}*",
                 escape(&self.new_name)
             ))
             .into()),
-            Err(e) => Ok(DoneView::err(format!("❌ Ошибка переименования зала: {e}")).into()),
+            Err(e) => Ok(DoneView::err(format!("Ошибка переименования зала: {e}")).into()),
         }
     }
 }
@@ -336,5 +330,4 @@ enum Callback {
     AddHall,
     EditHall([u8; 12]),
     DeleteHall([u8; 12]),
-    Back,
 }

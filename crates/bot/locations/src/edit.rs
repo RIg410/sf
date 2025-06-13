@@ -15,8 +15,6 @@ use teloxide::{
     utils::markdown::escape,
 };
 
-use crate::view::LocationDetailView;
-
 pub struct EditLocationView {
     location_id: ObjectId,
 }
@@ -31,6 +29,10 @@ impl EditLocationView {
 impl View for EditLocationView {
     fn name(&self) -> &'static str {
         "EditLocationView"
+    }
+
+    fn safe_point(&self) -> bool {
+        true
     }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
@@ -65,11 +67,6 @@ impl View for EditLocationView {
             Callback::EditAddress.to_data(),
         )]);
 
-        keymap = keymap.append_row(vec![InlineKeyboardButton::callback(
-            "⬅️ Назад",
-            Callback::Back.to_data(),
-        )]);
-
         ctx.edit_origin(&msg, keymap).await?;
         Ok(())
     }
@@ -80,7 +77,6 @@ impl View for EditLocationView {
         match calldata!(data) {
             Callback::EditName => Ok(EditLocationName::new(self.location_id).into()),
             Callback::EditAddress => Ok(EditLocationAddress::new(self.location_id).into()),
-            Callback::Back => Ok(LocationDetailView::new(self.location_id).into()),
         }
     }
 }
@@ -158,11 +154,11 @@ impl ConfirmView for ConfirmEditName {
             .await
         {
             Ok(_) => Ok(DoneView::ok(format!(
-                "✅ Название локации изменено на *{}*",
+                "Название локации изменено на *{}*",
                 escape(&self.new_name)
             ))
             .into()),
-            Err(e) => Ok(DoneView::err(format!("❌ Ошибка изменения названия: {e}")).into()),
+            Err(e) => Ok(DoneView::err(format!("Ошибка изменения названия: {e}")).into()),
         }
     }
 }
@@ -240,11 +236,11 @@ impl ConfirmView for ConfirmEditAddress {
             .await
         {
             Ok(_) => Ok(DoneView::ok(format!(
-                "✅ Адрес локации изменен на *{}*",
+                "Адрес локации изменен на *{}*",
                 escape(&self.new_address)
             ))
             .into()),
-            Err(e) => Ok(DoneView::err(format!("❌ Ошибка изменения адреса: {e}")).into()),
+            Err(e) => Ok(DoneView::err(format!("Ошибка изменения адреса: {e}")).into()),
         }
     }
 }
@@ -253,5 +249,4 @@ impl ConfirmView for ConfirmEditAddress {
 enum Callback {
     EditName,
     EditAddress,
-    Back,
 }

@@ -43,6 +43,11 @@ impl Default for LocationsView {
 
 #[async_trait]
 impl View for LocationsView {
+
+    fn safe_point(&self) -> bool {
+        true
+    }
+
     fn name(&self) -> &'static str {
         "LocationsView"
     }
