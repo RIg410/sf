@@ -8,6 +8,7 @@ use bot_core::{
 };
 use bot_couch::list::CouchingList;
 use bot_finance::FinanceView;
+use bot_locations::LocationsView;
 use bot_marketing::Marketing;
 use bot_subscription::SubscriptionView;
 use bot_trainings::program::list::ProgramList;
@@ -49,6 +50,7 @@ impl MainMenuView {
 
         if ctx.has_right(Rule::System) {
             keymap = keymap.append_row(vec![MainMenuItem::System.into()]);
+            keymap = keymap.append_row(vec![MainMenuItem::Locations.into()]);
         }
 
         if ctx.has_right(Rule::MiniApp) {
@@ -161,6 +163,7 @@ impl View for MainMenuView {
             MainMenuItem::Programs => ProgramList::default().into(),
             MainMenuItem::Marketing => Marketing::default().into(),
             MainMenuItem::System => SystemView::default().into(),
+            MainMenuItem::Locations => LocationsView::new().into(),
         })
     }
 
@@ -212,6 +215,7 @@ pub enum MainMenuItem {
     Programs,
     Marketing,
     System,
+    Locations,
 }
 
 const HOME_DESCRIPTION: &str = "🏠";
@@ -244,6 +248,9 @@ const STATISTICS_NAME: &str = "/marketing";
 const SYSTEM_DESCRIPTION: &str = "Система ⚙️";
 const SYSTEM_NAME: &str = "/system";
 
+const LOCATIONS_DESCRIPTION: &str = "Локации 🏢";
+const LOCATIONS_NAME: &str = "/locations";
+
 impl MainMenuItem {
     pub fn description(&self) -> &'static str {
         match self {
@@ -257,6 +264,7 @@ impl MainMenuItem {
             MainMenuItem::Programs => PROGRAM_DESCRIPTION,
             MainMenuItem::Marketing => STATISTICS_DESCRIPTION,
             MainMenuItem::System => SYSTEM_DESCRIPTION,
+            MainMenuItem::Locations => LOCATIONS_DESCRIPTION,
         }
     }
 
@@ -272,6 +280,7 @@ impl MainMenuItem {
             MainMenuItem::Programs => PROGRAM_NAME,
             MainMenuItem::Marketing => STATISTICS_NAME,
             MainMenuItem::System => SYSTEM_NAME,
+            MainMenuItem::Locations => LOCATIONS_NAME,
         }
     }
 }
@@ -306,6 +315,7 @@ impl TryFrom<&str> for MainMenuItem {
             PROGRAM_NAME | PROGRAM_DESCRIPTION => Ok(MainMenuItem::Programs),
             STATISTICS_NAME | STATISTICS_DESCRIPTION => Ok(MainMenuItem::Marketing),
             SYSTEM_NAME | SYSTEM_DESCRIPTION => Ok(MainMenuItem::System),
+            LOCATIONS_NAME | LOCATIONS_DESCRIPTION => Ok(MainMenuItem::Locations),
             _ => bail!("Unknown command"),
         }
     }

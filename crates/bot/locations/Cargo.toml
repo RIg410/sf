@@ -1,0 +1,18 @@
+[package]
+name = "bot-locations"
+
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+version.workspace = true
+
+[dependencies]
+async-trait.workspace = true
+bot-core.workspace = true
+chrono.workspace = true
+eyre.workspace = true
+locations.workspace = true
+mongodb.workspace = true
+rights.workspace = true
+serde.workspace = true
+teloxide.workspace = true

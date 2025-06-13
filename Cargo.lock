@@ -472,6 +472,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "bot-locations"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "bot-core",
+ "chrono",
+ "eyre",
+ "locations",
+ "mongodb",
+ "rights",
+ "serde",
+ "teloxide",
+]
+
+[[package]]
 name = "bot-main"
 version = "0.1.0"
 dependencies = [
@@ -481,6 +496,7 @@ dependencies = [
  "bot-core",
  "bot-couch",
  "bot-finance",
+ "bot-locations",
  "bot-marketing",
  "bot-subscription",
  "bot-trainings",

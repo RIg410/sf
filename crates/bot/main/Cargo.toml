@@ -13,6 +13,7 @@ bot-calendar.workspace = true
 bot-core.workspace = true
 bot-couch.workspace = true
 bot-finance.workspace = true
+bot-locations.workspace = true
 bot-marketing.workspace = true
 bot-subscription.workspace = true
 bot-trainings.workspace = true
