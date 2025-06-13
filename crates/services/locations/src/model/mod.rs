@@ -14,8 +14,7 @@ pub struct Location {
     pub version: u64,
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
-#[derive(Default)]
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct WorkingHours {
     pub monday: Option<DayHours>,
     pub tuesday: Option<DayHours>,
@@ -52,7 +51,6 @@ impl Default for Location {
         }
     }
 }
-
 
 impl Hall {
     pub fn new(name: String) -> Self {

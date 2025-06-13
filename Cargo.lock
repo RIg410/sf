@@ -2043,11 +2043,13 @@ version = "0.1.0"
 dependencies = [
  "bson",
  "chrono",
+ "dashmap",
  "eyre",
  "futures-util",
  "mongodb",
  "serde",
  "store",
+ "tracing",
  "tx_macro",
 ]
 

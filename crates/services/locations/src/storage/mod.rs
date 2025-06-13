@@ -1,4 +1,5 @@
 use bson::to_document;
+use dashmap::DashMap;
 use eyre::Error;
 use futures_util::TryStreamExt as _;
 use mongodb::{
@@ -7,6 +8,7 @@ use mongodb::{
     options::UpdateOptions,
 };
 use store::session::Session;
+use tracing::info;
 
 use crate::model::{Hall, Location};
 
@@ -14,12 +16,18 @@ const COLLECTION: &str = "locations";
 
 pub struct LocationStore {
     pub(crate) store: Collection<Location>,
+    pub(crate) location_cache: DashMap<ObjectId, Location>,
+    pub(crate) name_cache: DashMap<String, ObjectId>,
 }
 
 impl LocationStore {
     pub fn new(db: &mongodb::Database) -> Self {
         let store = db.collection(COLLECTION);
-        LocationStore { store }
+        LocationStore {
+            store,
+            location_cache: DashMap::new(),
+            name_cache: DashMap::new(),
+        }
     }
 
     pub async fn get_by_id(
@@ -27,16 +35,34 @@ impl LocationStore {
         session: &mut Session,
         id: ObjectId,
     ) -> Result<Option<Location>, Error> {
-        Ok(self
+        if !session.in_transaction() {
+            if let Some(location) = self.location_cache.get(&id) {
+                return Ok(Some(location.clone()));
+            }
+        }
+
+        let location = self
             .store
             .find_one(doc! { "_id": id })
             .session(&mut *session)
-            .await?)
+            .await?;
+
+        if let Some(ref location) = location {
+            self.cache_location(location);
+        }
+
+        Ok(location)
     }
 
     pub async fn get_all(&self, session: &mut Session) -> Result<Vec<Location>, Error> {
         let mut cursor = self.store.find(doc! {}).session(&mut *session).await?;
-        Ok(cursor.stream(&mut *session).try_collect().await?)
+        let locations: Vec<Location> = cursor.stream(&mut *session).try_collect().await?;
+
+        for location in &locations {
+            self.cache_location(location);
+        }
+
+        Ok(locations)
     }
 
     pub async fn get_by_name(
@@ -44,11 +70,26 @@ impl LocationStore {
         session: &mut Session,
         name: &str,
     ) -> Result<Option<Location>, Error> {
-        Ok(self
+        if !session.in_transaction() {
+            let name_lower = name.to_lowercase();
+            if let Some(id) = self.name_cache.get(&name_lower) {
+                if let Some(location) = self.location_cache.get(&id) {
+                    return Ok(Some(location.clone()));
+                }
+            }
+        }
+
+        let location = self
             .store
             .find_one(doc! { "name": { "$regex": name, "$options": "i" } })
             .session(&mut *session)
-            .await?)
+            .await?;
+
+        if let Some(ref location) = location {
+            self.cache_location(location);
+        }
+
+        Ok(location)
     }
 
     pub async fn find_by_address(
@@ -64,6 +105,9 @@ impl LocationStore {
     }
 
     pub async fn insert(&self, session: &mut Session, location: &Location) -> Result<(), Error> {
+        info!("Inserting location: {:?}", location);
+        self.invalidate_location_cache(&location.id);
+
         let result = self
             .store
             .update_one(
@@ -81,6 +125,9 @@ impl LocationStore {
     }
 
     pub async fn delete(&self, session: &mut Session, id: &ObjectId) -> Result<(), Error> {
+        info!("Deleting location: {}", id);
+        self.invalidate_location_cache(id);
+
         self.store
             .delete_one(doc! { "_id": id })
             .session(&mut *session)
@@ -94,6 +141,9 @@ impl LocationStore {
         id: &ObjectId,
         name: &str,
     ) -> Result<(), Error> {
+        info!("Updating location name for {}: {}", id, name);
+        self.invalidate_location_cache(id);
+
         self.store
             .update_one(
                 doc! { "_id": id },
@@ -110,6 +160,9 @@ impl LocationStore {
         id: &ObjectId,
         address: &str,
     ) -> Result<(), Error> {
+        info!("Updating location address for {}: {}", id, address);
+        self.invalidate_location_cache(id);
+
         self.store
             .update_one(
                 doc! { "_id": id },
@@ -126,6 +179,9 @@ impl LocationStore {
         location_id: &ObjectId,
         hall: &Hall,
     ) -> Result<(), Error> {
+        info!("Adding hall {:?} to location {}", hall, location_id);
+        self.invalidate_location_cache(location_id);
+
         self.store
             .update_one(
                 doc! { "_id": location_id },
@@ -145,6 +201,9 @@ impl LocationStore {
         location_id: &ObjectId,
         hall_id: &ObjectId,
     ) -> Result<(), Error> {
+        info!("Removing hall {} from location {}", hall_id, location_id);
+        self.invalidate_location_cache(location_id);
+
         self.store
             .update_one(
                 doc! { "_id": location_id },
@@ -165,6 +224,12 @@ impl LocationStore {
         hall_id: &ObjectId,
         name: &str,
     ) -> Result<(), Error> {
+        info!(
+            "Updating hall {} name to {} in location {}",
+            hall_id, name, location_id
+        );
+        self.invalidate_location_cache(location_id);
+
         self.store
             .update_one(
                 doc! { "_id": location_id, "halls.id": hall_id },
@@ -176,5 +241,17 @@ impl LocationStore {
             .session(&mut *session)
             .await?;
         Ok(())
+    }
+
+    fn cache_location(&self, location: &Location) {
+        self.location_cache.insert(location.id, location.clone());
+        self.name_cache
+            .insert(location.name.to_lowercase(), location.id);
+    }
+
+    fn invalidate_location_cache(&self, id: &ObjectId) {
+        if let Some((_, location)) = self.location_cache.remove(id) {
+            self.name_cache.remove(&location.name.to_lowercase());
+        }
     }
 }

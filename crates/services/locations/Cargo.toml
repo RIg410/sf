@@ -9,9 +9,11 @@ version.workspace = true
 [dependencies]
 bson.workspace = true
 chrono.workspace = true
+dashmap.workspace = true
 eyre.workspace = true
 futures-util.workspace = true
 mongodb.workspace = true
 serde.workspace = true
 store.workspace = true
+tracing.workspace = true
 tx_macro.workspace = true
