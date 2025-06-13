@@ -1,0 +1,17 @@
+[package]
+name = "locations"
+
+edition.workspace = true
+license.workspace = true
+publish.workspace = true
+version.workspace = true
+
+[dependencies]
+bson.workspace = true
+chrono.workspace = true
+eyre.workspace = true
+futures-util.workspace = true
+mongodb.workspace = true
+serde.workspace = true
+store.workspace = true
+tx_macro.workspace = true

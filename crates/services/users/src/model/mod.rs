@@ -16,6 +16,7 @@ pub mod extension;
 pub mod family;
 pub mod payer;
 pub mod rate;
+pub mod role;
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct User {
