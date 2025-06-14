@@ -10,12 +10,6 @@ class MobilePage extends StatelessWidget {
     int selectedIndex = 0;
 
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(40),
-        child: AppBar(
-          title: const LocationsSection(showAddress: false, isMobile: true),
-        ),
-      ),
       bottomNavigationBar: NavigationBar(
         destinations: const [
           NavigationDestination(icon: Icon(Icons.home), label: 'Дом'),
