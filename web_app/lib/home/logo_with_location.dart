@@ -12,7 +12,7 @@ class LogoWithLocation extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(
-          height: 40,
+          height: 20,
           child: Stack(
             alignment: Alignment.centerLeft,
             children: [
