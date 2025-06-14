@@ -1,6 +1,6 @@
 pub mod session;
 
-use bson::{doc, oid::ObjectId};
+use bson::doc;
 use eyre::{Context as _, Error};
 use mongodb::{Client, Database};
 use session::Session;
@@ -25,9 +25,9 @@ impl Db {
         Ok(Db { client, db })
     }
 
-    pub async fn start_session(&self) -> Result<Session, Error> {
+    pub async fn start_anonymous_session(&self) -> Result<Session, Error> {
         let session = self.client.start_session().await?;
-        Ok(Session::new(session, ObjectId::new()))
+        Ok(Session::new_anonymous(session))
     }
 }
 

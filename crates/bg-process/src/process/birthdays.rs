@@ -26,7 +26,7 @@ impl Task for BirthdaysNotifier {
     const CRON: &'static str = "every 1 day at 8:00";
 
     async fn process(&mut self) -> Result<(), Error> {
-        let mut session = self.ledger.db.start_session().await?;
+        let mut session = self.ledger.db.start_anonymous_session().await?;
         let now = Local::now();
         let users = self
             .ledger

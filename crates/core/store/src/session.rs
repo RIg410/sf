@@ -6,14 +6,16 @@ pub struct Session {
     client_session: ClientSession,
     actor: ObjectId,
     in_transaction: bool,
+    is_anonymous: bool,
 }
 
 impl Session {
-    pub fn new(client_session: ClientSession, actor: ObjectId) -> Self {
+    pub fn new_anonymous(client_session: ClientSession) -> Self {
         Session {
             client_session,
-            actor,
+            actor: ObjectId::from_bytes([0; 12]),
             in_transaction: false,
+            is_anonymous: true,
         }
     }
 
@@ -22,6 +24,12 @@ impl Session {
     }
 
     pub async fn start_transaction(&mut self) -> Result<(), mongodb::error::Error> {
+        if self.is_anonymous {
+            return Err(mongodb::error::Error::custom(
+                "Cannot commit transaction in anonymous session",
+            ));
+        }
+
         if self.in_transaction {
             return Ok(());
         }
@@ -55,6 +63,7 @@ impl Session {
     }
 
     pub fn set_actor(&mut self, actor: ObjectId) {
+        self.is_anonymous = false;
         self.actor = actor;
     }
 }

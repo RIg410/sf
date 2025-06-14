@@ -10,6 +10,10 @@ pub mod users {
     tonic::include_proto!("users");
 }
 
+pub mod locations {
+    tonic::include_proto!("locations");
+}
+
 pub mod id {
     tonic::include_proto!("id");
 }

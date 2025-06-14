@@ -26,7 +26,7 @@ async fn build_context(
 ) -> Result<(Context, Option<Widget>), (Error, Bot)> {
     let mut session = ledger
         .db
-        .start_session()
+        .start_anonymous_session()
         .await
         .map_err(|err| (err, bot.clone()))?;
     let (mut user, real) = if let Some(user) = ledger

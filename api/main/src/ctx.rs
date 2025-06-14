@@ -1,7 +1,7 @@
 use crate::auth::jwt::{Claims, Jwt};
 use bot_core::{
     bot::{Origin, TgBot, ValidToken},
-    context::Context,
+    context::{AnonymousContext, Context},
 };
 use bot_main::BotApp;
 use bson::oid::ObjectId;
@@ -24,6 +24,16 @@ impl ContextBuilder {
     pub fn new(ledger: Arc<SfServices>, bot: BotApp) -> Self {
         let jwt = Arc::new(Jwt::new(bot.env.jwt_secret()));
         ContextBuilder { ledger, bot, jwt }
+    }
+
+    pub async fn anonymous(&self) -> Result<AnonymousContext, Status> {
+        let session = self
+            .ledger
+            .db
+            .start_anonymous_session()
+            .await
+            .map_err(|_| Status::internal("Failed to start session"))?;
+        Ok(AnonymousContext::new(session, self.ledger.clone()))
     }
 
     pub async fn with_request<T>(&self, request: &tonic::Request<T>) -> Result<Context, Status> {
@@ -51,7 +61,7 @@ impl ContextBuilder {
         let mut session = self
             .ledger
             .db
-            .start_session()
+            .start_anonymous_session()
             .await
             .map_err(|_| Status::internal("Failed to start session"))?;
 

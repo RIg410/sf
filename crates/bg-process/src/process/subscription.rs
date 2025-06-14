@@ -25,7 +25,7 @@ impl Task for SubscriptionBg {
     const CRON: &'static str = "every day at 7:00";
 
     async fn process(&mut self) -> Result<(), Error> {
-        let mut session = self.ledger.db.start_session().await?;
+        let mut session = self.ledger.db.start_anonymous_session().await?;
 
         let mut users = self
             .ledger

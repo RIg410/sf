@@ -24,7 +24,7 @@ impl Task for UserNameSync {
     const CRON: &'static str = "every day at 03:00";
 
     async fn process(&mut self) -> Result<(), Error> {
-        let mut session = self.ledger.db.start_session().await?;
+        let mut session = self.ledger.db.start_anonymous_session().await?;
         info!("start user name sync");
         let mut cursor = self.ledger.users.find_all(&mut session, None, None).await?;
         while let Some(user) = cursor.next(&mut session).await {

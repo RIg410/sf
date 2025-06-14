@@ -20,7 +20,7 @@ impl Task for RewardsBg {
     const CRON: &'static str = "every 5 hour";
 
     async fn process(&mut self) -> Result<(), Error> {
-        let mut session = self.ledger.db.start_session().await?;
+        let mut session = self.ledger.db.start_anonymous_session().await?;
         self.process_rewards(&mut session).await?;
         Ok(())
     }

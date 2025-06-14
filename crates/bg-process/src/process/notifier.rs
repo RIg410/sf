@@ -24,7 +24,7 @@ impl Task for TrainingNotifier {
     const CRON: &'static str = "every 30 minutes";
 
     async fn process(&mut self) -> Result<(), Error> {
-        let mut session = self.ledger.db.start_session().await?;
+        let mut session = self.ledger.db.start_anonymous_session().await?;
         self.notify_about_tomorrow_training(&mut session).await?;
         self.notify_about_today_training(&mut session).await?;
         Ok(())

@@ -20,6 +20,7 @@ hex.workspace = true
 hmac.workspace = true
 ident.workspace = true
 jsonwebtoken.workspace = true
+locations.workspace = true
 mongodb.workspace = true
 prost.workspace = true
 rand.workspace = true

@@ -62,7 +62,7 @@ impl AuthService for AuthServer {
             .context_builder
             .ledger
             .db
-            .start_session()
+            .start_anonymous_session()
             .await
             .map_err(|_| tonic::Status::internal("Failed to start session"))?;
         let user = self
@@ -114,7 +114,7 @@ impl AuthService for AuthServer {
             .context_builder
             .ledger
             .db
-            .start_session()
+            .start_anonymous_session()
             .await
             .map_err(|_| tonic::Status::internal("Failed to start session"))?;
         let user = self

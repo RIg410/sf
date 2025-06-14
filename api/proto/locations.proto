@@ -1,0 +1,114 @@
+syntax = "proto3";
+package locations;
+
+import "id.proto";
+
+service LocationsService {
+    rpc get(LocationRequest) returns (LocationView);
+    rpc list(LocationListRequest) returns (LocationListView);
+    rpc create(CreateLocationRequest) returns (CreateLocationResponse);
+    rpc update(UpdateLocationRequest) returns (UpdateLocationResponse);
+    rpc delete(DeleteLocationRequest) returns (DeleteLocationResponse);
+    rpc add_hall(AddHallRequest) returns (AddHallResponse);
+    rpc remove_hall(RemoveHallRequest) returns (RemoveHallResponse);
+    rpc update_hall(UpdateHallRequest) returns (UpdateHallResponse);
+}
+
+message LocationView {
+    id.ObjectId id = 1;
+    string name = 2;
+    string address = 3;
+    WorkingHoursView working_hours = 4;
+    repeated HallView halls = 5;
+    uint64 version = 6;
+}
+
+message WorkingHoursView {
+    optional DayHoursView monday = 1;
+    optional DayHoursView tuesday = 2;
+    optional DayHoursView wednesday = 3;
+    optional DayHoursView thursday = 4;
+    optional DayHoursView friday = 5;
+    optional DayHoursView saturday = 6;
+    optional DayHoursView sunday = 7;
+}
+
+message DayHoursView {
+    int64 open = 1;
+    int64 close = 2;
+}
+
+message HallView {
+    id.ObjectId id = 1;
+    string name = 2;
+}
+
+// Request/Response messages
+message LocationRequest {
+    id.ObjectId id = 1;
+}
+
+message LocationListRequest {
+    // Empty for now, can add filters later
+}
+
+message LocationListView {
+    repeated LocationView locations = 1;
+}
+
+message CreateLocationRequest {
+    string name = 1;
+    string address = 2;
+    WorkingHoursView working_hours = 3;
+}
+
+message CreateLocationResponse {
+    id.ObjectId id = 1;
+}
+
+message UpdateLocationRequest {
+    id.ObjectId id = 1;
+    optional string name = 2;
+    optional string address = 3;
+    optional WorkingHoursView working_hours = 4;
+}
+
+message UpdateLocationResponse {
+    // Empty response
+}
+
+message DeleteLocationRequest {
+    id.ObjectId id = 1;
+}
+
+message DeleteLocationResponse {
+    // Empty response
+}
+
+message AddHallRequest {
+    id.ObjectId location_id = 1;
+    string hall_name = 2;
+}
+
+message AddHallResponse {
+    id.ObjectId hall_id = 1;
+}
+
+message RemoveHallRequest {
+    id.ObjectId location_id = 1;
+    id.ObjectId hall_id = 2;
+}
+
+message RemoveHallResponse {
+    // Empty response
+}
+
+message UpdateHallRequest {
+    id.ObjectId location_id = 1;
+    id.ObjectId hall_id = 2;
+    string name = 3;
+}
+
+message UpdateHallResponse {
+    // Empty response
+}

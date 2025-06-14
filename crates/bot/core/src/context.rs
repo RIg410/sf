@@ -9,6 +9,17 @@ use std::{
 use store::session::Session;
 use users::model::User;
 
+pub struct AnonymousContext {
+    pub session: Session,
+    pub services: Arc<SfServices>,
+}
+
+impl AnonymousContext {
+    pub fn new(session: Session, services: Arc<SfServices>) -> Self {
+        Self { session, services }
+    }
+}
+
 pub struct Context {
     pub bot: TgBot,
     pub me: User,

@@ -103,6 +103,7 @@ dependencies = [
  "hmac",
  "ident",
  "jsonwebtoken",
+ "locations",
  "mongodb",
  "prost",
  "rand",

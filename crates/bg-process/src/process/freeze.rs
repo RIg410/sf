@@ -17,7 +17,7 @@ impl Task for FreezeBg {
     const CRON: &'static str = "every 1 hour";
 
     async fn process(&mut self) -> Result<(), Error> {
-        let mut session = self.ledger.db.start_session().await?;
+        let mut session = self.ledger.db.start_anonymous_session().await?;
 
         let users = self
             .ledger

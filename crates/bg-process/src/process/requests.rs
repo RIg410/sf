@@ -23,7 +23,7 @@ impl Task for RequestNotifier {
     const CRON: &'static str = "every 30 minutes";
 
     async fn process(&mut self) -> Result<(), Error> {
-        let mut session = self.ledger.db.start_session().await?;
+        let mut session = self.ledger.db.start_anonymous_session().await?;
         let mut requests = self.ledger.requests.to_notify(&mut session).await?;
         for req in requests.as_mut_slice() {
             if let Some(remind_later) = &req.remind_later {

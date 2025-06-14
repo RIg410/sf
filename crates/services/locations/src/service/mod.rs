@@ -104,6 +104,31 @@ impl Locations {
             .update_hall_name(session, &location_id, &hall_id, &name)
             .await
     }
+
+    pub async fn get(
+        &self,
+        session: &mut Session,
+        id: ObjectId,
+    ) -> Result<Option<Location>, Error> {
+        self.store.get_by_id(session, id).await
+    }
+
+    pub async fn list(&self, session: &mut Session) -> Result<Vec<Location>, Error> {
+        self.store.get_all(session).await
+    }
+
+    pub async fn get_by_name(
+        &self,
+        session: &mut Session,
+        name: &str,
+    ) -> Result<Option<Location>, Error> {
+        self.store.get_by_name(session, name).await
+    }
+
+    #[tx]
+    pub async fn delete(&self, session: &mut Session, id: ObjectId) -> Result<(), Error> {
+        self.store.delete(session, &id).await
+    }
 }
 
 impl Deref for Locations {
