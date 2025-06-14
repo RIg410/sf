@@ -16,8 +16,8 @@ import 'dart:core' as $core;
 import 'package:grpc/service_api.dart' as $grpc;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'user.pb.dart' as $2;
-import 'users.pb.dart' as $1;
+import 'user.pb.dart' as $3;
+import 'users.pb.dart' as $2;
 
 export 'users.pb.dart';
 
@@ -31,14 +31,14 @@ class UsersServiceClient extends $grpc.Client {
     '',
   ];
 
-  static final _$get = $grpc.ClientMethod<$1.UserRequest, $2.UserView>(
+  static final _$get = $grpc.ClientMethod<$2.UserRequest, $3.UserView>(
       '/users.UsersService/get',
-      ($1.UserRequest value) => value.writeToBuffer(),
-      ($core.List<$core.int> value) => $2.UserView.fromBuffer(value));
+      ($2.UserRequest value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $3.UserView.fromBuffer(value));
 
   UsersServiceClient(super.channel, {super.options, super.interceptors});
 
-  $grpc.ResponseFuture<$2.UserView> get($1.UserRequest request, {$grpc.CallOptions? options}) {
+  $grpc.ResponseFuture<$3.UserView> get($2.UserRequest request, {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$get, request, options: options);
   }
 }
@@ -48,18 +48,18 @@ abstract class UsersServiceBase extends $grpc.Service {
   $core.String get $name => 'users.UsersService';
 
   UsersServiceBase() {
-    $addMethod($grpc.ServiceMethod<$1.UserRequest, $2.UserView>(
+    $addMethod($grpc.ServiceMethod<$2.UserRequest, $3.UserView>(
         'get',
         get_Pre,
         false,
         false,
-        ($core.List<$core.int> value) => $1.UserRequest.fromBuffer(value),
-        ($2.UserView value) => value.writeToBuffer()));
+        ($core.List<$core.int> value) => $2.UserRequest.fromBuffer(value),
+        ($3.UserView value) => value.writeToBuffer()));
   }
 
-  $async.Future<$2.UserView> get_Pre($grpc.ServiceCall $call, $async.Future<$1.UserRequest> $request) async {
+  $async.Future<$3.UserView> get_Pre($grpc.ServiceCall $call, $async.Future<$2.UserRequest> $request) async {
     return get($call, await $request);
   }
 
-  $async.Future<$2.UserView> get($grpc.ServiceCall call, $1.UserRequest request);
+  $async.Future<$3.UserView> get($grpc.ServiceCall call, $2.UserRequest request);
 }

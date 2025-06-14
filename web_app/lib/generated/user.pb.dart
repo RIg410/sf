@@ -15,8 +15,8 @@ import 'dart:core' as $core;
 import 'package:fixnum/fixnum.dart' as $fixnum;
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'id.pb.dart' as $3;
-import 'subscription.pb.dart' as $4;
+import 'id.pb.dart' as $4;
+import 'subscription.pb.dart' as $5;
 import 'user.pbenum.dart';
 
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
@@ -25,7 +25,7 @@ export 'user.pbenum.dart';
 
 class UserView extends $pb.GeneratedMessage {
   factory UserView({
-    $3.ObjectId? id,
+    $4.ObjectId? id,
     $fixnum.Int64? tgId,
     UserNameView? name,
     RightsView? rights,
@@ -60,7 +60,7 @@ class UserView extends $pb.GeneratedMessage {
   factory UserView.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UserView', package: const $pb.PackageName(_omitMessageNames ? '' : 'user'), createEmptyInstance: create)
-    ..aOM<$3.ObjectId>(1, _omitFieldNames ? '' : 'id', subBuilder: $3.ObjectId.create)
+    ..aOM<$4.ObjectId>(1, _omitFieldNames ? '' : 'id', subBuilder: $4.ObjectId.create)
     ..aInt64(2, _omitFieldNames ? '' : 'tgId')
     ..aOM<UserNameView>(3, _omitFieldNames ? '' : 'name', subBuilder: UserNameView.create)
     ..aOM<RightsView>(4, _omitFieldNames ? '' : 'rights', subBuilder: RightsView.create)
@@ -93,15 +93,15 @@ class UserView extends $pb.GeneratedMessage {
   static UserView? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $3.ObjectId get id => $_getN(0);
+  $4.ObjectId get id => $_getN(0);
   @$pb.TagNumber(1)
-  set id($3.ObjectId value) => $_setField(1, value);
+  set id($4.ObjectId value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
   void clearId() => $_clearField(1);
   @$pb.TagNumber(1)
-  $3.ObjectId ensureId() => $_ensure(0);
+  $4.ObjectId ensureId() => $_ensure(0);
 
   @$pb.TagNumber(2)
   $fixnum.Int64 get tgId => $_getI64(1);
@@ -337,14 +337,14 @@ class FreezeView extends $pb.GeneratedMessage {
 
 class UserSubscriptionView extends $pb.GeneratedMessage {
   factory UserSubscriptionView({
-    $3.ObjectId? id,
-    $3.ObjectId? subscriptionId,
+    $4.ObjectId? id,
+    $4.ObjectId? subscriptionId,
     $core.String? name,
     $core.int? items,
     $core.int? days,
     StatusView? status,
     $fixnum.Int64? price,
-    $4.SubscriptionTypeView? tp,
+    $5.SubscriptionTypeView? tp,
     $core.int? balance,
     $core.int? lockedBalance,
     $core.bool? unlimited,
@@ -374,14 +374,14 @@ class UserSubscriptionView extends $pb.GeneratedMessage {
   factory UserSubscriptionView.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UserSubscriptionView', package: const $pb.PackageName(_omitMessageNames ? '' : 'user'), createEmptyInstance: create)
-    ..aOM<$3.ObjectId>(1, _omitFieldNames ? '' : 'id', subBuilder: $3.ObjectId.create)
-    ..aOM<$3.ObjectId>(2, _omitFieldNames ? '' : 'subscriptionId', subBuilder: $3.ObjectId.create)
+    ..aOM<$4.ObjectId>(1, _omitFieldNames ? '' : 'id', subBuilder: $4.ObjectId.create)
+    ..aOM<$4.ObjectId>(2, _omitFieldNames ? '' : 'subscriptionId', subBuilder: $4.ObjectId.create)
     ..aOS(3, _omitFieldNames ? '' : 'name')
     ..a<$core.int>(4, _omitFieldNames ? '' : 'items', $pb.PbFieldType.OU3)
     ..a<$core.int>(5, _omitFieldNames ? '' : 'days', $pb.PbFieldType.OU3)
     ..aOM<StatusView>(6, _omitFieldNames ? '' : 'status', subBuilder: StatusView.create)
     ..aInt64(7, _omitFieldNames ? '' : 'price')
-    ..aOM<$4.SubscriptionTypeView>(8, _omitFieldNames ? '' : 'tp', subBuilder: $4.SubscriptionTypeView.create)
+    ..aOM<$5.SubscriptionTypeView>(8, _omitFieldNames ? '' : 'tp', subBuilder: $5.SubscriptionTypeView.create)
     ..a<$core.int>(9, _omitFieldNames ? '' : 'balance', $pb.PbFieldType.OU3)
     ..a<$core.int>(10, _omitFieldNames ? '' : 'lockedBalance', $pb.PbFieldType.OU3)
     ..aOB(11, _omitFieldNames ? '' : 'unlimited')
@@ -408,26 +408,26 @@ class UserSubscriptionView extends $pb.GeneratedMessage {
   static UserSubscriptionView? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $3.ObjectId get id => $_getN(0);
+  $4.ObjectId get id => $_getN(0);
   @$pb.TagNumber(1)
-  set id($3.ObjectId value) => $_setField(1, value);
+  set id($4.ObjectId value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
   void clearId() => $_clearField(1);
   @$pb.TagNumber(1)
-  $3.ObjectId ensureId() => $_ensure(0);
+  $4.ObjectId ensureId() => $_ensure(0);
 
   @$pb.TagNumber(2)
-  $3.ObjectId get subscriptionId => $_getN(1);
+  $4.ObjectId get subscriptionId => $_getN(1);
   @$pb.TagNumber(2)
-  set subscriptionId($3.ObjectId value) => $_setField(2, value);
+  set subscriptionId($4.ObjectId value) => $_setField(2, value);
   @$pb.TagNumber(2)
   $core.bool hasSubscriptionId() => $_has(1);
   @$pb.TagNumber(2)
   void clearSubscriptionId() => $_clearField(2);
   @$pb.TagNumber(2)
-  $3.ObjectId ensureSubscriptionId() => $_ensure(1);
+  $4.ObjectId ensureSubscriptionId() => $_ensure(1);
 
   @$pb.TagNumber(3)
   $core.String get name => $_getSZ(2);
@@ -477,15 +477,15 @@ class UserSubscriptionView extends $pb.GeneratedMessage {
   void clearPrice() => $_clearField(7);
 
   @$pb.TagNumber(8)
-  $4.SubscriptionTypeView get tp => $_getN(7);
+  $5.SubscriptionTypeView get tp => $_getN(7);
   @$pb.TagNumber(8)
-  set tp($4.SubscriptionTypeView value) => $_setField(8, value);
+  set tp($5.SubscriptionTypeView value) => $_setField(8, value);
   @$pb.TagNumber(8)
   $core.bool hasTp() => $_has(7);
   @$pb.TagNumber(8)
   void clearTp() => $_clearField(8);
   @$pb.TagNumber(8)
-  $4.SubscriptionTypeView ensureTp() => $_ensure(7);
+  $5.SubscriptionTypeView ensureTp() => $_ensure(7);
 
   @$pb.TagNumber(9)
   $core.int get balance => $_getIZ(8);

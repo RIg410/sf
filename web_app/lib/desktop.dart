@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sf/common.dart';
-import 'package:sf/logo.dart';
+import 'package:sf/home/logo_with_location.dart';
 
 class DesktopPage extends StatelessWidget {
   const DesktopPage({super.key});
@@ -8,7 +8,7 @@ class DesktopPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Logo(),
+        title: const LogoWithLocation(),
         centerTitle: false,
         actions: [
           TextButton(onPressed: () {}, child: const Text('Домой')),
@@ -35,6 +35,8 @@ class DesktopPage extends StatelessWidget {
                   NewsOffersSection(),
                   SizedBox(height: 32),
                   InstructorsSection(),
+                  SizedBox(height: 32),
+                  // LocationsSection moved to AppBar,
                 ],
               ),
             ),

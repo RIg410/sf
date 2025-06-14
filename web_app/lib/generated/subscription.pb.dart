@@ -14,7 +14,7 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'id.pb.dart' as $3;
+import 'id.pb.dart' as $4;
 
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
 
@@ -97,7 +97,7 @@ class SubscriptionTypeView extends $pb.GeneratedMessage {
 
 class Group extends $pb.GeneratedMessage {
   factory Group({
-    $core.Iterable<$3.ObjectId>? programFilter,
+    $core.Iterable<$4.ObjectId>? programFilter,
   }) {
     final result = create();
     if (programFilter != null) result.programFilter.addAll(programFilter);
@@ -110,7 +110,7 @@ class Group extends $pb.GeneratedMessage {
   factory Group.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Group', package: const $pb.PackageName(_omitMessageNames ? '' : 'subscription'), createEmptyInstance: create)
-    ..pc<$3.ObjectId>(1, _omitFieldNames ? '' : 'programFilter', $pb.PbFieldType.PM, subBuilder: $3.ObjectId.create)
+    ..pc<$4.ObjectId>(1, _omitFieldNames ? '' : 'programFilter', $pb.PbFieldType.PM, subBuilder: $4.ObjectId.create)
     ..hasRequiredFields = false
   ;
 
@@ -132,12 +132,12 @@ class Group extends $pb.GeneratedMessage {
   static Group? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $pb.PbList<$3.ObjectId> get programFilter => $_getList(0);
+  $pb.PbList<$4.ObjectId> get programFilter => $_getList(0);
 }
 
 class Personal extends $pb.GeneratedMessage {
   factory Personal({
-    $3.ObjectId? couchFilter,
+    $4.ObjectId? couchFilter,
   }) {
     final result = create();
     if (couchFilter != null) result.couchFilter = couchFilter;
@@ -150,7 +150,7 @@ class Personal extends $pb.GeneratedMessage {
   factory Personal.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'Personal', package: const $pb.PackageName(_omitMessageNames ? '' : 'subscription'), createEmptyInstance: create)
-    ..aOM<$3.ObjectId>(1, _omitFieldNames ? '' : 'couchFilter', subBuilder: $3.ObjectId.create)
+    ..aOM<$4.ObjectId>(1, _omitFieldNames ? '' : 'couchFilter', subBuilder: $4.ObjectId.create)
     ..hasRequiredFields = false
   ;
 
@@ -172,15 +172,15 @@ class Personal extends $pb.GeneratedMessage {
   static Personal? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $3.ObjectId get couchFilter => $_getN(0);
+  $4.ObjectId get couchFilter => $_getN(0);
   @$pb.TagNumber(1)
-  set couchFilter($3.ObjectId value) => $_setField(1, value);
+  set couchFilter($4.ObjectId value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasCouchFilter() => $_has(0);
   @$pb.TagNumber(1)
   void clearCouchFilter() => $_clearField(1);
   @$pb.TagNumber(1)
-  $3.ObjectId ensureCouchFilter() => $_ensure(0);
+  $4.ObjectId ensureCouchFilter() => $_ensure(0);
 }
 
 

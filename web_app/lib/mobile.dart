@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sf/common.dart';
-import 'package:sf/logo.dart';
+import 'package:sf/home/logo_with_location.dart';
 
 class MobilePage extends StatelessWidget {
   const MobilePage({super.key});
@@ -10,7 +10,7 @@ class MobilePage extends StatelessWidget {
     int selectedIndex = 0;
 
     return Scaffold(
-      appBar: AppBar(title: const Logo()),
+      appBar: AppBar(title: const LogoWithLocation()),
       bottomNavigationBar: NavigationBar(
         destinations: const [
           NavigationDestination(icon: Icon(Icons.home), label: 'Дом'),
@@ -40,6 +40,8 @@ class MobilePage extends StatelessWidget {
             InstructorsSection(),
             SizedBox(height: 24),
             ProgramsSection(),
+            SizedBox(height: 24),
+            // LocationsSection moved to AppBar,
           ],
         ),
       ),

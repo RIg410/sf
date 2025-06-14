@@ -14,13 +14,13 @@ import 'dart:core' as $core;
 
 import 'package:protobuf/protobuf.dart' as $pb;
 
-import 'id.pb.dart' as $3;
+import 'id.pb.dart' as $4;
 
 export 'package:protobuf/protobuf.dart' show GeneratedMessageGenericExtensions;
 
 class UserRequest extends $pb.GeneratedMessage {
   factory UserRequest({
-    $3.ObjectId? id,
+    $4.ObjectId? id,
   }) {
     final result = create();
     if (id != null) result.id = id;
@@ -33,7 +33,7 @@ class UserRequest extends $pb.GeneratedMessage {
   factory UserRequest.fromJson($core.String json, [$pb.ExtensionRegistry registry = $pb.ExtensionRegistry.EMPTY]) => create()..mergeFromJson(json, registry);
 
   static final $pb.BuilderInfo _i = $pb.BuilderInfo(_omitMessageNames ? '' : 'UserRequest', package: const $pb.PackageName(_omitMessageNames ? '' : 'users'), createEmptyInstance: create)
-    ..aOM<$3.ObjectId>(1, _omitFieldNames ? '' : 'id', subBuilder: $3.ObjectId.create)
+    ..aOM<$4.ObjectId>(1, _omitFieldNames ? '' : 'id', subBuilder: $4.ObjectId.create)
     ..hasRequiredFields = false
   ;
 
@@ -55,15 +55,15 @@ class UserRequest extends $pb.GeneratedMessage {
   static UserRequest? _defaultInstance;
 
   @$pb.TagNumber(1)
-  $3.ObjectId get id => $_getN(0);
+  $4.ObjectId get id => $_getN(0);
   @$pb.TagNumber(1)
-  set id($3.ObjectId value) => $_setField(1, value);
+  set id($4.ObjectId value) => $_setField(1, value);
   @$pb.TagNumber(1)
   $core.bool hasId() => $_has(0);
   @$pb.TagNumber(1)
   void clearId() => $_clearField(1);
   @$pb.TagNumber(1)
-  $3.ObjectId ensureId() => $_ensure(0);
+  $4.ObjectId ensureId() => $_ensure(0);
 }
 
 class UserFilter extends $pb.GeneratedMessage {
