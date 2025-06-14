@@ -7,7 +7,8 @@ class LogoWithLocation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisSize: MainAxisSize.min,
       children: [
         SizedBox(
@@ -30,8 +31,8 @@ class LogoWithLocation extends StatelessWidget {
             ],
           ),
         ),
-        const SizedBox(width: 24),
-        const LocationsSection(),
+        const SizedBox(height: 4),
+        const LocationsSection(showAddress: true, isMobile: false),
       ],
     );
   }
