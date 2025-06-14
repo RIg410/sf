@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sf/common.dart';
 import 'package:sf/home/logo.dart';
-import 'package:sf/widgets/theme_toggle.dart';
+import 'package:sf/menus/app_menu.dart';
 
 class DesktopPage extends StatelessWidget {
   const DesktopPage({super.key});
@@ -17,9 +17,10 @@ class DesktopPage extends StatelessWidget {
           TextButton(onPressed: () {}, child: const Text('Программы')),
           TextButton(onPressed: () {}, child: const Text('Цены')),
           const SizedBox(width: 16),
-          const ThemeToggle(),
           IconButton(onPressed: () {}, icon: const Icon(Icons.account_circle)),
-          const SizedBox(width: 24),
+          const SizedBox(width: 8),
+          const AppMenu(),
+          const SizedBox(width: 16),
         ],
       ),
       body: const Row(
