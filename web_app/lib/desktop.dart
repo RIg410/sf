@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sf/common.dart';
-import 'package:sf/home/logo_with_location.dart';
+import 'package:sf/home/logo.dart';
+import 'package:sf/widgets/theme_toggle.dart';
 
 class DesktopPage extends StatelessWidget {
   const DesktopPage({super.key});
@@ -8,15 +9,15 @@ class DesktopPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const LogoWithLocation(),
+        title: const Logo(),
         centerTitle: false,
         actions: [
-          TextButton(onPressed: () {}, child: const Text('Домой')),
           TextButton(onPressed: () {}, child: const Text('Расписание')),
           TextButton(onPressed: () {}, child: const Text('Инструкторы')),
           TextButton(onPressed: () {}, child: const Text('Программы')),
           TextButton(onPressed: () {}, child: const Text('Цены')),
           const SizedBox(width: 16),
+          const ThemeToggle(),
           IconButton(onPressed: () {}, icon: const Icon(Icons.account_circle)),
           const SizedBox(width: 24),
         ],

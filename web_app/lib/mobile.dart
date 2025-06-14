@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:sf/common.dart';
-import 'package:sf/home/locations.dart';
 
 class MobilePage extends StatelessWidget {
   const MobilePage({super.key});

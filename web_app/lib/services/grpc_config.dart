@@ -4,6 +4,8 @@ import 'constants.dart';
 class GrpcConfig {
   static GrpcConfig? _instance;
   late GrpcWebClientChannel _channel;
+  
+  static String get url => AppConstants.grpcUrl;
 
   GrpcConfig._internal() {
     _channel = GrpcWebClientChannel.xhr(Uri.parse(AppConstants.grpcUrl));
