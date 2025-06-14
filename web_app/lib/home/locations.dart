@@ -259,7 +259,6 @@ class _LocationDropdown extends StatelessWidget {
               location: location,
               isSelected: isSelected,
               onTap: () => onLocationSelected(location),
-              isMobile: isMobile,
             );
           },
         ),
@@ -272,13 +271,11 @@ class _LocationDropdownItem extends StatelessWidget {
   final LocationView location;
   final bool isSelected;
   final VoidCallback onTap;
-  final bool isMobile;
 
   const _LocationDropdownItem({
     required this.location,
     required this.isSelected,
     required this.onTap,
-    this.isMobile = false,
   });
 
   @override
@@ -294,43 +291,29 @@ class _LocationDropdownItem extends StatelessWidget {
           color: isSelected ? colorScheme.primaryContainer : null,
           borderRadius: BorderRadius.circular(4),
         ),
-        child: isMobile
-            ? Text(
-                location.name,
-                style: TextStyle(
-                  fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-                  color: isSelected
-                      ? colorScheme.onPrimaryContainer
-                      : colorScheme.onSurface,
-                ),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-              )
-            : Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    location.name,
-                    style: TextStyle(
-                      fontWeight: isSelected
-                          ? FontWeight.bold
-                          : FontWeight.normal,
-                      color: isSelected
-                          ? colorScheme.onPrimaryContainer
-                          : colorScheme.onSurface,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    location.address,
-                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                      color: isSelected
-                          ? colorScheme.onPrimaryContainer.withOpacity(0.7)
-                          : colorScheme.onSurfaceVariant,
-                    ),
-                  ),
-                ],
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              location.name,
+              style: TextStyle(
+                fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
+                color: isSelected
+                    ? colorScheme.onPrimaryContainer
+                    : colorScheme.onSurface,
               ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              location.address,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: isSelected
+                    ? colorScheme.onPrimaryContainer.withOpacity(0.7)
+                    : colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
