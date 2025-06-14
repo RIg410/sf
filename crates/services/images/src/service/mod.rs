@@ -14,6 +14,7 @@ use store::Db;
 use tracing::{debug, info};
 use tx_macro::tx;
 
+#[derive(Clone)]
 pub struct Images {
     store: Arc<ImagesStore>,
 }

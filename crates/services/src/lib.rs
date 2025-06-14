@@ -7,6 +7,7 @@ use eyre::Result;
 use history::service::History;
 use images::Images;
 use locations::service::Locations;
+use news::News;
 use program::service::Programs;
 use requests::service::Requests;
 use rewards::service::Rewards;
@@ -28,6 +29,7 @@ pub struct SfServices {
     pub programs: Programs,
     pub locations: Locations,
     pub images: Images,
+    pub news: News,
     pub treasury: Treasury<History>,
     pub subscriptions: Subscriptions,
     pub history: History,
@@ -57,6 +59,8 @@ impl SfServices {
 
         let users = Users::new(&storage, history.clone(), ai.clone()).await?;
         let calendar = Calendar::new(&storage, users.clone(), programs.clone()).await?;
+
+        let news = News::new(&storage, images.clone(), users.clone()).await?;
 
         let subscriptions = Subscriptions::new(&storage);
         let rewards = Rewards::new(&storage).await?;
@@ -88,6 +92,7 @@ impl SfServices {
             programs,
             locations,
             images,
+            news,
             db: storage,
             treasury,
             subscriptions,

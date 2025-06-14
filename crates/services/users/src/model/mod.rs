@@ -24,10 +24,13 @@ pub struct User {
     pub id: ObjectId,
     pub tg_id: i64,
     pub name: UserName,
-    pub rights: Rights,
     pub phone: Option<String>,
     #[serde(default = "default_is_active")]
     pub is_active: bool,
+
+    // pub role: UserRole
+    pub rights: Rights,
+
     #[serde(default)]
     pub freeze: Option<Freeze>,
     #[serde(default)]

@@ -1,0 +1,19 @@
+[package]
+name = "news"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bson.workspace = true
+chrono.workspace = true
+dashmap.workspace = true
+eyre.workspace = true
+futures-util.workspace = true
+history.workspace = true
+images.workspace = true
+mongodb.workspace = true
+serde.workspace = true
+store.workspace = true
+tracing.workspace = true
+tx_macro.workspace = true
+users.workspace = true

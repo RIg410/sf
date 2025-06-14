@@ -22,6 +22,7 @@ history.workspace = true
 ident.workspace = true
 images.workspace = true
 locations.workspace = true
+news.workspace = true
 mongodb.workspace = true
 program.workspace = true
 requests.workspace = true

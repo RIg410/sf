@@ -4,6 +4,29 @@ use chrono::{DateTime, Months, Utc};
 use decimal::Decimal;
 use serde::{Deserialize, Serialize};
 
+#[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq)]
+pub struct RatesV2 {
+    pub fix: Option<FixMonthRate>,
+    pub group_training: Option<GroupTrainingRate>,
+    pub personal_training: Option<PersonalTrainingRate>,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq)]
+pub struct FixMonthRate {
+    amount: Decimal,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq)]
+pub struct GroupTrainingRate {
+    percent: Decimal,
+    min_reward: Decimal,
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone, Copy, PartialEq, Eq)]
+pub struct PersonalTrainingRate {
+    percent: Decimal,
+}
+
 #[derive(Debug, Serialize, Deserialize, Clone, PartialEq, Eq)]
 pub enum EmployeeRole {
     Couch,

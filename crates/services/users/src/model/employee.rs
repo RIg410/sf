@@ -1,3 +1,5 @@
+use crate::model::rate::RatesV2;
+
 use super::rate::{EmployeeRole, Rate};
 use decimal::Decimal;
 use serde::{Deserialize, Serialize};
@@ -14,4 +16,11 @@ impl Employee {
     pub fn is_couch(&self) -> bool {
         self.role == EmployeeRole::Couch
     }
+}
+
+#[derive(Debug, Serialize, Deserialize, Clone)]
+pub struct EmployeeV2 {
+    pub description: String,
+    pub reward: Decimal,
+    pub rates: RatesV2,
 }
