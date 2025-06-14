@@ -5,6 +5,7 @@ use env::Env;
 use eyre::Error as EyError;
 use eyre::Result;
 use history::service::History;
+use images::Images;
 use locations::service::Locations;
 use program::service::Programs;
 use requests::service::Requests;
@@ -26,6 +27,7 @@ pub struct SfServices {
     pub calendar: Calendar<History>,
     pub programs: Programs,
     pub locations: Locations,
+    pub images: Images,
     pub treasury: Treasury<History>,
     pub subscriptions: Subscriptions,
     pub history: History,
@@ -48,6 +50,7 @@ impl SfServices {
         let history = History::new(&storage).await?;
         let programs = Programs::new(&storage);
         let locations = Locations::new(&storage);
+        let images = Images::new(&storage);
         let treasury = Treasury::new(&storage, history.clone()).await?;
 
         let ai = Ai::new(env.ai_base_url().to_owned(), env.ai_api_key().to_owned());
@@ -84,6 +87,7 @@ impl SfServices {
         Ok(SfServices {
             programs,
             locations,
+            images,
             db: storage,
             treasury,
             subscriptions,

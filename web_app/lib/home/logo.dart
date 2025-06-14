@@ -12,9 +12,9 @@ class Logo extends StatelessWidget {
         alignment: Alignment.centerLeft,
         children: [
           Positioned(
-            top: 3,
-            left: 11,
-            child: SvgPicture.asset('crown.svg', height: 10),
+            top: -3,
+            left: 5,
+            child: SvgPicture.asset('crown.svg', height: 16),
           ),
           const Padding(
             padding: EdgeInsets.only(left: 15),

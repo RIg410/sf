@@ -1,0 +1,20 @@
+[package]
+name = "images"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bson.workspace = true
+chrono.workspace = true
+dashmap.workspace = true
+eyre.workspace = true
+futures-util.workspace = true
+mongodb.workspace = true
+serde.workspace = true
+store.workspace = true
+tracing.workspace = true
+tx_macro.workspace = true
+sha2 = "0.10"
+base64 = "0.22"
+image = "0.25"
+tokio = { workspace = true, features = ["fs"] }
