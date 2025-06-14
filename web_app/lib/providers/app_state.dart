@@ -1,14 +1,7 @@
 import 'package:flutter/material.dart';
 import '../generated/user.pb.dart';
-import '../generated/locations.pb.dart';
 
-enum AppStatus {
-  initial,
-  loading,
-  authenticated,
-  unauthenticated,
-  error,
-}
+enum AppStatus { initial, loading, authenticated, unauthenticated, error }
 
 class AppState extends ChangeNotifier {
   AppStatus _status = AppStatus.initial;
@@ -23,7 +16,8 @@ class AppState extends ChangeNotifier {
   String? get authToken => _authToken;
   String? get error => _error;
   bool get isInitialized => _isInitialized;
-  bool get isAuthenticated => _status == AppStatus.authenticated && _currentUser != null;
+  bool get isAuthenticated =>
+      _status == AppStatus.authenticated && _currentUser != null;
 
   // Initialize app
   Future<void> initialize() async {
@@ -32,8 +26,7 @@ class AppState extends ChangeNotifier {
     try {
       _status = AppStatus.loading;
       notifyListeners();
- 
-     
+
       _isInitialized = true;
       _status = AppStatus.unauthenticated;
       notifyListeners();

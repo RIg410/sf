@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/ui_provider.dart' as ui;
-import '../providers/app_state.dart';
-import '../providers/navigation_provider.dart';
 
 class AppMenu extends StatelessWidget {
   const AppMenu({super.key});
@@ -27,27 +25,6 @@ class AppMenu extends StatelessWidget {
         // Theme section
         _buildThemeSection(context),
         const Divider(height: 8),
-
-        // User section
-        // _buildUserSection(context),
-        // const Divider(height: 8),
-
-        // Settings section
-        // MenuItemButton(
-        //   leadingIcon: const Icon(Icons.settings_outlined),
-        //   child: const Text('Настройки'),
-        //   onPressed: () {
-        //     // Navigate to settings
-        //   },
-        // ),
-
-        // MenuItemButton(
-        //   leadingIcon: const Icon(Icons.help_outline),
-        //   child: const Text('Помощь'),
-        //   onPressed: () {
-        //     // Show help
-        //   },
-        // ),
       ],
     );
   }
