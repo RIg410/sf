@@ -46,6 +46,38 @@ impl UserStore {
         })
     }
 
+    pub async fn migrate_users(&self, session: &mut Session) -> Result<()> {
+       // info!("Migrating users...");
+        //let mut cursor = self.users.find(doc! {}).session(&mut *session).await?;
+        // while let Some(user) = cursor.next(&mut *session).await {
+        //     let mut user = user?;
+        //     if user.rights.is_full() {
+        //         println!("User {} already has full rights", user.name);
+        //         user.role = UserRole::Admin(AdminRole::default());
+        //     }
+
+        //     if let Some(ref mut employee) = user.employee {
+        //         match employee.role {
+        //             crate::model::rate::EmployeeRole::Couch => {
+        //                 println!("User {} is a couch", user.name);
+        //                 user.role = UserRole::Instructor(InstructorRole::default());
+        //             }
+        //             crate::model::rate::EmployeeRole::Manager => {
+        //                 println!("User {} is a manager", user.name);
+        //                 user.role = UserRole::Manager(Default::default());
+        //             }
+        //             crate::model::rate::EmployeeRole::Admin => {
+        //                 println!("User {} is an admin", user.name);
+        //                 user.role = UserRole::Manager(Default::default());
+        //             }
+        //         }
+        //     }
+
+        //     self.update(session, &mut user).await?;
+       // }
+        Ok(())
+    }
+
     pub async fn find_users_for_personal_training(
         &self,
         session: &mut Session,
@@ -377,7 +409,6 @@ impl UserStore {
             bail!("Only owner can freeze account");
         }
 
-        user.version += 1;
         if !force && user.freeze_days < days {
             bail!("Insufficient freeze days");
         }

@@ -4,6 +4,7 @@ use crate::{
     model::{
         User, UserName,
         extension::{Birthday, UserExtension},
+        role::RoleType,
         sanitize_phone,
     },
     storage::UserStore,
@@ -13,7 +14,7 @@ use chrono::{DateTime, Local};
 use eyre::{Context as _, Error, Result, bail, eyre};
 use ident::source::Source;
 use mongodb::{SessionCursor, bson::oid::ObjectId};
-use rights::{Rights, Rule};
+use rights::Rule;
 use std::{ops::Deref, sync::Arc};
 use store::{Db, session::Session};
 use thiserror::Error;
@@ -41,6 +42,12 @@ impl<L: UserLog> Users<L> {
         })
     }
 
+    #[tx]
+    pub async fn migrate_users(&self, session: &mut Session) -> Result<()> {
+       self.store.migrate_users(session).await?;
+        Ok(())
+    }
+
     pub async fn get_user(&self, session: &mut Session, id: ObjectId) -> Result<User, UserError> {
         self.get(session, id)
             .await
@@ -59,10 +66,10 @@ impl<L: UserLog> Users<L> {
     ) -> Result<ObjectId> {
         let phone = sanitize_phone(&phone);
         let is_first_user = self.store.count(session, false).await? == 0;
-        let rights = if is_first_user {
-            Rights::full()
+        let role = if is_first_user {
+            RoleType::Admin
         } else {
-            Rights::customer()
+            RoleType::Client
         };
 
         let user = self.get_by_tg_id(session, tg_id).await?;
@@ -76,7 +83,7 @@ impl<L: UserLog> Users<L> {
             self.store.set_name(session, user.id, name).await?;
             Ok(user.id)
         } else {
-            let user = User::new(tg_id, name.clone(), rights, Some(phone.clone()), come_from);
+            let user = User::new(tg_id, name.clone(), Some(phone.clone()), come_from, role);
             let id = user.id;
             self.store.insert(session, user).await?;
             self.logs.create_user(session, name, phone).await?;
@@ -120,9 +127,9 @@ impl<L: UserLog> Users<L> {
         let user = User::new(
             -1,
             user_name.clone(),
-            Rights::customer(),
             Some(phone.clone()),
             come_from,
+            RoleType::Client,
         );
         self.store.insert(session, user.clone()).await?;
         self.logs.create_user(session, user_name, phone).await?;

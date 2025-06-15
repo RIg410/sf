@@ -61,6 +61,12 @@ impl UserRole {
     }
 }
 
+impl Default for UserRole {
+    fn default() -> Self {
+        UserRole::Client(ClientRole::default())
+    }
+}
+
 #[derive(Debug, Clone, Copy, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
 pub enum RoleType {
     Client,
@@ -68,6 +74,18 @@ pub enum RoleType {
     SeniorInstructor,
     Manager,
     Admin,
+}
+
+impl RoleType {
+    pub fn make_role(&self) -> UserRole {
+        match self {
+            RoleType::Client => UserRole::Client(ClientRole::default()),
+            RoleType::Instructor => UserRole::Instructor(InstructorRole::default()),
+            RoleType::SeniorInstructor => UserRole::SeniorInstructor(InstructorRole::default()),
+            RoleType::Manager => UserRole::Manager(ManagerRole::default()),
+            RoleType::Admin => UserRole::Admin(AdminRole::default()),
+        }
+    }
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]

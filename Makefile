@@ -44,4 +44,3 @@ restart: restart-nginx restart-back
 logs:
 	sudo docker container logs ledger-backend-1	
 
-

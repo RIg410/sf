@@ -56,6 +56,7 @@ bot-trainings = {path = "crates/bot/trainings"}
 bot-users = {path = "crates/bot/users"}
 bot-viewer = {path = "crates/bot/viewer"}
 
+api = {path = "api/main"}
 booking = {path = "crates/services/booking"}
 business-error = {path = "crates/bot/business-error"}
 calendar = {path = "crates/services/calendar"}
@@ -68,7 +69,6 @@ ident = {path = "crates/core/ident"}
 images = {path = "crates/services/images"}
 locations = {path = "crates/services/locations"}
 news = {path = "crates/services/news"}
-api = {path = "api/main"}
 program = {path = "crates/services/program"}
 requests = {path = "crates/services/requests"}
 rewards = {path = "crates/services/rewards"}

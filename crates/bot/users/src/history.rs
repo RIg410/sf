@@ -12,10 +12,10 @@ use eyre::Result;
 use history::model::{Action, HistoryRow};
 use ident::source::Source;
 use mongodb::bson::oid::ObjectId;
-use rights::{Rights, Rule};
+use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::{types::InlineKeyboardMarkup, utils::markdown::escape};
-use users::model::{User, UserName};
+use users::model::{User, UserName, role::RoleType};
 
 pub const LIMIT: u64 = 7;
 
@@ -103,9 +103,9 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
                     first_name: "system".to_string(),
                     last_name: None,
                 },
-                Rights::customer(),
                 None,
                 Source::Unknown {},
+                RoleType::Client,
             ),
             false,
         )

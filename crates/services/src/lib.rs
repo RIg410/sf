@@ -1,5 +1,6 @@
 use ai::Ai;
 use backup::Backup;
+use bson::oid::ObjectId;
 use calendar::service::Calendar;
 use env::Env;
 use eyre::Error as EyError;
@@ -58,6 +59,10 @@ impl SfServices {
         let ai = Ai::new(env.ai_base_url().to_owned(), env.ai_api_key().to_owned());
 
         let users = Users::new(&storage, history.clone(), ai.clone()).await?;
+        let mut session = storage.start_anonymous_session().await?;
+        session.set_actor(ObjectId::new());
+        users.migrate_users(&mut session).await?;
+
         let calendar = Calendar::new(&storage, users.clone(), programs.clone()).await?;
 
         let news = News::new(&storage, images.clone(), users.clone()).await?;

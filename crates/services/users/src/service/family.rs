@@ -2,11 +2,10 @@ use super::Users;
 use crate::{
     error::UserError,
     log::UserLog,
-    model::{User, UserName},
+    model::{User, UserName, role::RoleType},
 };
 use eyre::Result;
 use mongodb::bson::oid::ObjectId;
-use rights::Rights;
 use store::session::Session;
 use tx_macro::tx;
 
@@ -92,9 +91,9 @@ impl<L: UserLog> Users<L> {
                 first_name: name.to_string(),
                 last_name: surname.clone(),
             },
-            Rights::customer(),
             None,
             user.come_from,
+            RoleType::Client,
         );
         child.family.payer_id = Some(user_id);
         let id = child.id;

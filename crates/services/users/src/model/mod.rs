@@ -10,6 +10,8 @@ use serde::{Deserialize, Serialize};
 use std::fmt::{Display, Formatter};
 use subscription::model::UserSubscription;
 
+use crate::model::role::{RoleType, UserRole};
+
 pub mod comments;
 pub mod employee;
 pub mod extension;
@@ -28,7 +30,9 @@ pub struct User {
     #[serde(default = "default_is_active")]
     pub is_active: bool,
 
-    // pub role: UserRole
+    #[serde(default)]
+    pub role: UserRole,
+
     pub rights: Rights,
 
     #[serde(default)]
@@ -37,8 +41,6 @@ pub struct User {
     pub subscriptions: Vec<UserSubscription>,
     #[serde(default)]
     pub freeze_days: u32,
-    #[serde(default)]
-    pub version: u64,
     #[serde(with = "bson::serde_helpers::chrono_datetime_as_bson_datetime")]
     #[serde(default = "default_created_at")]
     pub created_at: DateTime<Utc>,
@@ -62,18 +64,17 @@ impl User {
     pub fn new(
         tg_id: i64,
         name: UserName,
-        rights: Rights,
         phone: Option<String>,
         come_from: Source,
+        role: RoleType,
     ) -> User {
         User {
             id: ObjectId::new(),
             tg_id,
             name,
-            rights,
+            rights: Rights::customer(),
             phone,
             is_active: true,
-            version: 0,
             subscriptions: vec![],
             freeze_days: 0,
             freeze: None,
@@ -82,6 +83,7 @@ impl User {
             come_from,
             family: Family::default(),
             employee: Default::default(),
+            role: role.make_role(),
         }
     }
 
@@ -106,10 +108,10 @@ impl User {
                 first_name: "".to_owned(),
                 last_name: None,
             },
+            role: Default::default(),
             rights: Rights::customer(),
             phone: None,
             is_active: true,
-            version: 0,
             subscriptions: vec![],
             freeze_days: 0,
             freeze: None,
@@ -192,8 +194,8 @@ pub fn test_user() -> User {
         },
         rights: Rights::customer(),
         phone: None,
+        role: Default::default(),
         is_active: true,
-        version: 0,
         subscriptions: vec![],
         freeze_days: 0,
         freeze: None,

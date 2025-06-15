@@ -1,12 +1,12 @@
 use crate::model::*;
 use bson::{doc, oid::ObjectId};
 use chrono::Utc;
-use eyre::{Result, eyre};
-use mongodb::{Collection, IndexModel, options::UpdateOptions};
+use eyre::{eyre, Result};
+use mongodb::{options::UpdateOptions, Collection, IndexModel};
 use std::collections::VecDeque;
 use std::sync::{Arc, RwLock};
-use store::Db;
 use store::session::Session;
+use store::Db;
 use tracing::info;
 
 pub struct NewsStore {

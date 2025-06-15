@@ -1,5 +1,3 @@
-use crate::model::rate::RatesV2;
-
 use super::rate::{EmployeeRole, Rate};
 use decimal::Decimal;
 use serde::{Deserialize, Serialize};
@@ -18,9 +16,8 @@ impl Employee {
     }
 }
 
-#[derive(Debug, Serialize, Deserialize, Clone)]
+#[derive(Debug, Serialize, Deserialize, Clone, Default)]
 pub struct EmployeeV2 {
     pub description: String,
     pub reward: Decimal,
-    pub rates: RatesV2,
 }
