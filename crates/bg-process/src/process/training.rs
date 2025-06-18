@@ -7,6 +7,7 @@ use bot_core::{CommonLocation, bot::TgBot};
 use bot_viewer::{fmt_phone, user::link_to_user};
 use employee::reward::EmployeeReward as _;
 use eyre::{Error, Result, bail, eyre};
+use mongodb::bson::oid::ObjectId;
 use program::model::TrainingType;
 use rewards::model::user::UserRewardContribution;
 use rights::Rule;
@@ -27,6 +28,8 @@ pub struct TriningBg {
     bot: Arc<TgBot>,
 }
 
+const SYSTEM_ID: ObjectId = ObjectId::from_bytes(*b"SF-SYSTEM-13");
+
 #[async_trait]
 impl Task for TriningBg {
     const NAME: &'static str = "training";
@@ -34,6 +37,7 @@ impl Task for TriningBg {
 
     async fn process(&mut self) -> Result<(), Error> {
         let mut session = self.ledger.db.start_anonymous_session().await?;
+        session.set_actor(SYSTEM_ID);
 
         let mut cursor = self.ledger.calendar.days_to_process(&mut session).await?;
         let now = chrono::Local::now();
@@ -43,6 +47,7 @@ impl Task for TriningBg {
                 if training.is_processed {
                     continue;
                 }
+                let slot = training.get_slot();
 
                 let result = match training.status(now) {
                     TrainingStatus::OpenToSignup { .. }
@@ -71,7 +76,7 @@ impl Task for TriningBg {
                     }
                 };
                 if let Err(err) = result {
-                    error!("Failed to finalize: training:{:#}. Training", err);
+                    error!("Failed to finalize: training:{:?}. {:?}", slot, err);
                 }
             }
         }
