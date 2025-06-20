@@ -36,6 +36,7 @@ members = [
   "crates/bot/clients-ui/trainings",
   "crates/bot/clients-ui/calendar",
   "crates/bot/clients-ui/couch",
+  "crates/bot/clients-ui/shop",
 ]
 
 exclude = [
@@ -64,9 +65,10 @@ bot-users = {path = "crates/bot/users"}
 bot-viewer = {path = "crates/bot/viewer"}
 
 bot-client-calendar = {path = "crates/bot/clients-ui/calendar"}
-bot-client-main = {path = "crates/bot/clients-ui/main"}
-bot-client-trainings = {path = "crates/bot/clients-ui/trainings"}
 bot-client-couch = {path = "crates/bot/clients-ui/couch"}
+bot-client-main = {path = "crates/bot/clients-ui/main"}
+bot-client-shop = {path = "crates/bot/clients-ui/shop"}
+bot-client-trainings = {path = "crates/bot/clients-ui/trainings"}
 
 api = {path = "api/main"}
 booking = {path = "crates/services/booking"}

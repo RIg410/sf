@@ -1,6 +1,7 @@
 use crate::profile::{ProfileView, freeze::UnfreezeConfirm};
 use bot_client_calendar::CalendarView;
 use bot_client_couch::list::CouchingList;
+use bot_client_shop::ShopView;
 use bot_client_trainings::program::list::ProgramList;
 use bot_core::callback_data::Calldata;
 use bot_core::calldata;
@@ -76,7 +77,7 @@ impl bot_core::widget::View for ClientMain {
             Callback::Schedule => CalendarView::default().into(),
             Callback::Programs => ProgramList.into(),
             Callback::Couches => CouchingList::default().into(),
-            Callback::Shop => todo!(),
+            Callback::Shop => ShopView.into(),
             Callback::Profile => ProfileView.into(),
             Callback::Unfreeze => UnfreezeConfirm.into(),
         })
