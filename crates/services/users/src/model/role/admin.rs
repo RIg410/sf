@@ -1,14 +1,8 @@
 use crate::model::employee::EmployeeV2;
 
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+#[derive(Default)]
 pub struct AdminRole {
     employees: EmployeeV2,
 }
 
-impl Default for AdminRole {
-    fn default() -> Self {
-        AdminRole {
-            employees: EmployeeV2::default(),
-        }
-    }
-}

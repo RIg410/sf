@@ -167,7 +167,7 @@ impl NewsStore {
             .await?;
 
         let mut articles = Vec::new();
-        while let Some(article) = cursor.next(&mut **session).await {
+        while let Some(article) = cursor.next(session).await {
             let article = article?;
             articles.push(article);
         }
@@ -215,7 +215,7 @@ impl NewsStore {
             .await?;
 
         let mut articles = Vec::new();
-        while let Some(article) = cursor.next(&mut **session).await {
+        while let Some(article) = cursor.next(session).await {
             let article = article?;
             articles.push(article);
         }

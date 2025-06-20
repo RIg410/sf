@@ -84,14 +84,14 @@ pub(crate) fn handle_result(
         crate::widget::Jmp::Back(steps) => {
             let mut back = current;
             for _ in 0..steps {
-                back = back.take_back().unwrap_or_else(|| system_handler())
+                back = back.take_back().unwrap_or_else(&system_handler)
             }
             back
         }
         crate::widget::Jmp::ToSafePoint => {
             let mut back = current;
             loop {
-                back = back.take_back().unwrap_or_else(|| system_handler());
+                back = back.take_back().unwrap_or_else(&system_handler);
                 if back.is_safe_point() {
                     break back;
                 }

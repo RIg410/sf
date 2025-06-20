@@ -166,7 +166,7 @@ impl ImagesStore {
         let mut cursor = self.collection.find(filter).session(&mut **session).await?;
 
         let mut metadata_list = Vec::new();
-        while let Some(image) = cursor.next(&mut **session).await {
+        while let Some(image) = cursor.next(session).await {
             let image = image?;
             let metadata = ImageMetadata {
                 id: image.id,
