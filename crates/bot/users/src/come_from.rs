@@ -23,9 +23,6 @@ impl MarketingInfoView {
 
 #[async_trait]
 impl View for MarketingInfoView {
-    fn name(&self) -> &'static str {
-        "MarketingInfoView"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::EditMarketingInfo)?;

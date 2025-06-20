@@ -25,9 +25,6 @@ impl SetRoom {
 
 #[async_trait]
 impl View for SetRoom {
-    fn name(&self) -> &'static str {
-        "SetRoom"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let msg = render_msg(ctx, &self.preset, "В каком зале будет тренировка?").await?;

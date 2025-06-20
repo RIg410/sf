@@ -26,9 +26,6 @@ impl StatisticsView {}
 
 #[async_trait]
 impl View for StatisticsView {
-    fn name(&self) -> &'static str {
-        "StatisticsView"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), Error> {
         ctx.ensure(Rule::ViewStatistics)?;

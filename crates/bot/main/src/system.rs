@@ -20,9 +20,6 @@ impl SystemView {}
 
 #[async_trait]
 impl View for SystemView {
-    fn name(&self) -> &'static str {
-        "SystemView"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), Error> {
         ctx.ensure(Rule::System)?;
@@ -64,9 +61,6 @@ pub struct ApplyDump;
 
 #[async_trait]
 impl View for ApplyDump {
-    fn name(&self) -> &'static str {
-        "ApplyDump"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), Error> {
         ctx.ensure(Rule::System)?;

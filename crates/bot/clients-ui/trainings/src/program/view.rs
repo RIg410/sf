@@ -28,9 +28,6 @@ impl ProgramView {
 
 #[async_trait]
 impl View for ProgramView {
-    fn name(&self) -> &'static str {
-        "ViewProgram"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let training = ctx

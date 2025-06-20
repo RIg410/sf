@@ -24,9 +24,6 @@ impl PersonalRate {
 
 #[async_trait]
 impl View for PersonalRate {
-    fn name(&self) -> &'static str {
-        "PersonalRate"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let msg = "Введите процент вознаграждения:";

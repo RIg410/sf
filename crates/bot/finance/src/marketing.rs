@@ -19,9 +19,6 @@ pub struct PayMarketing;
 
 #[async_trait]
 impl View for PayMarketing {
-    fn name(&self) -> &'static str {
-        "PayMarketing"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         ctx.edit_origin("Введите сумму оптаты за маркетинг", Default::default())
@@ -60,9 +57,6 @@ struct ComeFromType {
 
 #[async_trait]
 impl View for ComeFromType {
-    fn name(&self) -> &'static str {
-        "ComeFromType"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let msg = "Выберите категорию оплаты".to_string();

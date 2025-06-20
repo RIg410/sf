@@ -8,9 +8,6 @@ pub struct ShopView;
 
 #[async_trait]
 impl View for ShopView {
-    fn name(&self) -> &'static str {
-        "SubscriptionView"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         let mut msg = "💪 Тарифы:\n\n".to_string();

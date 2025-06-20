@@ -22,9 +22,6 @@ impl NotificationView {
 
 #[async_trait]
 impl View for NotificationView {
-    fn name(&self) -> &'static str {
-        "NotificationView"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         let user = ctx

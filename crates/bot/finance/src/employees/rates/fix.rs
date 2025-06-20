@@ -25,9 +25,6 @@ impl FixRateAmount {
 
 #[async_trait]
 impl View for FixRateAmount {
-    fn name(&self) -> &'static str {
-        "FixRate"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let msg = "Введите сумму:";
@@ -71,9 +68,6 @@ impl FixRateDate {
 
 #[async_trait]
 impl View for FixRateDate {
-    fn name(&self) -> &'static str {
-        "FixRateDate"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let msg = "Введите дату следующего платежа: ДД\\.ММ\\.ГГГГ";

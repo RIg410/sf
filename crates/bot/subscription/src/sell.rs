@@ -42,9 +42,6 @@ impl SellView {
 
 #[async_trait]
 impl View for SellView {
-    fn name(&self) -> &'static str {
-        "SellView"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let text;
@@ -174,9 +171,6 @@ impl SetName {
 
 #[async_trait]
 impl View for SetName {
-    fn name(&self) -> &'static str {
-        "CreateUser"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         ctx.edit_origin(
@@ -230,9 +224,6 @@ impl SelectComeFrom {
 
 #[async_trait]
 impl View for SelectComeFrom {
-    fn name(&self) -> &'static str {
-        "SelectFrom"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let mut markup = InlineKeyboardMarkup::default();
@@ -290,9 +281,6 @@ impl CreateUserAndSell {
 
 #[async_trait]
 impl View for CreateUserAndSell {
-    fn name(&self) -> &'static str {
-        "CreateUserAndSell"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let sub = ctx

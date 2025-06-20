@@ -222,9 +222,6 @@ fn print_sub_stat(sub: &SubscriptionStat) -> String {
 
 #[async_trait]
 impl View for UserProfile {
-    fn name(&self) -> &'static str {
-        "UserProfile"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         if self.skip_show {

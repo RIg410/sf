@@ -20,9 +20,6 @@ impl SetRenter {
 
 #[async_trait]
 impl View for SetRenter {
-    fn name(&self) -> &'static str {
-        "SetRenter"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let msg = render_msg(ctx, &self.preset, "Введите название арендатора").await?;

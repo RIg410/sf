@@ -32,9 +32,6 @@ impl FamilySignIn {
 
 #[async_trait]
 impl View for FamilySignIn {
-    fn name(&self) -> &'static str {
-        "FamilySignIn"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let training = ctx

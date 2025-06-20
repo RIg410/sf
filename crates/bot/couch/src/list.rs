@@ -32,9 +32,6 @@ impl CouchingList {
 
 #[async_trait]
 impl View for CouchingList {
-    fn name(&self) -> &'static str {
-        "CouchingList"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let msg = "Наши инструкторы ❤️";

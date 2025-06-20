@@ -26,9 +26,6 @@ pub struct ProfileView;
 
 #[async_trait]
 impl View for ProfileView {
-    fn name(&self) -> &'static str {
-        "ProfileView"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         let empty = "?".to_string();

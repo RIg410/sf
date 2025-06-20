@@ -23,9 +23,6 @@ impl ClientMain {}
 
 #[async_trait::async_trait]
 impl bot_core::widget::View for ClientMain {
-    fn name(&self) -> &'static str {
-        "ClientMain"
-    }
 
     fn safe_point(&self) -> bool {
         true

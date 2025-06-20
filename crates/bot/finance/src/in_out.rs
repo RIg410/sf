@@ -32,9 +32,6 @@ impl TreasuryOp {
 
 #[async_trait]
 impl View for TreasuryOp {
-    fn name(&self) -> &'static str {
-        "FinInOut"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let mut text = format!("{}\n{}", self.io.render(), self.state.render());

@@ -14,9 +14,6 @@ pub struct ExtendSubscriptions;
 
 #[async_trait]
 impl View for ExtendSubscriptions {
-    fn name(&self) -> &'static str {
-        "ExtendSubscriptions"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::System)?;
@@ -39,9 +36,6 @@ pub struct Confirm {
 
 #[async_trait]
 impl View for Confirm {
-    fn name(&self) -> &'static str {
-        "Confirm"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::System)?;

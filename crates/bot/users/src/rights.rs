@@ -26,9 +26,6 @@ impl UserRightsView {
 
 #[async_trait]
 impl View for UserRightsView {
-    fn name(&self) -> &'static str {
-        "UserRightsView"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         let user = ctx

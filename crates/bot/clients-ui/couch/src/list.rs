@@ -29,9 +29,6 @@ impl CouchingList {
 
 #[async_trait]
 impl View for CouchingList {
-    fn name(&self) -> &'static str {
-        "CouchingList"
-    }
 
     fn safe_point(&self) -> bool {
         true

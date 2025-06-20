@@ -34,9 +34,6 @@ impl Requests {
 
 #[async_trait]
 impl View for Requests {
-    fn name(&self) -> &'static str {
-        "Requests"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::ViewMarketingInfo)?;

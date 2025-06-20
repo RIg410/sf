@@ -24,9 +24,6 @@ impl GroupRateMin {
 
 #[async_trait]
 impl View for GroupRateMin {
-    fn name(&self) -> &'static str {
-        "GroupRate"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let msg = "Введите минимальное вознаграждение:";
@@ -70,9 +67,6 @@ impl GroupRatePercent {
 
 #[async_trait]
 impl View for GroupRatePercent {
-    fn name(&self) -> &'static str {
-        "GroupRatePercent"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let msg = "Введите процент вознаграждения:";

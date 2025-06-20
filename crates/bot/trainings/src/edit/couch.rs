@@ -87,9 +87,6 @@ impl ChangeCouch {
 
 #[async_trait]
 impl View for ChangeCouch {
-    fn name(&self) -> &'static str {
-        "ChangeCouch"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let msg = "Наши инструкторы ❤️";

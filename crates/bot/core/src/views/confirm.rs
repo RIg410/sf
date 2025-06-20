@@ -21,9 +21,6 @@ impl<V> View for V
 where
     V: ConfirmView + Send + Sync + 'static,
 {
-    fn name(&self) -> &'static str {
-        "Confirm"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let mut keymap = InlineKeyboardMarkup::default();

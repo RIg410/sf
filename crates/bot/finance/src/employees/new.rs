@@ -25,9 +25,6 @@ impl MakeEmployee {
 
 #[async_trait]
 impl View for MakeEmployee {
-    fn name(&self) -> &'static str {
-        "MakeEmployee"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         let msg = "Введите номер телефона нового сотрудника:";
@@ -72,9 +69,6 @@ pub struct EmployeeDescription {
 
 #[async_trait]
 impl View for EmployeeDescription {
-    fn name(&self) -> &'static str {
-        "EmployeeDescription"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         let msg = "Введите описание нового сотрудника:";
@@ -107,9 +101,6 @@ pub struct EmployeeRoleView {
 
 #[async_trait]
 impl View for EmployeeRoleView {
-    fn name(&self) -> &'static str {
-        "EmployeeRole"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         let msg = "Выберите роль нового сотрудника:";

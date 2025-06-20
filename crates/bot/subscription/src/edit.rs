@@ -89,9 +89,6 @@ impl EditSubscription {
 
 #[async_trait]
 impl View for EditSubscription {
-    fn name(&self) -> &'static str {
-        "EditSubscription"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         ctx.ensure(Rule::EditSubscription)?;

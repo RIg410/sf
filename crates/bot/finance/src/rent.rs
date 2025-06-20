@@ -13,9 +13,6 @@ pub struct PayRent;
 
 #[async_trait]
 impl View for PayRent {
-    fn name(&self) -> &'static str {
-        "PayRent"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         ctx.edit_origin("Введите сумму оптаты за аренду", Default::default())

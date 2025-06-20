@@ -29,9 +29,6 @@ impl EmployeeList {
 
 #[async_trait]
 impl View for EmployeeList {
-    fn name(&self) -> &'static str {
-        "CouchingList"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let msg = "Сотрудники ❤️";

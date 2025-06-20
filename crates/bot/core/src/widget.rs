@@ -13,8 +13,6 @@ pub type ViewResult = Result<Jmp, SfError>;
 
 #[async_trait]
 pub trait View {
-    fn name(&self) -> &'static str;
-
     // if view is safe point, Jmp::ToSafePoint will unroll the stack to this point
     fn safe_point(&self) -> bool {
         false
@@ -90,12 +88,7 @@ impl DerefMut for Widget {
 
 impl Debug for Widget {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(
-            f,
-            "{} -> [{}]",
-            self.view.name(),
-            self.back.as_ref().map(|w| w.name()).unwrap_or("?")
-        )
+        write!(f, "Widget")
     }
 }
 

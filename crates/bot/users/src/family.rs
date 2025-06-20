@@ -26,9 +26,6 @@ impl FamilyView {
 
 #[async_trait]
 impl View for FamilyView {
-    fn name(&self) -> &'static str {
-        "FamilyView"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         if !(ctx.has_right(Rule::ViewFamily) || (ctx.me.id == self.id && ctx.me.has_family())) {
@@ -137,9 +134,6 @@ struct ConfirmRemoveChild {
 
 #[async_trait]
 impl View for ConfirmRemoveChild {
-    fn name(&self) -> &'static str {
-        "ConfirmRemoveChild"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         ctx.ensure(Rule::EditFamily)?;

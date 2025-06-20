@@ -22,9 +22,6 @@ impl DeleteEmployeeConfirm {
 
 #[async_trait]
 impl View for DeleteEmployeeConfirm {
-    fn name(&self) -> &'static str {
-        "DeleteEmployeeConfirm"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         let msg = "Вы уверены, что хотите удалить сотрудника?";

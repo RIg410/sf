@@ -20,9 +20,6 @@ impl ChangeName {
 
 #[async_trait]
 impl View for ChangeName {
-    fn name(&self) -> &'static str {
-        "ChangeName"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         ctx.ensure(Rule::EditTraining)?;

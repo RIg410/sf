@@ -19,9 +19,6 @@ pub struct AddNotification {
 
 #[async_trait]
 impl View for AddNotification {
-    fn name(&self) -> &'static str {
-        "AddNotification"
-    }
 
     async fn show(&mut self, ctx: &mut bot_core::context::Context) -> Result<(), eyre::Error> {
         let text = "Напомнить позже?";
@@ -55,9 +52,6 @@ pub struct SetRemindLater {
 
 #[async_trait]
 impl View for SetRemindLater {
-    fn name(&self) -> &'static str {
-        "SetRemindLater"
-    }
 
     async fn show(&mut self, ctx: &mut bot_core::context::Context) -> Result<(), eyre::Error> {
         let text = "Напомнить через:\nВыберите вариант или ввидите дату в формате *дд\\.мм\\.гггг чч\\:мм*";

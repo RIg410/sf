@@ -61,9 +61,6 @@ impl ClientsList {
 
 #[async_trait]
 impl View for ClientsList {
-    fn name(&self) -> &'static str {
-        "ClientsList"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         if !ctx.is_employee() && !ctx.has_right(Rule::EditTrainingClientsList) {

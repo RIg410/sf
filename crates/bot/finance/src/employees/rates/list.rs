@@ -33,9 +33,6 @@ impl RatesList {
 
 #[async_trait]
 impl View for RatesList {
-    fn name(&self) -> &'static str {
-        "RatesList"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         ctx.ensure(Rule::EditEmployeeRates)?;
@@ -153,9 +150,6 @@ impl DeleteRateConfirm {
 
 #[async_trait]
 impl View for DeleteRateConfirm {
-    fn name(&self) -> &'static str {
-        "DeleteRateConfirm"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         ctx.ensure(Rule::EditEmployeeRates)?;

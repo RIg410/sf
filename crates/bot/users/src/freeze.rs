@@ -31,9 +31,6 @@ impl FreezeProfile {
 
 #[async_trait]
 impl View for FreezeProfile {
-    fn name(&self) -> &'static str {
-        "FreezeProfile"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         match self.state {

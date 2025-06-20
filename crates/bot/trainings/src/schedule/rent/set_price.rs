@@ -21,9 +21,6 @@ impl SetPrice {
 
 #[async_trait]
 impl View for SetPrice {
-    fn name(&self) -> &'static str {
-        "SetPrice"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let msg = render_msg(ctx, &self.preset, "Введите стоимость аренды").await?;

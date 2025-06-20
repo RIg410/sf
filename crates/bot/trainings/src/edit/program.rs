@@ -21,9 +21,6 @@ impl ChangeProgram {
 
 #[async_trait]
 impl View for ChangeProgram {
-    fn name(&self) -> &'static str {
-        "Change program"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         let _msg = "Тренировочные программы: 🤸🏼".to_string();

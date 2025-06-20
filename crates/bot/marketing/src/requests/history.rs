@@ -25,9 +25,6 @@ impl RequestHistory {
 
 #[async_trait]
 impl View for RequestHistory {
-    fn name(&self) -> &'static str {
-        "HistoryList"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         ctx.ensure(Rule::RequestsHistory)?;

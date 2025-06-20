@@ -26,9 +26,6 @@ impl CreateProgram {
 
 #[async_trait]
 impl View for CreateProgram {
-    fn name(&self) -> &'static str {
-        "CreateProgram"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         ctx.ensure(Rule::CreateTraining)?;

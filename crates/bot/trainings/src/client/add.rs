@@ -38,9 +38,6 @@ impl AddClientView {
 
 #[async_trait]
 impl View for AddClientView {
-    fn name(&self) -> &'static str {
-        "AddClientView"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let (text, keymap) = render(ctx, &self.query, self.offset).await?;

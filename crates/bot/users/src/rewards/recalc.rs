@@ -27,9 +27,6 @@ impl AddRecalcReward {
 
 #[async_trait]
 impl View for AddRecalcReward {
-    fn name(&self) -> &'static str {
-        "AddRecalcReward"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::RecalculateRewards)?;
@@ -76,9 +73,6 @@ impl AddRecalcComment {
 
 #[async_trait]
 impl View for AddRecalcComment {
-    fn name(&self) -> &'static str {
-        "AddRecalcComment"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::RecalculateRewards)?;
@@ -121,9 +115,6 @@ enum Callback {
 
 #[async_trait]
 impl View for AddRecalcConfirm {
-    fn name(&self) -> &'static str {
-        "AddRecalcConfirm"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::RecalculateRewards)?;

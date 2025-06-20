@@ -24,9 +24,6 @@ pub struct SetPhone;
 
 #[async_trait]
 impl View for SetPhone {
-    fn name(&self) -> &'static str {
-        "SetPhone"
-    }
 
     async fn show(&mut self, ctx: &mut bot_core::context::Context) -> Result<(), eyre::Error> {
         let text = "Введите номер телефона";
@@ -57,9 +54,6 @@ pub struct SetComeFrom {
 
 #[async_trait]
 impl View for SetComeFrom {
-    fn name(&self) -> &'static str {
-        "SetComeFrom"
-    }
 
     async fn show(&mut self, ctx: &mut bot_core::context::Context) -> Result<(), eyre::Error> {
         let text = "Откуда пришел клиент?";
@@ -112,9 +106,6 @@ pub struct SetDescription {
 
 #[async_trait]
 impl View for SetDescription {
-    fn name(&self) -> &'static str {
-        "SetDescription"
-    }
 
     async fn show(&mut self, ctx: &mut bot_core::context::Context) -> Result<(), eyre::Error> {
         let text = "Можно оставить комментарий или \\- если нечего добавить";
@@ -146,9 +137,6 @@ pub struct SetName {
 
 #[async_trait]
 impl View for SetName {
-    fn name(&self) -> &'static str {
-        "SetName"
-    }
 
     async fn show(&mut self, ctx: &mut bot_core::context::Context) -> Result<(), eyre::Error> {
         let text = "Введите имя и фамилию";
@@ -184,9 +172,6 @@ pub struct RemindLaterView {
 
 #[async_trait]
 impl View for RemindLaterView {
-    fn name(&self) -> &'static str {
-        "RemindLater"
-    }
 
     async fn show(&mut self, ctx: &mut bot_core::context::Context) -> Result<(), eyre::Error> {
         let text = "Напомнить позже?";
@@ -236,9 +221,6 @@ pub struct SetRemindLater {
 
 #[async_trait]
 impl View for SetRemindLater {
-    fn name(&self) -> &'static str {
-        "SetRemindLater"
-    }
 
     async fn show(&mut self, ctx: &mut bot_core::context::Context) -> Result<(), eyre::Error> {
         let text = "Напомнить через:\nВыберите вариант или ввидите дату в формате *дд\\.мм\\.гггг чч\\:мм*";
@@ -347,9 +329,6 @@ pub struct Confirm {
 
 #[async_trait]
 impl View for Confirm {
-    fn name(&self) -> &'static str {
-        "Confirm"
-    }
 
     async fn show(&mut self, ctx: &mut bot_core::context::Context) -> Result<(), eyre::Error> {
         let mut text = format!(
@@ -432,9 +411,6 @@ pub struct SellSubscription {
 
 #[async_trait]
 impl View for SellSubscription {
-    fn name(&self) -> &'static str {
-        "SellSubscription"
-    }
 
     async fn show(&mut self, ctx: &mut bot_core::context::Context) -> Result<(), eyre::Error> {
         let text = "Продать абонемент?";
@@ -472,9 +448,6 @@ pub struct SelectSubscriptionsView {
 
 #[async_trait]
 impl View for SelectSubscriptionsView {
-    fn name(&self) -> &'static str {
-        "SelectSubscriptionsView"
-    }
 
     async fn show(&mut self, ctx: &mut bot_core::context::Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::SellSubscription)?;
@@ -523,9 +496,6 @@ pub struct ConfirmSellSubscription {
 
 #[async_trait]
 impl View for ConfirmSellSubscription {
-    fn name(&self) -> &'static str {
-        "ConfirmSellSubscription"
-    }
 
     async fn show(&mut self, ctx: &mut bot_core::context::Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::SellSubscription)?;

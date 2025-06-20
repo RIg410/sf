@@ -18,9 +18,6 @@ impl CouchInfo {
 
 #[async_trait::async_trait]
 impl View for CouchInfo {
-    fn name(&self) -> &'static str {
-        "CouchInfo"
-    }
 
     fn safe_point(&self) -> bool {
         true

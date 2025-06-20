@@ -21,9 +21,6 @@ impl SetDuration {
 
 #[async_trait]
 impl View for SetDuration {
-    fn name(&self) -> &'static str {
-        "SetDuration"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let msg = render_msg(ctx, &self.preset, "Введите продолжительность в минутах").await?;

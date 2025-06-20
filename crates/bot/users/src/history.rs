@@ -32,9 +32,6 @@ impl HistoryList {
 
 #[async_trait]
 impl View for HistoryList {
-    fn name(&self) -> &'static str {
-        "HistoryList"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let mut logs = ctx

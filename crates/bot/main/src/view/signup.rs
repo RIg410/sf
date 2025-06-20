@@ -22,9 +22,6 @@ pub struct SignUpView;
 
 #[async_trait]
 impl View for SignUpView {
-    fn name(&self) -> &'static str {
-        "SignUpView"
-    }
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.send_replay_markup(GREET_START, relay()).await?;
         Ok(())

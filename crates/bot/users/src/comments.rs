@@ -34,9 +34,6 @@ impl Comments {
 
 #[async_trait]
 impl View for Comments {
-    fn name(&self) -> &'static str {
-        "Comments"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::ViewUserComments)?;

@@ -28,9 +28,6 @@ impl AddMember {
 
 #[async_trait]
 impl View for AddMember {
-    fn name(&self) -> &'static str {
-        "AddMember"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::EditFamily)?;
@@ -118,9 +115,6 @@ impl AddMemberConfirm {
 
 #[async_trait]
 impl View for AddMemberConfirm {
-    fn name(&self) -> &'static str {
-        "AddMemberConfirm"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::EditFamily)?;
@@ -179,9 +173,6 @@ impl CreateUser {
 
 #[async_trait]
 impl View for CreateUser {
-    fn name(&self) -> &'static str {
-        "CreateUser"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::EditFamily)?;
@@ -231,9 +222,6 @@ impl CreateMemberConfirm {
 
 #[async_trait]
 impl View for CreateMemberConfirm {
-    fn name(&self) -> &'static str {
-        "AddMemberConfirm"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::EditFamily)?;

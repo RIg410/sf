@@ -187,9 +187,6 @@ impl CreateSubscription {
 
 #[async_trait]
 impl View for CreateSubscription {
-    fn name(&self) -> &'static str {
-        "CreateSubscription"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let mut text = self.render_state(ctx).await?;

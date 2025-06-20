@@ -51,7 +51,6 @@ where
 }
 
 pub struct ScriptView<S> {
-    name: &'static str,
     state: Option<S>,
     action: Option<Stage<S>>,
 }
@@ -60,9 +59,8 @@ impl<S> ScriptView<S>
 where
     S: Send + Sync + 'static,
 {
-    pub fn new(name: &'static str, state: S, action: Stage<S>) -> ScriptView<S> {
+    pub fn new(state: S, action: Stage<S>) -> ScriptView<S> {
         ScriptView {
-            name,
             state: Some(state),
             action: Some(action),
         }
@@ -74,10 +72,6 @@ impl<S> View for ScriptView<S>
 where
     S: Send + Sync + 'static,
 {
-    fn name(&self) -> &'static str {
-        self.name
-    }
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         if let Some(stage) = self.action.as_mut() {
             let mut keymap = InlineKeyboardMarkup::default();

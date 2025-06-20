@@ -79,9 +79,6 @@ impl TrainingView {
 
 #[async_trait]
 impl View for TrainingView {
-    fn name(&self) -> &'static str {
-        "TrainingView"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let training = ctx
@@ -297,9 +294,6 @@ impl ConfirmCancelTraining {
 
 #[async_trait]
 impl View for ConfirmCancelTraining {
-    fn name(&self) -> &'static str {
-        "ConfirmCancelTraining"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let training = ctx

@@ -97,9 +97,6 @@ impl EditTraining {
 
 #[async_trait]
 impl View for EditTraining {
-    fn name(&self) -> &'static str {
-        "EditTraining"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let training = ctx

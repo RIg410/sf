@@ -32,9 +32,6 @@ impl FamilySignIn {
 
 #[async_trait]
 impl View for FamilySignIn {
-    fn name(&self) -> &'static str {
-        "FamilySignIn"
-    }
 
     fn safe_point(&self) -> bool {
         true

@@ -48,9 +48,6 @@ impl CalendarView {
 
 #[async_trait]
 impl View for CalendarView {
-    fn name(&self) -> &'static str {
-        "CalendarView"
-    }
 
     fn safe_point(&self) -> bool {
         true

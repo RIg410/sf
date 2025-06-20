@@ -25,9 +25,6 @@ impl EditPrograms {
 
 #[async_trait]
 impl View for EditPrograms {
-    fn name(&self) -> &'static str {
-        "EditRequirement"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), Error> {
         ctx.ensure(Rule::EditSubscription)?;

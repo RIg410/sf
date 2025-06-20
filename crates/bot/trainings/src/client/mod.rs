@@ -126,9 +126,6 @@ impl ClientView {
 
 #[async_trait]
 impl View for ClientView {
-    fn name(&self) -> &'static str {
-        "ClientView"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let (msg, _, _) = render_profile_msg(ctx, self.id).await?;

@@ -55,9 +55,6 @@ impl View for TrainingList {
         true
     }
     
-    fn name(&self) -> &'static str {
-        "TrainingList"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let mut keymap = InlineKeyboardMarkup::default();

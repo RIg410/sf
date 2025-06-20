@@ -19,9 +19,6 @@ impl SetPhone {
 
 #[async_trait]
 impl View for SetPhone {
-    fn name(&self) -> &'static str {
-        "SetPhone"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         ctx.edit_origin("Введите телефон", InlineKeyboardMarkup::default())

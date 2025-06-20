@@ -69,9 +69,6 @@ impl EditProgram {
 
 #[async_trait]
 impl View for EditProgram {
-    fn name(&self) -> &'static str {
-        "EditProgram"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let keymap = InlineKeyboardMarkup::default();

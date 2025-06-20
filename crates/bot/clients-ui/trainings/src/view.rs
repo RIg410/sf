@@ -56,9 +56,6 @@ impl View for TrainingView {
         true
     }
 
-    fn name(&self) -> &'static str {
-        "TrainingView"
-    }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let training = ctx
