@@ -1,4 +1,5 @@
-use crate::profile::{freeze::UnfreezeConfirm, ProfileView};
+use crate::profile::{ProfileView, freeze::UnfreezeConfirm};
+use bot_client_calendar::CalendarView;
 use bot_core::callback_data::Calldata;
 use bot_core::calldata;
 use bot_core::context::Context;
@@ -69,14 +70,14 @@ impl bot_core::widget::View for ClientMain {
     }
 
     async fn handle_callback(&mut self, _: &mut Context, data: &str) -> ViewResult {
-        match calldata!(data) {
-            Callback::Schedule => todo!(),
+        Ok(match calldata!(data) {
+            Callback::Schedule => CalendarView::default().into(),
             Callback::Programs => todo!(),
             Callback::Couches => todo!(),
             Callback::Shop => todo!(),
-            Callback::Profile => Ok(ProfileView.into()),
-            Callback::Unfreeze => Ok(UnfreezeConfirm.into()),
-        }
+            Callback::Profile => ProfileView.into(),
+            Callback::Unfreeze => UnfreezeConfirm.into(),
+        })
     }
 }
 

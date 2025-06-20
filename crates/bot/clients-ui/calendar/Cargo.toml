@@ -1,5 +1,5 @@
 [package]
-name = "bot-calendar"
+name = "bot-client-calendar"
 
 edition.workspace = true
 license.workspace = true
@@ -12,6 +12,7 @@ bincode.workspace = true
 bot-core.workspace = true
 bot-trainings.workspace = true
 bot-viewer.workspace = true
+
 chrono.workspace = true
 eyre.workspace = true
 hex.workspace = true

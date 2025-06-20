@@ -62,9 +62,9 @@ bot-trainings = {path = "crates/bot/trainings"}
 bot-users = {path = "crates/bot/users"}
 bot-viewer = {path = "crates/bot/viewer"}
 
+bot-client-calendar = {path = "crates/bot/clients-ui/calendar"}
 bot-client-main = {path = "crates/bot/clients-ui/main"}
 bot-client-trainings = {path = "crates/bot/clients-ui/trainings"}
-bot-client-calendar = {path = "crates/bot/clients-ui/calendar"}
 
 api = {path = "api/main"}
 booking = {path = "crates/services/booking"}

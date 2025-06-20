@@ -163,10 +163,29 @@ impl CalendarStore {
         while let Some(day) = cursor.next(&mut *session).await {
             let mut day = day?;
             day.training.sort_by_key(|a| a.start_at_utc());
+
             for training in day.training {
                 if training.start_at_utc() + Duration::minutes(training.duration_min as i64) < now {
                     continue;
                 }
+                match filter {
+                    Filter::Client(object_id) => {
+                        if !training.clients.contains(&object_id) {
+                            continue;
+                        }
+                    }
+                    Filter::Instructor(object_id) => {
+                        if training.instructor != object_id {
+                            continue;
+                        }
+                    }
+                    Filter::Program(object_id) => {
+                        if training.proto_id != object_id {
+                            continue;
+                        }
+                    }
+                }
+
                 if skiped < offset {
                     skiped += 1;
                     continue;

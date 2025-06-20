@@ -64,7 +64,7 @@ impl View for TrainingList {
                 &mut ctx.session,
                 self.filter.clone(),
                 TRAININGS_PER_PAGE as usize,
-                self.offset as usize,
+                dbg!(self.offset) as usize,
             )
             .await?;
 

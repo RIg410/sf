@@ -20,8 +20,6 @@ use std::vec;
 use teloxide::types::{InlineKeyboardButton, InlineKeyboardMarkup};
 use teloxide::utils::markdown::escape;
 
-mod schedule;
-
 #[derive(Debug, Default, Clone)]
 pub struct Filter {
     pub proto_id: Option<ObjectId>,
@@ -83,16 +81,6 @@ impl View for CalendarView {
                 Ok(Jmp::Stay)
             }
             Callback::SelectTraining(id) => Ok(TrainingView::new(id.into()).into()),
-            Callback::Schedule => {
-                if ctx.has_right(Rule::ScheduleGroupTraining)
-                    || ctx.has_right(Rule::ScheduleSubRent)
-                    || ctx.has_right(Rule::SchedulePersonalTraining)
-                {
-                    Ok(schedule::ScheduleView::new(self.selected_day.local()).into())
-                } else {
-                    Ok(Jmp::Stay)
-                }
-            }
             Callback::MyTrainings => {
                 if ctx.me.employee.is_some() {
                     Ok(TrainingList::couches(ctx.me.id).into())
@@ -206,14 +194,13 @@ pub async fn render_week(
 
     day.training.sort_by_key(|a| a.get_slot().start_at());
     for training in &day.training {
-        if !ctx.has_right(Rule::ViewAllTrainings) && training.tp.is_sub_rent() && !ctx.is_employee()
-        {
+        if training.tp.is_sub_rent() {
             continue;
         }
 
-        if !ctx.has_right(Rule::ViewAllTrainings) && training.tp.is_personal() {
+        if training.tp.is_personal() {
             let client_id = training.clients.first().copied().unwrap_or_default();
-            if !(ctx.is_employee() || client_id == ctx.me.id) {
+            if client_id != ctx.me.id {
                 continue;
             }
         }
@@ -250,13 +237,6 @@ pub async fn render_week(
 
     buttons = buttons.append_row(Callback::MyTrainings.btn_row("🫶🏻 Мои тренировки"));
 
-    if ctx.has_right(Rule::ScheduleGroupTraining)
-        || ctx.has_right(Rule::ScheduleSubRent)
-        || ctx.has_right(Rule::SchedulePersonalTraining)
-    {
-        buttons = buttons.append_row(Callback::Schedule.btn_row("📝  запланировать"));
-    }
-
     Ok((msg, buttons))
 }
 
@@ -277,7 +257,6 @@ enum Callback {
     GoToWeek(CallbackDateTime),
     SelectDay(CallbackDateTime),
     SelectTraining(TrainingIdCallback),
-    Schedule,
     MyTrainings,
     SelectRoom([u8; 12]),
 }

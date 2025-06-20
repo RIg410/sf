@@ -1,5 +1,5 @@
 [package]
-name = "bot-client-calendar"
+name = "bot-calendar"
 
 edition.workspace = true
 license.workspace = true
