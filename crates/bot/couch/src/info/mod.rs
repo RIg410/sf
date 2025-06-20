@@ -19,7 +19,7 @@ use trainings::model::{Filter, Training};
 mod edit_description;
 
 pub fn couch_view(id: ObjectId) -> Widget {
-    ScriptView::new("couch_info", State { id }, Stage::list(CouchInfo)).into()
+    ScriptView::new(State { id }, Stage::list(CouchInfo)).into()
 }
 
 struct State {

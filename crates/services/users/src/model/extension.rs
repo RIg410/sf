@@ -105,7 +105,7 @@ impl NotificationMask {
 impl Default for NotificationMask {
     fn default() -> Self {
         NotificationMask {
-            mask: 0b00000000_0111_1111_1111_1111_0000_0000,
+            mask: 0b0000_0000_0111_1111_1111_1111_0000_0000,
         }
     }
 }

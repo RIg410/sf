@@ -14,7 +14,7 @@ use teloxide::utils::markdown::escape;
 use users::model::{User, rate::EmployeeRole};
 
 pub fn make_make_couch_view() -> Widget {
-    ScriptView::new("make_couch", State::default(), Stage::list(UserList)).into()
+    ScriptView::new(State::default(), Stage::list(UserList)).into()
 }
 
 #[derive(Default)]

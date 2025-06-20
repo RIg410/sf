@@ -55,7 +55,7 @@ pub struct User {
 }
 
 fn default_created_at() -> DateTime<Utc> {
-    Utc.with_ymd_and_hms(2024, 09, 13, 12, 20, 0)
+    Utc.with_ymd_and_hms(2024, 9, 13, 12, 20, 0)
         .single()
         .unwrap()
 }

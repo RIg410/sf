@@ -19,7 +19,7 @@ use treasury::model::{Event, TreasuryEvent};
 use crate::operation::FinanceOperation;
 
 pub fn history_view() -> Widget {
-    ScriptView::new("finance_history", State {}, Stage::list(FinanceView {})).into()
+    ScriptView::new(State {}, Stage::list(FinanceView {})).into()
 }
 
 pub struct State {}
