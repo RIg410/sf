@@ -474,6 +474,30 @@ dependencies = [
 ]
 
 [[package]]
+name = "bot-client-couch"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "bincode",
+ "bot-client-trainings",
+ "bot-core",
+ "bot-viewer",
+ "chrono",
+ "eyre",
+ "futures-util",
+ "hex",
+ "itertools 0.2.9",
+ "mongodb",
+ "rights",
+ "serde",
+ "strum",
+ "teloxide",
+ "tracing",
+ "trainings",
+ "users",
+]
+
+[[package]]
 name = "bot-client-main"
 version = "0.1.0"
 dependencies = [
@@ -481,6 +505,7 @@ dependencies = [
  "async-trait",
  "bincode",
  "bot-client-calendar",
+ "bot-client-couch",
  "bot-client-trainings",
  "bot-core",
  "bot-viewer",
