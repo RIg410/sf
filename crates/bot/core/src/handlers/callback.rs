@@ -1,46 +1,22 @@
-use std::sync::Arc;
-
-use super::{build_context, handle_result};
 use crate::{
     BACK_NAME, ERROR,
     context::Context,
+    handlers::handle_result,
     state::{State, StateHolder},
     widget::Widget,
 };
-use env::Env;
-use services::SfServices;
-use teloxide::{
-    Bot,
-    prelude::{Requester as _, ResponseResult},
-    types::CallbackQuery,
-    utils::markdown::escape,
-};
+use teloxide::{prelude::ResponseResult, types::CallbackQuery, utils::markdown::escape};
 use tracing::error;
 
 pub async fn callback_handler(
-    bot: Bot,
-    env: Env,
     q: CallbackQuery,
-    ledger: Arc<SfServices>,
+    ctx: &mut Context,
+    widget: Widget,
     state_holder: StateHolder,
     system_handler: impl Fn() -> Widget,
 ) -> ResponseResult<()> {
-    let (mut ctx, widget) = if let Some(original_message) = &q.message {
-        let chat_id = original_message.chat().id;
-        match build_context(bot, ledger, chat_id, &state_holder, env).await {
-            Ok(ctx) => ctx,
-            Err((err, bot)) => {
-                error!("Failed to build context: {}", err);
-                bot.send_message(chat_id, ERROR).await?;
-                return Ok(());
-            }
-        }
-    } else {
-        return Ok(());
-    };
-
     let result = match inner_callback_handler(
-        &mut ctx,
+        ctx,
         widget,
         q.data.unwrap_or_default(),
         &state_holder,
@@ -70,49 +46,26 @@ pub async fn callback_handler(
 
 async fn inner_callback_handler(
     ctx: &mut Context,
-    widget: Option<Widget>,
+    mut widget: Widget,
     data: String,
     state_holder: &StateHolder,
     system_handler: impl Fn() -> Widget,
 ) -> Result<(), eyre::Error> {
-    if !ctx.is_active() {
-        ctx.send_msg("Ваш аккаунт заблокирован").await?;
-        return Ok(());
-    }
-
-    let has_widget = widget.is_some();
-    let mut widget = widget.unwrap_or_else(&system_handler);
-
-    if !has_widget {
-        widget.show(ctx).await?;
-    }
-
     ctx.set_system_go_back(!widget.is_back_main_view() && !widget.main_view());
     ctx.set_system_go_home(true);
 
-    let widget = if data.starts_with("/") {
+    if data.starts_with("/") {
         match data.as_str() {
             BACK_NAME => {
-                if let Some(mut back) = widget.take_back() {
-                    back.show(ctx).await?;
-                    back
+                if let Some(back) = widget.take_back() {
+                    widget = back;
                 } else {
-                    system_handler()
+                    widget = system_handler();
                 }
             }
-            _ => system_handler(),
+            _ => widget = system_handler(),
         }
-    } else {
-        widget
-    };
-
-    let mut widget = if !ctx.is_real_user && !widget.allow_unsigned_user() {
-        let mut handler = system_handler();
-        handler.show(ctx).await?;
-        handler
-    } else {
-        widget
-    };
+    }
 
     let result = widget.handle_callback(ctx, data.as_str()).await;
     let mut new_widget = handle_result(result, widget, system_handler)?;

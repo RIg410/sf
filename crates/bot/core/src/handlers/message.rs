@@ -1,49 +1,21 @@
-use std::sync::Arc;
-
-use super::{build_context, handle_result};
+use super::handle_result;
 use crate::{
-    BACK_NAME, ERROR,
+    BACK_NAME, ERROR, HOME_NAME,
     context::Context,
     state::{State, StateHolder},
     widget::Widget,
 };
-use env::Env;
-use services::SfServices;
-use teloxide::{
-    Bot,
-    prelude::{Requester as _, ResponseResult},
-    types::Message,
-    utils::markdown::escape,
-};
+use teloxide::{prelude::ResponseResult, types::Message, utils::markdown::escape};
 use tracing::error;
 
 pub async fn message_handler(
-    bot: Bot,
-    env: Env,
     msg: Message,
-    ledger: Arc<SfServices>,
-    state_holder: StateHolder,
+    ctx: &mut Context,
+    widget: Widget,
+    state_holder: &StateHolder,
     system_handler: impl Fn() -> Widget,
 ) -> ResponseResult<()> {
-    let (mut ctx, widget) = match build_context(bot, ledger, msg.chat.id, &state_holder, env).await
-    {
-        Ok(ctx) => ctx,
-        Err((err, bot)) => {
-            error!("Failed to build context: {:#}", err);
-            bot.send_message(msg.chat.id, ERROR).await?;
-            return Ok(());
-        }
-    };
-
-    match inner_message_handler(
-        &mut ctx,
-        widget.unwrap_or_else(&system_handler),
-        msg,
-        &state_holder,
-        system_handler,
-    )
-    .await
-    {
+    match inner_message_handler(ctx, widget, msg, state_holder, system_handler).await {
         Ok(_) => Ok(()),
         Err(err) => {
             error!("Failed to handle message: {:#}", err);
@@ -69,47 +41,28 @@ async fn inner_message_handler(
     state_holder: &StateHolder,
     system_handler: impl Fn() -> Widget,
 ) -> Result<(), eyre::Error> {
-    if !ctx.is_active() {
-        ctx.send_msg("Ваш аккаунт заблокирован").await?;
-        return Ok(());
-    }
-
     ctx.set_system_go_back(!widget.is_back_main_view() && !widget.main_view());
     ctx.set_system_go_home(true);
 
-    let widget = if let Some(msg) = msg.text() {
+    if let Some(msg) = msg.text() {
         if msg.starts_with("/") {
             match msg {
                 BACK_NAME => {
-                    if let Some(mut back) = widget.take_back() {
-                        back.show(ctx).await?;
-                        back
+                    if let Some(back) = widget.take_back() {
+                        widget = back;
                     } else {
-                        system_handler()
+                        widget = system_handler();
                     }
                 }
-                "/start" => {
-                    let mut widget = system_handler();
-                    ctx.origin().invalidate();
-                    widget.show(ctx).await?;
-                    widget
+                HOME_NAME => {
+                    let mut system = system_handler();
+                    system.show(ctx).await?;
+                    widget = system;
                 }
-                _ => system_handler(),
+                _ => widget = system_handler(),
             }
-        } else {
-            widget
         }
-    } else {
-        widget
-    };
-
-    let mut widget = if !ctx.is_real_user && !widget.allow_unsigned_user() {
-        let mut handler = system_handler();
-        handler.show(ctx).await?;
-        handler
-    } else {
-        widget
-    };
+    }
 
     let result = widget.handle_message(ctx, &msg).await;
     let mut new_widget = handle_result(result, widget, system_handler)?;

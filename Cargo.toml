@@ -5,14 +5,12 @@ publish = false
 version = "0.1.0"
 
 [workspace]
-exclude = []
 
 members = [
   "crates/bg-process",
   "crates/bot/*",
   "bins",
   "crates/services/payment/yookassa",
-  "crates/bot/business-error",
   "api/main",
   "crates/services/stat",
   "crates/services",
@@ -34,6 +32,12 @@ members = [
   "crates/services/locations",
   "crates/services/images",
   "crates/services/news",
+  "crates/bot/clients-ui/main",
+]
+
+exclude = [
+  "crates/bot/clients-ui",
+  "crates/bot/staff-ui",
 ]
 
 resolver = "2"
@@ -55,6 +59,8 @@ bot-subscription = {path = "crates/bot/subscription"}
 bot-trainings = {path = "crates/bot/trainings"}
 bot-users = {path = "crates/bot/users"}
 bot-viewer = {path = "crates/bot/viewer"}
+
+bot-client-main = {path = "crates/bot/clients-ui/main"}
 
 api = {path = "api/main"}
 booking = {path = "crates/services/booking"}

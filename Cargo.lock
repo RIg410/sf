@@ -452,6 +452,36 @@ dependencies = [
 ]
 
 [[package]]
+name = "bot-client-main"
+version = "0.1.0"
+dependencies = [
+ "ai",
+ "async-trait",
+ "bincode",
+ "bot-core",
+ "bot-trainings",
+ "bot-viewer",
+ "chrono",
+ "decimal",
+ "eyre",
+ "hex",
+ "history",
+ "ident",
+ "itertools 0.2.9",
+ "mongodb",
+ "rewards",
+ "rights",
+ "serde",
+ "stat",
+ "strum",
+ "subscription",
+ "teloxide",
+ "tracing",
+ "trainings",
+ "users",
+]
+
+[[package]]
 name = "bot-core"
 version = "0.1.0"
 dependencies = [
@@ -555,6 +585,7 @@ dependencies = [
  "async-trait",
  "bincode",
  "bot-calendar",
+ "bot-client-main",
  "bot-core",
  "bot-couch",
  "bot-finance",

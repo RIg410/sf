@@ -24,10 +24,6 @@ pub trait View {
         false
     }
 
-    fn allow_unsigned_user(&self) -> bool {
-        false
-    }
-
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error>;
 
     async fn handle_message(&mut self, ctx: &mut Context, msg: &Message) -> ViewResult {
@@ -107,6 +103,7 @@ impl Debug for Widget {
     }
 }
 
+#[derive(Debug)]
 pub enum Jmp {
     ToSafePoint,
     Next(Widget),

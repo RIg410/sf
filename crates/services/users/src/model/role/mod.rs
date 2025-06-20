@@ -12,7 +12,6 @@ pub mod manager;
 pub enum UserRole {
     Client(ClientRole),
     Instructor(InstructorRole),
-    SeniorInstructor(InstructorRole),
     Manager(ManagerRole),
     Admin(AdminRole),
 }
@@ -27,14 +26,7 @@ impl UserRole {
     }
 
     pub fn is_instructor(&self) -> bool {
-        matches!(
-            self,
-            UserRole::Instructor(_) | UserRole::SeniorInstructor(_)
-        )
-    }
-
-    pub fn is_senior_instructor(&self) -> bool {
-        matches!(self, UserRole::SeniorInstructor(_))
+        matches!(self, UserRole::Instructor(_))
     }
 
     pub fn is_client(&self) -> bool {
@@ -45,7 +37,6 @@ impl UserRole {
         match self {
             UserRole::Client(_) => RoleType::Client,
             UserRole::Instructor(_) => RoleType::Instructor,
-            UserRole::SeniorInstructor(_) => RoleType::SeniorInstructor,
             UserRole::Manager(_) => RoleType::Manager,
             UserRole::Admin(_) => RoleType::Admin,
         }
@@ -71,7 +62,6 @@ impl Default for UserRole {
 pub enum RoleType {
     Client,
     Instructor,
-    SeniorInstructor,
     Manager,
     Admin,
 }
@@ -81,7 +71,6 @@ impl RoleType {
         match self {
             RoleType::Client => UserRole::Client(ClientRole::default()),
             RoleType::Instructor => UserRole::Instructor(InstructorRole::default()),
-            RoleType::SeniorInstructor => UserRole::SeniorInstructor(InstructorRole::default()),
             RoleType::Manager => UserRole::Manager(ManagerRole::default()),
             RoleType::Admin => UserRole::Admin(AdminRole::default()),
         }

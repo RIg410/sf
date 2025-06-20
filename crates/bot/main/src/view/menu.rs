@@ -25,12 +25,12 @@ use crate::system::SystemView;
 
 use super::{common_location::handle_common_location, signup::SignUpView};
 
+#[derive(Default)]
 pub struct MainMenuView;
 
 impl MainMenuView {
     pub async fn send_self(&self, ctx: &mut Context) -> Result<(), eyre::Error> {
         let mut keymap = InlineKeyboardMarkup::default();
-
         keymap = keymap.append_row(vec![MainMenuItem::Profile.into()]);
         keymap = keymap.append_row(vec![MainMenuItem::Schedule.into()]);
         keymap = keymap.append_row(vec![MainMenuItem::Subscription.into()]);
@@ -197,10 +197,6 @@ impl View for MainMenuView {
             MainMenuItem::System => SystemView::default().into(),
             MainMenuItem::Locations => LocationsView::new().into(),
         })
-    }
-
-    fn allow_unsigned_user(&self) -> bool {
-        true
     }
 }
 

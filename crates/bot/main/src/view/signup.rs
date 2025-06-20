@@ -1,4 +1,3 @@
-use super::menu::MainMenuView;
 use async_trait::async_trait;
 use bot_core::{
     context::Context,
@@ -15,7 +14,8 @@ use tracing::info;
 use users::model::UserName;
 
 const GREET_START: &str =
-    "\nПожалуйста, оставьте ваш номер телефона\\. Для этого нажмите на кнопку ниже\\.";
+    "\nПожалуйста, оставьте ваш номер телефона\\. Для этого нажмите на кнопку ниже\\.\n\nОтправляя номер телефона, вы соглашаетесь на обработку ваших персональных данных\\.";
+
 
 #[derive(Default)]
 pub struct SignUpView;
@@ -60,16 +60,10 @@ impl View for SignUpView {
             .await?;
             ctx.me.id = id;
             ctx.reload_user().await?;
-            let view = MainMenuView;
-            view.send_self(ctx).await?;
-            return Ok(view.into());
+            return Ok(Jmp::Home);
         } else {
             Ok(Jmp::Stay)
         }
-    }
-
-    fn allow_unsigned_user(&self) -> bool {
-        true
     }
 }
 

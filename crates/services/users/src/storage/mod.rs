@@ -46,7 +46,7 @@ impl UserStore {
         })
     }
 
-    pub async fn migrate_users(&self, session: &mut Session) -> Result<()> {
+    pub async fn migrate_users(&self, _: &mut Session) -> Result<()> {
        // info!("Migrating users...");
         //let mut cursor = self.users.find(doc! {}).session(&mut *session).await?;
         // while let Some(user) = cursor.next(&mut *session).await {

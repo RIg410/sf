@@ -14,10 +14,13 @@ use env::Env;
 use error::handle_err;
 use eyre::Error;
 use services::SfServices;
-use teloxide::{Bot, prelude::Requester as _, types::ChatId};
+use teloxide::{
+    Bot,
+    types::{ChatId, MessageId},
+};
 use users::model::User;
 
-async fn build_context(
+pub async fn build_context(
     bot: Bot,
     ledger: Arc<SfServices>,
     tg_id: ChatId,
@@ -50,14 +53,9 @@ async fn build_context(
     let origin = if let Some(origin) = state.origin {
         origin
     } else {
-        let id = bot
-            .send_message(tg_id, ".")
-            .await
-            .map_err(|err| (err.into(), bot.clone()))?
-            .id;
         Origin {
             chat_id: tg_id,
-            message_id: id,
+            message_id: MessageId(0),
             tkn: state_holder.get_token(tg_id),
         }
     };
@@ -86,14 +84,14 @@ pub(crate) fn handle_result(
         crate::widget::Jmp::Back(steps) => {
             let mut back = current;
             for _ in 0..steps {
-                back = back.take_back().unwrap_or_else(&system_handler)
+                back = back.take_back().unwrap_or_else(|| system_handler())
             }
             back
         }
         crate::widget::Jmp::ToSafePoint => {
             let mut back = current;
             loop {
-                back = back.take_back().unwrap_or_else(&system_handler);
+                back = back.take_back().unwrap_or_else(|| system_handler());
                 if back.is_safe_point() {
                     break back;
                 }

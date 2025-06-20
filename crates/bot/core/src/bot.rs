@@ -291,7 +291,7 @@ pub struct Origin {
 
 impl Origin {
     pub fn is_valid(&self) -> bool {
-        self.tkn.is_valid()
+        self.tkn.is_valid() && self.message_id.0 != 0
     }
 
     pub fn invalidate(&self) {

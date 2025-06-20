@@ -1,5 +1,5 @@
 [package]
-name = "bot-main"
+name = "bot-client-main"
 
 edition.workspace = true
 license.workspace = true
@@ -7,32 +7,28 @@ publish.workspace = true
 version.workspace = true
 
 [dependencies]
-bot-client-main.workspace = true
-
+ai.workspace = true
 async-trait.workspace = true
 bincode.workspace = true
-bot-calendar.workspace = true
 bot-core.workspace = true
-bot-couch.workspace = true
-bot-finance.workspace = true
-bot-locations.workspace = true
-bot-marketing.workspace = true
-bot-subscription.workspace = true
 bot-trainings.workspace = true
-bot-users.workspace = true
 bot-viewer.workspace = true
-env.workspace = true
+rewards.workspace = true
+trainings.workspace = true
 
 chrono.workspace = true
+decimal.workspace = true
 eyre.workspace = true
 hex.workspace = true
+history.workspace = true
+ident.workspace = true
 itertools.workspace = true
 mongodb.workspace = true
 rights.workspace = true
 serde.workspace = true
-services.workspace = true
-store.workspace = true
+stat.workspace = true
 strum.workspace = true
+subscription.workspace = true
 teloxide.workspace = true
 tracing.workspace = true
 users.workspace = true
