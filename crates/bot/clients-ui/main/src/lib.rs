@@ -11,8 +11,8 @@ use teloxide::{types::InlineKeyboardMarkup, utils::markdown::escape};
 use users::model::role::UserRole;
 
 mod freeze;
-mod profile;
 mod history;
+mod profile;
 
 #[derive(Default)]
 pub struct ClientMain;
@@ -29,7 +29,6 @@ impl bot_core::widget::View for ClientMain {
         true
     }
 
-
     fn main_view(&self) -> bool {
         true
     }
@@ -43,11 +42,14 @@ impl bot_core::widget::View for ClientMain {
             return Err(eyre::eyre!("User is not a client"));
         };
 
-        let mut msg = format!(
-            "Привет, {}\\! 👋\n\n
-             Дней заморозки : _{}_\n\n",
-            ctx.me.name.first_name, ctx.me.freeze_days,
-        );
+        let mut msg = format!("Привет, {}\\! 👋\n\n", ctx.me.name.first_name);
+
+        if ctx.me.freeze_days > 0 {
+            msg.push_str(&format!(
+                "❄️ Доступно дней заморозки: *{}*\\.\n\n",
+                ctx.me.freeze_days
+            ));
+        }
         render_freeze_info(ctx, &mut msg)?;
         render_subscriptions(ctx, &mut msg)?;
         render_trainings(ctx, &mut msg, 5).await?;
@@ -147,7 +149,11 @@ pub fn render_sub(sub: &UserSubscription, is_owner: bool) -> String {
     }
 }
 
-pub async fn render_trainings(ctx: &mut Context, msg: &mut String, limit: usize) -> eyre::Result<()> {
+pub async fn render_trainings(
+    ctx: &mut Context,
+    msg: &mut String,
+    limit: usize,
+) -> eyre::Result<()> {
     let trainings = ctx
         .services
         .calendar
@@ -177,7 +183,9 @@ pub fn render_subscriptions(ctx: &mut Context, msg: &mut String) -> eyre::Result
     let mut subs = payer.subscriptions().to_vec();
     subs.sort_by(|a, b| a.status.cmp(&b.status));
 
-    msg.push_str("Абонементы:\n");
+    if !subs.is_empty() {
+        msg.push_str("Абонементы:\n");
+    }
 
     let has_group = subs.iter().any(|s| !s.tp.is_personal());
     let has_personal = subs.iter().any(|s| s.tp.is_personal());
