@@ -1,4 +1,4 @@
-use crate::{freeze::UnfreezeConfirm, profile::ProfileView};
+use crate::profile::{freeze::UnfreezeConfirm, ProfileView};
 use bot_core::callback_data::Calldata;
 use bot_core::calldata;
 use bot_core::context::Context;
@@ -10,9 +10,7 @@ use subscription::model::{SubscriptionStatus, UserSubscription};
 use teloxide::{types::InlineKeyboardMarkup, utils::markdown::escape};
 use users::model::role::UserRole;
 
-mod freeze;
-mod history;
-mod profile;
+pub mod profile;
 
 #[derive(Default)]
 pub struct ClientMain;
@@ -42,15 +40,16 @@ impl bot_core::widget::View for ClientMain {
             return Err(eyre::eyre!("User is not a client"));
         };
 
-        let mut msg = format!("Привет, {}\\! 👋\n\n", ctx.me.name.first_name);
+        let mut msg = format!("Привет, {}\\! 👋\n\n", escape(&ctx.me.name.first_name));
+
+        render_freeze_info(ctx, &mut msg)?;
 
         if ctx.me.freeze_days > 0 {
             msg.push_str(&format!(
-                "❄️ Доступно дней заморозки: *{}*\\.\n\n",
+                "Доступно дней заморозки: *{}*\\.\n\n",
                 ctx.me.freeze_days
             ));
         }
-        render_freeze_info(ctx, &mut msg)?;
         render_subscriptions(ctx, &mut msg)?;
         render_trainings(ctx, &mut msg, 5).await?;
 
@@ -107,7 +106,7 @@ pub fn render_sub(sub: &UserSubscription, is_owner: bool) -> String {
                 )
             } else {
                 format!(
-                    "{}_{}_\nОсталось занятий:*{}*\\(_{}_ резерв\\)\nНе активен\\. \n",
+                    "{}_{}_\nОсталось занятий:*{}*\\(_{}_ резерв\\)\n   Не активен\\. \n",
                     emoji,
                     escape(&sub.name),
                     sub.balance,
@@ -191,7 +190,7 @@ pub fn render_subscriptions(ctx: &mut Context, msg: &mut String) -> eyre::Result
     let has_personal = subs.iter().any(|s| s.tp.is_personal());
 
     if has_group {
-        msg.push_str("Групповые:\n");
+        msg.push_str("Групповые:");
         for sub in &subs {
             if sub.tp.is_personal() {
                 continue;
@@ -203,7 +202,7 @@ pub fn render_subscriptions(ctx: &mut Context, msg: &mut String) -> eyre::Result
     }
 
     if has_personal {
-        msg.push_str("Персональные:\n");
+        msg.push_str("Персональные:");
 
         for sub in &subs {
             if !sub.tp.is_personal() {

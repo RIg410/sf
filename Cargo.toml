@@ -33,6 +33,8 @@ members = [
   "crates/services/images",
   "crates/services/news",
   "crates/bot/clients-ui/main",
+  "crates/bot/clients-ui/trainings",
+  "crates/bot/clients-ui/calendar",
 ]
 
 exclude = [
@@ -61,6 +63,8 @@ bot-users = {path = "crates/bot/users"}
 bot-viewer = {path = "crates/bot/viewer"}
 
 bot-client-main = {path = "crates/bot/clients-ui/main"}
+bot-client-trainings = {path = "crates/bot/clients-ui/trainings"}
+bot-client-calendar = {path = "crates/bot/clients-ui/calendar"}
 
 api = {path = "api/main"}
 booking = {path = "crates/services/booking"}

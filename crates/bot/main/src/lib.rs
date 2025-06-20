@@ -133,7 +133,6 @@ async fn on_message(
     env: Env,
     state_holder: StateHolder,
 ) -> ResponseResult<()> {
-    dbg!(msg.text());
     let result = context(bot, sf, msg.chat.id, &state_holder, env).await;
     match result {
         ContextResult::Regular(mut ctx, widget) => {

@@ -458,8 +458,8 @@ dependencies = [
  "ai",
  "async-trait",
  "bincode",
+ "bot-client-trainings",
  "bot-core",
- "bot-trainings",
  "bot-viewer",
  "chrono",
  "decimal",
@@ -475,6 +475,32 @@ dependencies = [
  "stat",
  "strum",
  "subscription",
+ "teloxide",
+ "tracing",
+ "trainings",
+ "users",
+]
+
+[[package]]
+name = "bot-client-trainings"
+version = "0.1.0"
+dependencies = [
+ "async-trait",
+ "bincode",
+ "booking",
+ "bot-core",
+ "bot-viewer",
+ "chrono",
+ "decimal",
+ "eyre",
+ "hex",
+ "ident",
+ "itertools 0.2.9",
+ "mongodb",
+ "program",
+ "rights",
+ "serde",
+ "strum",
  "teloxide",
  "tracing",
  "trainings",

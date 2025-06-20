@@ -1,4 +1,5 @@
 use async_trait::async_trait;
+use bot_client_trainings::list::TrainingList;
 use bot_core::{
     callback_data::Calldata as _,
     calldata,
@@ -11,49 +12,22 @@ use serde::{Deserialize, Serialize};
 use teloxide::{types::InlineKeyboardMarkup, utils::markdown::escape};
 
 use crate::{
-    freeze::{AskFreezeDays, UnfreezeConfirm},
-    history::HistoryList,
+    profile::{
+        freeze::{AskFreezeDays, UnfreezeConfirm},
+        history::HistoryList,
+    },
     render_freeze_info, render_subscriptions, render_trainings,
 };
 
+pub mod freeze;
+mod history;
+
 pub struct ProfileView;
-
-impl ProfileView {
-    // async fn training_list(&mut self, ctx: &mut Context) -> ViewResult {
-    //     let user = ctx
-    //         .services
-    //         .users
-    //         .get_user(&mut ctx.session, self.id)
-    //         .await?;
-    //     if user.employee.is_some() {
-    //         Ok(TrainingList::couches(user.id).into())
-    //     } else {
-    //         Ok(TrainingList::users(user.id).into())
-    //     }
-    // }
-
-    // async fn history_list(&mut self, ctx: &mut Context) -> ViewResult {
-    //     let user = ctx
-    //         .services
-    //         .users
-    //         .get_user(&mut ctx.session, self.id)
-    //         .await?;
-    //     Ok(HistoryList::new(user.id).into())
-    // }
-
-    // async fn family_view(&mut self, ctx: &mut Context, id: ObjectId) -> ViewResult {
-    //     if ctx.has_right(Rule::ViewFamily) || (ctx.me.id == id && ctx.me.has_family()) {
-    //         Ok(FamilyView::new(self.id).into())
-    //     } else {
-    //         Ok(Jmp::Stay)
-    //     }
-    // }
-}
 
 #[async_trait]
 impl View for ProfileView {
     fn name(&self) -> &'static str {
-        "UserProfile"
+        "ProfileView"
     }
 
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
@@ -95,16 +69,13 @@ impl View for ProfileView {
 
         render_freeze_info(ctx, &mut msg)?;
         render_subscriptions(ctx, &mut msg)?;
+        render_family(ctx, &mut msg)?;
         render_trainings(ctx, &mut msg, 10).await?;
 
         if ctx.me.freeze_days != 0 && ctx.me.freeze.is_none() {
             keymap = keymap.append_row(Callback::Freeze.btn_row("Заморозить ❄"));
         } else if ctx.me.freeze.is_some() {
             keymap = keymap.append_row(Callback::UnFreeze.btn_row("Разморозить ❄"));
-        }
-
-        if ctx.me.has_family() {
-            keymap = keymap.append_row(Callback::FamilyView.btn_row("Семья 👨‍👩‍👧‍👦"));
         }
 
         keymap = keymap.append_row(Callback::TrainingList.btn_row("Записи 📝"));
@@ -114,15 +85,40 @@ impl View for ProfileView {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, _: &mut Context, data: &str) -> ViewResult {
+    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             Callback::UnFreeze => Ok(UnfreezeConfirm.into()),
             Callback::Freeze => Ok(AskViewWidget::new(AskFreezeDays).into()),
-            Callback::TrainingList => todo!(),
+            Callback::TrainingList => Ok(TrainingList::client(ctx.me.id).into()),
             Callback::HistoryList => Ok(HistoryList::default().into()),
-            Callback::FamilyView => todo!(),
         }
     }
+}
+
+fn render_family(ctx: &mut Context, msg: &mut String) -> eyre::Result<()> {
+    let family = &ctx.me.family;
+    if let Some(payer) = family.payer.as_ref() {
+        msg.push_str(&format!(
+            "Глава семьи: *{}*\n",
+            escape(&payer.name.first_name)
+        ));
+    }
+
+    if !family.children.is_empty() {
+        msg.push_str("Члены семьи:\n");
+        for child in family.children.iter() {
+            msg.push_str(&format!(
+                "👤 *{}* {}\n",
+                escape(&child.name.first_name),
+                if child.family.is_individual {
+                    "Независимый"
+                } else {
+                    "Общие абонементы"
+                }
+            ));
+        }
+    }
+    Ok(())
 }
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
@@ -131,5 +127,4 @@ pub enum Callback {
     UnFreeze,
     TrainingList,
     HistoryList,
-    FamilyView,
 }

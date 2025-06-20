@@ -74,15 +74,12 @@ impl HistoryStore {
         let mut filter = doc! { "$or": [ { "actor": actor }, { "sub_actors": { "$elemMatch": { "$eq": actor } } } ] };
 
         if !actions.is_empty() {
-            let mut action_filter = doc! {};
+            let action_conditions = actions
+                .iter()
+                .map(|action| doc! { format!("action.{}", action.name()): { "$exists": true } })
+                .collect::<Vec<_>>();
 
-            for action in actions {
-                action_filter.insert(
-                    format!("action.{}", action.name()),
-                    doc! { "$exists": true },
-                );
-            }
-            action_filter = doc! { "$or": [ action_filter ] };
+            let action_filter = doc! { "$or":  action_conditions };
 
             filter = doc! { "$and": [ filter, action_filter ] };
         }
