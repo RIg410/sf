@@ -81,13 +81,7 @@ impl View for CalendarView {
                 Ok(Jmp::Stay)
             }
             Callback::SelectTraining(id) => Ok(TrainingView::new(id.into()).into()),
-            Callback::MyTrainings => {
-                if ctx.me.employee.is_some() {
-                    Ok(TrainingList::couches(ctx.me.id).into())
-                } else {
-                    Ok(TrainingList::users(ctx.me.id).into())
-                }
-            }
+            Callback::MyTrainings => Ok(TrainingList::users(ctx.me.id).into()),
             Callback::SelectRoom(room) => {
                 let room_id = ObjectId::from_bytes(room);
                 if self.rooms.contains(&room_id) {
