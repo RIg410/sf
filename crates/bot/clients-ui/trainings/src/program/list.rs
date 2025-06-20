@@ -1,5 +1,4 @@
-use super::{create::CreateProgram, view::ProgramView};
-use crate::schedule::group::ScheduleTrainingPreset;
+use crate::program::view::ProgramView;
 use async_trait::async_trait;
 use bot_core::{
     callback_data::Calldata as _,
@@ -9,22 +8,11 @@ use bot_core::{
 };
 use eyre::{Error, Result};
 use mongodb::bson::oid::ObjectId;
-use rights::Rule;
 use serde::{Deserialize, Serialize};
 use teloxide::types::InlineKeyboardMarkup;
 
 #[derive(Default)]
-pub struct ProgramList {
-    preset: Option<ScheduleTrainingPreset>,
-}
-
-impl ProgramList {
-    pub fn new(preset: ScheduleTrainingPreset) -> Self {
-        Self {
-            preset: Some(preset),
-        }
-    }
-}
+pub struct ProgramList;
 
 #[async_trait]
 impl View for ProgramList {
@@ -38,15 +26,11 @@ impl View for ProgramList {
         Ok(())
     }
 
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
+    async fn handle_callback(&mut self, _: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
-            Callback::CreateTraining => {
-                ctx.ensure(Rule::CreateTraining)?;
-                Ok(CreateProgram::new().into())
-            }
             Callback::SelectTraining(id) => {
                 let id = ObjectId::from_bytes(id);
-                Ok(ProgramView::new(id, self.preset.unwrap_or_default()).into())
+                Ok(ProgramView::new(id).into())
             }
         }
     }
@@ -56,34 +40,36 @@ async fn render(ctx: &mut Context) -> Result<(String, InlineKeyboardMarkup), Err
     let msg = "Тренировочные программы: 🤸🏼".to_string();
     let mut keymap = InlineKeyboardMarkup::default();
 
-    let can_see_hidden_program = ctx.has_right(Rule::ViewHiddenPrograms);
     let trainings = ctx
         .services
         .programs
-        .get_all(&mut ctx.session, !can_see_hidden_program)
+        .get_all(&mut ctx.session, false)
         .await?;
 
     for training in trainings {
-        let name = if training.visible {
-            training.name.clone()
-        } else {
-            format!("🔒 {}", training.name)
-        };
+        let trainings = ctx
+            .services
+            .calendar
+            .find_trainings(
+                &mut ctx.session,
+                trainings::model::Filter::Program(training.id),
+                1,
+                0,
+            )
+            .await?;
+        if trainings.is_empty() {
+            continue;
+        }
+
         keymap
             .inline_keyboard
-            .push(Callback::SelectTraining(training.id.bytes()).btn_row(name));
+            .push(Callback::SelectTraining(training.id.bytes()).btn_row(training.name.clone()));
     }
 
-    if ctx.has_right(Rule::CreateTraining) {
-        keymap
-            .inline_keyboard
-            .push(Callback::CreateTraining.btn_row("🧘🏼 Создать новую тренировку"));
-    }
     Ok((msg, keymap))
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 pub enum Callback {
-    CreateTraining,
     SelectTraining([u8; 12]),
 }
