@@ -60,10 +60,6 @@ impl Widget {
         self.back.take().map(|b| *b)
     }
 
-    pub(crate) fn is_back_main_view(&self) -> bool {
-        self.back.as_ref().is_some_and(|b| b.view.main_view())
-    }
-
     pub fn is_safe_point(&self) -> bool {
         self.view.safe_point()
     }

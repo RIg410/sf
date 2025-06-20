@@ -3,8 +3,8 @@ use bot_core::callback_data::{CallbackDateTime, Calldata, TrainingIdCallback};
 use bot_core::calldata;
 use bot_core::context::Context;
 use bot_core::widget::{Jmp, View, ViewResult};
-use bot_trainings::list::TrainingList;
-use bot_trainings::view::TrainingView;
+use bot_client_trainings::list::TrainingList;
+use bot_client_trainings::view::TrainingView;
 use bot_viewer::day::{fmt_dm, fmt_month, fmt_weekday};
 use bot_viewer::rooms::fmt_room_emoji;
 use bot_viewer::training::{fmt_statistics_summary, fmt_training_status};
@@ -81,7 +81,7 @@ impl View for CalendarView {
                 Ok(Jmp::Stay)
             }
             Callback::SelectTraining(id) => Ok(TrainingView::new(id.into()).into()),
-            Callback::MyTrainings => Ok(TrainingList::users(ctx.me.id).into()),
+            Callback::MyTrainings => Ok(TrainingList::client(ctx.me.id).into()),
             Callback::SelectRoom(room) => {
                 let room_id = ObjectId::from_bytes(room);
                 if self.rooms.contains(&room_id) {

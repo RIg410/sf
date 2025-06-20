@@ -51,6 +51,10 @@ impl TrainingList {
 
 #[async_trait]
 impl View for TrainingList {
+    fn safe_point(&self) -> bool {
+        true
+    }
+    
     fn name(&self) -> &'static str {
         "TrainingList"
     }

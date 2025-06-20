@@ -457,8 +457,8 @@ version = "0.1.0"
 dependencies = [
  "async-trait",
  "bincode",
+ "bot-client-trainings",
  "bot-core",
- "bot-trainings",
  "bot-viewer",
  "chrono",
  "eyre",

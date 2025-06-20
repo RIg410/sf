@@ -9,8 +9,8 @@ version.workspace = true
 [dependencies]
 async-trait.workspace = true
 bincode.workspace = true
+bot-client-trainings.workspace = true
 bot-core.workspace = true
-bot-trainings.workspace = true
 bot-viewer.workspace = true
 
 chrono.workspace = true

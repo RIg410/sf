@@ -36,6 +36,10 @@ impl View for FamilySignIn {
         "FamilySignIn"
     }
 
+    fn safe_point(&self) -> bool {
+        true
+    }
+
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let training = ctx
             .services
@@ -68,17 +72,17 @@ impl View for FamilySignIn {
         match calldata!(data) {
             Callback::SingIn(id) => {
                 let id = ObjectId::from_bytes(id);
-                sign_up(ctx, self.id, id).await?;
+                sign_up(ctx, self.id, id).await
             }
             Callback::SignOut(id) => {
                 let id = ObjectId::from_bytes(id);
-                sign_out(ctx, self.id, id).await?;
+                sign_out(ctx, self.id, id).await
             }
             Callback::None => {
                 // do nothing
+                Ok(Jmp::Stay)
             }
         }
-        Ok(Jmp::Stay)
     }
 }
 

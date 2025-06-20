@@ -1,4 +1,4 @@
-use crate::{client::list::ClientsList, edit::EditTraining, family::FamilySignIn};
+use crate::family::FamilySignIn;
 use async_trait::async_trait;
 use booking::payer::{FindFor, SubscriptionResolver as _};
 use bot_core::{
@@ -14,7 +14,6 @@ use eyre::{Result, eyre};
 use ident::training::TrainingId;
 use mongodb::bson::oid::ObjectId;
 use program::model::TrainingType;
-use rights::Rule;
 use serde::{Deserialize, Serialize};
 use std::vec;
 use teloxide::{
@@ -49,36 +48,14 @@ impl TrainingView {
         }
         Ok(Jmp::Stay)
     }
-
-    async fn restore_training(&mut self, ctx: &mut Context) -> ViewResult {
-        ctx.ensure(Rule::CancelTraining)?;
-        let training = ctx
-            .services
-            .calendar
-            .get_training_by_id(&mut ctx.session, self.id)
-            .await?
-            .ok_or_else(|| eyre::eyre!("Training not found"))?;
-        if !training.is_group() {
-            return Err(eyre!("Can't delete personal training").into());
-        }
-
-        ctx.services
-            .booking
-            .restore_training(&mut ctx.session, &training)
-            .await?;
-        Ok(Jmp::Stay)
-    }
-
-    async fn client_list(&mut self, ctx: &mut Context) -> ViewResult {
-        if !ctx.is_employee() && !ctx.has_right(Rule::EditTrainingClientsList) {
-            return Err(eyre!("Only couch can see client list").into());
-        }
-        Ok(ClientsList::new(self.id).into())
-    }
 }
 
 #[async_trait]
 impl View for TrainingView {
+    fn safe_point(&self) -> bool {
+        true
+    }
+
     fn name(&self) -> &'static str {
         "TrainingView"
     }
@@ -98,33 +75,20 @@ impl View for TrainingView {
     async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
         match calldata!(data) {
             Callback::CouchInfo => self.couch_info(ctx).await,
-            Callback::Cancel => return Ok(Jmp::Next(ConfirmCancelTraining::new(self.id).into())),
-            Callback::UnCancel => self.restore_training(ctx).await,
             Callback::SignUp => sign_up(ctx, self.id, ctx.me.id).await,
             Callback::SignOut => sign_out(ctx, self.id, ctx.me.id).await,
-            Callback::ClientList => self.client_list(ctx).await,
             Callback::OpenSignInView => Ok(Jmp::Next(FamilySignIn::new(self.id).into())),
-            Callback::Edit => Ok(EditTraining::new(self.id).into()),
         }
     }
 }
 
 async fn render(ctx: &mut Context, training: &Training) -> Result<(String, InlineKeyboardMarkup)> {
-    let is_client = ctx.me.employee.is_none();
-    let cap = if is_client {
-        format!(
-            "*Свободных мест*: _{}_",
-            training
-                .capacity
-                .saturating_sub(training.clients.len() as u32)
-        )
-    } else {
-        format!(
-            "*Места* :_{}/{}_",
-            training.clients.len(),
-            training.capacity
-        )
-    };
+    let cap = format!(
+        "*Свободных мест*: _{}_",
+        training
+            .capacity
+            .saturating_sub(training.clients.len() as u32)
+    );
 
     let now = Local::now();
     let tr_status = training.status(now);
@@ -180,44 +144,20 @@ _{}_                            \n
     );
 
     let mut keymap = InlineKeyboardMarkup::default();
-    if training.is_group() || training.is_personal() {
-        keymap = keymap.append_row(vec![Callback::CouchInfo.button("🧘 Об инструкторе")]);
-    }
-
-    if ctx.has_right(Rule::EditTrainingClientsList) && training.is_group() || training.is_personal()
-    {
-        keymap = keymap.append_row(vec![Callback::ClientList.button("🗒 Список клиентов")]);
-    }
-
-    let mut row = vec![];
-    if ctx.has_right(Rule::CancelTraining) || ctx.me.id == training.instructor {
-        if tr_status.can_be_canceled() {
-            row.push(Callback::Cancel.button("⛔ Отменить"));
-        }
-        if tr_status.can_be_uncanceled() {
-            row.push(Callback::UnCancel.button("🔓 Вернуть"));
-        }
-    }
-    keymap = keymap.append_row(row);
+    keymap = keymap.append_row(vec![Callback::CouchInfo.button("🧘 Об инструкторе")]);
 
     if training.is_group() {
-        if !EditTraining::hidden(ctx)? && !training.is_processed {
-            keymap = keymap.append_row(vec![Callback::Edit.button("🔄 Редактировать")]);
-        }
-
-        if is_client {
-            if ctx.me.family.children_ids.is_empty() {
-                if signed {
-                    if tr_status.can_sign_out() {
-                        keymap =
-                            keymap.append_row(vec![Callback::SignOut.button("❌ Отменить запись")]);
-                    }
-                } else if tr_status.can_sign_in() {
-                    keymap = keymap.append_row(vec![Callback::SignUp.button("✔️ Записаться")]);
+        if ctx.me.family.children_ids.is_empty() {
+            if signed {
+                if tr_status.can_sign_out() {
+                    keymap =
+                        keymap.append_row(vec![Callback::SignOut.button("❌ Отменить запись")]);
                 }
-            } else {
-                keymap = keymap.append_row(vec![Callback::OpenSignInView.button("👨‍👩‍👧‍👦 Запись")]);
+            } else if tr_status.can_sign_in() {
+                keymap = keymap.append_row(vec![Callback::SignUp.button("✔️ Записаться")]);
             }
+        } else {
+            keymap = keymap.append_row(vec![Callback::OpenSignInView.button("👨‍👩‍👧‍👦 Запись")]);
         }
     }
 
@@ -231,13 +171,9 @@ _{}_                            \n
 #[derive(Serialize, Deserialize)]
 enum Callback {
     CouchInfo,
-    Cancel,
-    ClientList,
-    UnCancel,
     SignUp,
     SignOut,
     OpenSignInView,
-    Edit,
 }
 
 fn status(status: TrainingStatus, is_full: bool) -> &'static str {
@@ -254,94 +190,6 @@ fn status(status: TrainingStatus, is_full: bool) -> &'static str {
         TrainingStatus::Cancelled => "⛔Отменена",
         TrainingStatus::Finished => "✔️Завершена",
     }
-}
-pub struct ConfirmCancelTraining {
-    id: TrainingId,
-}
-
-impl ConfirmCancelTraining {
-    pub fn new(id: TrainingId) -> Self {
-        Self { id }
-    }
-
-    async fn cancel_training(&mut self, ctx: &mut Context) -> Result<Jmp> {
-        ctx.ensure(Rule::CancelTraining)?;
-        let training = ctx
-            .services
-            .calendar
-            .get_training_by_id(&mut ctx.session, self.id)
-            .await?
-            .ok_or_else(|| eyre::eyre!("Training not found"))?;
-        let to_notify = ctx
-            .services
-            .booking
-            .cancel_training(&mut ctx.session, &training)
-            .await?;
-        let msg = format!(
-            "Тренировка '{}' в {} *отменена*\\.",
-            escape(&training.name),
-            fmt_dt(&training.get_slot().start_at())
-        );
-        for client in to_notify {
-            if let Ok(user) = ctx.services.users.get_user(&mut ctx.session, client).await {
-                ctx.bot.notify(ChatId(user.tg_id), &msg, true).await;
-            }
-        }
-        if training.is_group() {
-            Ok(Jmp::ToSafePoint)
-        } else {
-            Ok(Jmp::ToSafePoint)
-        }
-    }
-}
-
-#[async_trait]
-impl View for ConfirmCancelTraining {
-    fn name(&self) -> &'static str {
-        "ConfirmCancelTraining"
-    }
-
-    async fn show(&mut self, ctx: &mut Context) -> Result<()> {
-        let training = ctx
-            .services
-            .calendar
-            .get_training_by_id(&mut ctx.session, self.id)
-            .await?
-            .ok_or_else(|| eyre::eyre!("Training not found"))?;
-
-        let tp = match training.tp {
-            TrainingType::Group { .. } => "групповую тренировку",
-            TrainingType::Personal { .. } => "персональную тренировку",
-            TrainingType::SubRent { .. } => "аренду",
-        };
-
-        let msg = format!(
-            "Вы уверены, что хотите отменить {} '{}' в {}?",
-            tp,
-            escape(&training.name),
-            fmt_dt(&training.get_slot().start_at())
-        );
-        let mut keymap = InlineKeyboardMarkup::default();
-        keymap = keymap.append_row(vec![
-            CancelCallback::Cancel.button("✅ Да"),
-            CancelCallback::Stay.button("❌ нет"),
-        ]);
-        ctx.edit_origin(&msg, keymap).await?;
-        Ok(())
-    }
-
-    async fn handle_callback(&mut self, ctx: &mut Context, data: &str) -> ViewResult {
-        Ok(match calldata!(data) {
-            CancelCallback::Cancel => self.cancel_training(ctx).await?,
-            CancelCallback::Stay => Jmp::Back(1),
-        })
-    }
-}
-
-#[derive(Serialize, Deserialize)]
-enum CancelCallback {
-    Cancel,
-    Stay,
 }
 
 pub async fn sign_up(ctx: &mut Context, id: TrainingId, user_id: ObjectId) -> ViewResult {
@@ -405,11 +253,20 @@ pub async fn sign_up(ctx: &mut Context, id: TrainingId, user_id: ObjectId) -> Vi
         .sign_up(&mut ctx.session, id, user.id, false)
         .await?;
 
-    let msg = format!(
-        "Вы записаны на тренировку *{}* в {}",
-        escape(&training.name),
-        fmt_dt(&training.get_slot().start_at())
-    );
+    let msg = if user_id == ctx.me.id {
+        format!(
+            "Вы записаны на тренировку *{}* в {}",
+            escape(&training.name),
+            fmt_dt(&training.get_slot().start_at())
+        )
+    } else {
+        format!(
+            "Вы записали {} на тренировку *{}* в {}",
+            escape(&user.name.first_name),
+            escape(&training.name),
+            fmt_dt(&training.get_slot().start_at())
+        )
+    };
     Ok(DoneView::ok(msg).into())
 }
 
@@ -454,10 +311,25 @@ pub async fn sign_out(ctx: &mut Context, id: TrainingId, user_id: ObjectId) -> V
             .await;
     }
 
-    let msg = format!(
-        "Вы отменили запись на тренировку *{}* в {}",
-        escape(&training.name),
-        fmt_dt(&training.get_slot().start_at())
-    );
+    let msg = if user_id == ctx.me.id {
+        format!(
+            "Вы отменили запись на тренировку *{}* в {}",
+            escape(&training.name),
+            fmt_dt(&training.get_slot().start_at())
+        )
+    } else {
+        let user = ctx
+            .services
+            .users
+            .get_user(&mut ctx.session, user_id)
+            .await?;
+
+        format!(
+            "Вы отменили запись на тренировку {} *{}* в {}",
+            escape(&user.name.first_name),
+            escape(&training.name),
+            fmt_dt(&training.get_slot().start_at())
+        )
+    };
     Ok(DoneView::ok(msg).into())
 }
