@@ -26,7 +26,13 @@ impl Task for FreezeBg {
             .await?;
         let now = Local::now();
         for user in users {
-            let freeze = if let Some(freeze) = user.freeze.as_ref() {
+            let client = if let Ok(client) = user.as_client() {
+                client
+            } else {
+                continue;
+            };
+
+            let freeze = if let Some(freeze) = client.freeze.as_ref() {
                 freeze
             } else {
                 warn!("User {} has no freeze", user.tg_id);
