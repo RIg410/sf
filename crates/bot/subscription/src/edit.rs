@@ -89,7 +89,6 @@ impl EditSubscription {
 
 #[async_trait]
 impl View for EditSubscription {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         ctx.ensure(Rule::EditSubscription)?;
         if State::Init == self.state {

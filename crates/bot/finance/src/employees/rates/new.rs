@@ -28,7 +28,6 @@ impl CreateRate {
 
 #[async_trait]
 impl View for CreateRate {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         ctx.ensure(Rule::EditEmployeeRates)?;
 
@@ -78,7 +77,6 @@ impl ConfirmCreationRate {
 
 #[async_trait]
 impl View for ConfirmCreationRate {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         ctx.ensure(Rule::EditEmployeeRates)?;
 

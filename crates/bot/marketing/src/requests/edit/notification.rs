@@ -19,7 +19,6 @@ pub struct AddNotification {
 
 #[async_trait]
 impl View for AddNotification {
-
     async fn show(&mut self, ctx: &mut bot_core::context::Context) -> Result<(), eyre::Error> {
         let text = "Напомнить позже?";
         let mut markup = InlineKeyboardMarkup::default();
@@ -52,7 +51,6 @@ pub struct SetRemindLater {
 
 #[async_trait]
 impl View for SetRemindLater {
-
     async fn show(&mut self, ctx: &mut bot_core::context::Context) -> Result<(), eyre::Error> {
         let text = "Напомнить через:\nВыберите вариант или ввидите дату в формате *дд\\.мм\\.гггг чч\\:мм*";
         let markup = InlineKeyboardMarkup::default();

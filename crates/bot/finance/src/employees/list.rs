@@ -29,7 +29,6 @@ impl EmployeeList {
 
 #[async_trait]
 impl View for EmployeeList {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let msg = "Сотрудники ❤️";
         let mut keymap = InlineKeyboardMarkup::default();

@@ -26,7 +26,6 @@ impl FamilyView {
 
 #[async_trait]
 impl View for FamilyView {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         if !(ctx.has_right(Rule::ViewFamily) || (ctx.me.id == self.id && ctx.me.has_family())) {
             ctx.send_notification("У вас нет прав на просмотр семьи")
@@ -134,7 +133,6 @@ struct ConfirmRemoveChild {
 
 #[async_trait]
 impl View for ConfirmRemoveChild {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         ctx.ensure(Rule::EditFamily)?;
         let child = ctx

@@ -27,7 +27,6 @@ impl SetItemPrice {
 
 #[async_trait]
 impl View for SetItemPrice {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<(), Error> {
         ctx.ensure(Rule::EditSubscription)?;
         let user = ctx

@@ -47,7 +47,6 @@ impl TrainingList {
 
 #[async_trait]
 impl View for TrainingList {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let (msg, keyboard) = render(ctx, self.filter.clone(), self.offset).await?;
         ctx.edit_origin(&msg, keyboard).await?;

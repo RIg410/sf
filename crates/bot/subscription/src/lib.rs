@@ -28,7 +28,6 @@ pub struct SubscriptionView;
 
 #[async_trait]
 impl View for SubscriptionView {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         let (msg, keymap) = render(ctx).await?;
         ctx.edit_origin(&msg, keymap).await?;

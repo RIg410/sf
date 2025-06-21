@@ -20,7 +20,6 @@ impl SystemView {}
 
 #[async_trait]
 impl View for SystemView {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<(), Error> {
         ctx.ensure(Rule::System)?;
         let mut keymap = InlineKeyboardMarkup::default();
@@ -61,7 +60,6 @@ pub struct ApplyDump;
 
 #[async_trait]
 impl View for ApplyDump {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<(), Error> {
         ctx.ensure(Rule::System)?;
         ctx.edit_origin("Отправьте дамп", Default::default())

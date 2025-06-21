@@ -17,7 +17,6 @@ pub struct Marketing {}
 
 #[async_trait]
 impl View for Marketing {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::ViewMarketingInfo)?;
         let text = "Маркетинг🚀";

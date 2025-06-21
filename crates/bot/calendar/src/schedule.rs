@@ -28,7 +28,6 @@ impl ScheduleView {
 
 #[async_trait]
 impl View for ScheduleView {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<(), Error> {
         let txt = format!("Запланировать на *{}*", fmt_date(&self.date_time));
         let mut keymap = InlineKeyboardMarkup::default();

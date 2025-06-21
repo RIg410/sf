@@ -33,7 +33,6 @@ impl RewardsList {
 
 #[async_trait]
 impl View for RewardsList {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         if !ctx.is_me(self.id) && !ctx.has_right(Rule::ViewRewards) {
             return Err(eyre::eyre!("Недостаточно прав"));

@@ -47,7 +47,6 @@ impl View for LocationsView {
         true
     }
 
-
     async fn show(&mut self, ctx: &mut Context) -> Result<(), Error> {
         let locations = ctx.services.locations.get_all(&mut ctx.session).await?;
 

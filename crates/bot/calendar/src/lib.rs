@@ -48,7 +48,6 @@ impl CalendarView {
 
 #[async_trait]
 impl View for CalendarView {
-
     fn safe_point(&self) -> bool {
         true
     }

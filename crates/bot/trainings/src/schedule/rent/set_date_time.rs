@@ -25,7 +25,6 @@ impl SetDateTime {
 
 #[async_trait]
 impl View for SetDateTime {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let request = if self.preset.day.is_none() {
             "На какой день назначить тренировку? дд\\.мм"

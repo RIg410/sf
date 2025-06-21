@@ -25,7 +25,6 @@ impl Stat {
 
 #[async_trait]
 impl View for Stat {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         ctx.ensure(Rule::ViewFinance)?;
 

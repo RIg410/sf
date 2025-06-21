@@ -6,7 +6,7 @@ use bot_core::{
     context::Context,
     widget::{Jmp, ViewResult},
 };
-use eyre::{Result, eyre};
+use eyre::Result;
 
 pub struct UnfreezeConfirm;
 
@@ -18,7 +18,8 @@ impl ConfirmView for UnfreezeConfirm {
 
     async fn on_confirm(&self, ctx: &mut Context) -> ViewResult {
         let me = &ctx.me;
-        if me.freeze.is_none() {
+        let client = me.as_client()?;
+        if client.freeze.is_none() {
             return Ok(Jmp::ToSafePoint);
         }
 
@@ -37,15 +38,10 @@ impl AskView<u32> for AskFreezeDays {
     const ERROR_MESSAGE: &'static str = "Введите число дней заморозки";
 
     async fn message(&self, ctx: &mut Context) -> eyre::Result<String> {
-        let user = ctx
-            .services
-            .users
-            .get(&mut ctx.session, ctx.me.id)
-            .await?
-            .ok_or_else(|| eyre!("User not found!"))?;
+        let client = ctx.me.as_client()?;
         Ok(format!(
             "Осталось дней заморозки: _{}_\nНа сколько дней заморозить абонемент?",
-            user.freeze_days
+            client.freeze_days
         ))
     }
 
@@ -54,7 +50,8 @@ impl AskView<u32> for AskFreezeDays {
             ctx.send_msg("Введите число больше 0.").await?;
             return Ok(Jmp::Stay);
         }
-        if ctx.me.freeze_days < value {
+        let client = ctx.me.as_client()?;
+        if client.freeze_days < value {
             ctx.send_msg("У вас недостаточно дней заморозки.").await?;
             return Ok(Jmp::Stay);
         }

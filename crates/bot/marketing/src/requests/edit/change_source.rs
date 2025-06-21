@@ -17,7 +17,6 @@ pub struct ChangeComeFrom {
 
 #[async_trait]
 impl View for ChangeComeFrom {
-
     async fn show(&mut self, ctx: &mut bot_core::context::Context) -> Result<(), eyre::Error> {
         let text = "Откуда пришел клиент?";
 

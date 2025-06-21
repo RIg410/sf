@@ -27,7 +27,6 @@ impl PayReward {
 
 #[async_trait]
 impl View for PayReward {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let user = ctx
             .services
@@ -87,7 +86,6 @@ impl ConfirmSum {
 
 #[async_trait]
 impl View for ConfirmSum {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let user = ctx
             .services

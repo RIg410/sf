@@ -25,7 +25,6 @@ impl FixRateAmount {
 
 #[async_trait]
 impl View for FixRateAmount {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let msg = "Введите сумму:";
         ctx.edit_origin(msg, InlineKeyboardMarkup::default())
@@ -68,7 +67,6 @@ impl FixRateDate {
 
 #[async_trait]
 impl View for FixRateDate {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let msg = "Введите дату следующего платежа: ДД\\.ММ\\.ГГГГ";
         ctx.edit_origin(msg, InlineKeyboardMarkup::default())

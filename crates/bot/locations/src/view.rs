@@ -29,7 +29,6 @@ impl LocationDetailView {
 
 #[async_trait]
 impl View for LocationDetailView {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let location = match ctx
             .services
@@ -118,7 +117,6 @@ impl AddHallView {
 
 #[async_trait]
 impl View for AddHallView {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         ctx.edit_origin("🚪 Введите название зала:", Default::default())
             .await?;
@@ -212,7 +210,6 @@ impl EditHallView {
 
 #[async_trait]
 impl View for EditHallView {
-
     fn safe_point(&self) -> bool {
         true
     }

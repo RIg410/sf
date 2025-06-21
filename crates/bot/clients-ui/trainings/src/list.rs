@@ -54,7 +54,6 @@ impl View for TrainingList {
     fn safe_point(&self) -> bool {
         true
     }
-    
 
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let mut keymap = InlineKeyboardMarkup::default();

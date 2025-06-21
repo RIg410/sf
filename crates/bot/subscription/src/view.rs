@@ -55,7 +55,6 @@ impl SubscriptionOption {
 
 #[async_trait]
 impl View for SubscriptionOption {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let (txt, keymap) = render_sub(self.id, ctx).await.context("render")?;
         ctx.edit_origin(&txt, keymap).await?;

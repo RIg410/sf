@@ -69,7 +69,6 @@ impl EditProgram {
 
 #[async_trait]
 impl View for EditProgram {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let keymap = InlineKeyboardMarkup::default();
         match self.edit_type {

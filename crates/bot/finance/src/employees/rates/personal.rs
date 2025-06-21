@@ -24,7 +24,6 @@ impl PersonalRate {
 
 #[async_trait]
 impl View for PersonalRate {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let msg = "Введите процент вознаграждения:";
         let keymap = InlineKeyboardMarkup::default();

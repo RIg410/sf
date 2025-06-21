@@ -49,12 +49,24 @@ impl BusinessError for UserError {
                     "Персональный тариф уже существует".to_string()
                 }
             },
+            UserError::Bson(_) => "Ошибка формата данных".to_string(),
+            UserError::OnlyOwnerCanFreeze => "Только владелец может заморозить аккаунт".to_string(),
+            UserError::InsufficientFreezeDays => "Недостаточно дней для заморозки".to_string(),
+            UserError::UserIsNotClient => "Пользователь не является клиентом".to_string(),
+            UserError::UserIsNotInstructor => "Пользователь не является инструктором".to_string(),
+            UserError::UserIsNotManager => "Пользователь не является менеджером".to_string(),
+            UserError::UserIsNotAdmin => "Пользователь не является администратором".to_string(),
+            UserError::UserAlreadyFrozen => "Аккаунт уже заморожен".to_string(),
         }
     }
 
     fn is_fatal(&self) -> bool {
         match self {
-            UserError::Eyre(_) | UserError::MongoError(_) | UserError::UserNotFound(_) => true,
+            UserError::Eyre(_)
+            | UserError::MongoError(_)
+            | UserError::UserNotFound(_)
+            | UserError::Bson(_) => true,
+
             UserError::MemberNotFound { .. }
             | UserError::WrongFamilyMember { .. }
             | UserError::UserAlreadyInFamily { .. }
@@ -64,7 +76,14 @@ impl BusinessError for UserError {
             | UserError::CouchHasTrainings(..)
             | UserError::NoRatesFound { .. }
             | UserError::RateNotFound { .. }
-            | UserError::RateTypeAlreadyExists { .. } => false,
+            | UserError::RateTypeAlreadyExists { .. }
+            | UserError::OnlyOwnerCanFreeze
+            | UserError::InsufficientFreezeDays
+            | UserError::UserIsNotClient
+            | UserError::UserIsNotInstructor
+            | UserError::UserIsNotManager
+            | UserError::UserIsNotAdmin
+            | UserError::UserAlreadyFrozen => false,
         }
     }
 }

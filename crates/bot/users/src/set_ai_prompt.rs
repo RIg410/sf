@@ -22,7 +22,6 @@ impl SetAiPrompt {
 
 #[async_trait]
 impl View for SetAiPrompt {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let ext = ctx
             .services

@@ -22,7 +22,6 @@ impl SetBirthday {
 
 #[async_trait]
 impl View for SetBirthday {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let msg = "Введите дату рождения в формате ДД\\.ММ\\.ГГГГ".to_string();
         ctx.edit_origin(&msg, InlineKeyboardMarkup::default())

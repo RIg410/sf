@@ -27,7 +27,6 @@ impl AddRecalcReward {
 
 #[async_trait]
 impl View for AddRecalcReward {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::RecalculateRewards)?;
         let user = ctx
@@ -73,7 +72,6 @@ impl AddRecalcComment {
 
 #[async_trait]
 impl View for AddRecalcComment {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::RecalculateRewards)?;
         let msg = "Введите комментарий к коррекции:".to_string();
@@ -115,7 +113,6 @@ enum Callback {
 
 #[async_trait]
 impl View for AddRecalcConfirm {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::RecalculateRewards)?;
         let user = ctx

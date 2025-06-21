@@ -132,7 +132,6 @@ impl EmployeeProfile {
 
 #[async_trait]
 impl View for EmployeeProfile {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         let (msg, keymap) = render_user_profile(ctx, self.id).await?;
         ctx.edit_origin(&msg, keymap).await?;

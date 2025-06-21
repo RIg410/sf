@@ -27,7 +27,6 @@ impl EditLocationView {
 
 #[async_trait]
 impl View for EditLocationView {
-
     fn safe_point(&self) -> bool {
         true
     }
@@ -90,7 +89,6 @@ impl EditLocationName {
 
 #[async_trait]
 impl View for EditLocationName {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         ctx.edit_origin("📝 Введите новое название локации:", Default::default())
             .await?;
@@ -169,7 +167,6 @@ impl EditLocationAddress {
 
 #[async_trait]
 impl View for EditLocationAddress {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         ctx.edit_origin("📮 Введите новый адрес локации:", Default::default())
             .await?;

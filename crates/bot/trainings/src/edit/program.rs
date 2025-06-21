@@ -21,7 +21,6 @@ impl ChangeProgram {
 
 #[async_trait]
 impl View for ChangeProgram {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         let _msg = "Тренировочные программы: 🤸🏼".to_string();
         let mut keymap = InlineKeyboardMarkup::default();

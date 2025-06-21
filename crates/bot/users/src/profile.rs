@@ -222,7 +222,6 @@ fn print_sub_stat(sub: &SubscriptionStat) -> String {
 
 #[async_trait]
 impl View for UserProfile {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         if self.skip_show {
             self.skip_show = false;
@@ -281,14 +280,15 @@ async fn render_user_profile(
         keymap = keymap.append_row(Callback::SetBirthday.btn_row("Установить дату рождения 🎂"));
     }
 
+    let client = user.as_client()?;
     if (ctx.has_right(Rule::FreezeUsers)
         || (ctx.me.tg_id == user.tg_id
             && user.payer()?.has_subscription()
-            && user.freeze_days != 0))
-        && user.freeze.is_none()
+            && client.freeze_days != 0))
+        && client.freeze.is_none()
     {
         keymap = keymap.append_row(Callback::Freeze.btn_row("Заморозить ❄"));
-    } else if ctx.has_right(Rule::FreezeUsers) && user.freeze.is_some() {
+    } else if ctx.has_right(Rule::FreezeUsers) && client.freeze.is_some() {
         keymap = keymap.append_row(Callback::UnFreeze.btn_row("Разморозить ❄"));
     }
 

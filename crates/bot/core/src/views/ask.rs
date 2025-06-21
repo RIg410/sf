@@ -55,7 +55,6 @@ where
     T: FromStr + Send + Sync + 'static,
     V: AskView<T> + Send + Sync + 'static,
 {
-
     async fn show(&mut self, ctx: &mut Context) -> eyre::Result<()> {
         let keymap = InlineKeyboardMarkup::default();
         let msg = self.view.message(ctx).await?;

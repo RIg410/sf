@@ -12,7 +12,6 @@ pub struct AddComment {
 
 #[async_trait]
 impl View for AddComment {
-
     async fn show(&mut self, ctx: &mut bot_core::context::Context) -> Result<(), eyre::Error> {
         let text = "Можно оставить комментарий или \\- если нечего добавить";
         ctx.bot.edit_origin(text, Default::default()).await?;

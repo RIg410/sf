@@ -20,7 +20,6 @@ impl ChangeName {
 
 #[async_trait]
 impl View for ChangeName {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         ctx.ensure(Rule::EditTraining)?;
 

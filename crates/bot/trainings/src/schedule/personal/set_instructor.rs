@@ -26,7 +26,6 @@ impl SetInstructor {
 
 #[async_trait]
 impl View for SetInstructor {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let (msg, keymap) = render(ctx, &self.preset).await?;
         ctx.edit_origin(&msg, keymap).await?;

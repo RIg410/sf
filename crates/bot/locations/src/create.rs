@@ -16,7 +16,6 @@ pub struct CreateLocationView;
 
 #[async_trait]
 impl View for CreateLocationView {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         ctx.edit_origin("📍 Введите название локации:", Default::default())
             .await?;
@@ -49,7 +48,6 @@ struct CreateLocationAddress {
 
 #[async_trait]
 impl View for CreateLocationAddress {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let msg = format!(
             "📍 Создание локации\n\nНазвание: *{}*\n\nВведите адрес локации:",

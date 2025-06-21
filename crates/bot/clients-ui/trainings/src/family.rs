@@ -32,7 +32,6 @@ impl FamilySignIn {
 
 #[async_trait]
 impl View for FamilySignIn {
-
     fn safe_point(&self) -> bool {
         true
     }

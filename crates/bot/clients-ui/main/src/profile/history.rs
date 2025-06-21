@@ -21,7 +21,6 @@ pub struct HistoryList {
 
 #[async_trait]
 impl View for HistoryList {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let mut logs = ctx
             .services

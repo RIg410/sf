@@ -33,7 +33,6 @@ impl RatesList {
 
 #[async_trait]
 impl View for RatesList {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         ctx.ensure(Rule::EditEmployeeRates)?;
         let user = ctx
@@ -150,7 +149,6 @@ impl DeleteRateConfirm {
 
 #[async_trait]
 impl View for DeleteRateConfirm {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         ctx.ensure(Rule::EditEmployeeRates)?;
         let mut keymap = InlineKeyboardMarkup::default();

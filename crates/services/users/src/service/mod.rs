@@ -11,7 +11,7 @@ use crate::{
 };
 use ::ai::Ai;
 use chrono::{DateTime, Local};
-use eyre::{Context as _, Error, Result, bail, eyre};
+use eyre::{Context as _, Error, Result, eyre};
 use ident::source::Source;
 use mongodb::{SessionCursor, bson::oid::ObjectId};
 use rights::Rule;
@@ -44,7 +44,7 @@ impl<L: UserLog> Users<L> {
 
     #[tx]
     pub async fn migrate_users(&self, session: &mut Session) -> Result<()> {
-       self.store.migrate_users(session).await?;
+        self.store.migrate_users(session).await?;
         Ok(())
     }
 
@@ -259,7 +259,8 @@ impl<L: UserLog> Users<L> {
             .get(session, id)
             .await?
             .ok_or_else(|| eyre!("User not found"))?;
-        if user.freeze.is_none() {
+       let client = user.as_client()?;
+        if client.freeze.is_none() {
             return Ok(());
         }
 
@@ -274,18 +275,19 @@ impl<L: UserLog> Users<L> {
         id: ObjectId,
         days: u32,
         force: bool,
-    ) -> Result<()> {
+    ) -> Result<(), UserError> {
         let user = self
             .store
             .get(session, id)
             .await?
-            .ok_or_else(|| eyre!("User not found"))?;
+            .ok_or_else(|| UserError::UserNotFound(id))?;
 
-        if !force && user.freeze_days < days {
-            bail!("Not enough days.");
+        let client = user.as_client()?;
+        if !force && client.freeze_days < days {
+            return Err(UserError::InsufficientFreezeDays);
         }
-        if user.freeze.is_some() {
-            bail!("Already frozen");
+        if client.freeze.is_some() {
+            return Err(UserError::UserAlreadyFrozen);
         }
 
         self.logs.freeze(session, user.id, days).await?;

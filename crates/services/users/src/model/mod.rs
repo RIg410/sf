@@ -10,7 +10,13 @@ use serde::{Deserialize, Serialize};
 use std::fmt::{Display, Formatter};
 use subscription::model::UserSubscription;
 
-use crate::model::role::{RoleType, UserRole};
+use crate::{
+    error::UserError,
+    model::role::{
+        RoleType, UserRole, admin::AdminRole, client::ClientRole, instructor::InstructorRole,
+        manager::ManagerRole,
+    },
+};
 
 pub mod comments;
 pub mod employee;
@@ -35,12 +41,12 @@ pub struct User {
 
     pub rights: Rights,
 
-    #[serde(default)]
-    pub freeze: Option<Freeze>,
+    // #[serde(default)]
+    // pub freeze: Option<Freeze>,
     #[serde(default)]
     pub subscriptions: Vec<UserSubscription>,
-    #[serde(default)]
-    pub freeze_days: u32,
+    // #[serde(default)]
+    // pub freeze_days: u32,
     #[serde(with = "bson::serde_helpers::chrono_datetime_as_bson_datetime")]
     #[serde(default = "default_created_at")]
     pub created_at: DateTime<Utc>,
@@ -76,8 +82,6 @@ impl User {
             phone,
             is_active: true,
             subscriptions: vec![],
-            freeze_days: 0,
-            freeze: None,
             created_at: Utc::now(),
             settings: UserSettings::default(),
             come_from,
@@ -113,8 +117,6 @@ impl User {
             phone: None,
             is_active: true,
             subscriptions: vec![],
-            freeze_days: 0,
-            freeze: None,
             created_at: Utc::now(),
             settings: UserSettings::default(),
             come_from: Source::default(),
@@ -181,6 +183,68 @@ impl User {
             name: self.name.first_name.clone(),
         }
     }
+
+    pub fn as_client(&self) -> Result<&ClientRole, UserError> {
+        if let UserRole::Client(client) = &self.role {
+            Ok(client)
+        } else {
+            Err(UserError::UserIsNotClient)
+        }
+    }
+
+    pub fn as_client_mut(&mut self) -> Result<&mut ClientRole, UserError> {
+        if let UserRole::Client(client) = &mut self.role {
+            Ok(client)
+        } else {
+            Err(UserError::UserIsNotClient)
+        }
+    }
+
+    pub fn as_instructor(&self) -> Result<&InstructorRole, UserError> {
+        if let UserRole::Instructor(instructor) = &self.role {
+            Ok(instructor)
+        } else {
+            Err(UserError::UserIsNotInstructor)
+        }
+    }
+    pub fn as_instructor_mut(&mut self) -> Result<&mut InstructorRole, UserError> {
+        if let UserRole::Instructor(instructor) = &mut self.role {
+            Ok(instructor)
+        } else {
+            Err(UserError::UserIsNotInstructor)
+        }
+    }
+    pub fn as_manager(&self) -> Result<&ManagerRole, UserError> {
+        if let UserRole::Manager(manager) = &self.role {
+            Ok(manager)
+        } else {
+            Err(UserError::UserIsNotManager)
+        }
+    }
+
+    pub fn as_manager_mut(&mut self) -> Result<&mut ManagerRole, UserError> {
+        if let UserRole::Manager(manager) = &mut self.role {
+            Ok(manager)
+        } else {
+            Err(UserError::UserIsNotManager)
+        }
+    }
+
+    pub fn as_admin(&self) -> Result<&AdminRole, UserError> {
+        if let UserRole::Admin(admin) = &self.role {
+            Ok(admin)
+        } else {
+            Err(UserError::UserIsNotAdmin)
+        }
+    }
+
+    pub fn as_admin_mut(&mut self) -> Result<&mut AdminRole, UserError> {
+        if let UserRole::Admin(admin) = &mut self.role {
+            Ok(admin)
+        } else {
+            Err(UserError::UserIsNotAdmin)
+        }
+    }
 }
 
 pub fn test_user() -> User {
@@ -197,8 +261,6 @@ pub fn test_user() -> User {
         role: Default::default(),
         is_active: true,
         subscriptions: vec![],
-        freeze_days: 0,
-        freeze: None,
         created_at: Utc::now(),
         settings: UserSettings::default(),
         come_from: Source::default(),

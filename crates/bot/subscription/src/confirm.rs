@@ -36,7 +36,6 @@ impl ConfirmSell {
 
 #[async_trait]
 impl View for ConfirmSell {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let (text, keymap) = render(ctx, self.user_id, self.sub, self.discount).await?;
         ctx.edit_origin(&text, keymap).await?;

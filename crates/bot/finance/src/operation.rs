@@ -26,7 +26,6 @@ impl FinanceOperation {
 
 #[async_trait]
 impl View for FinanceOperation {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::MakePayment)?;
 

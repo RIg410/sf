@@ -40,7 +40,6 @@ impl DoneView {
 
 #[async_trait]
 impl View for DoneView {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<(), Error> {
         ctx.set_system_go_back(false);
         ctx.set_system_go_home(false);

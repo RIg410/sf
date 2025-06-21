@@ -31,7 +31,6 @@ impl FreezeProfile {
 
 #[async_trait]
 impl View for FreezeProfile {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         match self.state {
             State::SetDays => {
@@ -41,10 +40,11 @@ impl View for FreezeProfile {
                     .get(&mut ctx.session, self.id)
                     .await?
                     .ok_or_else(|| eyre!("User not found!"))?;
+                let client = user.as_client()?;
                 ctx.send_msg_with_markup(
                     &format!(
                         "Осталось дней заморозок:_{}_\nНа сколько дней заморозить абонемент?",
-                        user.freeze_days
+                        client.freeze_days
                     ),
                     InlineKeyboardMarkup::default(),
                 )
@@ -102,13 +102,14 @@ impl View for FreezeProfile {
                     .get(&mut ctx.session, self.id)
                     .await?
                     .ok_or_else(|| eyre!("User not found!"))?;
-                if !can_freeze && user.freeze_days < self.days {
+                let client = user.as_client()?;
+                if !can_freeze && client.freeze_days < self.days {
                     self.state = State::SetDays;
                     ctx.send_msg("у вас недостаточно дней заморозки").await?;
                     return Ok(Jmp::Stay);
                 }
 
-                if user.freeze.is_some() {
+                if client.freeze.is_some() {
                     ctx.send_msg("абонемент уже заморожен").await?;
                     return Ok(Jmp::Back(1));
                 }

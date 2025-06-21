@@ -24,7 +24,6 @@ impl GroupRateMin {
 
 #[async_trait]
 impl View for GroupRateMin {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let msg = "Введите минимальное вознаграждение:";
         let keymap = InlineKeyboardMarkup::default();
@@ -67,7 +66,6 @@ impl GroupRatePercent {
 
 #[async_trait]
 impl View for GroupRatePercent {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let msg = "Введите процент вознаграждения:";
         let keymap = InlineKeyboardMarkup::default();

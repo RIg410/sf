@@ -21,7 +21,6 @@ impl<V> View for V
 where
     V: ConfirmView + Send + Sync + 'static,
 {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let mut keymap = InlineKeyboardMarkup::default();
         keymap = keymap.append_row(vec![

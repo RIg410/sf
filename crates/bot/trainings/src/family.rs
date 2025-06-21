@@ -32,7 +32,6 @@ impl FamilySignIn {
 
 #[async_trait]
 impl View for FamilySignIn {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let training = ctx
             .services

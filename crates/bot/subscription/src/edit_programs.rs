@@ -24,7 +24,6 @@ impl EditPrograms {
 
 #[async_trait]
 impl View for EditPrograms {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<(), Error> {
         ctx.ensure(Rule::EditSubscription)?;
         let mut keymap = InlineKeyboardMarkup::default();

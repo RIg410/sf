@@ -29,7 +29,6 @@ impl CouchingList {
 
 #[async_trait]
 impl View for CouchingList {
-
     fn safe_point(&self) -> bool {
         true
     }

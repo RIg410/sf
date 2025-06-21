@@ -1,5 +1,6 @@
 mod employee;
 
+use crate::error::UserError;
 use crate::model::extension::UserExtension;
 use crate::model::{Freeze, User, UserName};
 use bson::to_document;
@@ -46,11 +47,11 @@ impl UserStore {
         })
     }
 
-    pub async fn migrate_users(&self, _: &mut Session) -> Result<()> {
-       // info!("Migrating users...");
-        //let mut cursor = self.users.find(doc! {}).session(&mut *session).await?;
-        // while let Some(user) = cursor.next(&mut *session).await {
-        //     let mut user = user?;
+    pub async fn migrate_users(&self, session: &mut Session) -> Result<()> {
+        info!("Migrating users...");
+        let mut cursor = self.users.find(doc! {}).session(&mut *session).await?;
+        while let Some(user) = cursor.next(&mut *session).await {
+             let mut user = user?;
         //     if user.rights.is_full() {
         //         println!("User {} already has full rights", user.name);
         //         user.role = UserRole::Admin(AdminRole::default());
@@ -74,7 +75,7 @@ impl UserStore {
         //     }
 
         //     self.update(session, &mut user).await?;
-       // }
+        }
         Ok(())
     }
 
@@ -396,24 +397,26 @@ impl UserStore {
         id: ObjectId,
         days: u32,
         force: bool,
-    ) -> Result<()> {
+    ) -> Result<(), UserError> {
         self.user_cache.remove(&id);
         info!("Freeze account:{}", id);
         let mut user = self
             .get_row(session, id)
             .await?
-            .ok_or_else(|| eyre!("User not found:{}", id))?;
+            .ok_or_else(|| UserError::UserNotFound(id))?;
         self.resolve_family(session, &mut user).await?;
 
         if !user.payer()?.is_owner() {
-            bail!("Only owner can freeze account");
+            return Err(UserError::OnlyOwnerCanFreeze);
         }
 
-        if !force && user.freeze_days < days {
-            bail!("Insufficient freeze days");
+        let client = user.as_client_mut()?;
+
+        if !force && client.freeze_days < days {
+            return Err(UserError::InsufficientFreezeDays);
         }
 
-        user.freeze_days = user.freeze_days.saturating_sub(days);
+        client.freeze_days = client.freeze_days.saturating_sub(days);
 
         for sub in user.payer_mut()?.subscriptions_mut() {
             match sub.status {
@@ -431,7 +434,9 @@ impl UserStore {
                 }
             }
         }
-        user.freeze = Some(Freeze {
+        
+        let client = user.as_client_mut()?;
+        client.freeze = Some(Freeze {
             freeze_start: Local::now().with_timezone(&Utc),
             freeze_end: Local::now().with_timezone(&Utc) + chrono::Duration::days(days as i64),
         });

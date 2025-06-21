@@ -24,7 +24,6 @@ impl Finish {
 
 #[async_trait]
 impl View for Finish {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let msg = render_msg(ctx, &self.preset, "Все верно?").await?;
         let keymap = vec![vec![

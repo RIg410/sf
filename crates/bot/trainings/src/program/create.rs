@@ -26,7 +26,6 @@ impl CreateProgram {
 
 #[async_trait]
 impl View for CreateProgram {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         ctx.ensure(Rule::CreateTraining)?;
         if self.state.is_none() {

@@ -20,7 +20,6 @@ impl SetFio {
 
 #[async_trait]
 impl View for SetFio {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         ctx.edit_origin("Введите имя и фамилию", InlineKeyboardMarkup::default())
             .await?;

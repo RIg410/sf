@@ -26,7 +26,6 @@ pub struct ProfileView;
 
 #[async_trait]
 impl View for ProfileView {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         let empty = "?".to_string();
 
@@ -69,9 +68,11 @@ impl View for ProfileView {
         render_family(ctx, &mut msg)?;
         render_trainings(ctx, &mut msg, 10).await?;
 
-        if ctx.me.freeze_days != 0 && ctx.me.freeze.is_none() {
+        let client = ctx.me.as_client()?;
+
+        if client.freeze_days != 0 && client.freeze.is_none() {
             keymap = keymap.append_row(Callback::Freeze.btn_row("Заморозить ❄"));
-        } else if ctx.me.freeze.is_some() {
+        } else if client.freeze.is_some() {
             keymap = keymap.append_row(Callback::UnFreeze.btn_row("Разморозить ❄"));
         }
 

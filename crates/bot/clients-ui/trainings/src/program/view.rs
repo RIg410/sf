@@ -28,7 +28,6 @@ impl ProgramView {
 
 #[async_trait]
 impl View for ProgramView {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let training = ctx
             .services

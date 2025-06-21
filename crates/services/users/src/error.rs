@@ -9,6 +9,8 @@ pub enum UserError {
     Eyre(#[from] eyre::Error),
     #[error("Mongo error: {0}")]
     MongoError(#[from] mongodb::error::Error),
+    #[error("Invalid BSON: {0}")]
+    Bson(#[from] bson::ser::Error),
 
     #[error("User not found: {0}")]
     UserNotFound(ObjectId),
@@ -41,4 +43,20 @@ pub enum UserError {
     RateNotFound { user_id: ObjectId, rate: Rate },
     #[error("Rate already exists")]
     RateTypeAlreadyExists { user_id: ObjectId, rate: Rate },
+    #[error("Only owner can freeze account")]
+    OnlyOwnerCanFreeze,
+    #[error("Insufficient freeze days")]
+    InsufficientFreezeDays,
+
+    #[error("User is not client")]
+    UserIsNotClient,
+    #[error("User is not instructor")]
+    UserIsNotInstructor,
+    #[error("User is not manager")]
+    UserIsNotManager,
+    #[error("User is not admin")]
+    UserIsNotAdmin,
+
+    #[error("User already frozen")]
+    UserAlreadyFrozen,
 }

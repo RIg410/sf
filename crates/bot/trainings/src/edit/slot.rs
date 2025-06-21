@@ -28,7 +28,6 @@ impl ChangeRoom {
 
 #[async_trait]
 impl View for ChangeRoom {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         ctx.ensure(Rule::ChangeTrainingSlot)?;
 
@@ -78,7 +77,6 @@ impl ChangeTime {
 
 #[async_trait]
 impl View for ChangeTime {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         ctx.ensure(Rule::ChangeTrainingSlot)?;
 

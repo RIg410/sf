@@ -25,7 +25,6 @@ impl RequestHistory {
 
 #[async_trait]
 impl View for RequestHistory {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         ctx.ensure(Rule::RequestsHistory)?;
 

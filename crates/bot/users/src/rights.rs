@@ -26,7 +26,6 @@ impl UserRightsView {
 
 #[async_trait]
 impl View for UserRightsView {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         let user = ctx
             .services

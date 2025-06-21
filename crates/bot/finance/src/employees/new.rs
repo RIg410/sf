@@ -25,7 +25,6 @@ impl MakeEmployee {
 
 #[async_trait]
 impl View for MakeEmployee {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         let msg = "Введите номер телефона нового сотрудника:";
         let keymap = InlineKeyboardMarkup::default();
@@ -69,7 +68,6 @@ pub struct EmployeeDescription {
 
 #[async_trait]
 impl View for EmployeeDescription {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         let msg = "Введите описание нового сотрудника:";
         let keymap = InlineKeyboardMarkup::default();
@@ -101,7 +99,6 @@ pub struct EmployeeRoleView {
 
 #[async_trait]
 impl View for EmployeeRoleView {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         let msg = "Выберите роль нового сотрудника:";
         let mut keymap = InlineKeyboardMarkup::default();

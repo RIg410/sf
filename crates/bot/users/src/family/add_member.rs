@@ -28,7 +28,6 @@ impl AddMember {
 
 #[async_trait]
 impl View for AddMember {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::EditFamily)?;
 
@@ -115,7 +114,6 @@ impl AddMemberConfirm {
 
 #[async_trait]
 impl View for AddMemberConfirm {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::EditFamily)?;
 
@@ -173,7 +171,6 @@ impl CreateUser {
 
 #[async_trait]
 impl View for CreateUser {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::EditFamily)?;
 
@@ -222,7 +219,6 @@ impl CreateMemberConfirm {
 
 #[async_trait]
 impl View for CreateMemberConfirm {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::EditFamily)?;
 

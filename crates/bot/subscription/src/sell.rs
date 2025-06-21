@@ -42,7 +42,6 @@ impl SellView {
 
 #[async_trait]
 impl View for SellView {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let text;
         let mut keymap = InlineKeyboardMarkup::default();
@@ -171,7 +170,6 @@ impl SetName {
 
 #[async_trait]
 impl View for SetName {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         ctx.edit_origin(
             "Введите имя пользователя\\.",
@@ -224,7 +222,6 @@ impl SelectComeFrom {
 
 #[async_trait]
 impl View for SelectComeFrom {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let mut markup = InlineKeyboardMarkup::default();
         for come_from in Source::iter() {
@@ -281,7 +278,6 @@ impl CreateUserAndSell {
 
 #[async_trait]
 impl View for CreateUserAndSell {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let sub = ctx
             .services

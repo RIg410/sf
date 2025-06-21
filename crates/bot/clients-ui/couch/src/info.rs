@@ -1,6 +1,9 @@
 use bot_client_trainings::list::TrainingList;
 use bot_core::{
-    callback_data::Calldata as _, calldata, context::Context, widget::{View, ViewResult}
+    callback_data::Calldata as _,
+    calldata,
+    context::Context,
+    widget::{View, ViewResult},
 };
 use mongodb::bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
@@ -18,7 +21,6 @@ impl CouchInfo {
 
 #[async_trait::async_trait]
 impl View for CouchInfo {
-
     fn safe_point(&self) -> bool {
         true
     }
@@ -40,9 +42,8 @@ impl View for CouchInfo {
             escape(&user.name.to_string()),
             escape(&couch.description)
         );
-        let keymap = InlineKeyboardMarkup::default().append_row(
-            Callback::FindTraining.btn_row("Найти тренировку"),
-        );
+        let keymap = InlineKeyboardMarkup::default()
+            .append_row(Callback::FindTraining.btn_row("Найти тренировку"));
         ctx.edit_origin(&msg, keymap).await?;
         Ok(())
     }

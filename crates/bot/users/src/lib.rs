@@ -46,7 +46,6 @@ impl UsersView {
 
 #[async_trait]
 impl View for UsersView {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         let count = ctx
             .services

@@ -34,7 +34,6 @@ impl Requests {
 
 #[async_trait]
 impl View for Requests {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::ViewMarketingInfo)?;
 

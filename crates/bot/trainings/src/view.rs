@@ -79,7 +79,6 @@ impl TrainingView {
 
 #[async_trait]
 impl View for TrainingView {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let training = ctx
             .services
@@ -294,7 +293,6 @@ impl ConfirmCancelTraining {
 
 #[async_trait]
 impl View for ConfirmCancelTraining {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<()> {
         let training = ctx
             .services
@@ -386,7 +384,7 @@ pub async fn sign_up(ctx: &mut Context, id: TrainingId, user_id: ObjectId) -> Vi
         };
     }
 
-    if let Some(freeze) = ctx.me.freeze.as_ref() {
+    if let Some(freeze) = ctx.me.as_client()?.freeze.as_ref() {
         let slot = training.get_slot();
         if freeze.freeze_start <= slot.start_at() && freeze.freeze_end >= slot.end_at() {
             return Ok(DoneView::err("Ваш абонемент заморожен🥶").go_back().into());

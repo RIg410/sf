@@ -28,7 +28,6 @@ impl SubscriptionsList {
 
 #[async_trait]
 impl View for SubscriptionsList {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::EditUserSubscription)?;
 

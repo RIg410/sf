@@ -29,6 +29,7 @@ impl ToView<UserView> for User {
             None
         };
 
+        let freeze_days = self.as_client().map(|c| c.freeze_days).unwrap_or_default();
         UserView {
             id: Some(self.id.to_view(rights)),
             tg_id: self.tg_id,
@@ -37,7 +38,7 @@ impl ToView<UserView> for User {
             phone: self.phone.as_deref().map(fmt_phone_escape_less),
             is_active: self.is_active,
             freeze: self.freeze.map(|freeze| freeze.to_view(rights)),
-            freeze_days: self.freeze_days,
+            freeze_days,
             come_from,
             family: Some(Box::new(self.family.to_view(rights))),
             subscriptions: self

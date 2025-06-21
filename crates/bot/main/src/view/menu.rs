@@ -114,7 +114,6 @@ impl MainMenuView {
 
 #[async_trait]
 impl View for MainMenuView {
-
     fn main_view(&self) -> bool {
         true
     }

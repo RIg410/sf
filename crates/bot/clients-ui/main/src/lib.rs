@@ -23,7 +23,6 @@ impl ClientMain {}
 
 #[async_trait::async_trait]
 impl bot_core::widget::View for ClientMain {
-
     fn safe_point(&self) -> bool {
         true
     }
@@ -45,10 +44,11 @@ impl bot_core::widget::View for ClientMain {
 
         render_freeze_info(ctx, &mut msg)?;
 
-        if ctx.me.freeze_days > 0 {
+        let client = ctx.me.as_client()?;
+        if client.freeze_days > 0 {
             msg.push_str(&format!(
                 "Доступно дней заморозки: *{}*\\.\n\n",
-                ctx.me.freeze_days
+                client.freeze_days
             ));
         }
         render_subscriptions(ctx, &mut msg)?;
@@ -61,7 +61,8 @@ impl bot_core::widget::View for ClientMain {
             .append_row(Callback::Shop.btn_row("🛒 Магазин"))
             .append_row(Callback::Profile.btn_row("👤 Профиль"));
 
-        if ctx.me.freeze.is_some() {
+        let client = ctx.me.as_client()?;
+        if client.freeze.is_some() {
             markup = markup.append_row(Callback::Unfreeze.btn_row("❄️ Разморозить"));
         }
 
@@ -82,7 +83,8 @@ impl bot_core::widget::View for ClientMain {
 }
 
 pub fn render_freeze_info(ctx: &mut Context, msg: &mut String) -> eyre::Result<()> {
-    if let Some(freeze) = ctx.me.freeze.as_ref() {
+    let client = ctx.me.as_client()?;
+    if let Some(freeze) = client.freeze.as_ref() {
         msg.push_str(&format!(
             "❄️ Заморожен c _{}_  по _{}_",
             fmt_date(&freeze.freeze_start.with_timezone(&Local)),

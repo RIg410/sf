@@ -14,7 +14,6 @@ pub struct ExtendSubscriptions;
 
 #[async_trait]
 impl View for ExtendSubscriptions {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::System)?;
         ctx.edit_origin("Введите количество дней", Default::default())
@@ -36,7 +35,6 @@ pub struct Confirm {
 
 #[async_trait]
 impl View for Confirm {
-
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::System)?;
 

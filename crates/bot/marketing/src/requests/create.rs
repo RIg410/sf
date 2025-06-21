@@ -24,7 +24,6 @@ pub struct SetPhone;
 
 #[async_trait]
 impl View for SetPhone {
-
     async fn show(&mut self, ctx: &mut bot_core::context::Context) -> Result<(), eyre::Error> {
         let text = "Введите номер телефона";
         ctx.bot.edit_origin(text, Default::default()).await?;
@@ -54,7 +53,6 @@ pub struct SetComeFrom {
 
 #[async_trait]
 impl View for SetComeFrom {
-
     async fn show(&mut self, ctx: &mut bot_core::context::Context) -> Result<(), eyre::Error> {
         let text = "Откуда пришел клиент?";
 
@@ -106,7 +104,6 @@ pub struct SetDescription {
 
 #[async_trait]
 impl View for SetDescription {
-
     async fn show(&mut self, ctx: &mut bot_core::context::Context) -> Result<(), eyre::Error> {
         let text = "Можно оставить комментарий или \\- если нечего добавить";
         ctx.bot.edit_origin(text, Default::default()).await?;
@@ -137,7 +134,6 @@ pub struct SetName {
 
 #[async_trait]
 impl View for SetName {
-
     async fn show(&mut self, ctx: &mut bot_core::context::Context) -> Result<(), eyre::Error> {
         let text = "Введите имя и фамилию";
         ctx.bot.edit_origin(text, Default::default()).await?;
@@ -172,7 +168,6 @@ pub struct RemindLaterView {
 
 #[async_trait]
 impl View for RemindLaterView {
-
     async fn show(&mut self, ctx: &mut bot_core::context::Context) -> Result<(), eyre::Error> {
         let text = "Напомнить позже?";
         let mut markup = InlineKeyboardMarkup::default();
@@ -221,7 +216,6 @@ pub struct SetRemindLater {
 
 #[async_trait]
 impl View for SetRemindLater {
-
     async fn show(&mut self, ctx: &mut bot_core::context::Context) -> Result<(), eyre::Error> {
         let text = "Напомнить через:\nВыберите вариант или ввидите дату в формате *дд\\.мм\\.гггг чч\\:мм*";
         let markup = InlineKeyboardMarkup::default();
@@ -329,7 +323,6 @@ pub struct Confirm {
 
 #[async_trait]
 impl View for Confirm {
-
     async fn show(&mut self, ctx: &mut bot_core::context::Context) -> Result<(), eyre::Error> {
         let mut text = format!(
             "Все верно?:\n\
@@ -411,7 +404,6 @@ pub struct SellSubscription {
 
 #[async_trait]
 impl View for SellSubscription {
-
     async fn show(&mut self, ctx: &mut bot_core::context::Context) -> Result<(), eyre::Error> {
         let text = "Продать абонемент?";
         let mut markup = InlineKeyboardMarkup::default();
@@ -448,7 +440,6 @@ pub struct SelectSubscriptionsView {
 
 #[async_trait]
 impl View for SelectSubscriptionsView {
-
     async fn show(&mut self, ctx: &mut bot_core::context::Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::SellSubscription)?;
         let text = "Выберите абонемент";
@@ -496,7 +487,6 @@ pub struct ConfirmSellSubscription {
 
 #[async_trait]
 impl View for ConfirmSellSubscription {
-
     async fn show(&mut self, ctx: &mut bot_core::context::Context) -> Result<(), eyre::Error> {
         ctx.ensure(Rule::SellSubscription)?;
         let sub = ctx

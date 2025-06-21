@@ -161,7 +161,7 @@ fn render_subscriptions(msg: &mut String, user: &User) -> Result<()> {
 pub fn user_base_info(user: &User, extension: &UserExtension) -> String {
     let empty = "?".to_string();
 
-    let freeze = if let Some(freeze) = user.freeze.as_ref() {
+    let freeze = if let Some(freeze) = user.as_client().ok().and_then(|c| c.freeze.as_ref()) {
         format!(
             "❄️ Заморожен c _{}_  по _{}_",
             fmt_date(&freeze.freeze_start.with_timezone(&Local)),
@@ -261,7 +261,12 @@ fn render_employee_info(ctx: &mut Context, id: ObjectId, msg: &mut String, emplo
 }
 
 pub fn fmt_user_type(user: &User) -> &str {
-    if user.freeze.is_some() {
+    let is_frozen = user
+        .as_client()
+        .ok()
+        .map(|c| c.freeze.is_some())
+        .unwrap_or_default();
+    if is_frozen {
         "❄️"
     } else if !user.is_active {
         "⚫"
