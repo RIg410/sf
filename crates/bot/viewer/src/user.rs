@@ -86,7 +86,8 @@ pub async fn render_profile_msg(
 
     let mut msg = user_base_info(&user, &extension);
     if ctx.has_right(Rule::ViewMarketingInfo) {
-        msg.push_str(&format!("Источник : _{}_\n", user.come_from.name()));
+        let come_from = user.as_client()?.come_from.clone();
+        msg.push_str(&format!("Источник : _{}_\n", come_from.name()));
     }
 
     if let Some(employee) = user.employee.as_ref() {

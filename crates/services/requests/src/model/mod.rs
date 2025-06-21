@@ -1,6 +1,6 @@
 use bson::oid::ObjectId;
 use chrono::{DateTime, Utc};
-use ident::source::Source;
+use ident::source::{ Source};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
@@ -13,7 +13,7 @@ pub struct Request {
     pub modified: DateTime<Utc>,
     #[serde(with = "bson::serde_helpers::chrono_datetime_as_bson_datetime")]
     pub created: DateTime<Utc>,
-    pub come_from: Source,
+    pub source: Source,
     pub first_name: Option<String>,
     pub last_name: Option<String>,
     #[serde(default)]
@@ -26,7 +26,7 @@ impl Request {
     pub fn new(
         phone: String,
         comment: String,
-        come_from: Source,
+        source: Source,
         first_name: Option<String>,
         last_name: Option<String>,
         remind_later: Option<RemindLater>,
@@ -35,7 +35,7 @@ impl Request {
             id: ObjectId::new(),
             phone,
             comment,
-            come_from,
+            source,
             first_name,
             last_name,
             history: vec![],

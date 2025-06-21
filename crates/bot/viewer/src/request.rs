@@ -31,7 +31,7 @@ pub fn fmt_request(request: &Request) -> String {
         Дата: _{}_\n{}\
         История: {}",
         fmt_phone(Some(&request.phone)),
-        request.come_from.name(),
+        request.source.name(),
         escape(&request.comment),
         escape(request.first_name.as_deref().unwrap_or("?")),
         escape(request.last_name.as_deref().unwrap_or("?")),

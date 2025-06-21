@@ -104,10 +104,10 @@ impl BotApp {
 
 fn system_handler(ctx: &Context) -> fn() -> Widget {
     match &ctx.me.role {
-        users::model::role::UserRole::Client(_) => || ClientMain::default().widget(),
-        users::model::role::UserRole::Instructor(_)
-        | users::model::role::UserRole::Manager(_)
-        | users::model::role::UserRole::Admin(_) => || MainMenuView::default().widget(),
+        users::model::role::Role::Client(_) => || ClientMain::default().widget(),
+        users::model::role::Role::Instructor(_)
+        | users::model::role::Role::Manager(_)
+        | users::model::role::Role::Admin(_) => || MainMenuView::default().widget(),
     }
 }
 

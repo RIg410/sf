@@ -25,10 +25,8 @@ pub struct Requests<L> {
 
 impl<L: UserLog> Requests<L> {
     pub async fn new(store: &Db, users: Users<L>) -> Result<Self, Error> {
-        Ok(Requests {
-            requests: Arc::new(RequestStore::new(store).await?),
-            users,
-        })
+        let requests = Arc::new(RequestStore::new(store).await?);
+        Ok(Requests { requests, users })
     }
 
     #[tx]
@@ -36,7 +34,7 @@ impl<L: UserLog> Requests<L> {
         &self,
         session: &mut Session,
         id: ObjectId,
-        come_from: Source,
+        source: Source,
         comment: String,
     ) -> Result<(), RequestError> {
         if let Some(mut request) = self.requests.get(session, id).await? {
@@ -46,7 +44,7 @@ impl<L: UserLog> Requests<L> {
             });
             request.modified = Utc::now();
             request.comment = comment;
-            request.come_from = come_from;
+            request.source = source;
             self.requests.update(session, &request).await?;
 
             let user = self
@@ -55,7 +53,7 @@ impl<L: UserLog> Requests<L> {
                 .await?;
             if let Some(user) = user {
                 self.users
-                    .update_come_from(session, user.id, come_from)
+                    .update_come_from(session, user.id, source)
                     .await?;
             }
         } else {
@@ -127,7 +125,7 @@ impl<L: UserLog> Requests<L> {
             });
             request.modified = Utc::now();
             request.comment = comment;
-            request.come_from = come_from;
+            request.source = come_from;
             self.requests.update(session, &request).await?;
         } else {
             self.requests
@@ -152,7 +150,7 @@ impl<L: UserLog> Requests<L> {
         self.requests
             .get_by_phone(session, &phone)
             .await
-            .map(|r| r.map(|r| r.come_from).unwrap_or_default())
+            .map(|r| r.map(|r| r.source).unwrap_or_default())
     }
 }
 

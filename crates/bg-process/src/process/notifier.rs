@@ -54,17 +54,13 @@ impl TrainingNotifier {
             };
 
             if by_day {
-                if receiver.settings.notification.notify_by_day {
-                    self.bot.notify(ChatId(receiver.tg_id), msg, true).await;
-                    return Ok(true);
-                }
+                self.bot.notify(ChatId(receiver.tg_id), msg, true).await;
+                return Ok(true);
             } else {
                 let now = Local::now();
-                if let Some(hours) = receiver.settings.notification.notify_by_n_hours {
-                    if now + chrono::Duration::hours(hours as i64) > start_at {
-                        self.bot.notify(ChatId(receiver.tg_id), msg, true).await;
-                        return Ok(true);
-                    }
+                if now + chrono::Duration::hours(2 as i64) > start_at {
+                    self.bot.notify(ChatId(receiver.tg_id), msg, true).await;
+                    return Ok(true);
                 }
             }
         }

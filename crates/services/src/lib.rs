@@ -70,6 +70,7 @@ impl SfServices {
         let subscriptions = Subscriptions::new(&storage);
         let rewards = Rewards::new(&storage).await?;
         let requests = Requests::new(&storage, users.clone()).await?;
+        requests.migrate_request(&mut session).await?;
 
         let statistics =
             Statistics::new(history.clone(), users.clone(), requests.clone(), ai.clone());

@@ -118,7 +118,7 @@ impl View for SellView {
                             .clone()
                             .unwrap_or_else(|| "-".to_string()),
                         request.last_name.clone(),
-                        request.come_from,
+                        request.source,
                     )
                     .into(),
                 ));

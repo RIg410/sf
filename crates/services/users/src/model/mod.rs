@@ -1,22 +1,21 @@
+use crate::{
+    error::UserError,
+    model::role::{
+        Role, RoleType, admin::AdminRole, client::ClientRole, instructor::InstructorRole,
+        manager::ManagerRole,
+    },
+};
 use bson::oid::ObjectId;
 use chrono::{DateTime, TimeZone as _, Utc};
 use core::fmt;
 use eyre::eyre;
 use family::Family;
-use ident::{source::Source, user::UserIdWithName};
+use ident::user::UserIdWithName;
 use payer::Payer;
 use rights::Rights;
 use serde::{Deserialize, Serialize};
 use std::fmt::{Display, Formatter};
 use subscription::model::UserSubscription;
-
-use crate::{
-    error::UserError,
-    model::role::{
-        RoleType, UserRole, admin::AdminRole, client::ClientRole, instructor::InstructorRole,
-        manager::ManagerRole,
-    },
-};
 
 pub mod comments;
 pub mod employee;
@@ -37,7 +36,7 @@ pub struct User {
     pub is_active: bool,
 
     #[serde(default)]
-    pub role: UserRole,
+    pub role: Role,
 
     pub rights: Rights,
     #[serde(default)]
@@ -47,10 +46,6 @@ pub struct User {
     pub created_at: DateTime<Utc>,
     #[serde(default)]
     pub employee: Option<employee::Employee>,
-    #[serde(default)]
-    pub settings: UserSettings,
-    #[serde(default)]
-    pub come_from: Source,
     #[serde(default)]
     pub family: Family,
 }
@@ -62,13 +57,7 @@ fn default_created_at() -> DateTime<Utc> {
 }
 
 impl User {
-    pub fn new(
-        tg_id: i64,
-        name: UserName,
-        phone: Option<String>,
-        come_from: Source,
-        role: RoleType,
-    ) -> User {
+    pub fn new(tg_id: i64, name: UserName, phone: Option<String>, role: RoleType) -> User {
         User {
             id: ObjectId::new(),
             tg_id,
@@ -78,8 +67,6 @@ impl User {
             is_active: true,
             subscriptions: vec![],
             created_at: Utc::now(),
-            settings: UserSettings::default(),
-            come_from,
             family: Family::default(),
             employee: Default::default(),
             role: role.make_role(),
@@ -113,8 +100,6 @@ impl User {
             is_active: true,
             subscriptions: vec![],
             created_at: Utc::now(),
-            settings: UserSettings::default(),
-            come_from: Source::default(),
             family: Family::default(),
             employee: Default::default(),
         }
@@ -180,7 +165,7 @@ impl User {
     }
 
     pub fn as_client(&self) -> Result<&ClientRole, UserError> {
-        if let UserRole::Client(client) = &self.role {
+        if let Role::Client(client) = &self.role {
             Ok(client)
         } else {
             Err(UserError::UserIsNotClient)
@@ -188,7 +173,7 @@ impl User {
     }
 
     pub fn as_client_mut(&mut self) -> Result<&mut ClientRole, UserError> {
-        if let UserRole::Client(client) = &mut self.role {
+        if let Role::Client(client) = &mut self.role {
             Ok(client)
         } else {
             Err(UserError::UserIsNotClient)
@@ -196,21 +181,21 @@ impl User {
     }
 
     pub fn as_instructor(&self) -> Result<&InstructorRole, UserError> {
-        if let UserRole::Instructor(instructor) = &self.role {
+        if let Role::Instructor(instructor) = &self.role {
             Ok(instructor)
         } else {
             Err(UserError::UserIsNotInstructor)
         }
     }
     pub fn as_instructor_mut(&mut self) -> Result<&mut InstructorRole, UserError> {
-        if let UserRole::Instructor(instructor) = &mut self.role {
+        if let Role::Instructor(instructor) = &mut self.role {
             Ok(instructor)
         } else {
             Err(UserError::UserIsNotInstructor)
         }
     }
     pub fn as_manager(&self) -> Result<&ManagerRole, UserError> {
-        if let UserRole::Manager(manager) = &self.role {
+        if let Role::Manager(manager) = &self.role {
             Ok(manager)
         } else {
             Err(UserError::UserIsNotManager)
@@ -218,7 +203,7 @@ impl User {
     }
 
     pub fn as_manager_mut(&mut self) -> Result<&mut ManagerRole, UserError> {
-        if let UserRole::Manager(manager) = &mut self.role {
+        if let Role::Manager(manager) = &mut self.role {
             Ok(manager)
         } else {
             Err(UserError::UserIsNotManager)
@@ -226,7 +211,7 @@ impl User {
     }
 
     pub fn as_admin(&self) -> Result<&AdminRole, UserError> {
-        if let UserRole::Admin(admin) = &self.role {
+        if let Role::Admin(admin) = &self.role {
             Ok(admin)
         } else {
             Err(UserError::UserIsNotAdmin)
@@ -234,7 +219,7 @@ impl User {
     }
 
     pub fn as_admin_mut(&mut self) -> Result<&mut AdminRole, UserError> {
-        if let UserRole::Admin(admin) = &mut self.role {
+        if let Role::Admin(admin) = &mut self.role {
             Ok(admin)
         } else {
             Err(UserError::UserIsNotAdmin)
@@ -257,8 +242,6 @@ pub fn test_user() -> User {
         is_active: true,
         subscriptions: vec![],
         created_at: Utc::now(),
-        settings: UserSettings::default(),
-        come_from: Source::default(),
         family: Family::default(),
         employee: Default::default(),
     }
@@ -307,28 +290,6 @@ pub fn sanitize_phone(phone: &str) -> String {
             .chars()
             .filter_map(|c| if c.is_ascii_digit() { Some(c) } else { None })
             .collect()
-    }
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct UserSettings {
-    pub notification: Notification,
-}
-
-#[derive(Debug, Serialize, Deserialize, Clone)]
-pub struct Notification {
-    pub notify_by_day: bool,
-    pub notify_by_n_hours: Option<u8>,
-}
-
-impl Default for UserSettings {
-    fn default() -> Self {
-        UserSettings {
-            notification: Notification {
-                notify_by_day: true,
-                notify_by_n_hours: Some(1),
-            },
-        }
     }
 }
 

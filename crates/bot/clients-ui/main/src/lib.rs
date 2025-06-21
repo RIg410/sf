@@ -12,7 +12,7 @@ use chrono::{Local, Utc};
 use serde::{Deserialize, Serialize};
 use subscription::model::{SubscriptionStatus, UserSubscription};
 use teloxide::{types::InlineKeyboardMarkup, utils::markdown::escape};
-use users::model::role::UserRole;
+use users::model::role::Role;
 
 pub mod profile;
 
@@ -34,7 +34,7 @@ impl bot_core::widget::View for ClientMain {
     async fn show(&mut self, ctx: &mut Context) -> Result<(), eyre::Error> {
         let mut markup = InlineKeyboardMarkup::default();
 
-        let _info = if let UserRole::Client(info) = &ctx.me.role {
+        let _info = if let Role::Client(info) = &ctx.me.role {
             info
         } else {
             return Err(eyre::eyre!("User is not a client"));

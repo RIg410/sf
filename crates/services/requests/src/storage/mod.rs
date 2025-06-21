@@ -24,6 +24,35 @@ impl RequestStore {
         Ok(RequestStore { store: reward })
     }
 
+    pub async fn migrate_request(&self, _: &mut Session) -> Result<(), Error> {
+        // println!("Migrating request...");
+        // let mut cursor = self.store.find(doc! {}).session(&mut *session).await?;
+        // while let Some(request) = cursor.next(&mut *session).await {
+        //     let mut request = request?;
+
+        //     request.source = match request.come_from {
+        //         ident::source::Source::Unknown {} => SourceV2::Unknown,
+        //         ident::source::Source::Website {} => SourceV2::Website,
+        //         ident::source::Source::Instagram {} => SourceV2::Instagram,
+        //         ident::source::Source::VK {} => SourceV2::VK,
+        //         ident::source::Source::YandexMap {} => SourceV2::YandexMap,
+        //         ident::source::Source::YandexDirect {} => SourceV2::YandexDirect,
+        //         ident::source::Source::DirectAdds {} => SourceV2::DirectAdds,
+        //         ident::source::Source::VkAdds {} => SourceV2::VkAdds,
+        //         ident::source::Source::DoubleGIS {} => SourceV2::DoubleGIS,
+        //         ident::source::Source::Avito {} => SourceV2::Avito,
+        //         ident::source::Source::Recommendation {} => SourceV2::Recommendation,
+        //         ident::source::Source::Other {} => SourceV2::Other,
+        //         ident::source::Source::WebSearch {} => SourceV2::WebSearch,
+        //         ident::source::Source::OldBase {} => SourceV2::OldBase,
+        //     };
+
+        //     self.update(&mut *session, &request).await?;
+        // }
+        // println!("request migration completed");
+        Ok(())
+    }
+
     pub async fn find_by_words(
         &self,
         session: &mut Session,

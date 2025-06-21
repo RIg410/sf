@@ -30,7 +30,8 @@ impl View for MarketingInfoView {
             .users
             .get_user(&mut ctx.session, self.id)
             .await?;
-        let txt = format!("Источник : _{}_\n", user.come_from.name());
+
+        let txt = format!("Источник : _{}_\n", user.as_client()?.come_from.name());
         let mut markup = InlineKeyboardMarkup::default();
         for come_from in Source::iter() {
             markup = markup.append_row(come_from.btn_row(come_from.name()));
@@ -55,7 +56,7 @@ impl View for MarketingInfoView {
                 .get_by_phone(&mut ctx.session, &sanitize_phone(&phone))
                 .await?;
             if let Some(mut request) = request {
-                request.come_from = come_from;
+                request.source = come_from;
                 ctx.services
                     .requests
                     .update(&mut ctx.session, &request)

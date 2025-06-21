@@ -9,36 +9,36 @@ pub mod manager;
 
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 #[serde(tag = "type")]
-pub enum UserRole {
+pub enum Role {
     Client(ClientRole),
     Instructor(InstructorRole),
     Manager(ManagerRole),
     Admin(AdminRole),
 }
 
-impl UserRole {
+impl Role {
     pub fn is_admin(&self) -> bool {
-        matches!(self, UserRole::Admin(_))
+        matches!(self, Role::Admin(_))
     }
 
     pub fn is_manager(&self) -> bool {
-        matches!(self, UserRole::Manager(_))
+        matches!(self, Role::Manager(_))
     }
 
     pub fn is_instructor(&self) -> bool {
-        matches!(self, UserRole::Instructor(_))
+        matches!(self, Role::Instructor(_))
     }
 
     pub fn is_client(&self) -> bool {
-        matches!(self, UserRole::Client(_))
+        matches!(self, Role::Client(_))
     }
 
     pub fn get_role_type(&self) -> RoleType {
         match self {
-            UserRole::Client(_) => RoleType::Client,
-            UserRole::Instructor(_) => RoleType::Instructor,
-            UserRole::Manager(_) => RoleType::Manager,
-            UserRole::Admin(_) => RoleType::Admin,
+            Role::Client(_) => RoleType::Client,
+            Role::Instructor(_) => RoleType::Instructor,
+            Role::Manager(_) => RoleType::Manager,
+            Role::Admin(_) => RoleType::Admin,
         }
     }
 
@@ -52,9 +52,9 @@ impl UserRole {
     }
 }
 
-impl Default for UserRole {
+impl Default for Role {
     fn default() -> Self {
-        UserRole::Client(ClientRole::default())
+        Role::Client(ClientRole::default())
     }
 }
 
@@ -67,21 +67,12 @@ pub enum RoleType {
 }
 
 impl RoleType {
-    pub fn make_role(&self) -> UserRole {
+    pub fn make_role(&self) -> Role {
         match self {
-            RoleType::Client => UserRole::Client(ClientRole::default()),
-            RoleType::Instructor => UserRole::Instructor(InstructorRole::default()),
-            RoleType::Manager => UserRole::Manager(ManagerRole::default()),
-            RoleType::Admin => UserRole::Admin(AdminRole::default()),
+            RoleType::Client => Role::Client(ClientRole::default()),
+            RoleType::Instructor => Role::Instructor(InstructorRole::default()),
+            RoleType::Manager => Role::Manager(ManagerRole::default()),
+            RoleType::Admin => Role::Admin(AdminRole::default()),
         }
     }
-}
-
-#[derive(Debug, Clone, PartialEq, Eq, serde::Serialize, serde::Deserialize)]
-#[serde(tag = "type")]
-pub enum Role {
-    Client {},
-    Instructor {},
-    Manager {},
-    Admin {},
 }

@@ -47,10 +47,39 @@ impl UserStore {
         })
     }
 
-    pub async fn migrate_users(&self, session: &mut Session) -> Result<()> {
-        info!("Migrating users...");
-        let mut cursor = self.users.find(doc! {}).session(&mut *session).await?;
-        while let Some(_) = cursor.next(&mut *session).await {}
+    pub async fn migrate_users(&self, _: &mut Session) -> Result<()> {
+        // info!("Migrating users...");
+        // let mut cursor = self.users.find(doc! {}).session(&mut *session).await?;
+        // while let Some(user) = cursor.next(&mut *session).await {
+        //     let mut user = user?;
+        //     let come_from = user.come_from;
+        //     let client =if let Ok(client) = user.as_client_mut() {
+        //         client
+        //     } else {
+        //         continue; // Skip users that are not clients
+        //     };
+
+        //     let source = match come_from {
+        //         ident::source::Source::Unknown {} => SourceV2::Unknown,
+        //         ident::source::Source::Website {} => SourceV2::Website,
+        //         ident::source::Source::Instagram {} => SourceV2::Instagram,
+        //         ident::source::Source::VK {} => SourceV2::VK,
+        //         ident::source::Source::YandexMap {} => SourceV2::YandexMap,
+        //         ident::source::Source::YandexDirect {} => SourceV2::YandexDirect,
+        //         ident::source::Source::DirectAdds {} => SourceV2::DirectAdds,
+        //         ident::source::Source::VkAdds {} => SourceV2::VkAdds,
+        //         ident::source::Source::DoubleGIS {} => SourceV2::DoubleGIS,
+        //         ident::source::Source::Avito {} => SourceV2::Avito,
+        //         ident::source::Source::Recommendation {} => SourceV2::Recommendation,
+        //         ident::source::Source::Other {} => SourceV2::Other,
+        //         ident::source::Source::WebSearch {} => SourceV2::WebSearch,
+        //         ident::source::Source::OldBase {} => SourceV2::OldBase,
+        //     };
+        //     client.come_from = source;
+
+        //     self.update(session, &mut user).await?;
+        // }
+        // info!("User migration completed");
         Ok(())
     }
 
@@ -587,7 +616,7 @@ impl UserStore {
         self.users
             .update_one(
                 doc! { "_id": id },
-                doc! { "$set": { "come_from": to_document(&come_from)? }, "$inc": { "version": 1 } },
+                doc! { "$set": { "role.come_from": to_document(&come_from)? } },
             )
             .session(&mut *session)
             .await?;

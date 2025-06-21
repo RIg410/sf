@@ -46,10 +46,10 @@ impl<L: UserLog> AdvertisingStatService<L> {
 
         while let Some(request) = requests.next(session).await {
             let request = request?;
-            let come_from = request.come_from;
+            let source = request.source;
             let phone = request.phone;
 
-            let source_stat = stat.sources.entry(come_from).or_default();
+            let source_stat = stat.sources.entry(source).or_default();
             source_stat.processed_requests += 1;
             self.collect_users_stat(session, source_stat, phone).await?;
         }

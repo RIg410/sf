@@ -5,6 +5,7 @@ use crate::{
     model::{User, UserName, role::RoleType},
 };
 use eyre::Result;
+use ident::source::Source;
 use mongodb::bson::oid::ObjectId;
 use store::session::Session;
 use tx_macro::tx;
@@ -92,9 +93,11 @@ impl<L: UserLog> Users<L> {
                 last_name: surname.clone(),
             },
             None,
-            user.come_from,
             RoleType::Client,
         );
+        let child_clinet = child.as_client_mut()?;
+        child_clinet.come_from = Source::Recommendation;
+
         child.family.payer_id = Some(user_id);
         let id = child.id;
 

@@ -8,9 +8,7 @@ use bot_core::{
 use bot_viewer::{day::fmt_dt, fmt_phone, user::link_to_user};
 use chrono::Local;
 use eyre::Result;
-
 use history::model::{Action, HistoryRow};
-use ident::source::Source;
 use mongodb::bson::oid::ObjectId;
 use rights::Rule;
 use serde::{Deserialize, Serialize};
@@ -100,7 +98,6 @@ async fn fmt_row(ctx: &mut Context, log: &HistoryRow) -> Result<String> {
                     last_name: None,
                 },
                 None,
-                Source::Unknown {},
                 RoleType::Client,
             ),
             false,

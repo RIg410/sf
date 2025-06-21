@@ -33,7 +33,7 @@ impl View for ChangeComeFrom {
         let come_from: Source = calldata!(data);
         let request = ctx.services.requests.get(&mut ctx.session, self.id).await?;
         let old_come_from = if let Some(request) = request {
-            request.come_from
+            request.source
         } else {
             ctx.bot.send_notification("Заявка не найдена").await;
             return Ok(Jmp::Back(1));

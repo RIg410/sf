@@ -24,7 +24,8 @@ use users::model::{
 impl ToView<UserView> for User {
     fn to_view<R: HasRule>(self, rights: &R) -> UserView {
         let come_from = if rights.has_rule(Rule::ViewMarketingInfo) {
-            Some(self.come_from.to_view(&()) as i32)
+            let come_from = self.as_client().map(|c| c.come_from).unwrap_or_default();
+            Some(come_from.to_view(&()) as i32)
         } else {
             None
         };

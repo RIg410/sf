@@ -83,7 +83,9 @@ impl<L: UserLog> Users<L> {
             self.store.set_name(session, user.id, name).await?;
             Ok(user.id)
         } else {
-            let user = User::new(tg_id, name.clone(), Some(phone.clone()), come_from, role);
+            let mut user = User::new(tg_id, name.clone(), Some(phone.clone()), role);
+            user.as_client_mut()?.come_from = come_from;
+
             let id = user.id;
             self.store.insert(session, user).await?;
             self.logs.create_user(session, name, phone).await?;
@@ -124,13 +126,9 @@ impl<L: UserLog> Users<L> {
             last_name,
         };
 
-        let user = User::new(
-            -1,
-            user_name.clone(),
-            Some(phone.clone()),
-            come_from,
-            RoleType::Client,
-        );
+        let mut user = User::new(-1, user_name.clone(), Some(phone.clone()), RoleType::Client);
+        user.as_client_mut()?.come_from = come_from;
+
         self.store.insert(session, user.clone()).await?;
         self.logs.create_user(session, user_name, phone).await?;
         self.store
@@ -259,7 +257,7 @@ impl<L: UserLog> Users<L> {
             .get(session, id)
             .await?
             .ok_or_else(|| eyre!("User not found"))?;
-       let client = user.as_client()?;
+        let client = user.as_client()?;
         if client.freeze.is_none() {
             return Ok(());
         }
