@@ -64,6 +64,14 @@ impl View for ProfileView {
         );
 
         render_freeze_info(ctx, &mut msg)?;
+        
+        let client = ctx.me.as_client()?;
+        if client.freeze_days > 0 {
+            msg.push_str(&format!(
+                "\nДоступно дней заморозки: *{}*\\.\n\n",
+                client.freeze_days
+            ));
+        }
         render_subscriptions(ctx, &mut msg)?;
         render_family(ctx, &mut msg)?;
         render_trainings(ctx, &mut msg, 10).await?;

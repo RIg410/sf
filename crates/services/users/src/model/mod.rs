@@ -40,13 +40,8 @@ pub struct User {
     pub role: UserRole,
 
     pub rights: Rights,
-
-    // #[serde(default)]
-    // pub freeze: Option<Freeze>,
     #[serde(default)]
     pub subscriptions: Vec<UserSubscription>,
-    // #[serde(default)]
-    // pub freeze_days: u32,
     #[serde(with = "bson::serde_helpers::chrono_datetime_as_bson_datetime")]
     #[serde(default = "default_created_at")]
     pub created_at: DateTime<Utc>,

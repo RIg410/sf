@@ -52,7 +52,7 @@ impl AskView<u32> for AskFreezeDays {
         }
         let client = ctx.me.as_client()?;
         if client.freeze_days < value {
-            ctx.send_msg("У вас недостаточно дней заморозки.").await?;
+            ctx.send_msg("У вас недостаточно дней заморозки").await?;
             return Ok(Jmp::Stay);
         }
 

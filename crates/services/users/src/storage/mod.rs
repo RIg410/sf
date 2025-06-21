@@ -50,32 +50,7 @@ impl UserStore {
     pub async fn migrate_users(&self, session: &mut Session) -> Result<()> {
         info!("Migrating users...");
         let mut cursor = self.users.find(doc! {}).session(&mut *session).await?;
-        while let Some(user) = cursor.next(&mut *session).await {
-             let mut user = user?;
-        //     if user.rights.is_full() {
-        //         println!("User {} already has full rights", user.name);
-        //         user.role = UserRole::Admin(AdminRole::default());
-        //     }
-
-        //     if let Some(ref mut employee) = user.employee {
-        //         match employee.role {
-        //             crate::model::rate::EmployeeRole::Couch => {
-        //                 println!("User {} is a couch", user.name);
-        //                 user.role = UserRole::Instructor(InstructorRole::default());
-        //             }
-        //             crate::model::rate::EmployeeRole::Manager => {
-        //                 println!("User {} is a manager", user.name);
-        //                 user.role = UserRole::Manager(Default::default());
-        //             }
-        //             crate::model::rate::EmployeeRole::Admin => {
-        //                 println!("User {} is an admin", user.name);
-        //                 user.role = UserRole::Manager(Default::default());
-        //             }
-        //         }
-        //     }
-
-        //     self.update(session, &mut user).await?;
-        }
+        while let Some(_) = cursor.next(&mut *session).await {}
         Ok(())
     }
 
@@ -378,10 +353,7 @@ impl UserStore {
         info!("Unfreeze account:{}", id);
         let result = self
             .users
-            .update_one(
-                doc! { "_id": id },
-                doc! { "$unset": { "freeze": "" }, "$inc": { "version": 1 } },
-            )
+            .update_one(doc! { "_id": id }, doc! { "$unset": { "role.freeze": "" } })
             .session(&mut *session)
             .await?;
 
@@ -434,7 +406,7 @@ impl UserStore {
                 }
             }
         }
-        
+
         let client = user.as_client_mut()?;
         client.freeze = Some(Freeze {
             freeze_start: Local::now().with_timezone(&Utc),

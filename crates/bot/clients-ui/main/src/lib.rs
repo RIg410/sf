@@ -47,7 +47,7 @@ impl bot_core::widget::View for ClientMain {
         let client = ctx.me.as_client()?;
         if client.freeze_days > 0 {
             msg.push_str(&format!(
-                "Доступно дней заморозки: *{}*\\.\n\n",
+                "\nДоступно дней заморозки: *{}*\\.\n\n",
                 client.freeze_days
             ));
         }
